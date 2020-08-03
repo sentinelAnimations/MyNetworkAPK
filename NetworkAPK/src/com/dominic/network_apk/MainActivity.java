@@ -1,11 +1,7 @@
 package com.dominic.network_apk;
 
-import java.awt.event.MouseWheelEvent;
-import java.util.Arrays;
-
 import processing.core.PApplet;
 import processing.core.PFont;
-import processing.core.PSurface;
 import processing.event.MouseEvent;
 
 public class MainActivity extends PApplet {
@@ -23,11 +19,11 @@ public class MainActivity extends PApplet {
 	// colors -------------------------------------------------
 
 	// Dimens--------------------------------------------------
-	public int stdTs = 12, titleTs = 22, subtitleTs = 16, btnSize = 50, btnSizeLarge = btnSize * 2, btnSizeSmall = (int) btnSize / 2, edgeRad = (int) btnSize / 10, padding = 5, margin = padding;
+	public int stdTs = 12, titleTs = 22, subtitleTs = 16, btnSize = 50, btnSizeLarge = btnSize * 2, btnSizeSmall = btnSize / 2, edgeRad = btnSize / 10, padding = 5, margin = padding;
 	// Dimens--------------------------------------------------
 
 	// Strings--------------------------------------------------
-	public String APKName = "InSevenDays©", APKDescription = "-A network solution-", mySettingsPath = "data/savedData/settings/mySettings.json";
+	public String APKName = "InSevenDays©", APKDescription = "-A network solution-", mySettingsPath = "savedData/settings/mySettings.json";
 	// Strings--------------------------------------------------
 
 	// Fonts---------------------------------------------------
@@ -35,8 +31,8 @@ public class MainActivity extends PApplet {
 	// Fonts---------------------------------------------------
 
 	// images--------------------------------------------------
-	public String absPathPictos = "data\\imgs\\pictograms\\";
-	public String absPathStartImgs = "data\\imgs\\startImgs\\";
+	public String absPathPictos = "imgs\\pictograms\\";
+	public String absPathStartImgs ="imgs\\startImgs\\";
 	public String[] startImgPaths = { "muffins.png" };
 	// images--------------------------------------------------
 
@@ -53,19 +49,22 @@ public class MainActivity extends PApplet {
 	// Global variables
 	// -----------------------------------------------------------------------
 
+	@Override
 	public void settings() {
 		// getSurface().setSize(1050, 450);
 		// size(1050, 450);
 	}
 
+	@Override
 	public void setup() {
 		getSurface().setSize(1050, 450);
 
 		rectMode(CENTER);
 		imageMode(CENTER);
 		// variableInitialisation -----------------------------------------------
-		stdFont = createFont("data/fonts/stdFont.ttf", titleTs);
-		loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, dark, textCol, textDark, APKName, APKDescription, absPathStartImgs + startImgPaths[0], mySettingsPath, stdFont);
+		stdFont = createFont("fonts/stdFont.ttf", titleTs);
+
+		loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, dark, textCol, textDark, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
 
 		String[] p1 = { absPathPictos + "masterOrSlave.png", absPathPictos + "blenderExeFolder.png", absPathPictos + "imageFolder.png", absPathPictos + "pathToCloud.png", absPathPictos + "personalData.png", absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png" };
 		String[] p2 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png",absPathPictos+"arrowLeft.png",absPathPictos+"arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png",absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png" };
@@ -76,6 +75,7 @@ public class MainActivity extends PApplet {
 
 	}
 
+	@Override
 	public void draw() {
 		background(dark);
 		if (mode == 0) { // loadingScreen ----------------
@@ -121,6 +121,7 @@ public class MainActivity extends PApplet {
 
 	}
 
+	@Override
 	public void mousePressed() {
 		if (mode == 1) {
 			if (loadingScreen.firstSetup == true && settingsScreen.getMode() == 0) {
@@ -143,6 +144,7 @@ public class MainActivity extends PApplet {
 		}
 	}
 
+	@Override
 	public void mouseReleased() {
 		if (mode == 1) {
 			if (loadingScreen.firstSetup == true) {
@@ -174,6 +176,7 @@ public class MainActivity extends PApplet {
 		}
 	}
 	
+	@Override
 	public void mouseWheel(MouseEvent event) {
 		  float e = event.getCount();
 		if(mode==1) {
@@ -184,6 +187,7 @@ public class MainActivity extends PApplet {
 		}
 	}
 
+	@Override
 	public void keyReleased() {
 		if (mode == 1) {
 			if (loadingScreen.firstSetup == true) {

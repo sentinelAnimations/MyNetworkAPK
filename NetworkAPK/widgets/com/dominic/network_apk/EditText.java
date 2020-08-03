@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 import processing.data.StringList;
 
@@ -58,7 +59,7 @@ public class EditText<T> implements Widgets {
 			doOnceOnStartup = false;
 		}
 
-		p.textAlign(p.LEFT, p.TOP);
+		p.textAlign(PConstants.LEFT, PConstants.TOP);
 		if(useBg) {
 		p.fill(light);
 		p.stroke(light);
@@ -92,7 +93,7 @@ public class EditText<T> implements Widgets {
 
 	private void displayCursor() {
 		cursorAlpha++;
-		p.stroke(textCol, p.abs(p.sin(p.radians(cursorAlpha))) * 255 + 100);
+		p.stroke(textCol, PApplet.abs(PApplet.sin(PApplet.radians(cursorAlpha))) * 255 + 100);
 		p.line(cursorX, cursorY, cursorX, cursorY + stdTs);
 
 	}
@@ -166,7 +167,7 @@ public class EditText<T> implements Widgets {
 						makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol, false, "Maximum rows reached now", stdFont, null));
 					}
 				} else {
-					if ((int) k > 31 && (int) k < 127) {
+					if (k > 31 && k < 127) {
 						t = strList.get(row);
 						if (cursorInd < t.length()) {
 							if (cursorInd == 0) {
@@ -181,7 +182,7 @@ public class EditText<T> implements Widgets {
 						strList.set(row, t);
 					}
 				}
-				if (k == p.ENTER && strList.size() < maxRows) {
+				if (k == PConstants.ENTER && strList.size() < maxRows) {
 
 					if (cursorInd == strList.get(row).length()) {
 						if (row == strList.size() - 1) {
@@ -203,11 +204,11 @@ public class EditText<T> implements Widgets {
 					cursorInd = 0;
 				}
 
-				if (strList.size() == maxRows && makeToasts.size() < 2 && k == p.ENTER) {
+				if (strList.size() == maxRows && makeToasts.size() < 2 && k == PConstants.ENTER) {
 					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol, false, "Maximum rows reached now", stdFont, null));
 				}
 			}
-			if (k == p.BACKSPACE) {
+			if (k == PConstants.BACKSPACE) {
 				t = strList.get(row);
 				if (cursorInd > 1) {
 					strList.set(row, t.substring(0, cursorInd - 1) + t.substring(cursorInd));
@@ -228,8 +229,8 @@ public class EditText<T> implements Widgets {
 				}
 			}
 
-			if (k == p.CODED) {
-				if (p.keyCode == p.LEFT) {
+			if (k == PConstants.CODED) {
+				if (p.keyCode == PConstants.LEFT) {
 					cursorInd--;
 					if (cursorInd < 0) {
 						row--;
@@ -238,7 +239,7 @@ public class EditText<T> implements Widgets {
 						}
 					}
 				}
-				if (p.keyCode == p.RIGHT) {
+				if (p.keyCode == PConstants.RIGHT) {
 					cursorInd++;
 					if (cursorInd > strList.get(row).length()) {
 						row++;
@@ -248,10 +249,10 @@ public class EditText<T> implements Widgets {
 					}
 
 				}
-				if (p.keyCode == p.UP) {
+				if (p.keyCode == PConstants.UP) {
 					row--;
 				}
-				if (p.keyCode == p.DOWN) {
+				if (p.keyCode == PConstants.DOWN) {
 					row++;
 				}
 			}
@@ -305,9 +306,9 @@ public class EditText<T> implements Widgets {
 		if (strList.size() > 0 && row < strList.size()) {
 			int d = p.width, sInd = 0;
 			for (int i = 0; i < strList.get(row).length(); i++) {
-				if (p.dist(xPos, 0, textStartX + p.textWidth(strList.get(row).substring(0, i)), 0) < d) {
+				if (PApplet.dist(xPos, 0, textStartX + p.textWidth(strList.get(row).substring(0, i)), 0) < d) {
 					sInd = i;
-					d = (int) p.dist(xPos, 0, textStartX + p.textWidth(strList.get(row).substring(0, i)), 0);
+					d = (int) PApplet.dist(xPos, 0, textStartX + p.textWidth(strList.get(row).substring(0, i)), 0);
 				}
 			}
 

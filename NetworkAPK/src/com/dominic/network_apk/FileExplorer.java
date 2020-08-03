@@ -2,7 +2,6 @@ package com.dominic.network_apk;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,7 +10,6 @@ import java.util.Arrays;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import processing.core.PImage;
 import processing.data.StringList;
 
 public class FileExplorer {
@@ -89,8 +87,7 @@ public class FileExplorer {
 		rename_et = new EditText(p, margin * 2 + editBarW / 4 - btnSizeSmall + margin * 2, editBarY, editBarW / 2 - margin * 3 - btnSizeSmall, btnSizeSmall, stdTs, lighter, textCol, edgeRad, margin, true, false, "Rename Selected Folder", fChars, stdFont, null);
 		rename_btn = new ImageButton(p, editBarX - btnSizeSmall / 2 - margin, editBarY, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, true, false, textCol, lighter, PictoPaths[6], "Rename Selected Folder", null);
 
-		searching_sprAnim = new SpriteAnimation(p, searchBar.search_btn.getX(), editBarY, btnSizeSmall - margin, btnSizeSmall - margin, 0, 129, textCol, false, "data/imgs/sprites/loadingGears/", null);
-		p.println(getFoldersAndFiles("D:\\alter stick backup\\Alles\\LiberKeyneu\\Apps\\Notepad++\\App\\Notepad++\\user.manual", true));
+		searching_sprAnim = new SpriteAnimation(p, searchBar.search_btn.getX(), editBarY, btnSizeSmall - margin, btnSizeSmall - margin, 0, 129, textCol, false, "imgs/sprites/loadingGears/", null);
 	}
 
 	public void render() {
@@ -156,7 +153,7 @@ public class FileExplorer {
 					l1New[i] = l1[i];
 					path += l1New[i];
 				}
-				p.println(path);
+				PApplet.println(path);
 				horizontalLists[2].setList(getFoldersAndFiles(path, true));
 				horizontalLists[3].setList(getFoldersAndFiles(path, false));
 				horizontalLists[1].setList(l1New);
@@ -167,14 +164,14 @@ public class FileExplorer {
 		if (horizontalLists[4].isNewSelected == true) {
 			String path = "";
 			String[] l4 = horizontalLists[4].getList();
-			String[] splitStr = p.split(l4[horizontalLists[4].getSelectedInd()], "\\");
+			String[] splitStr = PApplet.split(l4[horizontalLists[4].getSelectedInd()], "\\");
 			String[] handOverStr = new String[splitStr.length];
 
 			if (splitStr.length > 0) {
-				String[] splitStr2 = p.split(splitStr[splitStr.length - 1], ".");
-				p.println(splitStr2);
+				String[] splitStr2 = PApplet.split(splitStr[splitStr.length - 1], ".");
+				PApplet.println(splitStr2);
 				if (splitStr2.length > 1) {
-					p.println("now");
+					PApplet.println("now");
 					handOverStr = new String[splitStr.length - 1];
 					handOverStr = Arrays.copyOf(splitStr, splitStr.length - 1);
 				} else {
@@ -281,7 +278,7 @@ public class FileExplorer {
 			if (finishedSearching == true) {
 				if (searchedStr != null) {
 					horizontalLists[4].setList(searchedStr);
-					p.println("set list");
+					PApplet.println("set list");
 				}
 				isSearching = false;
 				isListing = false;
@@ -358,12 +355,12 @@ public class FileExplorer {
 	void copyFolder(String copyFolderPath, String destination) {
 		  if (copyFolderPath.equals(destination)==false) { 
 		    File f=new File(destination);
-		    String[] basePath=p.split(copyFolderPath, "\\");
+		    String[] basePath=PApplet.split(copyFolderPath, "\\");
 		    f.mkdir();
 		    ArrayList<File> allFiles=listFilesRecursive(copyFolderPath);    
 		    for (int i=0; i<allFiles.size(); i++) {
 		      if (allFiles.get(i).isDirectory()) {
-		        String[] relativePath=p.split(allFiles.get(i).toString(), "\\");
+		        String[] relativePath=PApplet.split(allFiles.get(i).toString(), "\\");
 		        String path="";
 		        for (int i2=basePath.length; i2<relativePath.length; i2++) {
 		          path+=relativePath[i2]+"\\";
@@ -371,9 +368,9 @@ public class FileExplorer {
 		        f=new File(destination+"\\"+path);
 		        f.mkdir();
 		      }else{
-		        String[] splitStr=p.split(allFiles.get(i).toString(), "\\");
+		        String[] splitStr=PApplet.split(allFiles.get(i).toString(), "\\");
 
-		        String[] relativePath=p.split(allFiles.get(i).toString(), "\\");
+		        String[] relativePath=PApplet.split(allFiles.get(i).toString(), "\\");
 		        String path="";
 		        for (int i2=basePath.length; i2<relativePath.length; i2++) {
 		          path+=relativePath[i2]+"\\";
@@ -385,13 +382,13 @@ public class FileExplorer {
 		          Files.copy(oldFile, newFile);
 		        } 
 		        catch (IOException e) {
-		          p.println(e);
+		          PApplet.println(e);
 		        }
 		      }
 		        
 		    }
 		  }else{
-		   p.println("cant copy to same path!"); 
+		   PApplet.println("cant copy to same path!"); 
 		  }
 		}
 
@@ -402,7 +399,7 @@ public class FileExplorer {
 		recursGetPaths(path);
 
 		if (allInPathsDeleteFolder.size() > 1) {
-			p.println("data in folder");
+			PApplet.println("data in folder");
 		}
 
 		for (int i = allInPathsDeleteFolder.size() - 1; i >= 0; i--) {
@@ -417,13 +414,13 @@ public class FileExplorer {
 		if (index.list() != null) {
 			for (String s : entries) {
 				allInPathsDeleteFolder.append(pa + "/" + s);
-				String[] splitString = p.split(s, ".");
+				String[] splitString = PApplet.split(s, ".");
 				if (splitString.length == 1) {
 					recursGetPaths(p + "/" + s);
 				}
 			}
 		} else {
-			p.println("Cant delete path");
+			PApplet.println("Cant delete path");
 		}
 	}
 
@@ -433,24 +430,24 @@ public class FileExplorer {
 		int count = 0;
 
 		for (int i = 0; i < searchArray.length; i++) {
-			String[] splitStr = p.split(searchArray[i], "\\");
-			String[] splitStr2 = p.split(splitStr[splitStr.length - 1], ".");
+			String[] splitStr = PApplet.split(searchArray[i], "\\");
+			String[] splitStr2 = PApplet.split(splitStr[splitStr.length - 1], ".");
 			// p.println(searchArray[i]);
 			if (splitStr2.length > 1) {
-				String[] m1 = p.match(splitStr[splitStr.length - 1].toUpperCase(), searchStr.toUpperCase());
+				String[] m1 = PApplet.match(splitStr[splitStr.length - 1].toUpperCase(), searchStr.toUpperCase());
 				if (m1 != null) {
 					resultsFiles.add(searchArray[i]);
 				}
 			} else {
 				for (int i2 = splitStr.length - 1; i2 >= 0; i2--) {
-					String[] m1 = p.match(splitStr[i2].toUpperCase(), searchStr.toUpperCase());
-					p.println(splitStr[i2].toUpperCase(), searchStr.toUpperCase());
+					String[] m1 = PApplet.match(splitStr[i2].toUpperCase(), searchStr.toUpperCase());
+					PApplet.println(splitStr[i2].toUpperCase(), searchStr.toUpperCase());
 					if (m1 != null) {
 						Boolean noOtherMatch = true;
 						for (int i3 = 0; i3 < resultsFolders.size(); i3++) {
-							String[] splitStr3 = p.split(resultsFolders.get(i3), "\\");
+							String[] splitStr3 = PApplet.split(resultsFolders.get(i3), "\\");
 							for (int i4 = splitStr3.length - 1; i4 >= 0; i4--) {
-								String[] m2 = p.match(splitStr3[i4], searchStr);
+								String[] m2 = PApplet.match(splitStr3[i4], searchStr);
 
 								if (m2 != null) {
 									if (i2 == i4) {
@@ -463,7 +460,7 @@ public class FileExplorer {
 						// noOtherMatch = true;
 						if (noOtherMatch == true) {
 							resultsFolders.add(searchArray[i]);
-							p.println("match found ---------------------");
+							PApplet.println("match found ---------------------");
 							count++;
 							break;
 						}

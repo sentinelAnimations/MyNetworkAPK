@@ -1,12 +1,10 @@
 package com.dominic.network_apk;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
-
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 
 public class PathSelector<T> implements Widgets {
@@ -52,7 +50,7 @@ public class PathSelector<T> implements Widgets {
 		p.fill(bgCol);
 		p.rect(x, y, w, h, edgeRad);
 		openFileExplorer_btn.render();
-		p.textAlign(p.LEFT, p.CENTER);
+		p.textAlign(PConstants.LEFT, PConstants.CENTER);
 		p.textFont(stdFont);
 		p.textSize(stdTs);
 		if (t.length() < 1) {

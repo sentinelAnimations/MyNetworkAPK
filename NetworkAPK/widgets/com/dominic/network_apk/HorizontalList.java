@@ -2,9 +2,8 @@ package com.dominic.network_apk;
 
 import java.lang.reflect.Method;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
-import processing.core.PImage;
-import processing.data.StringList;
 
 public class HorizontalList<T> implements Widgets {
 	private int x, y, xShift, yShift, w, h, margin, edgeRad, stdTs, titleBoxWidth, btnSize, btnSizeSmall, type, dark, light, lighter, textCol, textDark,border, shiftPerClick = 20, lastDisplayedInd, firstDisplayedInd, selectedInd = 0, markedInd = 0;
@@ -107,13 +106,13 @@ public class HorizontalList<T> implements Widgets {
 			p.rect(x - w / 2 + margin + titleBoxWidth / 2, y, titleBoxWidth, btnSizeSmall, edgeRad);
 			picto.render();
 			p.fill(textCol);
-			p.textAlign(p.LEFT, p.CENTER);
+			p.textAlign(PConstants.LEFT, PConstants.CENTER);
 			p.textFont(stdFont);
 			p.textSize(stdTs);
 			p.text(title, x - w / 2 + 3 * margin + btnSizeSmall, y - tYShift);
 
 			if (displayList.length > 0) {
-				p.textAlign(p.CENTER, p.CENTER);
+				p.textAlign(PConstants.CENTER, PConstants.CENTER);
 				float xPos = startListX + shiftListX;
 				lastDisplayedInd = listX.length - 1;
 				firstDisplayedInd = 0;
@@ -145,7 +144,7 @@ public class HorizontalList<T> implements Widgets {
 							if(p.textWidth(displayList[i])<endListX-startListX) {
 							p.text(displayList[i], xPos, y - tYShift);
 							}else {
-								String[] splitStr=p.split(displayList[i],splitChar);
+								String[] splitStr=PApplet.split(displayList[i],splitChar);
 								p.text(splitStr[splitStr.length-1], xPos, y - tYShift);
 
 							}
@@ -279,7 +278,7 @@ public class HorizontalList<T> implements Widgets {
 				displayList[i]=l[i];
 				}else {
 					String elem="";
-					String[] splitStr=p.split(l[i],splitChar);
+					String[] splitStr=PApplet.split(l[i],splitChar);
 					for(int i2=splitStr.length-1;i2>=0;i2--) {
 						if(p.textWidth(elem+splitStr[i2]+"\\")<(endListX-startListX)/4*3) {
 						elem=splitStr[i2]+"\\"+elem;

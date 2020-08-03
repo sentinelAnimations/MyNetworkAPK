@@ -2,6 +2,7 @@ package com.dominic.network_apk;
 
 import java.lang.reflect.Method;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 
 public class MakeToast<T> implements Widgets {
@@ -54,7 +55,7 @@ public class MakeToast<T> implements Widgets {
 			}
 		}
 
-		p.textAlign(p.LEFT, p.CENTER);
+		p.textAlign(PConstants.LEFT, PConstants.CENTER);
 		p.noStroke();
 		p.fill(bgCol, alpha);
 		p.rect(x, y, w, h, edgeRad);

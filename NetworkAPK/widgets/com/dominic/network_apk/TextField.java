@@ -1,6 +1,7 @@
 package com.dominic.network_apk;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 import processing.data.StringList;
 
@@ -55,14 +56,14 @@ public class TextField<T> implements Widgets {
 	}
 
 	private void displayTextStretched() {
-		String[] splitStr = p.split(t, "\n");
-		p.textAlign(p.LEFT, p.CENTER);
+		String[] splitStr = PApplet.split(t, "\n");
+		p.textAlign(PConstants.LEFT, PConstants.CENTER);
 		p.fill(textCol);
 		p.textFont(f);
 		p.textSize(ts);
 		for (int i = 0; i < splitStr.length; i++) {
 			int spaceAmounth = Math.round((w - p.textWidth(splitStr[i])) / p.textWidth(" "));
-			String[] splitStr2 = p.split(splitStr[i], " ");
+			String[] splitStr2 = PApplet.split(splitStr[i], " ");
 			String newStr = splitStr2[0];
 			for (int i2 = 1; i2 < splitStr2.length; i2++) {				
 				if (i2 < spaceAmounth) {
@@ -81,7 +82,7 @@ public class TextField<T> implements Widgets {
 	}
 
 	private void displayTextUnStretched() {
-		p.textAlign(p.BOTTOM, p.CENTER);
+		p.textAlign(PConstants.BOTTOM, PConstants.CENTER);
 		p.fill(textCol);
 		p.textFont(f);
 		p.textSize(ts);
@@ -90,11 +91,11 @@ public class TextField<T> implements Widgets {
 
 	private void processToDisplay() {
 		p.textSize(ts);
-		String[] splitStr = p.split(t, " ");
+		String[] splitStr = PApplet.split(t, " ");
 		String newT = splitStr[0];
 		String newT2 = newT;
 		for (int i = 1; i < splitStr.length; i++) {
-			if (p.match(splitStr[i], "\n") != null) {
+			if (PApplet.match(splitStr[i], "\n") != null) {
 				newT += "\n" + splitStr[i];
 				newT2 = splitStr[i];
 			} else {
@@ -129,7 +130,7 @@ public class TextField<T> implements Widgets {
 		int ind = 0, singleFirst = 0, singleLast = 0;
 		StringList hyphenatedSegments = new StringList();
 		String hyphenated_word = hy.hyphenate(s);
-		String[] splitStr = p.split(hyphenated_word, "­");
+		String[] splitStr = PApplet.split(hyphenated_word, "­");
 		// p.println("--", splitStr, splitStr.length);
 
 		if (splitStr.length > 1) {
@@ -159,7 +160,7 @@ public class TextField<T> implements Widgets {
 		}
 
 		for (int i = singleFirst; i < splitStr.length - singleLast; i++) {
-			String[] searchForHyph = p.split(splitStr[i], "\u200b");
+			String[] searchForHyph = PApplet.split(splitStr[i], "\u200b");
 			for (int i2 = 0; i2 < searchForHyph.length; i2++) {
 				hyphenatedSegments.append(searchForHyph[i2]);
 			}
@@ -172,7 +173,7 @@ public class TextField<T> implements Widgets {
 	private void setupHyphenator() {
 		hy = new Hyphenator();
 		try {
-			hy.loadTable(new java.io.BufferedInputStream(new java.io.FileInputStream("data/hyphen.tex")));
+			hy.loadTable(new java.io.BufferedInputStream(new java.io.FileInputStream("data/tex/hyphen.tex")));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

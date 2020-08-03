@@ -3,6 +3,7 @@ package com.dominic.network_apk;
 import java.lang.reflect.Method;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 
 public class ImageButton<T> implements Widgets {
@@ -80,7 +81,7 @@ public class ImageButton<T> implements Widgets {
 
 	public void onKeyReleased(char k) {
 		if (shortcut >= 0) {
-			if ((int) k == shortcut) {
+			if (k == shortcut) {
 				isClicked = true;
 			}
 		}
@@ -101,10 +102,10 @@ public class ImageButton<T> implements Widgets {
 			int tw = (int) p.textWidth(infoText) + margin * 2;
 			int mx, my;
 			if (p.mouseX + tw < p.width) {
-				p.textAlign(p.RIGHT, p.CENTER);
+				p.textAlign(PConstants.RIGHT, PConstants.CENTER);
 			} else {
 				tw *= -1;
-				p.textAlign(p.LEFT, p.CENTER);
+				p.textAlign(PConstants.LEFT, PConstants.CENTER);
 			}
 			mx = p.mouseX;
 			my = p.mouseY;
@@ -117,7 +118,7 @@ public class ImageButton<T> implements Widgets {
 
 			p.fill(0, 200);
 			p.noStroke();
-			p.rect(mx + tw / 2, my + stdTs, p.abs(tw) + margin * 2, stdTs * 2, edgeRad);
+			p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
 			p.fill(col);
 			p.text(infoText, mx + tw, my + stdTs / 1.1f);
 		}

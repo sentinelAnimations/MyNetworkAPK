@@ -28,7 +28,7 @@ public class SpriteAnimation<T> implements Widgets {
 		this.parent=parent;
 		xShift=x;
 		yShift=y;
-		startImg = p.loadImage(path + p.nf(startInd, 4) + ".png");
+		startImg = p.loadImage(path + PApplet.nf(startInd, 4) + ".png");
 		startImg.resize(w, h);
 		Thread loadingThread = new Thread(new Runnable() {
 			@Override
@@ -62,7 +62,7 @@ public class SpriteAnimation<T> implements Widgets {
 	public void loadImgs() {
 		imgs = new PImage[endInd - startInd];
 		for (int i = startInd; i < endInd; i++) {
-			imgs[ind] = p.loadImage(path + p.nf(i, 4) + ".png");
+			imgs[ind] = p.loadImage(path + PApplet.nf(i, 4) + ".png");
 			imgs[ind].resize(w, h);
 			ind++;
 		}
