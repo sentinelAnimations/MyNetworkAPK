@@ -13,9 +13,9 @@ import processing.core.PFont;
 import processing.data.StringList;
 
 public class FileExplorer {
-	private int x, y, w, h, stdTs, edgeRad, margin, dark, light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, startXBtns, bs, editBarX, editBarY, editBarW;
+	private int x, y, w, h, stdTs, edgeRad, margin, dark, light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, startXBtns, bs, editBarX, editBarY, editBarW, btnMode = -1;
 	private Boolean isParented, isClosed = false, isCanceled = false, finishedListing = false, isListing = false, isSearching = false, finishedSearching = false;
-	private String selectedPath, searchDir,pathToCopy;
+	private String selectedPath = "", searchDir, pathToCopy = "";
 	private String[] searchedStr;
 	private PFont stdFont;
 	private PApplet p;
@@ -299,49 +299,143 @@ public class FileExplorer {
 			if (fileExplorer_btns[i].isClicked == true) {
 				switch (i) {
 				case 0: // copy folder
-					String[] list1=horizontalLists[2].getList();
-					for(int i2=0;i2<list1.length;i2++) {
-						pathToCopy+=list1[i2];
+					pathToCopy = "";
+					String[] c0List1 = horizontalLists[1].getList();
+					for (int i2 = 0; i2 < c0List1.length; i2++) {
+						pathToCopy += c0List1[i2];
 					}
-					break;
-				case 1: // cut folder
+					String[] c0List2 = horizontalLists[2].getList();
+					pathToCopy += c0List2[horizontalLists[2].getMarkedInd()];
+					btnMode = 0;
 					break;
 
-				case 2: // past folder
-					String destination="";
-					String[] l1=horizontalLists[2].getList();
-					for(int i2=0;i2<l1.length;i2++) {
-						destination+=l1[i2];
+				case 1: // cut folder
+					pathToCopy = "";
+					String[] c1List1 = horizontalLists[1].getList();
+					for (int i2 = 0; i2 < c1List1.length; i2++) {
+						pathToCopy += c1List1[i2];
 					}
-					if(pathToCopy.length()>0 && destination.length()>0) {
-					copyFolder(pathToCopy,destination);
-					 pathToCopy="";
+					String[] c1List2 = horizontalLists[2].getList();
+					pathToCopy += c1List2[horizontalLists[2].getMarkedInd()];
+					btnMode = 1;
+					break;
+
+				case 2: // paste folder
+					String destination = "";
+					String[] c2List1 = horizontalLists[1].getList();
+					for (int i2 = 0; i2 < c2List1.length; i2++) {
+						destination += c2List1[i2];
 					}
+					if (pathToCopy.length() > 0 && destination.length() > 0) {
+						Boolean isCopied = false;
+						copyFolder(pathToCopy, destination);
+						isCopied = true;
+						if (btnMode == 1 && isCopied) {
+							p.println(pathToCopy, "----");
+							deleteFolder(pathToCopy);
+						}
+						pathToCopy = "";
+					}
+					pathToCopy = "";
+					for (int i2 = 0; i2 < c2List1.length; i2++) {
+						pathToCopy += c2List1[i2];
+					}
+					horizontalLists[2].setList(getFoldersAndFiles(pathToCopy, true));
+					horizontalLists[3].setList(getFoldersAndFiles(pathToCopy, false));
+					pathToCopy = "";
+
+					btnMode = -1;
 					break;
 
 				case 3: // new folder
-					String c3curPath="";
-					String[] c3List=horizontalLists[2].getList();
-					for(int i2=0;i2<c3List.length;i2++) {
-						c3curPath+=c3List[i2];
+					String c3curPath = "", c3curPath2;
+					String[] c3List1 = horizontalLists[1].getList();
+					for (int i2 = 0; i2 < c3List1.length; i2++) {
+						c3curPath += c3List1[i2];
 					}
+					c3curPath2 = c3curPath;
+
+					String[] c3List2 = horizontalLists[2].getList();
+					String newFolderName = "";
+					int folderInd = 0;
+					Boolean searchNewName = true;
+					while (searchNewName == true) {
+						Boolean isEqual = false;
+						for (int i2 = 0; i2 < c3List2.length; i2++) {
+							newFolderName = "New folder" + folderInd;
+							if (folderInd < 1) {
+								newFolderName = "New folder";
+							}
+							if (newFolderName.equals(c3List2[i2])) {
+								isEqual = true;
+								break;
+							}
+						}
+						if (isEqual == false) {
+							searchNewName = false;
+						} else {
+							folderInd++;
+						}
+					}
+
+					c3curPath += "\\" + newFolderName;
 					File f = new File(c3curPath);
 					f.mkdir();
+					horizontalLists[2].setList(getFoldersAndFiles(c3curPath2, true));
 					break;
 
 				case 4: // delete folder
+					String pathToDelete = "";
+					String[] c4List1 = horizontalLists[1].getList();
+					for (int i2 = 0; i2 < c4List1.length; i2++) {
+						pathToDelete += c4List1[i2];
+					}
+					String[] c4List2 = horizontalLists[2].getList();
+					if (c4List2.length > 0) {
+						deleteFolder(pathToDelete + "\\" + c4List2[horizontalLists[2].getMarkedInd()]);
+						horizontalLists[2].setList(getFoldersAndFiles(pathToDelete, true));
+					}
 					break;
 
 				case 5: // delete file
+					pathToDelete = "";
+					String[] c5List1 = horizontalLists[1].getList();
+					for (int i2 = 0; i2 < c5List1.length; i2++) {
+						pathToDelete += c5List1[i2] + "\\";
+					}
+					String[] c5List3 = horizontalLists[3].getList();
+					if (c5List3.length > 0) {
+
+						String fileName = pathToDelete + "\\" + c5List3[horizontalLists[3].getMarkedInd()];
+						File f1 = new File(fileName);
+						if (f1.exists()) {
+							f1.delete();
+						}
+						horizontalLists[3].setList(getFoldersAndFiles(pathToDelete, false));
+					}
 					break;
 
 				case 6: // questions
 					break;
 
 				case 7: // cancel selection
+					isClosed=true;
+					isCanceled=true;
 					break;
 
 				case 8: // select
+					
+					selectedPath="";
+					String[] c8List1 = horizontalLists[1].getList();
+					for (int i2 = 0; i2 < c8List1.length; i2++) {
+						selectedPath += c8List1[i2];
+					}
+					String[] c8List3 = horizontalLists[3].getList();
+					if (c8List3.length > 0) {
+						selectedPath+=c8List3[horizontalLists[3].getMarkedInd()];
+					}
+					
+					isClosed=true;
 					break;
 
 				}
@@ -353,45 +447,45 @@ public class FileExplorer {
 	}
 
 	void copyFolder(String copyFolderPath, String destination) {
-		  if (copyFolderPath.equals(destination)==false) { 
-		    File f=new File(destination);
-		    String[] basePath=PApplet.split(copyFolderPath, "\\");
-		    f.mkdir();
-		    ArrayList<File> allFiles=listFilesRecursive(copyFolderPath);    
-		    for (int i=0; i<allFiles.size(); i++) {
-		      if (allFiles.get(i).isDirectory()) {
-		        String[] relativePath=PApplet.split(allFiles.get(i).toString(), "\\");
-		        String path="";
-		        for (int i2=basePath.length; i2<relativePath.length; i2++) {
-		          path+=relativePath[i2]+"\\";
-		        }
-		        f=new File(destination+"\\"+path);
-		        f.mkdir();
-		      }else{
-		        String[] splitStr=PApplet.split(allFiles.get(i).toString(), "\\");
+		if (copyFolderPath.equals(destination) == false) {
+			File f;
+			String[] splitStr1 = p.split(copyFolderPath, "\\");
+			String[] basePath = p.split(copyFolderPath, "\\");
 
-		        String[] relativePath=PApplet.split(allFiles.get(i).toString(), "\\");
-		        String path="";
-		        for (int i2=basePath.length; i2<relativePath.length; i2++) {
-		          path+=relativePath[i2]+"\\";
-		        }
+			ArrayList<File> allFiles = listFilesRecursive(copyFolderPath);
+			for (int i = 0; i < allFiles.size(); i++) {
+				if (allFiles.get(i).isDirectory()) {
+					String[] relativePath = p.split(allFiles.get(i).toString(), "\\");
+					String path = splitStr1[splitStr1.length - 1] + "\\";
+					for (int i2 = basePath.length; i2 < relativePath.length; i2++) {
+						path += relativePath[i2] + "\\";
+					}
+					f = new File(destination + "\\" + path);
+					f.mkdir();
+				} else {
+					String[] splitStr = p.split(allFiles.get(i).toString(), "\\");
 
-		        Path oldFile = Paths.get(allFiles.get(i).toString());
-		        Path newFile = Paths.get(destination+"\\"+path);
-		        try {
-		          Files.copy(oldFile, newFile);
-		        } 
-		        catch (IOException e) {
-		          PApplet.println(e);
-		        }
-		      }
-		        
-		    }
-		  }else{
-		   PApplet.println("cant copy to same path!"); 
-		  }
+					String[] relativePath = p.split(allFiles.get(i).toString(), "\\");
+					String path = "";
+					for (int i2 = basePath.length; i2 < relativePath.length; i2++) {
+						path += relativePath[i2] + "\\";
+					}
+
+					Path oldFile = Paths.get(allFiles.get(i).toString());
+					Path newFile = Paths.get(destination + splitStr1[splitStr1.length - 1] + "\\" + path);
+					p.println(newFile, oldFile);
+					try {
+						p.println(p.frameCount);
+						Files.copy(oldFile, newFile);
+					} catch (IOException e) {
+						p.println(e);
+					}
+				}
+			}
+		} else {
+			p.println("cant copy to same path!");
 		}
-
+	}
 
 	public void deleteFolder(String path) {
 		allInPathsDeleteFolder.clear();
@@ -401,7 +495,7 @@ public class FileExplorer {
 		if (allInPathsDeleteFolder.size() > 1) {
 			PApplet.println("data in folder");
 		}
-
+		p.println(allInPathsDeleteFolder);
 		for (int i = allInPathsDeleteFolder.size() - 1; i >= 0; i--) {
 			File curFile = new File(allInPathsDeleteFolder.get(i));
 			curFile.delete();
@@ -416,11 +510,11 @@ public class FileExplorer {
 				allInPathsDeleteFolder.append(pa + "/" + s);
 				String[] splitString = PApplet.split(s, ".");
 				if (splitString.length == 1) {
-					recursGetPaths(p + "/" + s);
+					recursGetPaths(pa + "/" + s);
 				}
 			}
 		} else {
-			PApplet.println("Cant delete path");
+			p.println("Cant delete path");
 		}
 	}
 
@@ -565,6 +659,13 @@ public class FileExplorer {
 
 	public Boolean getIsClosed() {
 		return isClosed;
+	}
+	
+	public void setIsCanceled(Boolean state) {
+		 isCanceled=state;
+	}
+	public void setIsClosed(Boolean state) {
+		isClosed=state;
 	}
 
 	public String getPath() {

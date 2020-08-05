@@ -7,6 +7,7 @@ import processing.data.StringList;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import net.davidashen.text.Hyphenator;
@@ -173,7 +174,11 @@ public class TextField<T> implements Widgets {
 	private void setupHyphenator() {
 		hy = new Hyphenator();
 		try {
-			hy.loadTable(new java.io.BufferedInputStream(new java.io.FileInputStream("data/tex/hyphen.tex")));
+			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+			InputStream is = classloader.getResourceAsStream("texSources/hyphen.tex");
+			hy.loadTable(new java.io.BufferedInputStream(is));
+			//"C:\\Users\\Dominic\\git\\MyNetworkAPK\\NetworkAPK\\data\\tex\\hyphen.tex"
+			//hy.loadTable(new java.io.BufferedInputStream(new java.io.FileInputStream("data/texSources/hyphen.tex")));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

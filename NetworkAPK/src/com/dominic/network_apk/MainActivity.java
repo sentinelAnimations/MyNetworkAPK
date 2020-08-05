@@ -31,8 +31,8 @@ public class MainActivity extends PApplet {
 	// Fonts---------------------------------------------------
 
 	// images--------------------------------------------------
-	public String absPathPictos = "imgs\\pictograms\\";
-	public String absPathStartImgs ="imgs\\startImgs\\";
+	public String absPathPictos = "imgs/pictograms/";
+	public String absPathStartImgs ="imgs/startImgs/";
 	public String[] startImgPaths = { "muffins.png" };
 	// images--------------------------------------------------
 
@@ -53,6 +53,8 @@ public class MainActivity extends PApplet {
 	public void settings() {
 		// getSurface().setSize(1050, 450);
 		// size(1050, 450);
+		smooth(8);
+
 	}
 
 	@Override
