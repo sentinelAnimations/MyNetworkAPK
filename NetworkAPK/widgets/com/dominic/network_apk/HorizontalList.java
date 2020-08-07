@@ -7,7 +7,7 @@ import processing.core.PFont;
 
 public class HorizontalList<T> implements Widgets {
 	private int x, y, xShift, yShift, w, h, margin, edgeRad, stdTs, titleBoxWidth, btnSize, btnSizeSmall, type, dark, light, lighter, textCol, textDark,border, shiftPerClick = 20, lastDisplayedInd, firstDisplayedInd, selectedInd = 0, markedInd = 0;
-	private float tYShift, startListX, endListX, shiftListX = 0;
+	private float textYShift, startListX, endListX, shiftListX = 0;
 	private float[] listX;
 	private char splitChar;
 	private Boolean isParented, showSelected, showMarked;
@@ -21,7 +21,7 @@ public class HorizontalList<T> implements Widgets {
 	private PictogramImage picto;
 	public ImageButton goLeft_btn, goRight_btn;
 
-	public HorizontalList(PApplet p, int x, int y, int w, int h, int margin, int edgeRad, int stdTs, int titleBoxWidth, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark,int border,char splitChar, Boolean isParented, Boolean showSelected, Boolean showMarked, String title, String[] pictoPaths, String[] list, PFont stdFont, T parent) {
+	public HorizontalList(PApplet p, int x, int y, int w, int h, int margin, int edgeRad, int stdTs, int titleBoxWidth, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark,int border,float textYShift,char splitChar, Boolean isParented, Boolean showSelected, Boolean showMarked, String title, String[] pictoPaths, String[] list, PFont stdFont, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -39,6 +39,7 @@ public class HorizontalList<T> implements Widgets {
 		this.textCol = textCol;
 		this.textDark = textDark;
 		this.border=border;
+		this.textYShift=textYShift;
 		this.splitChar=splitChar;
 		this.showSelected = showSelected;
 		this.showMarked = showMarked;
@@ -53,11 +54,10 @@ public class HorizontalList<T> implements Widgets {
 		displayList=list;
 		xShift = x;
 		yShift = y;
-		tYShift = stdTs * 0.1f;
 		listX = new float[list.length];
-		picto = new PictogramImage(p, x - w / 2 + 2 * margin + btnSizeSmall / 2, y, btnSizeSmall - margin, margin, stdTs, edgeRad, textCol, false, pictoPaths[0], "", null);
-		goLeft_btn = new ImageButton(p, x - w / 2 + margin * 2 + titleBoxWidth + btnSizeSmall / 2, y, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, true, false, textCol, lighter, pictoPaths[1], "", null);
-		goRight_btn = new ImageButton(p, x + w / 2 - margin - btnSizeSmall / 2, y, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, true, false, textCol, lighter, pictoPaths[2], "", null);
+		picto = new PictogramImage(p, x - w / 2 + 2 * margin + btnSizeSmall / 2, y, btnSizeSmall - margin, margin, stdTs, edgeRad, textCol, textYShift,false, pictoPaths[0], "", null);
+		goLeft_btn = new ImageButton(p, x - w / 2 + margin * 2 + titleBoxWidth + btnSizeSmall / 2, y, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1,textYShift, true, false, textCol, lighter, pictoPaths[1], "", null);
+		goRight_btn = new ImageButton(p, x + w / 2 - margin - btnSizeSmall / 2, y, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1,textYShift, true, false, textCol, lighter, pictoPaths[2], "", null);
 		startListX = goLeft_btn.getX() + goLeft_btn.getH() / 2.0f + margin;
 		endListX = goRight_btn.getX() - goRight_btn.getH() / 2 - margin;
 		type = 0;
@@ -109,7 +109,7 @@ public class HorizontalList<T> implements Widgets {
 			p.textAlign(PConstants.LEFT, PConstants.CENTER);
 			p.textFont(stdFont);
 			p.textSize(stdTs);
-			p.text(title, x - w / 2 + 3 * margin + btnSizeSmall, y - tYShift);
+			p.text(title, x - w / 2 + 3 * margin + btnSizeSmall, y - textYShift);
 
 			if (displayList.length > 0) {
 				p.textAlign(PConstants.CENTER, PConstants.CENTER);
@@ -142,10 +142,10 @@ public class HorizontalList<T> implements Widgets {
 							p.rect(xPos, y, p.textWidth(displayList[i]) + margin * 2, btnSizeSmall, edgeRad);
 							p.fill(textCol);
 							if(p.textWidth(displayList[i])<endListX-startListX) {
-							p.text(displayList[i], xPos, y - tYShift);
+							p.text(displayList[i], xPos, y - textYShift);
 							}else {
 								String[] splitStr=PApplet.split(displayList[i],splitChar);
-								p.text(splitStr[splitStr.length-1], xPos, y - tYShift);
+								p.text(splitStr[splitStr.length-1], xPos, y - textYShift);
 
 							}
 						} else {

@@ -15,11 +15,12 @@ public class MainActivity extends PApplet {
 	static int mode = 0; // 0=loadingScreen, 1=first setup
 
 	// Colors--------------------------------------------------
-	public int dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0),green=color(0,255,0), textCol = color(255), textDark = color(150);
+	public int dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0), green = color(0, 255, 0), textCol = color(255), textDark = color(150);
 	// colors -------------------------------------------------
 
 	// Dimens--------------------------------------------------
 	public int stdTs = 12, titleTs = 22, subtitleTs = 16, btnSize = 50, btnSizeLarge = btnSize * 2, btnSizeSmall = btnSize / 2, edgeRad = btnSize / 10, padding = 5, margin = padding;
+	public float textYShift = 0.1f;
 	// Dimens--------------------------------------------------
 
 	// Strings--------------------------------------------------
@@ -32,7 +33,7 @@ public class MainActivity extends PApplet {
 
 	// images--------------------------------------------------
 	public String absPathPictos = "imgs/pictograms/";
-	public String absPathStartImgs ="imgs/startImgs/";
+	public String absPathStartImgs = "imgs/startImgs/";
 	public String[] startImgPaths = { "muffins.png" };
 	// images--------------------------------------------------
 
@@ -51,10 +52,7 @@ public class MainActivity extends PApplet {
 
 	@Override
 	public void settings() {
-		// getSurface().setSize(1050, 450);
-		// size(1050, 450);
-		smooth(8);
-
+		pixelDensity(2);
 	}
 
 	@Override
@@ -66,13 +64,14 @@ public class MainActivity extends PApplet {
 		// variableInitialisation -----------------------------------------------
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
 
-		loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, dark, textCol, textDark, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
+		loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, dark, textCol, textDark, textYShift, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
 
 		String[] p1 = { absPathPictos + "masterOrSlave.png", absPathPictos + "blenderExeFolder.png", absPathPictos + "imageFolder.png", absPathPictos + "pathToCloud.png", absPathPictos + "personalData.png", absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png" };
-		String[] p2 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png",absPathPictos+"arrowLeft.png",absPathPictos+"arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png",absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png" };
-		settingsScreen = new SettingsScreen(this, btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark,dark, light, lighter,border, p1, p2, stdFont);
-		firstSetupPicto = new PictogramImage(this, margin + btnSize / 2, margin + btnSize / 2, btnSize, margin, stdTs, edgeRad, textCol, false, absPathPictos + "settings.png", "First setup page", null);
-		firstSetupHelp_btn = new ImageButton(this, width - btnSize / 2 - margin, btnSize / 2 + margin, btnSize, btnSize, stdTs, margin, edgeRad, 8, false, false, textCol, textCol, absPathPictos + "questions.png", "questions and infos | sortcut: ctrl+h", null);
+		String[] p2 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
+		settingsScreen = new SettingsScreen(this, btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark, dark, light, lighter, border, textYShift, mySettingsPath, p1, p2, stdFont);
+
+		firstSetupPicto = new PictogramImage(this, margin + btnSize / 2, margin + btnSize / 2, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, absPathPictos + "settings.png", "First setup page", null);
+		firstSetupHelp_btn = new ImageButton(this, width - btnSize / 2 - margin, btnSize / 2 + margin, btnSize, btnSize, stdTs, margin, edgeRad, 8, textYShift, false, false, textCol, textCol, absPathPictos + "questions.png", "questions and infos | sortcut: ctrl+h", null);
 		// variableInitialisation -----------------------------------------------
 
 	}
@@ -108,11 +107,20 @@ public class MainActivity extends PApplet {
 					m.render();
 				}
 			}
-			
+
 			for (int i = 0; i < settingsScreen.fileExplorer.searchBar.searchBar_et.getToastList().size(); i++) {
 				MakeToast m = (MakeToast) settingsScreen.fileExplorer.searchBar.searchBar_et.getToastList().get(i);
 				if (m.remove) {
 					settingsScreen.fileExplorer.searchBar.searchBar_et.removeToast(i);
+				} else {
+					m.render();
+				}
+			}
+
+			for (int i = 0; i < settingsScreen.getToastList().size(); i++) {
+				MakeToast m = (MakeToast) settingsScreen.getToastList().get(i);
+				if (m.remove) {
+					settingsScreen.removeToast(i);
 				} else {
 					m.render();
 				}
@@ -133,7 +141,7 @@ public class MainActivity extends PApplet {
 			for (int i = 0; i < settingsScreen.pathSelectors.length; i++) {
 				settingsScreen.pathSelectors[i].openFileExplorer_btn.onMousePressed();
 			}
-			for(int i=0;i<settingsScreen.fileExplorer.horizontalLists.length;i++) {
+			for (int i = 0; i < settingsScreen.fileExplorer.horizontalLists.length; i++) {
 				settingsScreen.fileExplorer.horizontalLists[i].goLeft_btn.onMousePressed();
 				settingsScreen.fileExplorer.horizontalLists[i].goRight_btn.onMousePressed();
 			}
@@ -142,6 +150,7 @@ public class MainActivity extends PApplet {
 			for (int i = settingsScreen.fileExplorer.fileExplorer_btns.length - 1; i >= 0; i--) {
 				settingsScreen.fileExplorer.fileExplorer_btns[i].onMousePressed();
 			}
+			settingsScreen.masterOrSlave_dropdown.dropdown_btn.onMousePressed();
 
 		}
 	}
@@ -157,13 +166,13 @@ public class MainActivity extends PApplet {
 			for (int i = 0; i < settingsScreen.pathSelectors.length; i++) {
 				settingsScreen.pathSelectors[i].openFileExplorer_btn.onMouseReleased();
 			}
-			for(int i=0;i<settingsScreen.fileExplorer.horizontalLists.length;i++) {
-				 if (mouseButton == RIGHT) {
-						settingsScreen.fileExplorer.horizontalLists[i].onMouseRightReleased();
-				 }
-				 if (mouseButton == LEFT) {
-				settingsScreen.fileExplorer.horizontalLists[i].onMouseReleased();
-				 }
+			for (int i = 0; i < settingsScreen.fileExplorer.horizontalLists.length; i++) {
+				if (mouseButton == RIGHT) {
+					settingsScreen.fileExplorer.horizontalLists[i].onMouseRightReleased();
+				}
+				if (mouseButton == LEFT) {
+					settingsScreen.fileExplorer.horizontalLists[i].onMouseReleased();
+				}
 				settingsScreen.fileExplorer.horizontalLists[i].goLeft_btn.onMouseReleased();
 				settingsScreen.fileExplorer.horizontalLists[i].goRight_btn.onMouseReleased();
 			}
@@ -174,18 +183,20 @@ public class MainActivity extends PApplet {
 			for (int i = settingsScreen.fileExplorer.fileExplorer_btns.length - 1; i >= 0; i--) {
 				settingsScreen.fileExplorer.fileExplorer_btns[i].onMouseReleased();
 			}
-
+			settingsScreen.masterOrSlave_dropdown.dropdown_btn.onMouseReleased();
+			settingsScreen.masterOrSlave_dropdown.onMouseReleased();
 		}
 	}
-	
+
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		  float e = event.getCount();
-		if(mode==1) {
-			for(int i=0;i<settingsScreen.fileExplorer.horizontalLists.length;i++) {
+		float e = event.getCount();
+		if (mode == 1) {
+			for (int i = 0; i < settingsScreen.fileExplorer.horizontalLists.length; i++) {
 				settingsScreen.fileExplorer.horizontalLists[i].onScroll(e);
 				settingsScreen.fileExplorer.horizontalLists[i].onScroll(e);
 			}
+			settingsScreen.masterOrSlave_dropdown.onScroll(e);
 		}
 	}
 
@@ -197,8 +208,8 @@ public class MainActivity extends PApplet {
 			}
 			settingsScreen.personalData_et.onKeyReleased(key);
 			settingsScreen.saveSettings_btn.onKeyReleased(key);
-			
-			for(int i=0;i<settingsScreen.fileExplorer.horizontalLists.length;i++) {
+
+			for (int i = 0; i < settingsScreen.fileExplorer.horizontalLists.length; i++) {
 				settingsScreen.fileExplorer.horizontalLists[i].goLeft_btn.onKeyReleased(key);
 				settingsScreen.fileExplorer.horizontalLists[i].goRight_btn.onKeyReleased(key);
 			}

@@ -14,6 +14,7 @@ import net.davidashen.text.Hyphenator;
 
 public class TextField<T> implements Widgets {
 	private int textCol, w, h, x, y,xShift,yShift, ts;
+	private float textYShift;
 	private Boolean stretch,isParented;
 	private String t;
 	private PApplet p;
@@ -21,7 +22,7 @@ public class TextField<T> implements Widgets {
 	private Hyphenator hy;
 	private T parent;
 
-	public TextField(PApplet p, int textCol, int w, int h, int x, int y, int stdTs, Boolean stretch,Boolean isParented, String t,
+	public TextField(PApplet p, int textCol, int w, int h, int x, int y, int stdTs,float textYShift, Boolean stretch,Boolean isParented, String t,
 			PFont f,T parent) {
 		this.p = p;
 		this.textCol = textCol;
@@ -31,6 +32,7 @@ public class TextField<T> implements Widgets {
 		this.y = y;
 		this.ts = stdTs;
 		this.stretch = stretch;
+		this.textYShift=textYShift;
 		this.isParented=isParented;
 		this.t = t;
 		this.f = f;

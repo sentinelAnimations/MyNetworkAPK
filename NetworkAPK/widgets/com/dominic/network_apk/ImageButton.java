@@ -8,6 +8,7 @@ import processing.core.PImage;
 
 public class ImageButton<T> implements Widgets {
 	private int x, y, xShift, yShift, w, h, stdTs, edgeRad, shortcut, col, bgCol, margin, onceOnClick = 0, hoverTime;
+	private float textYShift;
 	private String imgPath, infoText;
 	public Boolean isClicked = false,isPressed=false, isParented;
 	private Boolean useBg, isHovering;
@@ -15,7 +16,7 @@ public class ImageButton<T> implements Widgets {
 	private PImage picto;
 	private T parent;
 
-	public ImageButton(PApplet p, int x, int y, int w, int h, int stdTs, int margin, int edgeRad, int shortcut, Boolean useBg, Boolean isParented, int col, int bgCol, String imgPath, String infoText, T parent) {
+	public ImageButton(PApplet p, int x, int y, int w, int h, int stdTs, int margin, int edgeRad, int shortcut,float textYShift, Boolean useBg, Boolean isParented, int col, int bgCol, String imgPath, String infoText, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -29,6 +30,7 @@ public class ImageButton<T> implements Widgets {
 		this.bgCol = bgCol;
 		this.edgeRad = edgeRad;
 		this.shortcut = shortcut;
+		this.textYShift=textYShift;
 		this.imgPath = imgPath;
 		this.infoText = infoText;
 		this.parent = parent;
@@ -120,7 +122,7 @@ public class ImageButton<T> implements Widgets {
 			p.noStroke();
 			p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
 			p.fill(col);
-			p.text(infoText, mx + tw, my + stdTs / 1.1f);
+			p.text(infoText, mx + tw, my + stdTs -stdTs*textYShift );
 		}
 	}
 	}
@@ -170,5 +172,10 @@ public class ImageButton<T> implements Widgets {
 	}
 	public int getH() {
 		return h;
+	}
+	
+	public void setPicto(String path) {
+		imgPath=path;
+		loadPicto();
 	}
 }

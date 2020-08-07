@@ -11,6 +11,7 @@ import processing.data.StringList;
 public class EditText<T> implements Widgets {
 
 	private int x, y, xShift, yShift, w, h, stdTs, light, textCol, edgeRad, margin, cursorInd = 0, cursorX, cursorY, textStartX, textStartY, row = 0, maxRows, cursorAlpha = 0;
+	private float textYShift;
 	private Boolean isParented, doOnceOnStartup = true,useBg;
 	public Boolean isActive = false;
 	private String hint, displT;
@@ -21,7 +22,7 @@ public class EditText<T> implements Widgets {
 	private T parent;
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 
-	public EditText(PApplet p, int x, int y, int w, int h, int stdTs, int light, int textCol, int edgeRad, int margin,Boolean useBg, Boolean isParented, String hint,char[] forbiddenChars, PFont stdFont, T parent) {
+	public EditText(PApplet p, int x, int y, int w, int h, int stdTs, int light, int textCol, int edgeRad, int margin,float textYShift,Boolean useBg, Boolean isParented, String hint,char[] forbiddenChars, PFont stdFont, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -32,6 +33,7 @@ public class EditText<T> implements Widgets {
 		this.textCol = textCol;
 		this.edgeRad = edgeRad;
 		this.margin = margin;
+		this.textYShift=textYShift;
 		this.useBg=useBg;
 		this.isParented = isParented;
 		this.hint = hint;
@@ -164,7 +166,7 @@ public class EditText<T> implements Widgets {
 			if (strList.size() <= maxRows) {
 				if (strList.size() + 1 > maxRows && p.textWidth(strList.get(row) + k) > w - margin * 2) {
 					if (makeToasts.size() < 2) {
-						makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol, false, "Maximum rows reached now", stdFont, null));
+						makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol,textYShift, false, "Maximum rows reached now", stdFont, null));
 					}
 				} else {
 					if (k > 31 && k < 127) {
@@ -205,7 +207,7 @@ public class EditText<T> implements Widgets {
 				}
 
 				if (strList.size() == maxRows && makeToasts.size() < 2 && k == PConstants.ENTER) {
-					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol, false, "Maximum rows reached now", stdFont, null));
+					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol,textYShift, false, "Maximum rows reached now", stdFont, null));
 				}
 			}
 			if (k == PConstants.BACKSPACE) {

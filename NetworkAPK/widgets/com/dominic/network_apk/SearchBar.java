@@ -7,6 +7,7 @@ import processing.core.PFont;
 
 public class SearchBar<T> implements Widgets {
 	private int x,y,w,h,xShift,yShift,edgeRad,margin,stdTs,textCol,textDark,bgCol,bs;
+	private float textYShift;
 	private String hint,t;
 	private Boolean isParented;
 	private PFont stdFont;
@@ -15,7 +16,7 @@ public class SearchBar<T> implements Widgets {
 	public EditText searchBar_et;
 	public ImageButton search_btn;
 	
-	public SearchBar(PApplet p,int x,int y,int w,int h,int edgeRad,int margin,int stdTs,int textCol,int textDark,int bgCol,Boolean isParented, String hint,String pictoPath,PFont stdFont,T parent) {
+	public SearchBar(PApplet p,int x,int y,int w,int h,int edgeRad,int margin,int stdTs,int textCol,int textDark,int bgCol,float textYShift,Boolean isParented, String hint,String pictoPath,PFont stdFont,T parent) {
 		this.p=p;
 		this.x=x;
 		this.y=y;
@@ -27,15 +28,16 @@ public class SearchBar<T> implements Widgets {
 		this.textCol=textCol;
 		this.textDark=textDark;
 		this.bgCol=bgCol;
+		this.textYShift=textYShift;
 		this.isParented=isParented;
 		this.hint=hint;
 		this.stdFont=stdFont;
 		this.parent=parent;
 		xShift = x;
 		yShift = y;
-		search_btn=new ImageButton( p,x+w/2-h/2,  y,  h,  h,  stdTs,  margin,  edgeRad,  10,  true,false,  textCol,  bgCol, pictoPath , "Search | Shortcut: ctrl+Enter", null);	
+		search_btn=new ImageButton( p,x+w/2-h/2,  y,  h,  h,  stdTs,  margin,  edgeRad,  10,textYShift,  true,false,  textCol,  bgCol, pictoPath , "Search | Shortcut: ctrl+Enter", null);	
 		char[] fChars= {'>','<',':','"','/','\\','|','?','*'};
-		searchBar_et = new EditText(p, x-h/2-margin, y, w-margin*6, h, stdTs, bgCol, textCol, edgeRad, margin,true,false, hint,fChars, stdFont, null);
+		searchBar_et = new EditText(p, x-h/2-margin, y, w-margin*6, h, stdTs, bgCol, textCol, edgeRad, margin,textYShift,true,false, hint,fChars, stdFont, null);
 
 	}
 	

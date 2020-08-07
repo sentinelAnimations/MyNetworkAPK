@@ -10,6 +10,7 @@ import processing.core.PFont;
 public class PathSelector<T> implements Widgets {
 
 	private int x, y, xShift, yShift, w, h, stdTs, edgeRad, margin, bgCol, textCol, textDark, btnSize, hoverTime = 0, textStartX = 0;
+	private float textYShift;
 	private Boolean isParented, selectFolder, isHovering = false;
 	private String t = "",displayText="", hint, imgPath;
 	private PFont stdFont;
@@ -18,7 +19,7 @@ public class PathSelector<T> implements Widgets {
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 	public ImageButton openFileExplorer_btn;
 
-	public PathSelector(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int bgCol, int textCol, int textDark, Boolean selectFolder, Boolean isParented, String hint, String imgPath, PFont stdFont, T parent) {
+	public PathSelector(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int bgCol, int textCol, int textDark,float textYShift, Boolean selectFolder, Boolean isParented, String hint, String imgPath, PFont stdFont, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -30,6 +31,7 @@ public class PathSelector<T> implements Widgets {
 		this.bgCol = bgCol;
 		this.textCol = textCol;
 		this.textDark = textDark;
+		this.textYShift=textYShift;
 		this.selectFolder = selectFolder;
 		this.isParented = isParented;
 		this.hint = hint;
@@ -39,7 +41,7 @@ public class PathSelector<T> implements Widgets {
 		xShift = x;
 		yShift = y;
 		btnSize = h - margin;
-		openFileExplorer_btn = new ImageButton(p, x - w / 2 + margin + btnSize / 2, yShift, btnSize, btnSize, stdTs, margin, edgeRad, -1, false, isParented, textCol, textCol, imgPath, "open file explorer", parent);
+		openFileExplorer_btn = new ImageButton(p, x - w / 2 + margin + btnSize / 2, yShift, btnSize, btnSize, stdTs, margin, edgeRad, -1,textYShift, false, isParented, textCol, textCol, imgPath, "open file explorer", parent);
 		textStartX = x - w / 2 + margin + btnSize;
 		calcDisplayText();
 
@@ -58,10 +60,10 @@ public class PathSelector<T> implements Widgets {
 		p.textSize(stdTs);
 		if (t.length() < 1) {
 			p.fill(textDark);
-			p.text(hint, textStartX, y - stdTs / 5);
+			p.text(hint, textStartX, y - stdTs*textYShift);
 		} else {
 			p.fill(textCol);
-			p.text(displayText, x - w / 2 + margin + btnSize, y - stdTs / 5);
+			p.text(displayText, x - w / 2 + margin + btnSize, y - stdTs*textYShift);
 		}
 		onHover();
 	}
@@ -73,11 +75,12 @@ public class PathSelector<T> implements Widgets {
 		
 		String[] splitStr = p.split(t, "\\");
 		for(int i=splitStr.length-1;i>=0;i--) {
-			if(splitStr[i].length()>0) {
 			if(p.textWidth("..."+displayText+splitStr[i])<td) {
+				if(splitStr[i].length()>0) {
 				displayText=splitStr[i]+"\\"+displayText;	
+				}
 			}else {
-				if(i==splitStr.length-1) {
+				if(displayText.length()<5) {
 					for(int i2=splitStr[splitStr.length-1].length()-1;i2>=0;i2--) {
 						if(p.textWidth("..."+displayText+splitStr[splitStr.length-1].charAt(i2))<td) {
 							displayText=splitStr[splitStr.length-1].charAt(i2)+displayText;
@@ -92,7 +95,6 @@ public class PathSelector<T> implements Widgets {
 				break;
 			}
 		}
-		}
 		if(displayText.length()>0) {
 			while(displayText.charAt(displayText.length()-1)=='\\') {
 				displayText=displayText.substring(0,displayText.length()-1);
@@ -102,7 +104,7 @@ public class PathSelector<T> implements Widgets {
 	
 	private void onHover() {
 		if (t.length() > 0) {
-			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			if (p.mouseX > x - w / 2+h+margin && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
 				if (isHovering) {
 					hoverTime++;
 				}
@@ -133,7 +135,7 @@ public class PathSelector<T> implements Widgets {
 				p.noStroke();
 				p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
 				p.fill(textCol);
-				p.text(t, mx + tw, my + stdTs / 1.1f);
+				p.text(t, mx + tw, my + stdTs - stdTs*textYShift);
 			}
 		}
 	}
@@ -164,12 +166,22 @@ public class PathSelector<T> implements Widgets {
 		return y;
 	}
 
+	//whether PathSelector should be used to select Folder or File
 	public Boolean getSelectFolder() {
 		return selectFolder;
 	}
+	
+	public String getPath() {
+		return t;
+	}
 
-	public void setText(String text) {
+	public void setText(String text) {	
 		t = text;
+		if(t.length()>0) {
+			while(t.charAt(t.length()-1)=='\\') {
+				t=t.substring(0,t.length()-1);
+			}
+		}
 		calcDisplayText();
 	}
 

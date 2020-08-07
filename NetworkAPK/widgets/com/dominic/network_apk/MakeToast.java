@@ -6,17 +6,16 @@ import processing.core.PConstants;
 import processing.core.PFont;
 
 public class MakeToast<T> implements Widgets {
-	private int x, y, xShift, yShift, w, h, stdTs, margin, edgeRad, bgCol, textCol, alpha = 0, alifeTime = 100,
-			fadeOutTimer;
+	private int x, y, xShift, yShift, w, h, stdTs, margin, edgeRad, bgCol, textCol, alpha = 0, alifeTime = 100, fadeOutTimer;
+	private float textYShift;
 	public Boolean remove = false;
-	private Boolean fadeOut = false,isParented;
+	private Boolean fadeOut = false, isParented;
 	private String t;
 	private PFont stdFont;
 	private PApplet p;
 	private T parent;
 
-	public MakeToast(PApplet p, int x, int y, int stdTs, int margin, int edgeRad, int bgCol, int textCol, Boolean isParented,String t,
-			PFont stdFont, T parent) {
+	public MakeToast(PApplet p, int x, int y, int stdTs, int margin, int edgeRad, int bgCol, int textCol,float textYShift, Boolean isParented, String t, PFont stdFont, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -25,12 +24,13 @@ public class MakeToast<T> implements Widgets {
 		this.edgeRad = edgeRad;
 		this.bgCol = bgCol;
 		this.textCol = textCol;
-		this.isParented=isParented;
+		this.textYShift=textYShift;
+		this.isParented = isParented;
 		this.t = t;
 		this.stdFont = stdFont;
 		this.parent = parent;
-		xShift=this.x;
-		yShift=this.y;
+		xShift = this.x;
+		yShift = this.y;
 		w = (int) (p.textWidth(t) + margin * 2);
 		h = stdTs + margin * 2;
 	}
@@ -62,7 +62,7 @@ public class MakeToast<T> implements Widgets {
 		p.fill(textCol, alpha);
 		p.textFont(stdFont);
 		p.textSize(stdTs);
-		p.text(t, x - w / 2 + margin, y - stdTs / 5);
+		p.text(t, x - w / 2 + margin, y - stdTs*textYShift);
 	}
 
 	@Override

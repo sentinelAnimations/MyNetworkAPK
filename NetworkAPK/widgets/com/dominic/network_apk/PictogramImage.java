@@ -7,13 +7,14 @@ import processing.core.PImage;
 
 public class PictogramImage<T> implements Widgets {
 	private int x,y,xShift,yShift,dim,col,hoverTime=0,btnSize,margin,stdTs,edgeRad;
+	private float textYShift;
 	private Boolean isHovering=false,isParented;
 	private String imgPath,infoText;
 	private PApplet p;
 	private PImage img;
 	private T parent;
 	
-	public PictogramImage(PApplet p,int x,int y,int dim,int margin,int stdTs,int edgeRad,int col,Boolean isParented, String imgPath,String infoText,T parent) {
+	public PictogramImage(PApplet p,int x,int y,int dim,int margin,int stdTs,int edgeRad,int col,float textYShift,Boolean isParented, String imgPath,String infoText,T parent) {
 		this.p=p;
 		this.x=x;
 		this.y=y;
@@ -23,6 +24,7 @@ public class PictogramImage<T> implements Widgets {
 		this.edgeRad=edgeRad;
 		this.col=col;
 		this.isParented=isParented;
+		this.textYShift=textYShift;
 		this.imgPath=imgPath;
 		this.infoText=infoText;
 		this.parent=parent;
@@ -74,7 +76,7 @@ public class PictogramImage<T> implements Widgets {
 			p.noStroke();
 			p.rect(mx + tw / 2, my + stdTs , PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
 			p.fill(col);
-			p.text(infoText, mx + tw,my + stdTs / 1.1f );
+			p.text(infoText, mx + tw,my + stdTs -stdTs*textYShift );
 		}
 	}
 	}
