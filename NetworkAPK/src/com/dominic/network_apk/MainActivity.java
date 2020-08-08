@@ -24,7 +24,7 @@ public class MainActivity extends PApplet {
 	// Dimens--------------------------------------------------
 
 	// Strings--------------------------------------------------
-	public String APKName = "InSevenDays©", APKDescription = "-A network solution-", mySettingsPath = "savedData/settings/mySettings.json";
+	public String APKName = "InSevenDays©", APKDescription = "-A network solution-", mySettingsPath = "savedData/settings/settings.json";  
 	// Strings--------------------------------------------------
 
 	// Fonts---------------------------------------------------
@@ -52,7 +52,7 @@ public class MainActivity extends PApplet {
 
 	@Override
 	public void settings() {
-		pixelDensity(2);
+
 	}
 
 	@Override
