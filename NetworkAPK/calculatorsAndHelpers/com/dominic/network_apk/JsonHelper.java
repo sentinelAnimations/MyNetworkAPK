@@ -1,56 +1,88 @@
 package com.dominic.network_apk;
 
 import org.json.simple.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.json.simple.JSONArray;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
 import processing.core.PApplet;
 
-
 public class JsonHelper {
+	private Boolean isFlawlessLoaded = true;
 	private PApplet p;
+	private JSONArray myArray = new JSONArray();
+	private JSONArray loadedData = new JSONArray();
+
 	public JsonHelper(PApplet p) {
-		this.p=p;
+		this.p = p;
 	}
-    
+
 	public void writeData(String path) {
-		 //First Employee
-        JSONObject employeeDetails = new JSONObject();
-        employeeDetails.put("firstName", "Lokesh");
-        employeeDetails.put("lastName", "Gupta");
-        employeeDetails.put("website", "howtodoinjava.com");
-         
-        JSONObject employeeObject = new JSONObject(); 
-        employeeObject.put("employee", employeeDetails);
-         
-        //Second Employee
-        JSONObject employeeDetails2 = new JSONObject();
-        employeeDetails2.put("firstName", "Brian");
-        employeeDetails2.put("lastName", "Schultz");
-        employeeDetails2.put("website", "example.com");
-         
-        JSONObject employeeObject2 = new JSONObject(); 
-        employeeObject2.put("employee", employeeDetails2);
-         
-        //Add employees to list
-        JSONArray employeeList = new JSONArray();
-        employeeList.add(employeeObject);
-        employeeList.add(employeeObject2);
-         
-        //Write JSON file
-        
-        try (FileWriter file = new FileWriter(path)) {
- 
-            file.write(employeeList.toJSONString());
-            file.flush();
- 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		// Write JSON file
+		String[] splitPath = p.split(path, "/");
+		File f = new File(splitPath[0]);
+		f.mkdir();
+		f = new File(path);
+		f.getParentFile().mkdir();
+
+		try (FileWriter file = new FileWriter(path)) {
+
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String jsonOutput = gson.toJson(myArray);
+
+			file.write(jsonOutput);
+			file.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
+	private void readData(String path) {
+		JSONParser jsonParser = new JSONParser();
+		isFlawlessLoaded = false;
+		try (FileReader reader = new FileReader(path)) {
+			isFlawlessLoaded = true;
+			Object obj = jsonParser.parse(reader);
+			loadedData = (JSONArray) obj;
+
+		} catch (FileNotFoundException e) {
+			isFlawlessLoaded = false;
+			e.printStackTrace();
+		} catch (IOException e) {
+			isFlawlessLoaded = false;
+			e.printStackTrace();
+		} catch (ParseException e) {
+			isFlawlessLoaded = false;
+			e.printStackTrace();
+		}
+	}
+
+	public JSONArray getData(String path) {
+		readData(path);
+		return loadedData;
+	}
+
+	public Boolean getIsFlawlessLoaded() {
+		return isFlawlessLoaded;
+	}
+
+	public void appendObjectToArray(JSONObject jObj) {
+		myArray.add(jObj);
+	}
+
+	public void clearArray() {
+		myArray.clear();
+	}
+
 }

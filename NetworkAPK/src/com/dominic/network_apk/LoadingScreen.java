@@ -1,11 +1,12 @@
 package com.dominic.network_apk;
 
+import org.json.simple.JSONArray;
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
-import processing.data.JSONObject;
 
 public class LoadingScreen {
 	private int btnSize, margin, dark, textCol, textDark, stdTs, titleTs, subtitleTs;
@@ -16,11 +17,12 @@ public class LoadingScreen {
 	private PImage img;
 	private PVector c;
 	private PFont stdFont;
-	private JSONObject settingsJson;
+	private JSONArray loadedSettingsData = new JSONArray();
 	private TextField tf;
 	private SpriteAnimation loadingGearSprite;
+	private JsonHelper jHelper;
 
-	public LoadingScreen(PApplet p, int btnSize, int margin, int stdTs, int titleTs, int subtitleTs, int dark, int textCol, int textDark,float textYShift, String APKName, String APKDescription, String imgPath, String mySettingsPath, PFont stdFont) {
+	public LoadingScreen(PApplet p, int btnSize, int margin, int stdTs, int titleTs, int subtitleTs, int dark, int textCol, int textDark, float textYShift, String APKName, String APKDescription, String imgPath, String mySettingsPath, PFont stdFont) {
 		this.p = p;
 		this.btnSize = btnSize;
 		this.margin = margin;
@@ -30,9 +32,10 @@ public class LoadingScreen {
 		this.dark = dark;
 		this.textCol = textCol;
 		this.textDark = textDark;
-		this.textYShift=textYShift;
+		this.textYShift = textYShift;
 		this.APKDescription = APKDescription;
 		this.APKName = APKName;
+		this.mySettingsPath=mySettingsPath;
 		this.stdFont = stdFont;
 		img = p.loadImage(imgPath);
 		img.resize(p.width, p.height);
@@ -41,20 +44,9 @@ public class LoadingScreen {
 		tf = new TextField(p, textDark, p.width / 4 - margin * 4, p.height / 2, p.width / 8, p.height / 2, stdTs, textYShift, true, false, s, stdFont, null);
 		loadingGearSprite = new SpriteAnimation(p, margin * 2 + btnSize / 2, p.height - p.height / 8, btnSize, btnSize, 0, 129, textDark, false, "imgs/sprites/loadingGears/", null); // endInd=129, obwohl letztes bild '0128.png' --> weil start bei '0000.png'
 
-		// load settings info, if not available, goto settingsPage----------------------
-		try {
-			settingsJson = p.loadJSONObject(mySettingsPath);
-		} catch (Exception e) {
-			// e.printStackTrace();
-		}
-		if (settingsJson == null) {
-			// if(1==1) {
-			MainActivity.mode = 1;
-		} else {
-			firstSetup = false;
-			loadSettings();
-		}
-		// load settings info, if not available, goto settingsPage----------------------
+		jHelper = new JsonHelper(p);
+
+		loadData();
 
 	}
 
@@ -82,8 +74,16 @@ public class LoadingScreen {
 		loadingGearSprite.render();
 	}
 
-	private void loadSettings() {
-
+	private void loadData() {
+		// load settings info, if not available, goto settingsPage----------------------
+		loadedSettingsData = jHelper.getData(mySettingsPath);
+		if (loadedSettingsData.isEmpty()) {
+			MainActivity.mode = 3;
+		} else {
+			MainActivity.mode = 1;
+			firstSetup = false;
+		}
+		// load settings info, if not available, goto settingsPage----------------------
 	}
 
 }

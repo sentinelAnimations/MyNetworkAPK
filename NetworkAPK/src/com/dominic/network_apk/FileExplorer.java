@@ -29,7 +29,7 @@ public class FileExplorer {
 	public EditText rename_et;
 	public SearchBar searchBar;
 
-	public FileExplorer(PApplet p, int x, int y, int w, int h, int stdTs, int edgeRad, int margin, int dark, int light, int lighter, int textCol, int textDark, int border, int btnSize, int btnSizeSmall,float textYShift, String[] PictoPaths, PFont stdFont) {
+	public FileExplorer(PApplet p, int x, int y, int w, int h, int stdTs, int edgeRad, int margin, int dark, int light, int lighter, int textCol, int textDark, int border, int btnSize, int btnSizeSmall, float textYShift, String[] PictoPaths, PFont stdFont) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -45,7 +45,7 @@ public class FileExplorer {
 		this.textDark = textDark;
 		this.btnSize = btnSize;
 		this.btnSizeSmall = btnSizeSmall;
-		this.textYShift=textYShift;
+		this.textYShift = textYShift;
 		this.isParented = isParented;
 		this.stdFont = stdFont;
 		String[][] l = { {}, {}, {}, {}, {} };
@@ -64,14 +64,14 @@ public class FileExplorer {
 			hoLiPictoPaths[0] = PictoPaths[i];
 			hoLiPictoPaths[1] = PictoPaths[4];
 			hoLiPictoPaths[2] = PictoPaths[5];
-			horizontalLists[i] = new HorizontalList(p, x, y - 3 * btnSizeSmall - btnSizeSmall / 2 - margin * 3 + margin / 2 + i * btnSizeSmall + i * (margin * 3), w - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Search Results") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border,textYShift, '\\', false, showSelected[i], showMarked[i], titles[i], hoLiPictoPaths, l[i], stdFont, null);
+			horizontalLists[i] = new HorizontalList(p, x, y - 3 * btnSizeSmall - btnSizeSmall / 2 - margin * 3 + margin / 2 + i * btnSizeSmall + i * (margin * 3), w - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Search Results") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, showSelected[i], showMarked[i], titles[i], hoLiPictoPaths, l[i], stdFont, null);
 		}
 		String[] hoLiPictoPaths = new String[3];
 		hoLiPictoPaths[0] = PictoPaths[7];
 		hoLiPictoPaths[1] = PictoPaths[4];
 		hoLiPictoPaths[2] = PictoPaths[5];
 		int lastHListInd = horizontalLists.length - 1;
-		horizontalLists[lastHListInd] = new HorizontalList(p, x, y - 3 * btnSizeSmall - btnSizeSmall / 2 - margin * 3 + margin / 2 + lastHListInd * btnSizeSmall + lastHListInd * (margin * 3), w - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Search Results") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border,textYShift, '\\', false, showSelected[lastHListInd], showMarked[lastHListInd], titles[lastHListInd], hoLiPictoPaths, l[lastHListInd], stdFont, null);
+		horizontalLists[lastHListInd] = new HorizontalList(p, x, y - 3 * btnSizeSmall - btnSizeSmall / 2 - margin * 3 + margin / 2 + lastHListInd * btnSizeSmall + lastHListInd * (margin * 3), w - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Search Results") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, showSelected[lastHListInd], showMarked[lastHListInd], titles[lastHListInd], hoLiPictoPaths, l[lastHListInd], stdFont, null);
 
 		horizontalLists[0].setList(getVolumes());
 		horizontalLists[0].isNewSelected = true;
@@ -81,13 +81,13 @@ public class FileExplorer {
 
 		String[] infoTexts = { "Copy", "Cut", "Paste", "New folder", "Delete folder", "Delete file", "Help", "", "" };
 		for (int i = 0; i < fileExplorer_btns.length; i++) {
-			fileExplorer_btns[i] = new ImageButton(p, startXBtns + (i * bs + i * margin), editBarY, bs, bs, stdTs, margin, edgeRad, -1,textYShift, true, false, textCol, light, PictoPaths[i + 8], infoTexts[i], null);
+			fileExplorer_btns[i] = new ImageButton(p, startXBtns + (i * bs + i * margin), editBarY, bs, bs, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, PictoPaths[i + 8], infoTexts[i], null);
 		}
 
-		searchBar = new SearchBar(p, margin * 2 + editBarW / 4 * 3, editBarY, editBarW / 2 - margin * 2, btnSizeSmall, edgeRad, margin, stdTs, textCol, textDark, lighter,textYShift, false, "Search", PictoPaths[7], stdFont, null);
+		searchBar = new SearchBar(p, margin * 2 + editBarW / 4 * 3, editBarY, editBarW / 2 - margin * 2, btnSizeSmall, edgeRad, margin, stdTs, textCol, textDark, lighter, textYShift, false, "Search", PictoPaths[7], stdFont, null);
 		char[] fChars = { '>', '<', ':', '"', '/', '\\', '|', '?', '*' };
-		rename_et = new EditText(p, margin * 2 + editBarW / 4 - btnSizeSmall + margin * 2, editBarY, editBarW / 2 - margin * 3 - btnSizeSmall, btnSizeSmall, stdTs, lighter, textCol, edgeRad, margin,textYShift, true, false, "Rename Selected Folder", fChars, stdFont, null);
-		rename_btn = new ImageButton(p, editBarX - btnSizeSmall / 2 - margin, editBarY, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1,textYShift, true, false, textCol, lighter, PictoPaths[6], "Rename Selected Folder", null);
+		rename_et = new EditText(p, margin * 2 + editBarW / 4 - btnSizeSmall + margin * 2, editBarY, editBarW / 2 - margin * 3 - btnSizeSmall, btnSizeSmall, stdTs, lighter, textCol, edgeRad, margin, textYShift, true, false, "Rename Selected Folder", fChars, stdFont, null);
+		rename_btn = new ImageButton(p, editBarX - btnSizeSmall / 2 - margin, editBarY, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, lighter, PictoPaths[6], "Rename Selected Folder", null);
 
 		searching_sprAnim = new SpriteAnimation(p, searchBar.search_btn.getX(), editBarY, btnSizeSmall - margin, btnSizeSmall - margin, 0, 129, textCol, false, "imgs/sprites/loadingGears/", null);
 	}
@@ -194,11 +194,11 @@ public class FileExplorer {
 
 		String[] emptyList = {};
 		for (int i = fileExplorer_btns.length - 1; i >= 0; i--) {
-			if (fileExplorer_btns[i].isClicked == true) {
+			if (fileExplorer_btns[i].getIsClicked() == true) {
 				horizontalLists[4].setList(emptyList);
 			}
 		}
-		if (rename_btn.isClicked == true) {
+		if (rename_btn.getIsClicked() == true) {
 			horizontalLists[4].setList(emptyList);
 		}
 
@@ -208,7 +208,7 @@ public class FileExplorer {
 
 		// rename button -------------------------------------------------
 
-		if (rename_btn.isClicked == true) {
+		if (rename_btn.getIsClicked() == true) {
 			if (horizontalLists[2].isNewMarked == true && horizontalLists[2].getList().length > 0 && rename_et.getStrList().get(0).length() > 0) {
 				File originalFile, newFile;
 				String originalFileName = "", newFileName;
@@ -226,14 +226,14 @@ public class FileExplorer {
 					horizontalLists[3].setList(getFoldersAndFiles(originalFileName, false));
 				}
 			}
-			rename_btn.isClicked = false;
+			rename_btn.setIsClicked(false);
 		}
 
 		// rename button -------------------------------------------------
 
 		// search button -------------------------------------------------
 
-		if (searchBar.search_btn.isClicked == true) {
+		if (searchBar.search_btn.getIsClicked() == true) {
 			if (searchBar.searchBar_et.getStrList().get(0).length() > 0) {
 				for (int i = allDirsAndFiles.size() - 1; i >= 0; i--) {
 					allDirsAndFiles.remove(i);
@@ -256,7 +256,7 @@ public class FileExplorer {
 				listFilesThread.start();
 
 			}
-			searchBar.search_btn.isClicked = false;
+			searchBar.search_btn.setIsClicked(false);
 		}
 
 		if (finishedListing == true) {
@@ -298,7 +298,7 @@ public class FileExplorer {
 
 		// bassline buttons------------------------------------------------
 		for (int i = 0; i < fileExplorer_btns.length; i++) {
-			if (fileExplorer_btns[i].isClicked == true) {
+			if (fileExplorer_btns[i].getIsClicked() == true) {
 				switch (i) {
 				case 0: // copy folder
 					pathToCopy = "";
@@ -421,26 +421,26 @@ public class FileExplorer {
 					break;
 
 				case 7: // cancel selection
-					isClosed=true;
-					isCanceled=true;
+					isClosed = true;
+					isCanceled = true;
 					break;
 
 				case 8: // select
-					
-					selectedPath="";
+
+					selectedPath = "";
 					String[] c8List1 = horizontalLists[1].getList();
 					for (int i2 = 0; i2 < c8List1.length; i2++) {
 						selectedPath += c8List1[i2];
 					}
 					String[] c8List3 = horizontalLists[3].getList();
 					if (c8List3.length > 0) {
-						selectedPath+=c8List3[horizontalLists[3].getMarkedInd()];
+						selectedPath += c8List3[horizontalLists[3].getMarkedInd()];
 					}
-					isClosed=true;
+					isClosed = true;
 					break;
 
 				}
-				fileExplorer_btns[i].isClicked = false;
+				fileExplorer_btns[i].setIsClicked(false);
 			}
 		}
 		// bassline buttons------------------------------------------------
@@ -564,6 +564,27 @@ public class FileExplorer {
 			}
 		}
 
+		// remove unwanted results ----------------------
+		if (resultsFolders.size() > 0) {
+			for (int i = resultsFolders.size() - 1; i >= 0; i--) {
+				String[] m1 = p.match(resultsFolders.get(i), "RECYCLE.BIN");
+				if (m1 != null) {
+					p.println("now");
+					resultsFolders.remove(i);
+				}
+			}
+		}
+
+		if (resultsFiles.size() > 0) {
+			for (int i = resultsFiles.size() - 1; i >= 0; i--) {
+				String[] m1 = p.match(resultsFiles.get(i), "RECYCLE.BIN");
+				if (m1 != null) {
+					resultsFiles.remove(i);
+				}
+			}
+		}
+		// remove unwanted results ----------------------
+
 		String[] resStr = new String[resultsFolders.size() + resultsFiles.size()];
 		for (int i = 0; i < resStr.length; i++) {
 			if (i < resultsFolders.size()) {
@@ -643,6 +664,64 @@ public class FileExplorer {
 
 	}
 
+	public void onMouseReleased(int mouseButton) {
+		rename_et.onMouseReleased();
+		searchBar.search_btn.onMouseReleased();
+		searchBar.searchBar_et.onMouseReleased();
+		rename_btn.onMouseReleased();
+
+		for (int i = 0; i < horizontalLists.length; i++) {
+
+			if (mouseButton==p.RIGHT) {
+				horizontalLists[i].onMouseRightReleased();
+			}
+			if (mouseButton==p.LEFT) {
+				horizontalLists[i].onMouseReleased();
+			}
+
+			horizontalLists[i].goLeft_btn.onMouseReleased();
+			horizontalLists[i].goRight_btn.onMouseReleased();
+		}
+		searchBar.search_btn.onMouseReleased();
+		rename_btn.onMouseReleased();
+		for (int i = fileExplorer_btns.length - 1; i >= 0; i--) {
+			fileExplorer_btns[i].onMouseReleased();
+		}
+	}
+
+	public void onMousePressed() {
+		for (int i = 0; i < horizontalLists.length; i++) {
+			horizontalLists[i].goLeft_btn.onMousePressed();
+			horizontalLists[i].goRight_btn.onMousePressed();
+		}
+		searchBar.search_btn.onMousePressed();
+		rename_btn.onMousePressed();
+		for (int i = fileExplorer_btns.length - 1; i >= 0; i--) {
+			fileExplorer_btns[i].onMousePressed();
+		}
+	}
+
+	public void onKeyReleased(char k) {
+		for (int i = 0; i < horizontalLists.length; i++) {
+			horizontalLists[i].goLeft_btn.onKeyReleased(k);
+			horizontalLists[i].goRight_btn.onKeyReleased(k);
+		}
+		rename_et.onKeyReleased(k);
+		searchBar.searchBar_et.onKeyReleased(k);
+		rename_btn.onKeyReleased(k);
+		searchBar.search_btn.onKeyReleased(k);
+		for (int i = fileExplorer_btns.length - 1; i >= 0; i--) {
+			fileExplorer_btns[i].onKeyReleased(k);
+		}
+	}
+
+	public void onScroll(float e) {
+		for (int i = 0; i < horizontalLists.length; i++) {
+			horizontalLists[i].onScroll(e);
+			horizontalLists[i].onScroll(e);
+		}
+	}
+
 	String[] listFileNames(String dir) {
 		File file = new File(dir);
 		if (file.isDirectory()) {
@@ -661,12 +740,13 @@ public class FileExplorer {
 	public Boolean getIsClosed() {
 		return isClosed;
 	}
-	
+
 	public void setIsCanceled(Boolean state) {
-		 isCanceled=state;
+		isCanceled = state;
 	}
+
 	public void setIsClosed(Boolean state) {
-		isClosed=state;
+		isClosed = state;
 	}
 
 	public String getPath() {

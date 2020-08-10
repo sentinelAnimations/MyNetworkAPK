@@ -3,12 +3,19 @@ package com.dominic.network_apk;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 
 public class SettingsScreen {
 	private int btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark, dark, light, lighter, mode = 0, activePathSelectorInd = 0;
+	private Boolean successfullySaved=false;
 	private float textYShift;
 	private String mySettingsPath;
 	private String[] imgPaths;
@@ -22,8 +29,9 @@ public class SettingsScreen {
 	public DropdownMenu masterOrSlave_dropdown;
 	public FileExplorer fileExplorer;
 	private JsonHelper jHelper;
+	private JSONArray loadedSettingsData= new JSONArray();
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
-	
+
 	public SettingsScreen(PApplet p, int btnSize, int btnSizeSmall, int stdTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySettingsPath, String[] imgPaths, String[] HorizontalListPictoPaths, PFont stdFont) {
 		this.p = p;
 		this.btnSize = btnSize;
@@ -63,8 +71,9 @@ public class SettingsScreen {
 		masterOrSlave_dropdown = new DropdownMenu(p, 0, btnSize, p.width / 8 - margin * 2, btnSizeSmall, p.height / 4 + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, light, lighter, textCol, textDark, textYShift, "Master or Slave", ddPaths, dropdownList, stdFont, true, setting_pictos[0]);
 
 		fileExplorer = new FileExplorer(p, p.width / 2, p.height / 2, p.width - margin * 2, 6 * btnSizeSmall + 19 * margin, stdTs, edgeRad, margin, dark, light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, textYShift, HorizontalListPictoPaths, stdFont);
-		jHelper=new JsonHelper(p);
-		jHelper.writeData(mySettingsPath);
+		jHelper = new JsonHelper(p);		
+		
+		setData();
 	}
 
 	public void render() {
@@ -79,41 +88,53 @@ public class SettingsScreen {
 			for (int i = pathSelectors.length - 1; i >= 0; i--) {
 				PathSelector ps = pathSelectors[i];
 				ps.render();
-				if (ps.openFileExplorer_btn.isClicked) {
+				if (ps.openFileExplorer_btn.getIsClicked()) {
 					mode = 1;
 					activePathSelectorInd = i;
 
 				}
 			}
 
-			if (saveSettings_btn.isClicked == true) {
+			if (saveSettings_btn.getIsClicked() == true) {
 				// check if all is set
 				Boolean allSet = true;
-				allSet = masterOrSlave_dropdown.getIsSelected();
+				JSONObject settingsDetails = new JSONObject();
+				JSONObject settingsObject = new JSONObject();
 
+				allSet = masterOrSlave_dropdown.getIsSelected();
+				settingsDetails.put("masterOrSlave_dropdown_selectedInd",masterOrSlave_dropdown.getSelectedInd());
+
+				
 				for (int i = pathSelectors.length - 1; i >= 0; i--) {
 					PathSelector ps = pathSelectors[i];
 					if (ps.getPath().length() < 1) {
 						allSet = false;
-						break;
+					}else {
+						settingsDetails.put("pathSelector"+i, ps.getPath());
 					}
 
 				}
 
 				if (personalData_et.getStrList().get(0).length() < 1) {
 					allSet = false;
+				}else {
+					settingsDetails.put("personalData_et",personalData_et.getStrList().get(0));
 				}
 				// write to jsonfile;
 				if (allSet == true) {
-					
-					
-					
-					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol, textYShift, false, "Saved settings", stdFont, null));
+					jHelper.clearArray();
+
+					settingsObject.put("Settings",settingsDetails);
+					jHelper.appendObjectToArray(settingsObject);
+					jHelper.writeData(mySettingsPath);
+					p.println(jHelper.getData(mySettingsPath));
+					successfullySaved=true;
+					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad,100, light, textCol, textYShift, false, "Saved settings", stdFont, null));
 
 				} else {
-					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol, textYShift, false, "Set all required data", stdFont, null));
+					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad,100, light, textCol, textYShift, false, "Set all required data", stdFont, null));
 				}
-				saveSettings_btn.isClicked = false;
+				saveSettings_btn.setIsClicked(false);
 			}
 
 			if (mode == 1) {
@@ -136,7 +157,7 @@ public class SettingsScreen {
 
 		PathSelector ps = pathSelectors[activePathSelectorInd];
 
-		if (ps.openFileExplorer_btn.isClicked) {
+		if (ps.openFileExplorer_btn.getIsClicked()) {
 			fileExplorer.render();
 
 			if (fileExplorer.getIsClosed()) {
@@ -164,7 +185,7 @@ public class SettingsScreen {
 						ps.setText(setPath);
 					}
 				}
-				ps.openFileExplorer_btn.isClicked = false;
+				ps.openFileExplorer_btn.setIsClicked(false);
 				mode = 0;
 			}
 		}
@@ -173,6 +194,10 @@ public class SettingsScreen {
 	public int getMode() {
 		return mode;
 	}
+	
+	public Boolean getSuccessfullySaved() {
+		return successfullySaved;
+	}
 
 	public ArrayList getToastList() {
 		return makeToasts;
@@ -180,5 +205,24 @@ public class SettingsScreen {
 
 	public void removeToast(int i) {
 		makeToasts.remove(i);
+	}
+	
+	private void setData() {
+		// load settings info, if not available, goto settingsPage----------------------
+		loadedSettingsData = jHelper.getData(mySettingsPath);
+		if (loadedSettingsData.isEmpty()) {
+		} else {
+			JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
+			int selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
+			masterOrSlave_dropdown.setIsSelected(selectedInd);
+			for (int i = pathSelectors.length - 1; i >= 0; i--) {
+				PathSelector ps = pathSelectors[i];
+				String t = jsonObject.getAsJsonObject("Settings").get("pathSelector"+i).getAsString();
+				ps.setText(t);
+			}
+			String t = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
+			personalData_et.setText(t);
+		}
+		// load settings info, if not available, goto settingsPage----------------------
 	}
 }

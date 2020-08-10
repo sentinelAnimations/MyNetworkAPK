@@ -74,14 +74,14 @@ public class DropdownMenu<T> implements Widgets {
 		dropdown_btn.render();
 		dropdown();
 
-		if (dropdown_btn.isClicked == true) {
+		if (dropdown_btn.getIsClicked() == true) {
 			unfold = !unfold;
 			if (unfold == true) {
 				dropdown_btn.setPicto(pictoPaths[1]);
 			} else {
 				dropdown_btn.setPicto(pictoPaths[0]);
 			}
-			dropdown_btn.isClicked = false;
+			dropdown_btn.setIsClicked(false);
 		}
 	}
 
@@ -225,8 +225,9 @@ public class DropdownMenu<T> implements Widgets {
 		return isSelected;
 	}
 	
-	public void setIsSelected(Boolean isSel) {
-		 isSelected=isSel;
+	public void setIsSelected(int selInd) {
+		 isSelected=true;
+		 selectedInd=selInd;
 	}
 	
 	public String getSelectedItem() {

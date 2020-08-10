@@ -166,7 +166,7 @@ public class EditText<T> implements Widgets {
 			if (strList.size() <= maxRows) {
 				if (strList.size() + 1 > maxRows && p.textWidth(strList.get(row) + k) > w - margin * 2) {
 					if (makeToasts.size() < 2) {
-						makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol,textYShift, false, "Maximum rows reached now", stdFont, null));
+						makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad,100, light, textCol,textYShift, false, "Maximum rows reached now", stdFont, null));
 					}
 				} else {
 					if (k > 31 && k < 127) {
@@ -207,7 +207,7 @@ public class EditText<T> implements Widgets {
 				}
 
 				if (strList.size() == maxRows && makeToasts.size() < 2 && k == PConstants.ENTER) {
-					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, light, textCol,textYShift, false, "Maximum rows reached now", stdFont, null));
+					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad,100, light, textCol,textYShift, false, "Maximum rows reached now", stdFont, null));
 				}
 			}
 			if (k == PConstants.BACKSPACE) {
@@ -363,6 +363,28 @@ public class EditText<T> implements Widgets {
 	@Override
 	public int getY() {
 		return y;
+	}
+	
+	public void setText(String t) {
+		String s="";
+		StringList tempList = new StringList();
+		for(int i=0;i<t.length();i++) {
+			if(p.textWidth(s+t.charAt(i))<w-margin*2) {
+				s+=t.charAt(i);
+				if(i==t.length()-1) {
+					tempList.append(s);
+				}
+			}else {
+				tempList.append(s);
+				s="";
+			}
+		}
+		if(tempList.size()>maxRows) {
+			p.println("Text to long for EditText field");
+		}else {
+			strList.clear();
+			strList.append(tempList);
+		}
 	}
 	
 	public StringList getStrList() {

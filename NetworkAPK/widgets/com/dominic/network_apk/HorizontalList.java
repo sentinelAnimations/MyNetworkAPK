@@ -82,19 +82,19 @@ public class HorizontalList<T> implements Widgets {
 			getParentPos();
 		}
 		if (list.length > 0) {
-			if (goLeft_btn.isClicked == true) {
+			if (goLeft_btn.getIsClicked() == true) {
 				if (shiftListX < 0) {
 					shiftListX += shiftPerClick;
 				}
-				goLeft_btn.isClicked = false;
+				goLeft_btn.setIsClicked(false);
 			}
 
-			if (goRight_btn.isClicked == true) {
+			if (goRight_btn.getIsClicked() == true) {
 
 				if (lastDisplayedInd < list.length - 1) {
 					shiftListX -= shiftPerClick;
 				}
-				goRight_btn.isClicked = false;
+				goRight_btn.setIsClicked(false);
 			}
 		}
 
@@ -274,13 +274,13 @@ public class HorizontalList<T> implements Widgets {
 				markedInd = 0;
 			}
 			for(int i=0;i<l.length;i++) {
-				if(p.textWidth(l[i])<(endListX-startListX)/4*3) {
+				if(p.textWidth(l[i])<(endListX-startListX)/3) {
 				displayList[i]=l[i];
 				}else {
 					String elem="";
 					String[] splitStr=PApplet.split(l[i],splitChar);
 					for(int i2=splitStr.length-1;i2>=0;i2--) {
-						if(p.textWidth(elem+splitStr[i2]+"\\")<(endListX-startListX)/4*3) {
+						if(p.textWidth(elem+splitStr[i2]+"\\")<(endListX-startListX)/3) {
 						elem=splitStr[i2]+"\\"+elem;
 						}
 					}

@@ -7,16 +7,15 @@ import processing.core.PConstants;
 import processing.core.PImage;
 
 public class ImageButton<T> implements Widgets {
-	private int x, y, xShift, yShift, w, h, stdTs, edgeRad, shortcut, col, bgCol, margin, onceOnClick = 0, hoverTime;
+	private int x, y, xShift, yShift, w, h, stdTs, edgeRad, shortcut, col, bgCol, margin, onceOnClick = 0, hoverTime, clickCount = 0, waitAfterTransform = 0;
 	private float textYShift;
 	private String imgPath, infoText;
-	public Boolean isClicked = false,isPressed=false, isParented;
-	private Boolean useBg, isHovering;
+	private Boolean isClicked = false, isPressed = false, isParented,useBg, isHovering;
 	private PApplet p;
 	private PImage picto;
 	private T parent;
 
-	public ImageButton(PApplet p, int x, int y, int w, int h, int stdTs, int margin, int edgeRad, int shortcut,float textYShift, Boolean useBg, Boolean isParented, int col, int bgCol, String imgPath, String infoText, T parent) {
+	public ImageButton(PApplet p, int x, int y, int w, int h, int stdTs, int margin, int edgeRad, int shortcut, float textYShift, Boolean useBg, Boolean isParented, int col, int bgCol, String imgPath, String infoText, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -30,7 +29,7 @@ public class ImageButton<T> implements Widgets {
 		this.bgCol = bgCol;
 		this.edgeRad = edgeRad;
 		this.shortcut = shortcut;
-		this.textYShift=textYShift;
+		this.textYShift = textYShift;
 		this.imgPath = imgPath;
 		this.infoText = infoText;
 		this.parent = parent;
@@ -45,6 +44,10 @@ public class ImageButton<T> implements Widgets {
 			getParentPos();
 		}
 
+		if (waitAfterTransform < 0) {
+			waitAfterTransform++;
+		}
+
 		if (useBg) {
 			p.fill(bgCol);
 			p.stroke(bgCol);
@@ -57,7 +60,7 @@ public class ImageButton<T> implements Widgets {
 	}
 
 	public void onMousePressed() {
-		isPressed=true;
+		isPressed = true;
 		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
 			if (onceOnClick == 0) {
 				picto.resize(picto.width - margin, picto.height - margin);
@@ -69,16 +72,19 @@ public class ImageButton<T> implements Widgets {
 	}
 
 	public void onMouseReleased() {
-		if (onceOnClick != 0) {
-			w += margin;
-			h += margin;
-			onceOnClick = 0;
-			loadPicto();
+		if (waitAfterTransform >= 0) {
+			if (onceOnClick != 0) {
+				w += margin;
+				h += margin;
+				onceOnClick = 0;
+				loadPicto();
+			}
+			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+				clickCount++;
+				isClicked = true;
+			}
 		}
-		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
-			isClicked = true;
-		}
-		isPressed=false;
+		isPressed = false;
 	}
 
 	public void onKeyReleased(char k) {
@@ -90,41 +96,41 @@ public class ImageButton<T> implements Widgets {
 	}
 
 	private void onHover() {
-		if(infoText.length()>0) {
-		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
-			if (isHovering) {
-				hoverTime++;
-			}
-			isHovering = true;
-		} else {
-			hoverTime = 0;
-			isHovering = false;
-		}
-		if (hoverTime > 72) {
-			int tw = (int) p.textWidth(infoText) + margin * 2;
-			int mx, my;
-			if (p.mouseX + tw < p.width) {
-				p.textAlign(PConstants.RIGHT, PConstants.CENTER);
+		if (infoText.length() > 0) {
+			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+				if (isHovering) {
+					hoverTime++;
+				}
+				isHovering = true;
 			} else {
-				tw *= -1;
-				p.textAlign(PConstants.LEFT, PConstants.CENTER);
+				hoverTime = 0;
+				isHovering = false;
 			}
-			mx = p.mouseX;
-			my = p.mouseY;
-			if (p.mouseY < stdTs) {
-				my = stdTs;
-			}
-			if (p.mouseY > p.height - stdTs * 2) {
-				my = p.height - stdTs * 2;
-			}
+			if (hoverTime > 72) {
+				int tw = (int) p.textWidth(infoText) + margin * 2;
+				int mx, my;
+				if (p.mouseX + tw < p.width) {
+					p.textAlign(PConstants.RIGHT, PConstants.CENTER);
+				} else {
+					tw *= -1;
+					p.textAlign(PConstants.LEFT, PConstants.CENTER);
+				}
+				mx = p.mouseX;
+				my = p.mouseY;
+				if (p.mouseY < stdTs) {
+					my = stdTs;
+				}
+				if (p.mouseY > p.height - stdTs * 2) {
+					my = p.height - stdTs * 2;
+				}
 
-			p.fill(0, 200);
-			p.noStroke();
-			p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
-			p.fill(col);
-			p.text(infoText, mx + tw, my + stdTs -stdTs*textYShift );
+				p.fill(0, 200);
+				p.noStroke();
+				p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
+				p.fill(col);
+				p.text(infoText, mx + tw, my + stdTs - stdTs * textYShift);
+			}
 		}
-	}
 	}
 
 	private void loadPicto() {
@@ -166,16 +172,39 @@ public class ImageButton<T> implements Widgets {
 	public int getY() {
 		return y;
 	}
-	
+
 	public int getW() {
 		return w;
 	}
+
 	public int getH() {
 		return h;
 	}
+
+	public int getClickCount() {
+		return clickCount;
+	}
 	
+	public Boolean getIsClicked() {
+		return isClicked;
+	}
+	
+	public void setIsClicked(Boolean state) {
+		isClicked=state;
+	}
+	public void setPos(int xp, int yp) {
+		if (isParented) {
+			xShift = xp;
+			yShift = yp;
+		} else {
+			x = xp;
+			y = yp;
+		}
+		waitAfterTransform = -1;
+	}
+
 	public void setPicto(String path) {
-		imgPath=path;
+		imgPath = path;
 		loadPicto();
 	}
 }

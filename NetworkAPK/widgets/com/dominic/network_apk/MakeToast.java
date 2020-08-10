@@ -6,7 +6,7 @@ import processing.core.PConstants;
 import processing.core.PFont;
 
 public class MakeToast<T> implements Widgets {
-	private int x, y, xShift, yShift, w, h, stdTs, margin, edgeRad, bgCol, textCol, alpha = 0, alifeTime = 100, fadeOutTimer;
+	private int x, y, xShift, yShift, w, h, stdTs, margin, edgeRad, bgCol, textCol, alpha = 0, alifeTime, fadeOutTimer;
 	private float textYShift;
 	public Boolean remove = false;
 	private Boolean fadeOut = false, isParented;
@@ -15,13 +15,14 @@ public class MakeToast<T> implements Widgets {
 	private PApplet p;
 	private T parent;
 
-	public MakeToast(PApplet p, int x, int y, int stdTs, int margin, int edgeRad, int bgCol, int textCol,float textYShift, Boolean isParented, String t, PFont stdFont, T parent) {
+	public MakeToast(PApplet p, int x, int y, int stdTs, int margin, int edgeRad,int alifeTime, int bgCol, int textCol,float textYShift, Boolean isParented, String t, PFont stdFont, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
 		this.stdTs = stdTs;
 		this.margin = margin;
 		this.edgeRad = edgeRad;
+		this.alifeTime=alifeTime;
 		this.bgCol = bgCol;
 		this.textCol = textCol;
 		this.textYShift=textYShift;
