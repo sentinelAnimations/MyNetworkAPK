@@ -92,7 +92,7 @@ public class MainActivity extends PApplet {
 		imageMode(CENTER);
 		// variableInitialisation -----------------------------------------------
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
-		
+
 		String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "downloadBlender.png", absPathPictos + "questions.png" };
 		for (int i = 0; i < mainButtons.length; i++) {
 			String s = "";
@@ -133,9 +133,11 @@ public class MainActivity extends PApplet {
 		// variableInitialisation for mode 1 --> home screen-------------------
 
 		// variableInitialisation for mode 2 --> node editor-------------------
-		String[] btnP = {absPathPictos+"panView.png",absPathPictos+"addNode.png",absPathPictos+"center.png",absPathPictos+"save.png"};
-		String[] nodeP= {absPathPictos+"masterPC.png",absPathPictos+"pc.png",absPathPictos+"laptop.png",absPathPictos+"switch.png",absPathPictos+"engine.png"};
-		nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, light, lighter, border, textCol, textDark, textYShift, btnP,nodeP, stdFont);
+		String[] btnP = { absPathPictos + "panView.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png" };
+		String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
+		String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
+
+		nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, light, lighter, border, textCol, textDark, textYShift, btnP, nodeP1, nodeP2, stdFont);
 		// variableInitialisation for mode 2 --> node editor-------------------
 
 		// variableInitialisation for mode 3 --> settings screen---------------
@@ -153,7 +155,7 @@ public class MainActivity extends PApplet {
 
 		// variableInitialisation for mode 5 --> help screen-------------------
 		// variableInitialisation for mode 5 --> help screen-------------------
-		
+
 		// variableInitialisation -----------------------------------------------
 
 	}
@@ -169,6 +171,7 @@ public class MainActivity extends PApplet {
 
 			// render all ---------------------------------------------------------------
 			renderMainButtons();
+
 			for (int i = 0; i < homeSettings_checkboxes.length; i++) {
 				homeSettings_checkboxes[i].render();
 			}
@@ -330,8 +333,6 @@ public class MainActivity extends PApplet {
 
 		if (mode == 2) {
 			nodeEditor.render();
-
-			renderMainButtons();
 		}
 
 		if (mode == 3) {// setup for the first time -----------------
@@ -385,10 +386,8 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 4) {
-			renderMainButtons();
 		}
 		if (mode == 5) {
-			renderMainButtons();
 		}
 
 	}
@@ -440,6 +439,15 @@ public class MainActivity extends PApplet {
 				endFrame_counterArea.onMousePressed();
 				stillFrame_counterArea.onMousePressed();
 				startRendering_btn.onMousePressed();
+
+				if (loadingScreen.firstSetup == false) {
+					for (int i = 0; i < mainButtons.length; i++) {
+						if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
+							mainButtons[i].onMousePressed();
+						}
+					}
+				}
+
 			} else {
 				selectBlendFile_fileExplorer.onMousePressed();
 			}
@@ -449,26 +457,9 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 3) {
-			if (loadingScreen.firstSetup == true && settingsScreen.getMode() == 0) {
-				firstSetupHelp_btn.onMousePressed();
-			}
-			settingsScreen.saveSettings_btn.onMousePressed();
-			for (int i = 0; i < settingsScreen.pathSelectors.length; i++) {
-				settingsScreen.pathSelectors[i].openFileExplorer_btn.onMousePressed();
-			}
-			settingsScreen.fileExplorer.onMousePressed();
-			settingsScreen.masterOrSlave_dropdown.dropdown_btn.onMousePressed();
+			settingsScreen.onMousePressed();
 		}
 
-		if (loadingScreen.firstSetup == false) {
-			if (fileExplorerIsOpen == false) {
-				for (int i = 0; i < mainButtons.length; i++) {
-					if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
-						mainButtons[i].onMousePressed();
-					}
-				}
-			}
-		}
 	}
 
 	@Override
@@ -485,6 +476,14 @@ public class MainActivity extends PApplet {
 				stillFrame_counterArea.onMouseReleased();
 				startRendering_btn.onMouseReleased();
 
+				if (loadingScreen.firstSetup == false) {
+					for (int i = 0; i < mainButtons.length; i++) {
+						if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
+							mainButtons[i].onMouseReleased();
+						}
+					}
+				}
+
 			} else {
 				selectBlendFile_fileExplorer.onMouseReleased(mouseButton);
 			}
@@ -496,27 +495,7 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 3) {
-			if (loadingScreen.firstSetup == true) {
-				firstSetupHelp_btn.onMouseReleased();
-			}
-			settingsScreen.saveSettings_btn.onMouseReleased();
-			settingsScreen.personalData_et.onMouseReleased();
-			for (int i = 0; i < settingsScreen.pathSelectors.length; i++) {
-				settingsScreen.pathSelectors[i].openFileExplorer_btn.onMouseReleased();
-			}
-
-			settingsScreen.fileExplorer.onMouseReleased(mouseButton);
-
-			settingsScreen.masterOrSlave_dropdown.dropdown_btn.onMouseReleased();
-			settingsScreen.masterOrSlave_dropdown.onMouseReleased();
-		}
-
-		if (loadingScreen.firstSetup == false) {
-			for (int i = 0; i < mainButtons.length; i++) {
-				if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
-					mainButtons[i].onMouseReleased();
-				}
-			}
+			settingsScreen.onMouseReleased(mouseButton);
 		}
 
 	}
@@ -540,8 +519,7 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 3) {
-			settingsScreen.fileExplorer.onScroll(e);
-			settingsScreen.masterOrSlave_dropdown.onScroll(e);
+			settingsScreen.onScroll(e);
 		}
 	}
 
@@ -560,18 +538,19 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 3) {
-			if (loadingScreen.firstSetup == true) {
-				firstSetupHelp_btn.onKeyReleased(key);
-			}
-			settingsScreen.personalData_et.onKeyReleased(key);
-			settingsScreen.saveSettings_btn.onKeyReleased(key);
-
-			settingsScreen.fileExplorer.onKeyReleased(key);
-
+			settingsScreen.onKeyReleased(key);
 		}
 	}
 
 	public ImageButton[] getMainButtons() {
 		return mainButtons;
 	}
+	
+	public ImageButton getFirstSetupHelp_btn() {
+		return firstSetupHelp_btn;
+	}
+	public LoadingScreen getLoadingScreen() {
+		return loadingScreen;
+	}
+	
 }

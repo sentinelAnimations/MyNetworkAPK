@@ -15,13 +15,14 @@ import processing.core.PImage;
 
 public class SettingsScreen {
 	private int btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark, dark, light, lighter, mode = 0, activePathSelectorInd = 0;
-	private Boolean successfullySaved=false;
+	private Boolean successfullySaved = false;
 	private float textYShift;
 	private String mySettingsPath;
 	private String[] imgPaths;
 	private PFont stdFont;
 	private PImage screenshot;
 	private PApplet p;
+	private MainActivity mainActivity;
 	private PictogramImage[] setting_pictos;
 	public PathSelector[] pathSelectors;
 	public ImageButton saveSettings_btn;
@@ -29,7 +30,8 @@ public class SettingsScreen {
 	public DropdownMenu masterOrSlave_dropdown;
 	public FileExplorer fileExplorer;
 	private JsonHelper jHelper;
-	private JSONArray loadedSettingsData= new JSONArray();
+	private JSONArray loadedSettingsData = new JSONArray();
+	private ImageButton[] mainButtons;
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 
 	public SettingsScreen(PApplet p, int btnSize, int btnSizeSmall, int stdTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySettingsPath, String[] imgPaths, String[] HorizontalListPictoPaths, PFont stdFont) {
@@ -48,6 +50,8 @@ public class SettingsScreen {
 		this.mySettingsPath = mySettingsPath;
 		this.imgPaths = imgPaths;
 		this.stdFont = stdFont;
+		mainActivity = (MainActivity) p;
+		mainButtons = mainActivity.getMainButtons();
 
 		setting_pictos = new PictogramImage[imgPaths.length - 2];
 		pathSelectors = new PathSelector[imgPaths.length - 4];
@@ -71,13 +75,15 @@ public class SettingsScreen {
 		masterOrSlave_dropdown = new DropdownMenu(p, 0, btnSize, p.width / 8 - margin * 2, btnSizeSmall, p.height / 4 + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, light, lighter, textCol, textDark, textYShift, "Master or Slave", ddPaths, dropdownList, stdFont, true, setting_pictos[0]);
 
 		fileExplorer = new FileExplorer(p, p.width / 2, p.height / 2, p.width - margin * 2, 6 * btnSizeSmall + 19 * margin, stdTs, edgeRad, margin, dark, light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, textYShift, HorizontalListPictoPaths, stdFont);
-		jHelper = new JsonHelper(p);		
-		
+		jHelper = new JsonHelper(p);
+
 		setData();
 	}
 
 	public void render() {
 		if (mode == 0) { // normal mode
+			mainActivity.renderMainButtons();
+
 			for (int i = setting_pictos.length - 1; i >= 0; i--) {
 				setting_pictos[i].render();
 			}
@@ -102,37 +108,36 @@ public class SettingsScreen {
 				JSONObject settingsObject = new JSONObject();
 
 				allSet = masterOrSlave_dropdown.getIsSelected();
-				settingsDetails.put("masterOrSlave_dropdown_selectedInd",masterOrSlave_dropdown.getSelectedInd());
+				settingsDetails.put("masterOrSlave_dropdown_selectedInd", masterOrSlave_dropdown.getSelectedInd());
 
-				
 				for (int i = pathSelectors.length - 1; i >= 0; i--) {
 					PathSelector ps = pathSelectors[i];
 					if (ps.getPath().length() < 1) {
 						allSet = false;
-					}else {
-						settingsDetails.put("pathSelector"+i, ps.getPath());
+					} else {
+						settingsDetails.put("pathSelector" + i, ps.getPath());
 					}
 
 				}
 
 				if (personalData_et.getStrList().get(0).length() < 1) {
 					allSet = false;
-				}else {
-					settingsDetails.put("personalData_et",personalData_et.getStrList().get(0));
+				} else {
+					settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
 				}
 				// write to jsonfile;
 				if (allSet == true) {
 					jHelper.clearArray();
 
-					settingsObject.put("Settings",settingsDetails);
+					settingsObject.put("Settings", settingsDetails);
 					jHelper.appendObjectToArray(settingsObject);
 					jHelper.writeData(mySettingsPath);
 					p.println(jHelper.getData(mySettingsPath));
-					successfullySaved=true;
-					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad,100, light, textCol, textYShift, false, "Saved settings", stdFont, null));
+					successfullySaved = true;
+					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Saved settings", stdFont, null));
 
 				} else {
-					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad,100, light, textCol, textYShift, false, "Set all required data", stdFont, null));
+					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Set all required data", stdFont, null));
 				}
 				saveSettings_btn.setIsClicked(false);
 			}
@@ -191,20 +196,67 @@ public class SettingsScreen {
 		}
 	}
 
-	public int getMode() {
-		return mode;
+	public void onMousePressed() {
+		if (mainActivity.getLoadingScreen().firstSetup == true && mode == 0) {
+			mainActivity.getFirstSetupHelp_btn().onMousePressed();
+		}
+		
+		if(mainActivity.getLoadingScreen().firstSetup==false && mode==0) {
+			for (int i = 0; i < mainButtons.length; i++) {
+				if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
+					mainButtons[i].onMousePressed();
+				}
+			}
+		}
+		
+		saveSettings_btn.onMousePressed();
+		for (int i = 0; i < pathSelectors.length; i++) {
+			pathSelectors[i].openFileExplorer_btn.onMousePressed();
+		}
+		fileExplorer.onMousePressed();
+		masterOrSlave_dropdown.dropdown_btn.onMousePressed();
+	}
+
+	
+	public void onMouseReleased(int mouseButton) {
+		if (mainActivity.getLoadingScreen().firstSetup == true) {
+			mainActivity.getFirstSetupHelp_btn().onMouseReleased();
+		}
+		
+		if(mainActivity.getLoadingScreen().firstSetup==false && mode==0) {
+			for (int i = 0; i < mainButtons.length; i++) {
+				if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
+					mainButtons[i].onMouseReleased();
+				}
+			}
+		}
+		
+		saveSettings_btn.onMouseReleased();
+		personalData_et.onMouseReleased();
+		for (int i = 0; i < pathSelectors.length; i++) {
+			pathSelectors[i].openFileExplorer_btn.onMouseReleased();
+		}
+
+		fileExplorer.onMouseReleased(mouseButton);
+
+		masterOrSlave_dropdown.dropdown_btn.onMouseReleased();
+		masterOrSlave_dropdown.onMouseReleased();
 	}
 	
-	public Boolean getSuccessfullySaved() {
-		return successfullySaved;
-	}
+	
+	public void onKeyReleased(char k) {
+		if (mainActivity.getLoadingScreen().firstSetup == true) {
+			mainActivity.getFirstSetupHelp_btn().onKeyReleased(k);
+		}
+		personalData_et.onKeyReleased(k);
+		saveSettings_btn.onKeyReleased(k);
 
-	public ArrayList getToastList() {
-		return makeToasts;
+		fileExplorer.onKeyReleased(k);
 	}
-
-	public void removeToast(int i) {
-		makeToasts.remove(i);
+	
+	public void onScroll(float e) {
+		fileExplorer.onScroll(e);
+		masterOrSlave_dropdown.onScroll(e);
 	}
 	
 	private void setData() {
@@ -217,7 +269,7 @@ public class SettingsScreen {
 			masterOrSlave_dropdown.setIsSelected(selectedInd);
 			for (int i = pathSelectors.length - 1; i >= 0; i--) {
 				PathSelector ps = pathSelectors[i];
-				String t = jsonObject.getAsJsonObject("Settings").get("pathSelector"+i).getAsString();
+				String t = jsonObject.getAsJsonObject("Settings").get("pathSelector" + i).getAsString();
 				ps.setText(t);
 			}
 			String t = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
@@ -225,4 +277,22 @@ public class SettingsScreen {
 		}
 		// load settings info, if not available, goto settingsPage----------------------
 	}
+	
+
+	public int getMode() {
+		return mode;
+	}
+
+	public Boolean getSuccessfullySaved() {
+		return successfullySaved;
+	}
+
+	public ArrayList getToastList() {
+		return makeToasts;
+	}
+
+	public void removeToast(int i) {
+		makeToasts.remove(i);
+	}
+
 }
