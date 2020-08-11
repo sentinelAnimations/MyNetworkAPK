@@ -96,6 +96,7 @@ public class ImageButton<T> implements Widgets {
 	}
 
 	private void onHover() {
+		Boolean show = false;
 		if (infoText.length() > 0) {
 			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
 				if (isHovering) {
@@ -123,12 +124,19 @@ public class ImageButton<T> implements Widgets {
 				if (p.mouseY > p.height - stdTs * 2) {
 					my = p.height - stdTs * 2;
 				}
-
+				
+				if (hoverTime > 120) {
+					show = false;
+				} else {
+					show = true;
+				}
+			if(show) {	
 				p.fill(0, 200);
 				p.noStroke();
 				p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
 				p.fill(col);
 				p.text(infoText, mx + tw, my + stdTs - stdTs * textYShift);
+			}
 			}
 		}
 	}

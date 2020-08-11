@@ -60,6 +60,7 @@ public class MainActivity extends PApplet {
 	// Classes--------------------------------------------------
 	// Main classes-------------------------------
 	private LoadingScreen loadingScreen;
+	private NodeEditor nodeEditor;
 	private SettingsScreen settingsScreen;
 	// Main classes-------------------------------
 	// widgets -----------------------------------
@@ -91,6 +92,15 @@ public class MainActivity extends PApplet {
 		imageMode(CENTER);
 		// variableInitialisation -----------------------------------------------
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
+		
+		String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "downloadBlender.png", absPathPictos + "questions.png" };
+		for (int i = 0; i < mainButtons.length; i++) {
+			String s = "";
+			if (i > 0) {
+				s = modeNames[i - 1];
+			}
+			mainButtons[i] = new ImageButton(this, btnSize / 2 + margin + btnSize * i + margin * i, btnSize / 2 + margin, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, p3[i], s, null);
+		}
 
 		// variableInitialisation for mode 0 --> loading screen----------------
 		loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, dark, textCol, textDark, textYShift, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
@@ -120,10 +130,12 @@ public class MainActivity extends PApplet {
 		sfX = (int) ((homeSettings_checkboxes[7].getX() - homeSettings_checkboxes[7].getW() / 2 + homeSettings_checkboxes[7].getBoxDim() + margin * 2)) - homeSettings_checkboxes[7].getX() + sfW / 2;
 		stillFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, light, lighter, textCol, textYShift, true, "Still frame", pp, stdFont, homeSettings_checkboxes[7]);
 		startRendering_btn = new ImageButton(this, width / 2, height - height / 7 * 2, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, absPathPictos + "startEngine.png", "Start rendering", null);
-
 		// variableInitialisation for mode 1 --> home screen-------------------
 
 		// variableInitialisation for mode 2 --> node editor-------------------
+		String[] btnP = {absPathPictos+"panView.png",absPathPictos+"addNode.png",absPathPictos+"center.png",absPathPictos+"save.png"};
+		String[] nodeP= {absPathPictos+"masterPC.png",absPathPictos+"pc.png",absPathPictos+"laptop.png",absPathPictos+"switch.png",absPathPictos+"engine.png"};
+		nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, light, lighter, border, textCol, textDark, textYShift, btnP,nodeP, stdFont);
 		// variableInitialisation for mode 2 --> node editor-------------------
 
 		// variableInitialisation for mode 3 --> settings screen---------------
@@ -141,15 +153,7 @@ public class MainActivity extends PApplet {
 
 		// variableInitialisation for mode 5 --> help screen-------------------
 		// variableInitialisation for mode 5 --> help screen-------------------
-
-		String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "downloadBlender.png", absPathPictos + "questions.png" };
-		for (int i = 0; i < mainButtons.length; i++) {
-			String s = "";
-			if (i > 0) {
-				s = modeNames[i - 1];
-			}
-			mainButtons[i] = new ImageButton(this, btnSize / 2 + margin + btnSize * i + margin * i, btnSize / 2 + margin, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, p3[i], s, null);
-		}
+		
 		// variableInitialisation -----------------------------------------------
 
 	}
@@ -188,7 +192,6 @@ public class MainActivity extends PApplet {
 			}
 			// render toasts -----------------------------------
 
-			
 			// file explorer ------------------------------------------------------
 			if (fileToRender_pathSelector.openFileExplorer_btn.getIsClicked() == true) {
 
@@ -238,89 +241,85 @@ public class MainActivity extends PApplet {
 			// handle Buttons ------------------------------------------------------
 			if (startRendering_btn.getIsClicked() == true) {
 				Boolean correctlySelected = true;
-				String errorMessage="";
-				
+				String errorMessage = "";
+
 				if (homeSettings_checkboxes[6].getIsChecked() == false && homeSettings_checkboxes[7].getIsChecked() == false) {
 					correctlySelected = false;
 					if (homeSettings_checkboxes[3].getIsChecked()) {
 						correctlySelected = true;
 					}
-					if(correctlySelected==false) {
-						if(errorMessage.length()>0) {
-							errorMessage+=" - ";
+					if (correctlySelected == false) {
+						if (errorMessage.length() > 0) {
+							errorMessage += " - ";
 						}
-						errorMessage+="Either render animation or still frame";
+						errorMessage += "Either render animation or still frame";
 					}
 				}
-				
+
 				if (homeSettings_checkboxes[0].getIsChecked() == false && homeSettings_checkboxes[1].getIsChecked() == false) {
 					correctlySelected = false;
-					if(errorMessage.length()>0) {
-						errorMessage+=" - ";
+					if (errorMessage.length() > 0) {
+						errorMessage += " - ";
 					}
-					errorMessage+="Either select 'Render with full force' or 'Render only with slaves'";
+					errorMessage += "Either select 'Render with full force' or 'Render only with slaves'";
 				}
 
 				if (homeSettings_checkboxes[2].getIsChecked() == false && homeSettings_checkboxes[3].getIsChecked() == false) {
 					correctlySelected = false;
-					if(errorMessage.length()>0) {
-						errorMessage+=" - ";
+					if (errorMessage.length() > 0) {
+						errorMessage += " - ";
 					}
-					errorMessage+="Either select .blend file or choose 'Render on Sheepit'";
+					errorMessage += "Either select .blend file or choose 'Render on Sheepit'";
 				}
 
 				if (homeSettings_checkboxes[4].getIsChecked() == false && homeSettings_checkboxes[5].getIsChecked() == false) {
 					correctlySelected = false;
-					if(errorMessage.length()>0) {
-						errorMessage+=" - ";
+					if (errorMessage.length() > 0) {
+						errorMessage += " - ";
 					}
-					errorMessage+="Either use CPU or GPU";
+					errorMessage += "Either use CPU or GPU";
 				}
 
-				
 				if (homeSettings_checkboxes[2].getIsChecked() && homeSettings_checkboxes[3].getIsChecked()) {
-					correctlySelected=false;
-					if(errorMessage.length()>0) {
-						errorMessage+=" - ";
+					correctlySelected = false;
+					if (errorMessage.length() > 0) {
+						errorMessage += " - ";
 					}
-					errorMessage+="Cant render File AND on Sheepit";
+					errorMessage += "Cant render File AND on Sheepit";
 				}
-				
+
 				if (homeSettings_checkboxes[6].getIsChecked() && homeSettings_checkboxes[7].getIsChecked()) {
-					correctlySelected=false;
-					if(errorMessage.length()>0) {
-						errorMessage+=" - ";
+					correctlySelected = false;
+					if (errorMessage.length() > 0) {
+						errorMessage += " - ";
 					}
-					errorMessage+="Cant render Animation AND still frame";
+					errorMessage += "Cant render Animation AND still frame";
 				}
-				
-				if(homeSettings_checkboxes[6].getIsChecked()) {
-					if(endFrame_counterArea.getCount()<startFrame_counterArea.getCount()) {
-						if(errorMessage.length()>0) {
-							errorMessage+=" - ";
+
+				if (homeSettings_checkboxes[6].getIsChecked()) {
+					if (endFrame_counterArea.getCount() < startFrame_counterArea.getCount()) {
+						if (errorMessage.length() > 0) {
+							errorMessage += " - ";
 						}
-						correctlySelected=false;
-						errorMessage+="Cant render negative frame range";
+						correctlySelected = false;
+						errorMessage += "Cant render negative frame range";
 					}
 				}
-				
-				if(homeSettings_checkboxes[3].getIsChecked()) {
+
+				if (homeSettings_checkboxes[3].getIsChecked()) {
 					if (homeSettings_checkboxes[6].getIsChecked() || homeSettings_checkboxes[7].getIsChecked()) {
-						if(errorMessage.length()>0) {
-							errorMessage+=" - ";
+						if (errorMessage.length() > 0) {
+							errorMessage += " - ";
 						}
-						correctlySelected=false;
-						errorMessage+="Cant render frame/Animation AND on Sheepit";
+						correctlySelected = false;
+						errorMessage += "Cant render frame/Animation AND on Sheepit";
 					}
 				}
-
-
-				
 
 				if (correctlySelected) {
-					mode=101;
-				}else {
-					makeToasts.add(new MakeToast(this, width / 2, height - stdTs * 2, stdTs, margin, edgeRad,errorMessage.length()*2, light, textCol,textYShift, false, errorMessage, stdFont, null));
+					mode = 101;
+				} else {
+					makeToasts.add(new MakeToast(this, width / 2, height - stdTs * 2, stdTs, margin, edgeRad, errorMessage.length() * 2, light, textCol, textYShift, false, errorMessage, stdFont, null));
 				}
 
 				startRendering_btn.setIsClicked(false);
@@ -330,6 +329,8 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 2) {
+			nodeEditor.render();
+
 			renderMainButtons();
 		}
 
@@ -425,7 +426,6 @@ public class MainActivity extends PApplet {
 					mode = i;
 					break;
 				}
-				println(mode);
 				mainButtons[i].setIsClicked(false);
 			}
 		}
@@ -445,7 +445,7 @@ public class MainActivity extends PApplet {
 			}
 		}
 		if (mode == 2) {
-
+			nodeEditor.onMousePressed();
 		}
 
 		if (mode == 3) {
@@ -492,7 +492,7 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 2) {
-
+			nodeEditor.onMouseReleased();
 		}
 
 		if (mode == 3) {
@@ -536,7 +536,7 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 2) {
-
+			nodeEditor.onScroll(e);
 		}
 
 		if (mode == 3) {
@@ -556,7 +556,7 @@ public class MainActivity extends PApplet {
 			}
 		}
 		if (mode == 2) {
-
+			nodeEditor.onKeyReleased(key);
 		}
 
 		if (mode == 3) {
@@ -569,5 +569,9 @@ public class MainActivity extends PApplet {
 			settingsScreen.fileExplorer.onKeyReleased(key);
 
 		}
+	}
+
+	public ImageButton[] getMainButtons() {
+		return mainButtons;
 	}
 }
