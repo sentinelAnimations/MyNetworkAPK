@@ -9,7 +9,7 @@ import processing.core.PFont;
 public class CounterArea<T> implements Widgets {
 	private int x, y, xShift, yShift, w, h, edgeRad, margin, stdTs, bgCol, textCol, lighter, calcOnceOnStartup = 0, count, counterBorderLow, counterBorderHigh, hoverTime;
 	private float textYShift;
-	private Boolean isParented, isHovering = false;
+	private Boolean isParented, isHovering = false, valueHasChanged = true;
 	private String infoText;
 	private String[] pictoPaths;
 	private PFont stdFont;
@@ -17,7 +17,7 @@ public class CounterArea<T> implements Widgets {
 	private T parent;
 	private ImageButton add_btn, subtract_btn;
 
-	public CounterArea(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int counterBorderLow, int counterBorderHigh, int bgCol, int lighter, int textCol, float textYShift, Boolean isParented, String infoText, String[] pictoPaths, PFont stdFont, T parent) {
+	public CounterArea(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int counterBorderLow, int counterBorderHigh, int startVal, int bgCol, int lighter, int textCol, float textYShift, Boolean isParented, String infoText, String[] pictoPaths, PFont stdFont, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -38,6 +38,7 @@ public class CounterArea<T> implements Widgets {
 		this.parent = parent;
 		xShift = x;
 		yShift = y;
+		count = startVal;
 		initializePictoImage();
 	}
 
@@ -45,14 +46,9 @@ public class CounterArea<T> implements Widgets {
 		if (isParented) {
 			getParentPos();
 		}
-		if (count < counterBorderLow) {
-			count = counterBorderLow;
-		}
-		if (count > counterBorderHigh) {
-			count = counterBorderHigh;
-		}
 
 		p.fill(bgCol);
+		p.stroke(bgCol);
 		p.rect(x, y, w, h, edgeRad);
 		p.textAlign(p.CENTER, p.CENTER);
 		p.textFont(stdFont);
@@ -65,11 +61,15 @@ public class CounterArea<T> implements Widgets {
 
 		if (add_btn.getIsClicked() == true) {
 			count++;
+			checkForBorder();
+			valueHasChanged = true;
 			add_btn.setIsClicked(false);
 		}
 
 		if (subtract_btn.getIsClicked() == true) {
 			count--;
+			checkForBorder();
+			valueHasChanged = true;
 			subtract_btn.setIsClicked(false);
 		}
 
@@ -86,19 +86,21 @@ public class CounterArea<T> implements Widgets {
 	}
 
 	public void onScroll(float e) {
-		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+		if (mouseIsInArea()) {
 			if (e > 0) {
 				count += 10;
 			} else {
 				count -= 10;
 			}
+			checkForBorder();
+			valueHasChanged = true;
 		}
 	}
 
 	private void onHover() {
 		Boolean show = false;
 		if (infoText.length() > 0) {
-			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			if (mouseIsInArea()) {
 				if (isHovering) {
 					hoverTime++;
 				}
@@ -146,6 +148,14 @@ public class CounterArea<T> implements Widgets {
 		subtract_btn = new ImageButton(p, xShift - w / 2 + w / 8, yShift, h / 2, h / 2, stdTs, margin, edgeRad, -1, textYShift, false, isParented, lighter, textCol, pictoPaths[0], "", parent);
 
 	}
+	private void checkForBorder() {
+		if (count < counterBorderLow) {
+			count = counterBorderLow;
+		}
+		if (count > counterBorderHigh) {
+			count = counterBorderHigh;
+		}
+	}
 
 	@Override
 	public void getParentPos() {
@@ -175,13 +185,40 @@ public class CounterArea<T> implements Widgets {
 	public int getY() {
 		return y;
 	}
-	
+
+	public Boolean mouseIsInArea() {
+		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public int getW() {
 		return w;
+	}
+	public int  getH() {
+		return h;
 	}
 
 	public int getCount() {
 		return count;
 	}
 
+	public Boolean getValueHasChanged() {
+		return valueHasChanged;
+	}
+
+	public void setValueHasChanged(Boolean state) {
+		valueHasChanged = state;
+	}
+
+	public void setPos(int xp, int yp) {
+		x = xp;
+		xShift = x;
+		y = yp;
+		yShift = y;
+		add_btn.setPos(xShift + w / 2 - w / 8, yShift);
+		subtract_btn.setPos(xShift - w / 2 + w / 8, yShift);
+	}
 }

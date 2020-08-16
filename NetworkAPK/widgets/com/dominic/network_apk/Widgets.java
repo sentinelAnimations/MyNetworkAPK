@@ -4,4 +4,5 @@ public interface Widgets {
  public void getParentPos();
  public int getX();
  public int getY();
+ public Boolean mouseIsInArea();
 }

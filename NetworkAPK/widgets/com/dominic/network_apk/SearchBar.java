@@ -83,5 +83,15 @@ public class SearchBar<T> implements Widgets {
 	public int getY() {
 		return y;
 	}
+	
+
+	@Override
+	public Boolean mouseIsInArea() {
+		if(p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 }

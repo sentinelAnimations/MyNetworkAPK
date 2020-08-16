@@ -306,8 +306,13 @@ public class FileExplorer {
 					for (int i2 = 0; i2 < c0List1.length; i2++) {
 						pathToCopy += c0List1[i2];
 					}
+				
 					String[] c0List2 = horizontalLists[2].getList();
+					if(c0List2.length>0) {
 					pathToCopy += c0List2[horizontalLists[2].getMarkedInd()];
+					}else {
+						pathToCopy="";
+					}
 					btnMode = 0;
 					break;
 

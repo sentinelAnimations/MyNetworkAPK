@@ -80,13 +80,13 @@ public class Checkbox<T> implements Widgets {
 	}
 
 	public void onMouseReleased() {
-		if (p.mouseX > boxX - boxDim / 2 && p.mouseX < boxX + boxDim / 2 && p.mouseY > boxY - boxDim / 2 && p.mouseY < boxY + boxDim / 2) {
+		if (mouseIsInArea()) {
 			isChecked = !isChecked;
 		}
 	}
 	
 	private void initializePictoImage(){
-		picto = new PictogramImage(p, boxX, boxY, boxDim - margin, margin, stdTs, edgeRad, tickCol, textYShift,isParented, pictoPath, "", parent);
+		picto = new PictogramImage(p, xShift-(x-boxX),yShift-(y-boxY), boxDim - margin, margin, stdTs, edgeRad, tickCol, textYShift,isParented, pictoPath, "", parent);
 	}
 	
 	@Override
@@ -98,9 +98,9 @@ public class Checkbox<T> implements Widgets {
 
 			m = parent.getClass().getMethod("getY");
 			y = (int) m.invoke(parent) + yShift;
+			boxX = x - w / 2 + margin + boxDim / 2;
+			boxY = y;
 			if (calcOnceOnStartup == 0) {
-				boxX = x - w / 2 + margin + boxDim / 2;
-				boxY = y;
 				initializePictoImage();
 				calcOnceOnStartup++;
 			}
@@ -119,7 +119,14 @@ public class Checkbox<T> implements Widgets {
 	public int getY() {
 		return y;
 	}
-	
+	@Override
+	public Boolean mouseIsInArea() {
+		if(p.mouseX > boxX - boxDim / 2 && p.mouseX < boxX + boxDim / 2 && p.mouseY > boxY - boxDim / 2 && p.mouseY < boxY + boxDim / 2) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	public Boolean getIsChecked() {
 		return isChecked;
 	}

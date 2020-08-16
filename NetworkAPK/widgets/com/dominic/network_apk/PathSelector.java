@@ -166,6 +166,14 @@ public class PathSelector<T> implements Widgets {
 		return y;
 	}
 
+	@Override
+	public Boolean mouseIsInArea() {
+		if(p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	//whether PathSelector should be used to select Folder or File
 	public Boolean getSelectFolder() {
 		return selectFolder;
@@ -184,5 +192,6 @@ public class PathSelector<T> implements Widgets {
 		}
 		calcDisplayText();
 	}
+	
 
 }

@@ -142,7 +142,7 @@ public class EditText<T> implements Widgets {
 	}
 
 	public void onMouseReleased() {
-		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+		if (mouseIsInArea()) {
 			getCursorPosByCoordinates(p.mouseX, p.mouseY);
 			isActive = true;
 		} else {
@@ -365,6 +365,14 @@ public class EditText<T> implements Widgets {
 		return y;
 	}
 	
+	public Boolean mouseIsInArea() {
+		if(p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
 	public void setText(String t) {
 		String s="";
 		StringList tempList = new StringList();
@@ -397,6 +405,13 @@ public class EditText<T> implements Widgets {
 
 	public void removeToast(int i) {
 		makeToasts.remove(i);
+	}
+	
+	public void setPos(int xp, int yp) {
+		x = xp;
+		xShift = x;
+		y = yp;
+		yShift = y;
 	}
 
 }

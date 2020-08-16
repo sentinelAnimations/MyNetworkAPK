@@ -32,7 +32,7 @@ public class MainActivity extends PApplet {
 	// Booleans-------------------------------------------------
 
 	// Colors--------------------------------------------------
-	private int dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0), green = color(0, 255, 0), textCol = color(255), textDark = color(150);
+	private int darkest = color(30),dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78),lightest=color(64,77,88), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0), green = color(0, 255, 0), textCol = color(255), textDark = color(150);
 	// colors -------------------------------------------------
 
 	// Dimens--------------------------------------------------
@@ -124,20 +124,20 @@ public class MainActivity extends PApplet {
 		String[] pp = { absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
 		int sfW = (int) (width / 16 - margin);
 		int sfX = (int) ((homeSettings_checkboxes[6].getX() - homeSettings_checkboxes[6].getW() / 2 + homeSettings_checkboxes[6].getBoxDim() + margin * 2)) - homeSettings_checkboxes[6].getX() + sfW / 2;
-		startFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, light, lighter, textCol, textYShift, true, "Startframe", pp, stdFont, homeSettings_checkboxes[6]);
-		endFrame_counterArea = new CounterArea(this, sfX + sfW + margin, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, light, lighter, textCol, textYShift, true, "Endframe", pp, stdFont, homeSettings_checkboxes[6]);
+		startFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000,0, light, lighter, textCol, textYShift, true, "Startframe", pp, stdFont, homeSettings_checkboxes[6]);
+		endFrame_counterArea = new CounterArea(this, sfX + sfW + margin, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0,0, 1000000000, light, lighter, textCol, textYShift, true, "Endframe", pp, stdFont, homeSettings_checkboxes[6]);
 		sfW = (int) textWidth(checkBoxTexts[3]);
 		sfX = (int) ((homeSettings_checkboxes[7].getX() - homeSettings_checkboxes[7].getW() / 2 + homeSettings_checkboxes[7].getBoxDim() + margin * 2)) - homeSettings_checkboxes[7].getX() + sfW / 2;
-		stillFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, light, lighter, textCol, textYShift, true, "Still frame", pp, stdFont, homeSettings_checkboxes[7]);
+		stillFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000,0, light, lighter, textCol, textYShift, true, "Still frame", pp, stdFont, homeSettings_checkboxes[7]);
 		startRendering_btn = new ImageButton(this, width / 2, height - height / 7 * 2, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, absPathPictos + "startEngine.png", "Start rendering", null);
 		// variableInitialisation for mode 1 --> home screen-------------------
 
 		// variableInitialisation for mode 2 --> node editor-------------------
 		String[] btnP = { absPathPictos + "panView.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png" };
 		String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
-		String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
+		String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" ,absPathPictos+"checkmark.png"};
 
-		nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, light, lighter, border, textCol, textDark, textYShift, btnP, nodeP1, nodeP2, stdFont);
+		nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark,darkest, light, lighter,lightest, border, textCol, textDark, textYShift, btnP, nodeP1, nodeP2, stdFont);
 		// variableInitialisation for mode 2 --> node editor-------------------
 
 		// variableInitialisation for mode 3 --> settings screen---------------
@@ -453,13 +453,12 @@ public class MainActivity extends PApplet {
 			}
 		}
 		if (mode == 2) {
-			nodeEditor.onMousePressed();
+			nodeEditor.onMousePressed(mouseButton);
 		}
 
 		if (mode == 3) {
 			settingsScreen.onMousePressed();
 		}
-
 	}
 
 	@Override
@@ -491,7 +490,7 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 2) {
-			nodeEditor.onMouseReleased();
+			nodeEditor.onMouseReleased(mouseButton);
 		}
 
 		if (mode == 3) {
@@ -551,6 +550,9 @@ public class MainActivity extends PApplet {
 	}
 	public LoadingScreen getLoadingScreen() {
 		return loadingScreen;
+	}
+	public NodeEditor getNodeEditor() {
+		return nodeEditor;
 	}
 	
 }

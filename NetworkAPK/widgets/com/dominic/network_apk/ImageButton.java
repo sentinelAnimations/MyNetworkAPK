@@ -10,7 +10,7 @@ public class ImageButton<T> implements Widgets {
 	private int x, y, xShift, yShift, w, h, stdTs, edgeRad, shortcut, col, bgCol, margin, onceOnClick = 0, hoverTime, clickCount = 0, waitAfterTransform = 0;
 	private float textYShift;
 	private String imgPath, infoText;
-	private Boolean isClicked = false, isPressed = false, isParented,useBg, isHovering;
+	private Boolean isClicked = false, isPressed = false, isParented,useBg, isHovering=false;
 	private PApplet p;
 	private PImage picto;
 	private T parent;
@@ -61,7 +61,7 @@ public class ImageButton<T> implements Widgets {
 
 	public void onMousePressed() {
 		isPressed = true;
-		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+		if (mouseIsInArea()) {
 			if (onceOnClick == 0) {
 				picto.resize(picto.width - margin, picto.height - margin);
 				w -= margin;
@@ -79,7 +79,7 @@ public class ImageButton<T> implements Widgets {
 				onceOnClick = 0;
 				loadPicto();
 			}
-			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			if (mouseIsInArea()) {
 				clickCount++;
 				isClicked = true;
 			}
@@ -195,6 +195,14 @@ public class ImageButton<T> implements Widgets {
 	
 	public Boolean getIsClicked() {
 		return isClicked;
+	}
+	
+	public Boolean mouseIsInArea() {
+		if(p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 	public void setIsClicked(Boolean state) {

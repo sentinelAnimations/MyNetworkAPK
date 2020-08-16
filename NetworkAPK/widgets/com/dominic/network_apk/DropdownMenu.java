@@ -3,16 +3,17 @@ package com.dominic.network_apk;
 import java.lang.reflect.Method;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 import processing.data.StringList;
 
 public class DropdownMenu<T> implements Widgets {
-	private int x, y, xShift, yShift, w, h, colH, maxH, dropdownH, dropdownY, edgeRad, margin, stdTs, light, lighter, textCol, textDark, selectedInd, unfoldTime = 5, elapsedUnfoldTime = 0, curDropdownH, calcOnce = 0, shiftListInd,maxDisplayableItems=0;
+	private int x, y, xShift, yShift, w, h, colH, maxH, dropdownH, dropdownY, edgeRad, margin, stdTs, light, lighter, textCol, textDark, selectedInd, unfoldTime = 5, elapsedUnfoldTime = 0, curDropdownH, calcOnce = 0, shiftListInd,maxDisplayableItems=0,hoverTime=72;
 	private float textYShift;
 	private float[] itemsY;
-	private Boolean isParented, unfold = false, isUnfolded = false, isSelected = false;
+	private Boolean isParented, unfold = false, isUnfolded = false, isSelected = false,isHovering=false;
 	private String title;
-	private String[] list, pictoPaths;
+	private String[] list, displList,pictoPaths;
 	private PFont stdFont;
 	private PApplet p;
 	private T parent;
@@ -48,6 +49,9 @@ public class DropdownMenu<T> implements Widgets {
 		for (int i = 0; i < itemsY.length; i++) {
 			itemsY[i] = y;
 		}
+		
+		calcDropdownDimens();
+		calcDisplList(list);
 
 		dropdown_btn = new ImageButton(p, x + w / 2 - margin - (h - margin * 2) / 2, yShift, h - margin * 2, h - margin * 2, stdTs, margin, edgeRad, -1, textYShift, false, true, textCol, textCol, pictoPaths[0], "", parent);
 
@@ -57,7 +61,8 @@ public class DropdownMenu<T> implements Widgets {
 		if (isParented) {
 			getParentPos();
 		}
-
+		
+		p.stroke(light);
 		p.fill(light);
 		p.rect(x, y, w, h, edgeRad);
 
@@ -66,12 +71,13 @@ public class DropdownMenu<T> implements Widgets {
 		p.textSize(stdTs);
 		if (isSelected) {
 			p.fill(textCol);
-			p.text(list[selectedInd], x - w / 2 + margin, y - stdTs * textYShift);
+			p.text(displList[selectedInd], x - w / 2 + margin, y - stdTs * textYShift);
 		} else {
 			p.fill(textDark);
 			p.text(title, x - w / 2 + margin, y - stdTs * textYShift);
 		}
 		dropdown_btn.render();
+		onHover();
 		dropdown();
 
 		if (dropdown_btn.getIsClicked() == true) {
@@ -111,7 +117,7 @@ public class DropdownMenu<T> implements Widgets {
 						p.textFont(stdFont);
 						p.textSize(stdTs);
 						p.fill(textCol, elapsedUnfoldTime - unfoldTime);
-						p.text(list[i], x, itemsY[i] - stdTs * textYShift);
+						p.text(displList[i], x, itemsY[i] - stdTs * textYShift);
 					}else {
 						if(i==shiftListInd+maxDisplayableItems) {
 							float lastRectH,lastRectY;
@@ -137,6 +143,7 @@ public class DropdownMenu<T> implements Widgets {
 
 	public void onMouseReleased() {
 		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > dropdownY - dropdownH / 2 && p.mouseY < dropdownY + dropdownH / 2) {
+			if(isUnfolded) {
 			for(int i=shiftListInd;i<shiftListInd+maxDisplayableItems;i++) {
 				if(p.mouseX>x-w/2+margin && p.mouseX<x+w/2-margin && p.mouseY>itemsY[i]-colH/2 && p.mouseY<itemsY[i]+colH/2) {
 					isSelected=true;
@@ -147,6 +154,7 @@ public class DropdownMenu<T> implements Widgets {
 					unfold=false;
 					dropdown_btn.setPicto(pictoPaths[0]);
 				}
+			}
 			}
 		}else {
 			if(p.mouseX<dropdown_btn.getX()-dropdown_btn.getH()/2 && p.mouseX<dropdown_btn.getX()+dropdown_btn.getH()/2 && p.mouseY<dropdown_btn.getY()-dropdown_btn.getH()/2 && p.mouseY>dropdown_btn.getX()+dropdown_btn.getH()/2) {
@@ -164,12 +172,58 @@ public class DropdownMenu<T> implements Widgets {
 			if (e > 0) {
 				if (shiftListInd < list.length-maxDisplayableItems) {
 					shiftListInd++;
-					p.println("now");
 				}
 			} else {
 				if (shiftListInd > 0) {
 					shiftListInd--;
 				}
+			}
+		}
+	}
+
+	
+	private void onHover() {
+		Boolean show = false;
+		if (isSelected==true && list[selectedInd].equals(displList[selectedInd])==false) {
+			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+				if (isHovering) {
+					hoverTime++;
+				}
+				isHovering = true;
+			} else {
+				hoverTime = 0;
+				isHovering = false;
+			}
+			if (hoverTime > 72) {
+				int tw = (int) p.textWidth(list[selectedInd]) + margin * 2;
+				int mx, my;
+				if (p.mouseX + tw < p.width) {
+					p.textAlign(PConstants.RIGHT, PConstants.CENTER);
+				} else {
+					tw *= -1;
+					p.textAlign(PConstants.LEFT, PConstants.CENTER);
+				}
+				mx = p.mouseX;
+				my = p.mouseY;
+				if (p.mouseY < stdTs) {
+					my = stdTs;
+				}
+				if (p.mouseY > p.height - stdTs * 2) {
+					my = p.height - stdTs * 2;
+				}
+				
+				if (hoverTime > 120) {
+					show = false;
+				} else {
+					show = true;
+				}
+			if(show) {	
+				p.fill(0, 200);
+				p.noStroke();
+				p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
+				p.fill(textCol);
+				p.text(list[selectedInd], mx + tw, my + stdTs - stdTs * textYShift);
+			}
 			}
 		}
 	}
@@ -183,7 +237,23 @@ public class DropdownMenu<T> implements Widgets {
 		
 		maxDisplayableItems=(dropdownH-margin)/(colH+margin);
 	}
-
+	
+	private void calcDisplList(String[] l){
+		displList=new String[l.length];
+		for(int i=0;i<l.length;i++) {
+			if(p.textWidth(l[i])>w-margin*2) {
+				String s="";
+				for(int i2=l[i].length()-1;i2>=0;i2--) {
+				if(p.textWidth(s+l[i].charAt(i2))<w-margin*2) {
+					s=l[i].charAt(i2)+s;
+				}
+				}
+				displList[i]=s;
+			}else {
+				displList[i]=l[i];
+			}
+		}
+	}
 	@Override
 	public void getParentPos() {
 		Method m;
@@ -193,11 +263,11 @@ public class DropdownMenu<T> implements Widgets {
 
 			m = parent.getClass().getMethod("getY");
 			y = (int) m.invoke(parent) + yShift;
+			calcDropdownDimens();
 
-			if (calcOnce == 0) {
-				calcDropdownDimens();
+			/*if (calcOnce == 0) {
 				calcOnce++;
-			}
+			}*/
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -214,6 +284,14 @@ public class DropdownMenu<T> implements Widgets {
 		return y;
 	}
 
+	@Override
+	public Boolean mouseIsInArea() {
+		if(p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	public int getSelectedInd() {
 		return selectedInd;
 	}
@@ -230,12 +308,19 @@ public class DropdownMenu<T> implements Widgets {
 		 selectedInd=selInd;
 	}
 	
+	public Boolean getIsUnfolded() {
+		return isUnfolded;
+	}
+	
 	public String getSelectedItem() {
 		return list[selectedInd];
 	}
 
 	public void setList(String[] l) {
 		list = l;
+		
+		calcDisplList(l);
+		
 		itemsY = new float[list.length];
 		calcDropdownDimens();
 	}
