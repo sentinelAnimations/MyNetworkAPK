@@ -333,6 +333,7 @@ public class Node {
 
 			if (type == 3) {
 				switchPort_CounterArea.onMousePressed();
+				switchName_editText.onMousePressed();
 			}
 		}
 	}

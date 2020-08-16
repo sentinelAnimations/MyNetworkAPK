@@ -125,7 +125,7 @@ public class MainActivity extends PApplet {
 		int sfW = (int) (width / 16 - margin);
 		int sfX = (int) ((homeSettings_checkboxes[6].getX() - homeSettings_checkboxes[6].getW() / 2 + homeSettings_checkboxes[6].getBoxDim() + margin * 2)) - homeSettings_checkboxes[6].getX() + sfW / 2;
 		startFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000,0, light, lighter, textCol, textYShift, true, "Startframe", pp, stdFont, homeSettings_checkboxes[6]);
-		endFrame_counterArea = new CounterArea(this, sfX + sfW + margin, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0,0, 1000000000, light, lighter, textCol, textYShift, true, "Endframe", pp, stdFont, homeSettings_checkboxes[6]);
+		endFrame_counterArea = new CounterArea(this, sfX + sfW + margin, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000,0, light, lighter, textCol, textYShift, true, "Endframe", pp, stdFont, homeSettings_checkboxes[6]);
 		sfW = (int) textWidth(checkBoxTexts[3]);
 		sfX = (int) ((homeSettings_checkboxes[7].getX() - homeSettings_checkboxes[7].getW() / 2 + homeSettings_checkboxes[7].getBoxDim() + margin * 2)) - homeSettings_checkboxes[7].getX() + sfW / 2;
 		stillFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000,0, light, lighter, textCol, textYShift, true, "Still frame", pp, stdFont, homeSettings_checkboxes[7]);

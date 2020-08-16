@@ -46,7 +46,8 @@ public class CounterArea<T> implements Widgets {
 		if (isParented) {
 			getParentPos();
 		}
-
+		checkForBorder();
+		
 		p.fill(bgCol);
 		p.stroke(bgCol);
 		p.rect(x, y, w, h, edgeRad);

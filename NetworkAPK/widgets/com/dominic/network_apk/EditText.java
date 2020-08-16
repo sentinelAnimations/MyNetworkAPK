@@ -140,6 +140,12 @@ public class EditText<T> implements Widgets {
 		// p.println(strList);
 
 	}
+	
+	public void onMousePressed() {
+		if(mouseIsInArea()==false) {
+			isActive=false;
+		}
+	}
 
 	public void onMouseReleased() {
 		if (mouseIsInArea()) {
