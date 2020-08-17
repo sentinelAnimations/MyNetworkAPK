@@ -1,0 +1,5 @@
+InSevenDays 1.0 - Software written to simplify the management of network rendering based on Blenders internal Engine 'Cycles'. 
+Discover the full untaimed force of an infinite extendable amounth of PCs while rendering and enjoy creative workflow on a new level.
+\nWith builtin features such as a node-based network-editor, easy render control options, and a straightforward software update possibility,
+ these program allows you to spend your time on more valuable tasks than worrying about rendertime. \nDeveloped and designed by Dominic Gut
+

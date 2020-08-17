@@ -671,10 +671,8 @@ public class FileExplorer {
 
 	public void onMouseReleased(int mouseButton) {
 		rename_et.onMouseReleased();
-		searchBar.search_btn.onMouseReleased();
-		searchBar.searchBar_et.onMouseReleased();
 		rename_btn.onMouseReleased();
-
+		searchBar.onMouseReleased();
 		for (int i = 0; i < horizontalLists.length; i++) {
 
 			if (mouseButton==p.RIGHT) {
@@ -687,7 +685,6 @@ public class FileExplorer {
 			horizontalLists[i].goLeft_btn.onMouseReleased();
 			horizontalLists[i].goRight_btn.onMouseReleased();
 		}
-		searchBar.search_btn.onMouseReleased();
 		rename_btn.onMouseReleased();
 		for (int i = fileExplorer_btns.length - 1; i >= 0; i--) {
 			fileExplorer_btns[i].onMouseReleased();
@@ -699,7 +696,7 @@ public class FileExplorer {
 			horizontalLists[i].goLeft_btn.onMousePressed();
 			horizontalLists[i].goRight_btn.onMousePressed();
 		}
-		searchBar.search_btn.onMousePressed();
+		searchBar.onMousePressed();
 		rename_btn.onMousePressed();
 		for (int i = fileExplorer_btns.length - 1; i >= 0; i--) {
 			fileExplorer_btns[i].onMousePressed();
@@ -711,10 +708,9 @@ public class FileExplorer {
 			horizontalLists[i].goLeft_btn.onKeyReleased(k);
 			horizontalLists[i].goRight_btn.onKeyReleased(k);
 		}
+		searchBar.onKeyReleased(k);
 		rename_et.onKeyReleased(k);
-		searchBar.searchBar_et.onKeyReleased(k);
 		rename_btn.onKeyReleased(k);
-		searchBar.search_btn.onKeyReleased(k);
 		for (int i = fileExplorer_btns.length - 1; i >= 0; i--) {
 			fileExplorer_btns[i].onKeyReleased(k);
 		}

@@ -62,6 +62,8 @@ public class MainActivity extends PApplet {
 	private LoadingScreen loadingScreen;
 	private NodeEditor nodeEditor;
 	private SettingsScreen settingsScreen;
+	private SpreadBlender spreadBlenderScreen;
+	private QuestionScreen questionScreen;
 	// Main classes-------------------------------
 	// widgets -----------------------------------
 	private PictogramImage firstSetupPicto;
@@ -151,9 +153,14 @@ public class MainActivity extends PApplet {
 		// variableInitialisation for mode 3 --> settings screen---------------
 
 		// variableInitialisation for mode 4 --> blender download--------------
+		String[] pp1= {absPathPictos + "selectFolder.png",absPathPictos + "spreadBlender.png"};
+		spreadBlenderScreen=new SpreadBlender(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp1, stdFont);
 		// variableInitialisation for mode 4 --> blender download--------------
 
 		// variableInitialisation for mode 5 --> help screen-------------------
+		String[] pp2= {absPathPictos + "search.png"};
+        questionScreen=new QuestionScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp2, stdFont);
+        
 		// variableInitialisation for mode 5 --> help screen-------------------
 
 		// variableInitialisation -----------------------------------------------
@@ -386,8 +393,10 @@ public class MainActivity extends PApplet {
 		}
 
 		if (mode == 4) {
+		    spreadBlenderScreen.render();
 		}
 		if (mode == 5) {
+		    questionScreen.render();
 		}
 
 	}
@@ -459,6 +468,12 @@ public class MainActivity extends PApplet {
 		if (mode == 3) {
 			settingsScreen.onMousePressed();
 		}
+		if(mode==4) {
+		    spreadBlenderScreen.onMousePressed();
+		}
+		if(mode==5) {
+		    questionScreen.onMousePressed();
+		}
 	}
 
 	@Override
@@ -496,6 +511,13 @@ public class MainActivity extends PApplet {
 		if (mode == 3) {
 			settingsScreen.onMouseReleased(mouseButton);
 		}
+		
+		if(mode==4) {
+            spreadBlenderScreen.onMouseReleased();
+        }
+        if(mode==5) {
+            questionScreen.onMouseReleased();
+        }
 
 	}
 
@@ -520,6 +542,12 @@ public class MainActivity extends PApplet {
 		if (mode == 3) {
 			settingsScreen.onScroll(e);
 		}
+		
+		if(mode==4) {
+        }
+        if(mode==5) {
+            questionScreen.onScroll(e);
+        }
 	}
 
 	@Override
@@ -539,6 +567,13 @@ public class MainActivity extends PApplet {
 		if (mode == 3) {
 			settingsScreen.onKeyReleased(key);
 		}
+		
+		if(mode==4) {
+            spreadBlenderScreen.onKeyReleased(key);
+        }
+        if(mode==5) {
+            questionScreen.onKeyReleased(key);
+        }
 	}
 
 	public ImageButton[] getMainButtons() {
