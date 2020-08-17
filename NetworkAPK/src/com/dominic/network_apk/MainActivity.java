@@ -42,7 +42,7 @@ public class MainActivity extends PApplet {
 
 	// Strings--------------------------------------------------
 	private String APKName = "InSevenDays©", APKDescription = "A network solution", mySettingsPath = "output/sub/settings.json";
-	private String[] modeNames = { "Home", "Node Editor", "Settings", "Download Blender", "Questions" };
+	private String[] modeNames = { "Home", "Node Editor", "Settings", "Spread Blender","Theme", "Questions" };
 	// Strings--------------------------------------------------
 
 	// Fonts---------------------------------------------------
@@ -63,6 +63,7 @@ public class MainActivity extends PApplet {
 	private NodeEditor nodeEditor;
 	private SettingsScreen settingsScreen;
 	private SpreadBlender spreadBlenderScreen;
+	private ThemeScreen themeScreen;
 	private QuestionScreen questionScreen;
 	// Main classes-------------------------------
 	// widgets -----------------------------------
@@ -72,7 +73,7 @@ public class MainActivity extends PApplet {
 	private FileExplorer selectBlendFile_fileExplorer;
 	private CounterArea startFrame_counterArea, endFrame_counterArea, stillFrame_counterArea;
 	private ImageButton startRendering_btn;
-	private ImageButton[] mainButtons = new ImageButton[6];
+	private ImageButton[] mainButtons = new ImageButton[7];
 	private Checkbox[] homeSettings_checkboxes = new Checkbox[8];
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 
@@ -95,7 +96,7 @@ public class MainActivity extends PApplet {
 		// variableInitialisation -----------------------------------------------
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
 
-		String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "downloadBlender.png", absPathPictos + "questions.png" };
+		String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "downloadBlender.png", absPathPictos + "themeSettings.png",absPathPictos+"questions.png" };
 		for (int i = 0; i < mainButtons.length; i++) {
 			String s = "";
 			if (i > 0) {
@@ -157,11 +158,16 @@ public class MainActivity extends PApplet {
 		spreadBlenderScreen=new SpreadBlender(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp1, stdFont);
 		// variableInitialisation for mode 4 --> blender download--------------
 
-		// variableInitialisation for mode 5 --> help screen-------------------
+		// variableInitialisation for mode 5 --> Theme screen-------------------
 		String[] pp2= {absPathPictos + "search.png"};
-        questionScreen=new QuestionScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp2, stdFont);
-        
-		// variableInitialisation for mode 5 --> help screen-------------------
+        themeScreen=new ThemeScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp2, stdFont);      
+		// variableInitialisation for mode 5 --> Theme screen-------------------
+		
+		// variableInitialisation for mode 6 --> help screen-------------------
+		String[] pp3= {absPathPictos + "search.png"};
+        questionScreen=new QuestionScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp3, stdFont);
+		// variableInitialisation for mode 6 --> help screen-------------------
+
 
 		// variableInitialisation -----------------------------------------------
 
@@ -396,6 +402,9 @@ public class MainActivity extends PApplet {
 		    spreadBlenderScreen.render();
 		}
 		if (mode == 5) {
+			themeScreen.render();
+		}
+		if(mode==6) {
 		    questionScreen.render();
 		}
 
@@ -472,6 +481,9 @@ public class MainActivity extends PApplet {
 		    spreadBlenderScreen.onMousePressed();
 		}
 		if(mode==5) {
+			themeScreen.onMousePressed();
+		}
+		if(mode==6) {
 		    questionScreen.onMousePressed();
 		}
 	}
@@ -516,6 +528,9 @@ public class MainActivity extends PApplet {
             spreadBlenderScreen.onMouseReleased();
         }
         if(mode==5) {
+        	themeScreen.onMouseReleased();
+        }
+        if(mode==6) {
             questionScreen.onMouseReleased();
         }
 
@@ -546,6 +561,9 @@ public class MainActivity extends PApplet {
 		if(mode==4) {
         }
         if(mode==5) {
+        	themeScreen.onScroll(e);
+        }
+        if(mode==6) {
             questionScreen.onScroll(e);
         }
 	}
@@ -572,6 +590,9 @@ public class MainActivity extends PApplet {
             spreadBlenderScreen.onKeyReleased(key);
         }
         if(mode==5) {
+        	themeScreen.onKeyReleased(key);
+        }
+        if(mode==6) {
             questionScreen.onKeyReleased(key);
         }
 	}
