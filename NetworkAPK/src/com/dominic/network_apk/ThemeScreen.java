@@ -16,6 +16,7 @@ public class ThemeScreen {
     private PApplet p;
     private MainActivity mainActivity;
     private ImageButton[] mainButtons;
+    private ColorPicker colorPicker;
     
 
     public ThemeScreen(PApplet p,int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] pictoPaths, PFont stdFont) {
@@ -39,10 +40,12 @@ public class ThemeScreen {
         this.p = p;
         mainActivity = (MainActivity)p;
         mainButtons=mainActivity.getMainButtons();
+        colorPicker=new ColorPicker(p, p.width/2, p.height/2, btnSize, btnSizeSmall, btnSize*2, darkest, stdTs, edgeRad, 1, lightest, lighter, textCol, textYShift, false, stdFont, null);
     }
     
     public void render() {
         mainActivity.renderMainButtons();
+        colorPicker.render();
     }
     
     public void onMousePressed() {
