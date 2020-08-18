@@ -40,7 +40,8 @@ public class ThemeScreen {
         this.p = p;
         mainActivity = (MainActivity)p;
         mainButtons=mainActivity.getMainButtons();
-        colorPicker=new ColorPicker(p, p.width/2, p.height/2, btnSize, btnSizeSmall, btnSize*2, darkest, stdTs, edgeRad, 1, lightest, lighter, textCol, textYShift, false, stdFont, null);
+       
+        colorPicker=new ColorPicker(p, p.width/2, p.height/2, btnSize, btnSizeSmall, (int)(btnSize*1.0f), dark, stdTs, edgeRad,margin,btnSize,btnSizeSmall, light, lighter,lightest, textCol, textYShift, false,false,true, stdFont, null);  //isParented,renderBg,stayOpen
     }
     
     public void render() {
@@ -54,6 +55,7 @@ public class ThemeScreen {
                 mainButtons[i].onMousePressed();
             }
         }
+        colorPicker.onMousePressed();
     }
     public void onMouseReleased() {
         for (int i = 0; i < mainButtons.length; i++) {
@@ -61,6 +63,7 @@ public class ThemeScreen {
                 mainButtons[i].onMouseReleased();
             }
         }
+        colorPicker.onMoueseReleased();
     }
     
     public void onKeyReleased(char k) {
