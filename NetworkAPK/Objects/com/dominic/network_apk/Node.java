@@ -1,11 +1,13 @@
 package com.dominic.network_apk;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 
 public class Node {
 
-	private int index, x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS;
+	private int ind, x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS;
 	private float textYShift;
 	private Boolean isOnDrag = true, isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false;
 	private String[] pictoPaths;
@@ -17,9 +19,11 @@ public class Node {
 	private DropdownMenu pcSelection_DropdownMenu;
 	private CounterArea switchPort_CounterArea;
 	private EditText switchName_editText;
+	private ConnectorPoint output_connectorPoint,intput_connectorPoint;
+	private ArrayList<ConnectorPoint> switch_connectorPoints=new ArrayList<ConnectorPoint>();
 
-	public Node(PApplet p, int index, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, float textYShift, String[] pictoPaths, PFont stdFont) {
-		this.index = index;
+	public Node(PApplet p, int ind, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, float textYShift, String[] pictoPaths, PFont stdFont) {
+		this.ind = ind;
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -87,7 +91,9 @@ public class Node {
 			String[] tempList = { "dies", "und", "das", "kfdjakjfaskdjfasdkf", "askdfjasdkfjjjjjjjjj" };
 			String[] ddPaths = { pictoPaths[anzTypes + 5], pictoPaths[anzTypes + 4] };
 			pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, tempList, stdFont, true, this);
-
+			
+			output_connectorPoint=new ConnectorPoint(p,0,ind, dragShiftX, anzTypes, conS,2, bgCol, true, this);
+			
 			doOnce++;
 		}
 
@@ -231,6 +237,46 @@ public class Node {
 	}
 
 	private void renderTypeOutput() {
+	    if (doOnce == 0) {
+            type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
+            doOnce++;
+        }
+
+        if (mouseIsPressed) {
+            if (isGrabbed == false) {
+                if (isDragableOutputNode()) {
+                    isGrabbed = true;
+                    dragShiftX = p.mouseX - x;
+                    dragShiftY = p.mouseY - y;
+                }
+            }
+
+        }
+
+        if (isGrabbed) {
+            x = p.mouseX - dragShiftX;
+            y = p.mouseY - dragShiftY;
+            calcBodyAndHeadPos();
+        }
+
+        if (isSelected) {
+            p.stroke(lightest);
+        } else {
+            p.stroke(darkest);
+        }
+        p.fill(bgCol);
+        p.rect(x, bodyY, w, bodyH, 0, 0, edgeRad, edgeRad);
+        p.rect(x, headY, w, headH, edgeRad, edgeRad, 0, 0);
+
+        type_picto.render();
+        p.fill(textCol);
+        p.textFont(stdFont);
+        p.textSize(stdTs);
+        p.textAlign(p.LEFT, p.CENTER);
+        p.text("Output",x-w/2+margin,headY-stdTs*textYShift);
+        p.text("CPUs: 24\nGPUs: 2",x-w/2+margin+conS/2,bodyY-stdTs*textYShift);
+
+        renderConnector(x - w / 2, bodyY, true);
 
 	}
 
@@ -271,7 +317,7 @@ public class Node {
 
 		for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
 			Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
-			if (n.getIsGrabbed() && i != index) {
+			if (n.getIsGrabbed() && i != ind) {
 				isD = false;
 				break;
 			}
@@ -304,7 +350,7 @@ public class Node {
 
 		for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
 			Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
-			if (n.getIsGrabbed() && i != index) {
+			if (n.getIsGrabbed() && i != ind) {
 				isD = false;
 				break;
 			}
@@ -321,6 +367,25 @@ public class Node {
 			isD = false;
 		}
 		return isD;
+	}
+	
+	public Boolean isDragableOutputNode() {
+	    Boolean isD = true;
+
+        for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
+            Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
+            if (n.getIsGrabbed() && i != ind) {
+                isD = false;
+                break;
+            }
+        }
+
+        if (mouseIsInArea()) {
+           //connector check here
+        } else {
+            isD = false;
+        }
+        return isD;
 	}
 
 	public void onMousePressed(int mouseButton) {
@@ -418,5 +483,5 @@ public class Node {
 	public Boolean getIsGrabbed() {
 		return isGrabbed;
 	}
-
+	
 }

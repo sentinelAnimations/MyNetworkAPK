@@ -159,7 +159,7 @@ public class MainActivity extends PApplet {
 		// variableInitialisation for mode 4 --> blender download--------------
 
 		// variableInitialisation for mode 5 --> Theme screen-------------------
-		String[] pp2= {absPathPictos + "search.png"};
+		String[] pp2= {absPathPictos+"colorPicker.png"};
         themeScreen=new ThemeScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp2, stdFont);      
 		// variableInitialisation for mode 5 --> Theme screen-------------------
 		

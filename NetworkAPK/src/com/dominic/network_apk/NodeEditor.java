@@ -135,7 +135,7 @@ public class NodeEditor {
 			if (nodeAdderButtons[i].getIsClicked() == true) {
 				int nh = nodeH;
 				if (i == nodeAdderButtons.length - 1) {
-					nh /= 2;
+					nh =btnSizeSmall+stdTs*2+margin*7;
 				}
 				nodes.add(new Node(p,nodes.size(), p.mouseX, p.mouseY, nodeW, nh, i, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest,light, textCol, textDark, lighter, lightest, border, textYShift, nodePaths2, stdFont));
 				renderNodeMenu = false;

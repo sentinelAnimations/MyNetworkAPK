@@ -10,13 +10,15 @@ public class ColorPicker<T> implements Widgets {
 	private int x, y, xShift, yShift, markerX, markerY, w, h, r, dark, stdTs, edgeRad, margin, btnSize, btnSizeSmall, bgCol, lighter, lightest, textCol, pickedCol, doOnce = 0, borderW;
 	private float textYShift, brightness;
 	private Boolean isParented, isPressed = false, isUnfolded = false, renderBg, stayOpen;
+	private String pictoPath;
 	private PFont stdFont;
 	private PImage rgbCircle;
 	private PApplet p;
 	private T parent;
 	private Slider brightness_slider;
+	private PictogramImage picto;
 
-	public ColorPicker(PApplet p, int x, int y, int w, int h, int r, int dark, int stdTs, int edgeRad, int margin, int btnSize, int btnSizeSmall, int bgCol, int lighter, int lightest, int textCol, float textYShift, Boolean isParented, Boolean renderBg, Boolean stayOpen, PFont stdFont, T parent) {
+	public ColorPicker(PApplet p, int x, int y, int w, int h, int r, int dark, int stdTs, int edgeRad, int margin, int btnSize, int btnSizeSmall, int bgCol, int lighter, int lightest, int textCol, float textYShift, Boolean isParented, Boolean renderBg, Boolean stayOpen,String pictoPath, PFont stdFont, T parent) {
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -36,6 +38,7 @@ public class ColorPicker<T> implements Widgets {
 		this.renderBg = renderBg;
 		this.stayOpen = stayOpen;
 		this.textYShift = textYShift;
+		this.pictoPath=pictoPath;
 		this.stdFont = stdFont;
 		this.p = p;
 		this.parent = parent;
@@ -51,6 +54,10 @@ public class ColorPicker<T> implements Widgets {
 		} else {
 			bgC = bgCol;
 		}
+		
+	      picto = new PictogramImage(p, xShift, yShift, btnSizeSmall - margin, margin, stdTs, edgeRad, textCol, textYShift,false, pictoPath, "", parent);
+
+		
 		brightness_slider = new Slider(p, 0, margin + r + btnSizeSmall / 2, r * 2, btnSizeSmall / 4, btnSizeSmall - margin, stdTs, edgeRad, margin, 0, 100, 0, dark, bgC, lightest, textYShift, true, true, false, stdFont, this);
 		brightness_slider.render();
 
@@ -78,6 +85,7 @@ public class ColorPicker<T> implements Widgets {
 			p.fill(pickedCol);
 			p.stroke(lighter);
 			p.rect(x, y, w, h, edgeRad);
+			picto.render();
 		} else {
 
 			if (!mouseIsInColorPickArea()) {
@@ -166,6 +174,7 @@ public class ColorPicker<T> implements Widgets {
 		float red = 0, green = 0, blue = 0;
 		float d = 0;
 
+		    
 		ar = getAngle(cx, cy, xp, yp);
 		ab = ar - 120;
 
