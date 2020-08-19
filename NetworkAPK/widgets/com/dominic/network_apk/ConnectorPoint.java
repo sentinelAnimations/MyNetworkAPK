@@ -77,6 +77,9 @@ public class ConnectorPoint<T> implements Widgets {
 					break;
 				}
 			}
+			
+			//sometimes doesnt calculate correct updatedConnectedInd to do --------------------- vlt weil ind nicht eindeutig ist: String idOne = UUID.randomUUID().toString(); ,UUID idOne = UUID.randomUUID();
+			
 			//p.println(updatedConnectedInd,"--");
 			//if(updatedConnectedInd>=0&&updatedConnectedInd<connectorPoints.size()) {
 			connected_connectorPoint = connectorPoints.get(updatedConnectedInd);
