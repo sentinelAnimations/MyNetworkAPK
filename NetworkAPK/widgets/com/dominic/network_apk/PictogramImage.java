@@ -123,4 +123,8 @@ public class PictogramImage<T> implements Widgets {
 		y = yp;
 		yShift = y;
 	}
+	
+	public void setCol(int c) {
+		col=c;
+	}
 }

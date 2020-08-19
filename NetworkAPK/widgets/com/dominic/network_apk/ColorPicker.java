@@ -88,7 +88,7 @@ public class ColorPicker<T> implements Widgets {
 			picto.render();
 		} else {
 
-			if (!mouseIsInColorPickArea()) {
+			if (!mouseIsInColorPickArea() && !isPressed) {
 				isUnfolded = false;
 				brightness_slider.setIsPressed(false);
 			}
@@ -130,8 +130,6 @@ public class ColorPicker<T> implements Widgets {
 			
 			if (brightness_slider.getIsOnDrag()) {
 				brightness = brightness_slider.getVal();
-				p.println(brightness);
-				//rgbCircle = calcRGBCircle();
 			}
 		}
 	}
@@ -170,10 +168,10 @@ public class ColorPicker<T> implements Widgets {
 	}
 
 	private int getColOfPos(float cx, float cy, float xp, float yp, int rad) {
+		int c;
 		float ar = 0, ag = 0, ab = 0;
 		float red = 0, green = 0, blue = 0;
-		float d = 0;
-
+		float d = 0;		
 		    
 		ar = getAngle(cx, cy, xp, yp);
 		ab = ar - 120;
@@ -185,6 +183,10 @@ public class ColorPicker<T> implements Widgets {
 		}
 
 		ag = ar - 240;
+		
+		if(ar!=ar || ag!=ag || ab!=ab) {  // if one angle = NaN
+		c=p.color(255);
+		}else {
 		if (ag < 0) {
 			ag = (360 - 240) + (240 - p.abs(ag));
 		}
@@ -224,7 +226,8 @@ public class ColorPicker<T> implements Widgets {
 		red += d;
 		green += d;
 		blue += d;
-		int c = p.color(red, green, blue);
+		 c = p.color(red, green, blue);
+		}
 
 		return c;
 	}

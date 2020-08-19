@@ -5,24 +5,26 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PFont;
 
-public class Node {
+public class Node<T> {
 
-	private int ind, x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS;
+	private int ind, x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS,prevPortCount=0;
 	private float textYShift;
 	private Boolean isOnDrag = true, isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false;
 	private String[] pictoPaths;
 	private PFont stdFont;
 	private PApplet p;
 	private MainActivity mainActivity;
+	private NodeEditor parent;
 	private PictogramImage type_picto, cpu_picto, gpu_picto;
 	private Checkbox useCpu_checkbox, useGpu_checkbox;
 	private DropdownMenu pcSelection_DropdownMenu;
 	private CounterArea switchPort_CounterArea;
 	private EditText switchName_editText;
-	private ConnectorPoint output_connectorPoint,intput_connectorPoint;
-	private ArrayList<ConnectorPoint> switch_connectorPoints=new ArrayList<ConnectorPoint>();
+	private ConnectorPoint output_connectorPoint, input_connectorPoint;
+	private ArrayList<Integer> switch_connectorPointInds = new ArrayList<Integer>();
+	private ArrayList<ConnectorPoint> switch_connectorPoints = new ArrayList<ConnectorPoint>();
 
-	public Node(PApplet p, int ind, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, float textYShift, String[] pictoPaths, PFont stdFont) {
+	public Node(PApplet p, int ind, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, float textYShift, String[] pictoPaths, PFont stdFont, T parent) {
 		this.ind = ind;
 		this.x = x;
 		this.y = y;
@@ -45,6 +47,7 @@ public class Node {
 		this.stdFont = stdFont;
 		this.p = p;
 		this.type = type;
+		this.parent = (NodeEditor) parent;
 
 		mainActivity = (MainActivity) p;
 		conS = btnSizeSmall - margin;
@@ -91,9 +94,10 @@ public class Node {
 			String[] tempList = { "dies", "und", "das", "kfdjakjfaskdjfasdkf", "askdfjasdkfjjjjjjjjj" };
 			String[] ddPaths = { pictoPaths[anzTypes + 5], pictoPaths[anzTypes + 4] };
 			pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, tempList, stdFont, true, this);
-			
-			output_connectorPoint=new ConnectorPoint(p,0,ind, dragShiftX, anzTypes, conS,2, bgCol, true, this);
-			
+
+			int[] conT = { 1, 2 };
+			mainActivity.getNodeEditor().addConnectorPoint(p, getConnectorPoints().size(), ind, 0, w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT, this);
+			output_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
 			doOnce++;
 		}
 
@@ -105,7 +109,7 @@ public class Node {
 					dragShiftY = p.mouseY - y;
 				}
 			}
-
+			output_connectorPoint.onMousePressed();
 		}
 
 		if (isGrabbed) {
@@ -137,6 +141,7 @@ public class Node {
 		p.text("Status: ok", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2);
 
 		renderConnector(x + w / 2, bodyY, false);
+		output_connectorPoint.render();
 
 		pcSelection_DropdownMenu.render();
 
@@ -194,89 +199,119 @@ public class Node {
 		type_picto.render();
 		switchPort_CounterArea.render();
 
-		
 		Boolean isEven;
 		int conBorder;
 		if (switchPort_CounterArea.getCount() % 2 == 0) {
-			conBorder = p.ceil(switchPort_CounterArea.getCount() / 2)-1;
-			isEven=true;
+			conBorder = p.ceil(switchPort_CounterArea.getCount() / 2) - 1;
+			isEven = true;
 		} else {
-			conBorder=p.ceil(switchPort_CounterArea.getCount() / 2);
-			isEven=false;
+			conBorder = p.ceil(switchPort_CounterArea.getCount() / 2);
+			isEven = false;
 		}
-		
-		for (int i = 0; i < switchPort_CounterArea.getCount(); i++) {
+
+		if (switch_connectorPointInds.size() > switchPort_CounterArea.getCount()) {
+			for(int i=switch_connectorPointInds.size()-1;i>=prevPortCount;i--) {
+				mainActivity.getNodeEditor().removeConnectorPoint(switch_connectorPointInds.get(i));
+				p.println(switch_connectorPointInds.get(i),i);
+				switch_connectorPointInds.remove(i);
+				switch_connectorPoints.remove(i);
+			}
+		}
+
+		//for (int i = 0; i < switchPort_CounterArea.getCount(); i++) {
+		for(int i=switchPort_CounterArea.getCount()-1;i>=0;i--) {
 			int xp, yp;
-			
-			
+
 			if (i <= conBorder) {
-				xp = x - w / 2-1;
+				xp = x - w / 2 - 1;
 				yp = conS / 2 + bodyY - bodyH / 2 + margin * 2 + switchPort_CounterArea.getH() + i * conS + i * margin;
 				renderConnector(xp, yp, true);
+
 				p.fill(textCol);
 				p.textFont(stdFont);
 				p.textSize(stdTs);
-				p.textAlign(p.LEFT,p.CENTER);
-				p.text("Port: "+(i+1),xp+conS/2+margin,yp-stdTs*textYShift);
+				p.textAlign(p.LEFT, p.CENTER);
+				p.text("Port: " + (i + 1), xp + conS / 2 + margin, yp - stdTs * textYShift);
 			} else {
 				int ind = i - p.ceil(switchPort_CounterArea.getCount() / 2);
-				if(!isEven) {
+				if (!isEven) {
 					ind--;
 				}
 				xp = x + w / 2;
 				yp = conS / 2 + bodyY - bodyH / 2 + margin * 2 + switchPort_CounterArea.getH() + ind * conS + ind * margin;
 				renderConnector(xp, yp, false);
+
 				p.fill(textCol);
 				p.textFont(stdFont);
 				p.textSize(stdTs);
-				p.textAlign(p.RIGHT,p.CENTER);
-				p.text("Port: "+(i+1),xp-conS/2-margin,yp-stdTs*textYShift);
+				p.textAlign(p.RIGHT, p.CENTER);
+				p.text("Port: " + (i + 1), xp - conS / 2 - margin, yp - stdTs * textYShift);
+			}
+
+			if (switch_connectorPoints.size() < switchPort_CounterArea.getCount()) {
+				int[] conT = { 0, 1, 2 };
+				mainActivity.getNodeEditor().addConnectorPoint(p, getConnectorPoints().size(), ind, 2, xp - x, yp - y, conS / 2, 2, bgCol, true, conT, this);
+				switch_connectorPoints.add(getConnectorPoints().get(getConnectorPoints().size() - 1));
+				switch_connectorPointInds.add(getConnectorPoints().size() - 1);
+			}else {
+				switch_connectorPoints.get(i).setPos(xp-x,yp-y);
 			}
 		}
+
+		for (int i = 0; i < switch_connectorPoints.size(); i++) {
+			ConnectorPoint cp = switch_connectorPoints.get(i);
+			cp.render();
+		}
+		
+		prevPortCount=switchPort_CounterArea.getCount();
 
 	}
 
 	private void renderTypeOutput() {
-	    if (doOnce == 0) {
-            type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
-            doOnce++;
-        }
+		if (doOnce == 0) {
+			type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
+			int[] conT = { 0, 1 };
+			mainActivity.getNodeEditor().addConnectorPoint(p, getConnectorPoints().size(), ind, 2, -w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT, this); // type 0 = pc, type 1=switch, type 2=output
+			input_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
+			doOnce++;
+		}
 
-        if (mouseIsPressed) {
-            if (isGrabbed == false) {
-                if (isDragableOutputNode()) {
-                    isGrabbed = true;
-                    dragShiftX = p.mouseX - x;
-                    dragShiftY = p.mouseY - y;
-                }
-            }
+		if (mouseIsPressed) {
+			if (isGrabbed == false) {
+				if (isDragableOutputNode()) {
+					isGrabbed = true;
+					dragShiftX = p.mouseX - x;
+					dragShiftY = p.mouseY - y;
+				}
+			}
+			input_connectorPoint.onMousePressed();
+		}
 
-        }
+		if (isGrabbed) {
+			x = p.mouseX - dragShiftX;
+			y = p.mouseY - dragShiftY;
+			calcBodyAndHeadPos();
+		}
 
-        if (isGrabbed) {
-            x = p.mouseX - dragShiftX;
-            y = p.mouseY - dragShiftY;
-            calcBodyAndHeadPos();
-        }
+		if (isSelected) {
+			p.stroke(lightest);
+		} else {
+			p.stroke(darkest);
+		}
+		p.fill(bgCol);
+		p.rect(x, bodyY, w, bodyH, 0, 0, edgeRad, edgeRad);
+		p.rect(x, headY, w, headH, edgeRad, edgeRad, 0, 0);
 
-        if (isSelected) {
-            p.stroke(lightest);
-        } else {
-            p.stroke(darkest);
-        }
-        p.fill(bgCol);
-        p.rect(x, bodyY, w, bodyH, 0, 0, edgeRad, edgeRad);
-        p.rect(x, headY, w, headH, edgeRad, edgeRad, 0, 0);
+		type_picto.render();
+		p.fill(textCol);
+		p.textFont(stdFont);
+		p.textSize(stdTs);
+		p.textAlign(p.LEFT, p.CENTER);
+		p.text("Output", x - w / 2 + margin, headY - stdTs * textYShift);
+		p.text("CPUs: 24\nGPUs: 2", x - w / 2 + margin + conS / 2, bodyY - stdTs * textYShift);
 
-        type_picto.render();
-        p.fill(textCol);
-        p.textFont(stdFont);
-        p.textSize(stdTs);
-        p.textAlign(p.LEFT, p.CENTER);
-        p.text("Output",x-w/2+margin,headY-stdTs*textYShift);
-        p.text("CPUs: 24\nGPUs: 2",x-w/2+margin+conS/2,bodyY-stdTs*textYShift);
-
-        renderConnector(x - w / 2, bodyY, true);
+		renderConnector(x - w / 2, bodyY, true);
+		input_connectorPoint.render();
 
 	}
 
@@ -293,7 +328,7 @@ public class Node {
 		p.fill(dark);
 		p.stroke(dark);
 		p.arc(conX, conY, conS, conS, a1, a2, p.PIE);
-		
+
 		p.noFill();
 		if (isSelected) {
 			p.stroke(lightest);
@@ -321,6 +356,18 @@ public class Node {
 				isD = false;
 				break;
 			}
+		}
+
+		for (int i = 0; i < mainActivity.getNodeEditor().getConnectorPoints().size(); i++) {
+			ConnectorPoint cp = (ConnectorPoint) mainActivity.getNodeEditor().getConnectorPoints().get(i);
+			if (cp.getIsOnDrag()) {
+				isD = false;
+				break;
+			}
+		}
+
+		if (output_connectorPoint.mouseIsInArea()) {
+			isD = false;
 		}
 
 		if (mouseIsInArea()) {
@@ -368,24 +415,36 @@ public class Node {
 		}
 		return isD;
 	}
-	
+
 	public Boolean isDragableOutputNode() {
-	    Boolean isD = true;
+		Boolean isD = true;
 
-        for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
-            Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
-            if (n.getIsGrabbed() && i != ind) {
-                isD = false;
-                break;
-            }
-        }
+		for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
+			Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
+			if (n.getIsGrabbed() && i != ind) {
+				isD = false;
+				break;
+			}
+		}
 
-        if (mouseIsInArea()) {
-           //connector check here
-        } else {
-            isD = false;
-        }
-        return isD;
+		for (int i = 0; i < mainActivity.getNodeEditor().getConnectorPoints().size(); i++) {
+			ConnectorPoint cp = (ConnectorPoint) mainActivity.getNodeEditor().getConnectorPoints().get(i);
+			if (cp.getIsOnDrag()) {
+				isD = false;
+				break;
+			}
+		}
+
+		if (input_connectorPoint.mouseIsInArea()) {
+			isD = false;
+		}
+
+		if (mouseIsInArea()) {
+
+		} else {
+			isD = false;
+		}
+		return isD;
 	}
 
 	public void onMousePressed(int mouseButton) {
@@ -418,13 +477,16 @@ public class Node {
 				}
 				pcSelection_DropdownMenu.dropdown_btn.onMouseReleased();
 				pcSelection_DropdownMenu.onMouseReleased();
+				output_connectorPoint.onMouseReleased();
 			}
 
 			if (type == 3) {
 				switchPort_CounterArea.onMouseReleased();
 				switchName_editText.onMouseReleased();
 			}
-
+			if (type == 4) {
+				input_connectorPoint.onMouseReleased();
+			}
 			mouseIsPressed = false;
 
 		}
@@ -468,6 +530,28 @@ public class Node {
 		return y;
 	}
 
+	public int getType() {
+		return type;
+	}
+
+	public ConnectorPoint getOutputConnectorPoint() {
+		return output_connectorPoint;
+	}
+
+	public ConnectorPoint getInputConnectorPoint() {
+		return input_connectorPoint;
+	}
+
+	public ArrayList<ConnectorPoint> getSwitchConnectorPoints() {
+		return switch_connectorPoints;
+	}
+
+	public ArrayList<ConnectorPoint> getConnectorPoints() {
+		return ((NodeEditor) parent).getConnectorPoints();
+		// return mainActivity.getNodeEditor().getConnectorPoints();
+	}
+	
+
 	public Boolean mouseIsInArea() {
 		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
 			return true;
@@ -483,5 +567,5 @@ public class Node {
 	public Boolean getIsGrabbed() {
 		return isGrabbed;
 	}
-	
+
 }

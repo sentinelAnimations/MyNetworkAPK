@@ -6,8 +6,8 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 
-public class NodeEditor {
-	private int nodeW, nodeH, nodeAdderBoxW, nodeAdderBoxH, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark,darkest, light, lighter, lightest, border, textCol, textDark;
+public class NodeEditor<T> {
+	private int nodeW, nodeH, nodeAdderBoxW, nodeAdderBoxH, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark;
 	private float textYShift;
 	private Boolean renderNodeMenu = false;
 	private String[] nodePaths1, nodePaths2, pcPaths;
@@ -19,8 +19,9 @@ public class NodeEditor {
 	private ImageButton[] nodeEditorButtons = new ImageButton[4];
 	private ImageButton[] nodeAdderButtons = new ImageButton[5];
 	private ArrayList<Node> nodes = new ArrayList<>();
+	private ArrayList<ConnectorPoint> connectorPoints = new ArrayList<ConnectorPoint>();
 
-	public NodeEditor(PApplet p, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest,int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] buttonPaths, String[] nodePaths1, String[] nodePaths2, PFont stdFont) {
+	public NodeEditor(PApplet p, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] buttonPaths, String[] nodePaths1, String[] nodePaths2, PFont stdFont) {
 		this.btnSize = btnSize;
 		this.btnSizeSmall = btnSizeSmall;
 		this.margin = margin;
@@ -28,7 +29,7 @@ public class NodeEditor {
 		this.edgeRad = edgeRad;
 		this.textYShift = textYShift;
 		this.dark = dark;
-		this.darkest=darkest;
+		this.darkest = darkest;
 		this.light = light;
 		this.lighter = lighter;
 		this.lightest = lightest;
@@ -62,29 +63,43 @@ public class NodeEditor {
 	public void render() {
 		renderGrid();
 		if (renderNodeMenu == false) {
-			if (mainButtons[0].getClickCount() % 2 == 0) {
-				for (int i = 0; i < nodeEditorButtons.length; i++) {
-					nodeEditorButtons[i].render();
-				}
-
-				int rectH = p.height - (nodeEditorButtons[nodeEditorButtons.length - 1].getY() + nodeEditorButtons[nodeEditorButtons.length - 1].getH() / 2 + margin * 2);
-				int rectY = nodeEditorButtons[nodeEditorButtons.length - 1].getY() + nodeEditorButtons[nodeEditorButtons.length - 1].getH() / 2 + margin + rectH / 2;
-				p.fill(light);
-				p.stroke(light);
-				p.rect(nodeEditorButtons[nodeEditorButtons.length - 1].getX(), rectY, btnSize, rectH, edgeRad);
-			}
-			mainActivity.renderMainButtons();
 
 			for (int i = nodes.size() - 1; i >= 0; i--) {
 				Node n = nodes.get(i);
 				if (n.getIsDeleted()) {
+					if (n.getType() < 3) {
+						connectorPoints.remove(n.getOutputConnectorPoint().getInd());
+					}
+					if (n.getType() == 3) {
+						for(int i2=n.getSwitchConnectorPoints().size()-1;i2>=0;i2--) {
+							ConnectorPoint cp=(ConnectorPoint) n.getSwitchConnectorPoints().get(i2);
+					        connectorPoints.remove(cp);
+
+						}
+					}
+					if (n.getType() == 4) {
+						connectorPoints.remove(n.getInputConnectorPoint().getInd());
+					}
 					nodes.remove(i);
 				} else {
 					n.render();
 				}
 			}
 		}
+		mainActivity.renderMainButtons();
+		
+		if (mainButtons[0].getClickCount() % 2 == 0) {
+			for (int i = 0; i < nodeEditorButtons.length; i++) {
+				nodeEditorButtons[i].render();
+			}
 
+			int rectH = p.height - (nodeEditorButtons[nodeEditorButtons.length - 1].getY() + nodeEditorButtons[nodeEditorButtons.length - 1].getH() / 2 + margin * 2);
+			int rectY = nodeEditorButtons[nodeEditorButtons.length - 1].getY() + nodeEditorButtons[nodeEditorButtons.length - 1].getH() / 2 + margin + rectH / 2;
+			p.fill(light);
+			p.stroke(light);
+			p.rect(nodeEditorButtons[nodeEditorButtons.length - 1].getX(), rectY, btnSize, rectH, edgeRad);
+		}
+		
 		if (renderNodeMenu == true) {
 			p.image(screenshot, p.width / 2, p.height / 2);
 			p.fill(dark);
@@ -94,7 +109,6 @@ public class NodeEditor {
 				nodeAdderButtons[i].render();
 			}
 		}
-
 		handleButtons();
 	}
 
@@ -135,9 +149,9 @@ public class NodeEditor {
 			if (nodeAdderButtons[i].getIsClicked() == true) {
 				int nh = nodeH;
 				if (i == nodeAdderButtons.length - 1) {
-					nh =btnSizeSmall+stdTs*2+margin*7;
+					nh = btnSizeSmall + stdTs * 2 + margin * 7;
 				}
-				nodes.add(new Node(p,nodes.size(), p.mouseX, p.mouseY, nodeW, nh, i, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest,light, textCol, textDark, lighter, lightest, border, textYShift, nodePaths2, stdFont));
+				nodes.add(new Node(p, nodes.size(), p.mouseX, p.mouseY, nodeW, nh, i, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, light, textCol, textDark, lighter, lightest, border, textYShift, nodePaths2, stdFont, this));
 				renderNodeMenu = false;
 				nodeAdderButtons[i].setIsClicked(false);
 			}
@@ -222,9 +236,30 @@ public class NodeEditor {
 			}
 		}
 	}
-	
+
+	public void removeConnectorPoint(int remInd) {
+		int updatedRemInd=0;
+		for(int i=0;i<connectorPoints.size();i++) {
+			ConnectorPoint cp=connectorPoints.get(i);
+			if(cp.getInd()==remInd) {
+				updatedRemInd=i;
+				p.println(i,"now");
+				break;
+			}
+		}
+		
+		connectorPoints.remove(updatedRemInd);
+	}
+
+	public void addConnectorPoint(PApplet _p, int _ind, int _parentInd,int _type, int _x, int _y, int _r, int _strWeight, int _col, Boolean _isParented,int[] _connectableTypes, T _parent) {
+		connectorPoints.add(new ConnectorPoint(_p, _ind, _parentInd,_type, _x, _y, _r, _strWeight,_col, _isParented,_connectableTypes, _parent));
+	}
+
 	public ArrayList getNodes() {
 		return nodes;
 	}
 
+	public ArrayList<ConnectorPoint> getConnectorPoints() {
+		return connectorPoints;
+	}
 }
