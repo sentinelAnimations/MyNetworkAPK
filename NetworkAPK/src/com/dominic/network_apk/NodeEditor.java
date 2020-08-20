@@ -1,6 +1,7 @@
 package com.dominic.network_apk;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -58,6 +59,7 @@ public class NodeEditor<T> {
 		}
 		nodeAdderBoxW = nodeAdderButtons.length * btnSize + nodeAdderButtons.length * margin + margin;
 		nodeAdderBoxH = btnSize + margin * 2;
+		
 	}
 
 	public void render() {
@@ -68,7 +70,7 @@ public class NodeEditor<T> {
 				Node n = nodes.get(i);
 				if (n.getIsDeleted()) {
 					if (n.getType() < 3) {
-						connectorPoints.remove(n.getOutputConnectorPoint().getInd());
+						connectorPoints.remove(n.getOutputConnectorPoint());
 					}
 					if (n.getType() == 3) {
 						for(int i2=n.getSwitchConnectorPoints().size()-1;i2>=0;i2--) {
@@ -78,7 +80,7 @@ public class NodeEditor<T> {
 						}
 					}
 					if (n.getType() == 4) {
-						connectorPoints.remove(n.getInputConnectorPoint().getInd());
+						connectorPoints.remove(n.getInputConnectorPoint());
 					}
 					nodes.remove(i);
 				} else {
@@ -151,7 +153,8 @@ public class NodeEditor<T> {
 				if (i == nodeAdderButtons.length - 1) {
 					nh = btnSizeSmall + stdTs * 2 + margin * 7;
 				}
-				nodes.add(new Node(p, nodes.size(), p.mouseX, p.mouseY, nodeW, nh, i, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, light, textCol, textDark, lighter, lightest, border, textYShift, nodePaths2, stdFont, this));
+		        String nodeId = UUID.randomUUID().toString();
+				nodes.add(new Node(p, p.mouseX, p.mouseY, nodeW, nh, i, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, light, textCol, textDark, lighter, lightest, border, textYShift,nodeId, nodePaths2, stdFont, this));
 				renderNodeMenu = false;
 				nodeAdderButtons[i].setIsClicked(false);
 			}
@@ -237,22 +240,21 @@ public class NodeEditor<T> {
 		}
 	}
 
-	public void removeConnectorPoint(int remInd) {
-		int updatedRemInd=0;
+	public void removeConnectorPoint(String remId) {
+		ConnectorPoint remCon;
 		for(int i=0;i<connectorPoints.size();i++) {
 			ConnectorPoint cp=connectorPoints.get(i);
-			if(cp.getInd()==remInd) {
-				updatedRemInd=i;
-				p.println(i,"now");
+			if(cp.getId().equals(remId)) {
+			    remCon=connectorPoints.get(i);
+			     connectorPoints.remove(remCon);
 				break;
 			}
 		}
 		
-		connectorPoints.remove(updatedRemInd);
 	}
 
-	public void addConnectorPoint(PApplet _p, int _ind, int _parentInd,int _type, int _x, int _y, int _r, int _strWeight, int _col, Boolean _isParented,int[] _connectableTypes, T _parent) {
-		connectorPoints.add(new ConnectorPoint(_p, _ind, _parentInd,_type, _x, _y, _r, _strWeight,_col, _isParented,_connectableTypes, _parent));
+	public void addConnectorPoint(PApplet _p,int _type, int _x, int _y, int _r, int _strWeight, int _col, Boolean _isParented,int[] _connectableTypes, String _id,String _parentId,T _parent) {
+		connectorPoints.add(new ConnectorPoint(_p,_type, _x, _y, _r, _strWeight,_col, _isParented,_connectableTypes,_id, _parentId, _parent));
 	}
 
 	public ArrayList getNodes() {

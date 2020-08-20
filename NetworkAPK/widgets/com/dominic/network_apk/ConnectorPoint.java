@@ -4,227 +4,277 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class ConnectorPoint<T> implements Widgets {
-	private int ind, parentInd, connectedInd,updatedConnectedInd, type, x, y, xShift, yShift, connectedX, connectedY, r, strWeight, possibleConnections, col;
-	private Boolean isParented, isConnected = false, isPressed = false, isOnDrag = false;
-	private PApplet p;
-	private int[] connectableTypes;
-	private T parent;
-	private ConnectorPoint connected_connectorPoint;
-	private ArrayList<ConnectorPoint> connectorPoints = new ArrayList<ConnectorPoint>();
+    private int connectedInd, type, x, y, xShift, yShift, connectedX, connectedY, r, strWeight, possibleConnections, col, idLength;
+    private float handlerWeight = 0;
+    private Boolean isParented, isConnected = false, isPressed = false, isOnDrag = false;
+    private String id, parentId, connectedId, updatedConnectedId;
+    private PApplet p;
+    private int[] connectableTypes;
+    private PVector[] bezierPoints = new PVector[4];
+    private T parent;
+    private ConnectorPoint connected_connectorPoint;
+    private ArrayList<ConnectorPoint> connectorPoints = new ArrayList<ConnectorPoint>();
 
-	public ConnectorPoint(PApplet p, int ind, int parentInd, int type, int x, int y, int r, int strWeight, int col, Boolean isParented, int[] connectableTypes, T parent) {
-		this.p = p;
-		this.ind = ind;
-		this.parentInd = parentInd;
-		this.type = type;
-		this.x = x;
-		this.y = y;
-		this.r = r;
-		this.strWeight = strWeight;
-		this.possibleConnections = possibleConnections;
-		this.col = col;
-		this.isParented = isParented;
-		this.connectableTypes = connectableTypes;
-		this.parent = parent;
+    public ConnectorPoint(PApplet p, int type, int x, int y, int r, int strWeight, int col, Boolean isParented, int[] connectableTypes, String id, String parentId, T parent) {
+        this.p = p;
+        this.type = type;
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.strWeight = strWeight;
+        this.possibleConnections = possibleConnections;
+        this.col = col;
+        this.isParented = isParented;
+        this.connectableTypes = connectableTypes;
+        this.id = id;
+        this.parentId = parentId;
+        this.parent = parent;
 
-		xShift = x;
-		yShift = y;
-		
-		p.println(ind);
+        xShift = x;
+        yShift = y;
 
-	}
+        idLength = 0;
+        for (int i = 0; i < id.length(); i++) {
+            idLength += (int) (id.charAt(i));
+        }
 
-	public void render() {
-		if (isParented) {
-			getParentPos();
-		}
-		if (isPressed) {
-			if (mouseIsInArea() && !isOnDrag) {
-				Boolean anotherIsOnDrag=false;
-				for(int i=0;i<getAllConnectorPoints().size();i++) {
-					ConnectorPoint cp=getAllConnectorPoints().get(i);
-					if(cp.getIsOnDrag()) {
-						anotherIsOnDrag=true;
-					}
-				}
-				if(anotherIsOnDrag) {
-				}else {
-				if(isConnected) {
-					isConnected=false;
-					connected_connectorPoint.setIsConnected(false);
-				}
-				isOnDrag = true;
-				}
-				
-			}
-		}
+        p.println(id, idLength);
 
-		if (isOnDrag) {
-			renderCurve(x, y, p.mouseX, p.mouseY);
-		}
-		if (isConnected) {
-			connectorPoints = getAllConnectorPoints();
-			//p.println(connectorPoints.size(),"-------");
+    }
 
-			 updatedConnectedInd=0;
-			for(int i=0;i<connectorPoints.size();i++) {
-				ConnectorPoint cp=connectorPoints.get(i);
-				if(cp.getInd()==connectedInd) {
-					updatedConnectedInd=i;
-					p.println(i,"now");
-					break;
-				}
-			}
-			
-			//sometimes doesnt calculate correct updatedConnectedInd to do --------------------- vlt weil ind nicht eindeutig ist: String idOne = UUID.randomUUID().toString(); ,UUID idOne = UUID.randomUUID();
-			
-			//p.println(updatedConnectedInd,"--");
-			//if(updatedConnectedInd>=0&&updatedConnectedInd<connectorPoints.size()) {
-			connected_connectorPoint = connectorPoints.get(updatedConnectedInd);
-			connectedX = connected_connectorPoint.getX();
-			connectedY = connected_connectorPoint.getY();
-			renderCurve(x, y, connectedX, connectedY);
-			//}
-			
-			
-		}
-		p.noFill();
-		p.stroke(255, 0, 0);
-		p.ellipse(x, y, r * 2, r * 2);
-		p.textSize(10);
-		p.textAlign(p.CENTER,p.CENTER);
-		p.fill(255);
-		p.text(ind,x,y);
-	}
+    public void render() {
+        if (isParented) {
+            getParentPos();
+        }
+        if (isPressed) {
+            if (mouseIsInArea() && !isOnDrag) {
+                Boolean anotherIsOnDrag = false;
+                for (int i = 0; i < getAllConnectorPoints().size(); i++) {
+                    ConnectorPoint cp = getAllConnectorPoints().get(i);
+                    if (cp.getIsOnDrag()) {
+                        anotherIsOnDrag = true;
+                    }
+                }
+                if (anotherIsOnDrag) {
+                } else {
+                    if (isConnected) {
+                        isConnected = false;
+                        connected_connectorPoint.setIsConnected(false);
+                    }
+                    isOnDrag = true;
+                }
 
-	public void renderCurve(int x1, int y1, int x2, int y2) {
-		p.strokeWeight(strWeight);
-		p.stroke(col);
-		p.line(x1, y1, x2, y2);
-		p.strokeWeight(1);
-	}
+            }
+        }
 
-	public void onMousePressed() {
-		isPressed = true;
-	}
+        if (isOnDrag) {
+            renderCurve(x, y, p.mouseX, p.mouseY);
+        }
+        if (isConnected) {
+            connectorPoints = getAllConnectorPoints();
 
-	public void onMouseReleased() {
+            // updatedConnectedId="";
+            connectedInd = -1;
+            for (int i = 0; i < connectorPoints.size(); i++) {
+                ConnectorPoint cp = connectorPoints.get(i);
+                if (cp.getId().equals(connectedId)) {
+                    // updatedConnectedId=cp.getId();
+                    connectedInd = i;
+                    break;
+                }
+            }
+            if (connectedInd < 0) {
+                isConnected = false;
+            }
 
-		if (isOnDrag) {
-			for (int i = 0; i < getAllConnectorPoints().size(); i++) {
-				ConnectorPoint cp = getAllConnectorPoints().get(i);
-				if (i != ind && parentInd != cp.getParentInd()) {
-					if (cp.mouseIsInArea() && cp.getIsConnected() == false) {
-						for (int i2 = 0; i2 < connectableTypes.length; i2++) {
-							if (connectableTypes[i2] == cp.getType()) {
-								connectedInd = i;
-								isConnected = true;
-								cp.setConnectedInd(ind);
-								cp.setIsConnected(true);
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
+            if (isConnected) {
+                connected_connectorPoint = connectorPoints.get(connectedInd);
+                connectedX = connected_connectorPoint.getX();
+                connectedY = connected_connectorPoint.getY();
 
-		isPressed = false;
-		isOnDrag = false;
-	}
+                if (idLength > connected_connectorPoint.getIdLength()) {
+                    renderCurve(x, y, connectedX, connectedY);
+                }
+            }
 
-	public ArrayList<ConnectorPoint> getAllConnectorPoints() {
-		Method m;
-		try {
-			m = parent.getClass().getMethod("getConnectorPoints");
-			return (ArrayList<ConnectorPoint>) m.invoke(parent);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+        }
+        p.noFill();
+        p.stroke(255, 0, 0);
+        p.ellipse(x, y, r * 2, r * 2);
+        p.textSize(10);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.fill(255);
+        // p.text(id,x,y);
+    }
 
-	@Override
-	public void getParentPos() {
-		Method m;
-		try {
-			m = parent.getClass().getMethod("getX");
-			x = (int) m.invoke(parent) + xShift;
+    public void renderCurve(int x1, int y1, int x2, int y2) {
+        p.strokeWeight(strWeight);
+        p.stroke(255, 0, 0);
+        // p.stroke(col);
+        // p.line(x1, y1, x2, y2);
+        p.strokeWeight(1);
+        renderBezierCurve(new PVector(x1, y1), new PVector(x2, y2));
+    }
 
-			m = parent.getClass().getMethod("getY");
-			y = (int) m.invoke(parent) + yShift;
+    void renderBezierCurve(PVector pv1, PVector pv2) {
+        PVector bt, prevBt, p1 = pv1, p2 = pv2;
 
-			m = parent.getClass().getMethod("getConnectorPoints");
-			connectorPoints = (ArrayList<ConnectorPoint>) m.invoke(parent);
+        if (pv1.x < pv2.x) {
+            p1 = pv1;
+            p2 = pv2;
+        } else {
+            p1 = pv2;
+            p2 = pv1;
+        }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        float subdiv = p.dist(p1.x, p1.y, p2.x, p2.y) / 10;
+        if (subdiv < 10) {
+            subdiv = 10;
+        }
 
-	@Override
-	public int getX() {
-		return x;
-	}
+        bezierPoints[0] = new PVector(p1.x, p1.y);
+        bezierPoints[1] = new PVector(bezierPoints[0].x + handlerWeight, bezierPoints[0].y);
+        bezierPoints[3] = new PVector(p2.x, p2.y);
+        bezierPoints[2] = new PVector(bezierPoints[3].x - handlerWeight, bezierPoints[3].y);
+        handlerWeight = p.abs(bezierPoints[0].x - bezierPoints[3].x) / 2;
 
-	@Override
-	public int getY() {
-		return y;
-	}
+        prevBt = bezierPoints[0];
+        p.stroke(col);
+        p.strokeWeight(strWeight);
+        for (float i = 1 / subdiv; i <= 1; i += 1 / subdiv) {
+            bt = new PVector(p.pow((1 - i), 3) * bezierPoints[0].x + 3 * p.pow((1 - i), 2) * i * bezierPoints[1].x + 3 * (1 - i) * p.pow(i, 2) * bezierPoints[2].x + p.pow(i, 3) * bezierPoints[3].x, p.pow((1 - i), 3) * bezierPoints[0].y + 3 * p.pow((1 - i), 2) * i * bezierPoints[1].y + 3 * (1 - i) * p.pow(i, 2) * bezierPoints[2].y + p.pow(i, 3) * bezierPoints[3].y);
+            p.line(bt.x, bt.y, prevBt.x, prevBt.y);
+            prevBt = bt;
+        }
+        p.line(prevBt.x, prevBt.y, bezierPoints[3].x, bezierPoints[3].y);
+    }
 
-	@Override
-	public Boolean mouseIsInArea() {
-		if (p.dist(p.mouseX, p.mouseY, x, y) < r) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public void onMousePressed() {
+        isPressed = true;
+    }
 
-	public void setPos(int xp, int yp) {
-		x = xp;
-		xShift = x;
-		y = yp;
-		yShift = y;
-	}
+    public void onMouseReleased() {
 
-	public int getConnectedInd() {
-		return connectedInd;
-	}
+        if (isOnDrag) {
+            for (int i = 0; i < getAllConnectorPoints().size(); i++) {
+                ConnectorPoint cp = getAllConnectorPoints().get(i);
+                if (id.equals(cp.getId()) == false && parentId.equals(cp.getParentId()) == false) {
+                    if (cp.mouseIsInArea() && cp.getIsConnected() == false) {
+                        for (int i2 = 0; i2 < connectableTypes.length; i2++) {
+                            if (connectableTypes[i2] == cp.getType()) {
+                                connectedId = cp.getId();
+                                isConnected = true;
+                                cp.setConnectedId(id);
+                                cp.setIsConnected(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-	public int getInd() {
-		return ind;
-	}
-	public int getUpdatedConnectedInd() {
-		return updatedConnectedInd;
-	}
-	
-	public int getParentInd() {
-		return parentInd;
-	}
+        isPressed = false;
+        isOnDrag = false;
+    }
 
-	public int getType() {
-		return type;
-	}
+    public ArrayList<ConnectorPoint> getAllConnectorPoints() {
+        Method m;
+        try {
+            m = parent.getClass().getMethod("getConnectorPoints");
+            return (ArrayList<ConnectorPoint>) m.invoke(parent);
 
-	public Boolean getIsOnDrag() {
-		return isOnDrag;
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-	public Boolean getIsConnected() {
-		return isConnected;
-	}
+    @Override
+    public void getParentPos() {
+        Method m;
+        try {
+            m = parent.getClass().getMethod("getX");
+            x = (int) m.invoke(parent) + xShift;
 
-	public void setIsConnected(Boolean state) {
-		isConnected = state;
-	}
+            m = parent.getClass().getMethod("getY");
+            y = (int) m.invoke(parent) + yShift;
 
-	public void setConnectedInd(int conInd) {
-		connectedInd = conInd;
-		p.println("ind set");
-	}
+            m = parent.getClass().getMethod("getConnectorPoints");
+            connectorPoints = (ArrayList<ConnectorPoint>) m.invoke(parent);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public Boolean mouseIsInArea() {
+        if (p.dist(p.mouseX, p.mouseY, x, y) < r) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void setPos(int xp, int yp) {
+        x = xp;
+        xShift = x;
+        y = yp;
+        yShift = y;
+    }
+
+    public String getConnectedId() {
+        return connectedId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUpdatedConnectedId() {
+        return updatedConnectedId;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public int getIdLength() {
+        return idLength;
+    }
+
+    public Boolean getIsOnDrag() {
+        return isOnDrag;
+    }
+
+    public Boolean getIsConnected() {
+        return isConnected;
+    }
+
+    public void setIsConnected(Boolean state) {
+        isConnected = state;
+    }
+
+    public void setConnectedId(String conId) {
+        connectedId = conId;
+    }
 
 }

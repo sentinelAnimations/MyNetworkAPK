@@ -1,15 +1,17 @@
 package com.dominic.network_apk;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import processing.core.PApplet;
 import processing.core.PFont;
 
 public class Node<T> {
 
-	private int ind, x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS,prevPortCount=0;
+	private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS,prevPortCount=0;
 	private float textYShift;
 	private Boolean isOnDrag = true, isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false;
+	private String id;
 	private String[] pictoPaths;
 	private PFont stdFont;
 	private PApplet p;
@@ -21,11 +23,10 @@ public class Node<T> {
 	private CounterArea switchPort_CounterArea;
 	private EditText switchName_editText;
 	private ConnectorPoint output_connectorPoint, input_connectorPoint;
-	private ArrayList<Integer> switch_connectorPointInds = new ArrayList<Integer>();
+	private ArrayList<String> switch_connectorPointIds = new ArrayList<String>();
 	private ArrayList<ConnectorPoint> switch_connectorPoints = new ArrayList<ConnectorPoint>();
 
-	public Node(PApplet p, int ind, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, float textYShift, String[] pictoPaths, PFont stdFont, T parent) {
-		this.ind = ind;
+	public Node(PApplet p, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, float textYShift, String id,String[] pictoPaths, PFont stdFont, T parent) {
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -43,6 +44,7 @@ public class Node<T> {
 		this.lightest = lightest;
 		this.border = border;
 		this.textYShift = textYShift;
+		this.id=id;
 		this.pictoPaths = pictoPaths;
 		this.stdFont = stdFont;
 		this.p = p;
@@ -96,7 +98,9 @@ public class Node<T> {
 			pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, tempList, stdFont, true, this);
 
 			int[] conT = { 1, 2 };
-			mainActivity.getNodeEditor().addConnectorPoint(p, getConnectorPoints().size(), ind, 0, w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT, this);
+            String connectorId = UUID.randomUUID().toString();
+
+			mainActivity.getNodeEditor().addConnectorPoint(p, 0, w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT,connectorId,id, this);
 			output_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
 			doOnce++;
 		}
@@ -177,7 +181,6 @@ public class Node<T> {
 		if (switchPort_CounterArea.getValueHasChanged()) {
 			h = headH + margin + (switchPort_CounterArea.getH() + margin * 2 + (p.ceil(switchPort_CounterArea.getCount() / 2.0f) * conS) + (p.ceil(switchPort_CounterArea.getCount() / 2.0f) * margin));
 			bodyH = h - headH - margin;
-			p.println(p.ceil(switchPort_CounterArea.getCount() / 2.0f));
 			calcBodyAndHeadPos();
 
 			type_picto.setPos(w / 2 - btnSizeSmall / 2 - margin, headY - y);
@@ -209,11 +212,11 @@ public class Node<T> {
 			isEven = false;
 		}
 
-		if (switch_connectorPointInds.size() > switchPort_CounterArea.getCount()) {
-			for(int i=switch_connectorPointInds.size()-1;i>=prevPortCount;i--) {
-				mainActivity.getNodeEditor().removeConnectorPoint(switch_connectorPointInds.get(i));
-				p.println(switch_connectorPointInds.get(i),i);
-				switch_connectorPointInds.remove(i);
+		if (switch_connectorPointIds.size() > switchPort_CounterArea.getCount()) {
+			for(int i=switch_connectorPointIds.size()-1;i>=prevPortCount;i--) {
+			    
+				mainActivity.getNodeEditor().removeConnectorPoint(switch_connectorPointIds.get(i));
+				switch_connectorPointIds.remove(i);
 				switch_connectorPoints.remove(i);
 			}
 		}
@@ -250,9 +253,10 @@ public class Node<T> {
 
 			if (switch_connectorPoints.size() < switchPort_CounterArea.getCount()) {
 				int[] conT = { 0, 1, 2 };
-				mainActivity.getNodeEditor().addConnectorPoint(p, getConnectorPoints().size(), ind, 2, xp - x, yp - y, conS / 2, 2, bgCol, true, conT, this);
+                String connectorId = UUID.randomUUID().toString();
+				mainActivity.getNodeEditor().addConnectorPoint(p, 2, xp - x, yp - y, conS / 2, 2, bgCol, true, conT,connectorId,id, this);
 				switch_connectorPoints.add(getConnectorPoints().get(getConnectorPoints().size() - 1));
-				switch_connectorPointInds.add(getConnectorPoints().size() - 1);
+				switch_connectorPointIds.add(connectorId);
 			}else {
 				switch_connectorPoints.get(i).setPos(xp-x,yp-y);
 			}
@@ -271,7 +275,8 @@ public class Node<T> {
 		if (doOnce == 0) {
 			type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
 			int[] conT = { 0, 1 };
-			mainActivity.getNodeEditor().addConnectorPoint(p, getConnectorPoints().size(), ind, 2, -w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT, this); // type 0 = pc, type 1=switch, type 2=output
+            String connectorId = UUID.randomUUID().toString();
+			mainActivity.getNodeEditor().addConnectorPoint(p, 2, -w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT,connectorId,id, this); // type 0 = pc, type 1=switch, type 2=output
 			input_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
 			doOnce++;
 		}
@@ -352,7 +357,7 @@ public class Node<T> {
 
 		for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
 			Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
-			if (n.getIsGrabbed() && i != ind) {
+			if (n.getIsGrabbed() && n.getId() != id) {
 				isD = false;
 				break;
 			}
@@ -397,7 +402,7 @@ public class Node<T> {
 
 		for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
 			Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
-			if (n.getIsGrabbed() && i != ind) {
+            if (n.getIsGrabbed() && n.getId() != id) {
 				isD = false;
 				break;
 			}
@@ -421,7 +426,7 @@ public class Node<T> {
 
 		for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
 			Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
-			if (n.getIsGrabbed() && i != ind) {
+            if (n.getIsGrabbed() && n.getId() != id) {
 				isD = false;
 				break;
 			}
@@ -458,6 +463,12 @@ public class Node<T> {
 			if (type == 3) {
 				switchPort_CounterArea.onMousePressed();
 				switchName_editText.onMousePressed();
+				
+			    for (int i = 0; i < mainActivity.getNodeEditor().getConnectorPoints().size(); i++) {
+		            ConnectorPoint cp = (ConnectorPoint) mainActivity.getNodeEditor().getConnectorPoints().get(i);
+		            cp.onMousePressed();
+		        }
+			    
 			}
 		}
 	}
@@ -483,6 +494,10 @@ public class Node<T> {
 			if (type == 3) {
 				switchPort_CounterArea.onMouseReleased();
 				switchName_editText.onMouseReleased();
+				  for (int i = 0; i < mainActivity.getNodeEditor().getConnectorPoints().size(); i++) {
+	                    ConnectorPoint cp = (ConnectorPoint) mainActivity.getNodeEditor().getConnectorPoints().get(i);
+	                    cp.onMouseReleased();
+	                }
 			}
 			if (type == 4) {
 				input_connectorPoint.onMouseReleased();
@@ -566,6 +581,10 @@ public class Node<T> {
 
 	public Boolean getIsGrabbed() {
 		return isGrabbed;
+	}
+	
+	public String getId() {
+	    return id;
 	}
 
 }
