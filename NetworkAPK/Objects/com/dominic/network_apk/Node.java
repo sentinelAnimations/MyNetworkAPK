@@ -409,6 +409,17 @@ public class Node<T> {
 		}
 
 		if (mouseIsInArea()) {
+			
+			//check if mouse is in connectorpoint Area to do --->
+			
+			for(int i=0;i<getConnectorPoints().size();i++) {
+				ConnectorPoint cp= getConnectorPoints().get(i);
+				if(cp.mouseIsInArea() || cp.getIsOnDrag()) {
+					isD=false;
+					break;
+				}
+			}
+			
 			if (switchPort_CounterArea.mouseIsInArea()) {
 				isD = false;
 			}

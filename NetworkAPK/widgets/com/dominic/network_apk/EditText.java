@@ -157,6 +157,9 @@ public class EditText<T> implements Widgets {
 	}
 
 	public void onKeyReleased(char k) {
+		
+		p.textSize(stdTs);
+		
 		Boolean charIsForbidden=false;
 		for(int i=0;i<forbiddenChars.length;i++) {
 			if(k==forbiddenChars[i]) {
@@ -290,6 +293,9 @@ public class EditText<T> implements Widgets {
 	}
 
 	private void getCursorPos() {
+		
+		p.textSize(stdTs);
+		
 		cursorY = textStartY + row * stdTs;
 		if (strList.get(row).length() > 1) {
 			cursorX = (int) (textStartX + p.textWidth(strList.get(row).substring(0, cursorInd)));
@@ -305,6 +311,10 @@ public class EditText<T> implements Widgets {
 	}
 
 	private void getCursorPosByCoordinates(int xPos, int yPos) {
+		
+		p.textSize(stdTs);
+
+		
 		row = (yPos - textStartY) / stdTs;
 		if (row >= maxRows) {
 			row = maxRows - 1;

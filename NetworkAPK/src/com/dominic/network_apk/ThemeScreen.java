@@ -41,7 +41,7 @@ public class ThemeScreen {
         mainActivity = (MainActivity)p;
         mainButtons=mainActivity.getMainButtons();
        
-        colorPicker=new ColorPicker(p, p.width/2, p.height/2, btnSize, btnSizeSmall, (int)(btnSize*1.2f), dark, stdTs, edgeRad,margin,btnSize,btnSizeSmall, light, lighter,lightest, textCol, textYShift, false,false,false, pictoPaths[0],stdFont, null);  //isParented,renderBg,stayOpen
+        colorPicker=new ColorPicker(p, p.width/2, p.height/2, btnSize, btnSizeSmall, (int)(btnSize*1.2f), dark, stdTs, edgeRad,margin,btnSize,btnSizeSmall, light, lighter,lightest, textCol, textYShift, false,false,true, pictoPaths[0],stdFont, null);  //isParented,renderBg,stayOpen
     }
     
     public void render() {

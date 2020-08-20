@@ -71,7 +71,9 @@ public class ConnectorPoint<T> implements Widgets {
         }
 
         if (isOnDrag) {
-            renderCurve(x, y, p.mouseX, p.mouseY);
+            renderBezierCurve(new PVector(x, y), new PVector( p.mouseX, p.mouseY));
+            p.fill(col);
+            p.ellipse(p.mouseX, p.mouseY, r, r);
         }
         if (isConnected) {
             connectorPoints = getAllConnectorPoints();
@@ -96,26 +98,21 @@ public class ConnectorPoint<T> implements Widgets {
                 connectedY = connected_connectorPoint.getY();
 
                 if (idLength > connected_connectorPoint.getIdLength()) {
-                    renderCurve(x, y, connectedX, connectedY);
+                    renderBezierCurve(new PVector(x, y), new PVector(connectedX, connectedY));
                 }
             }
 
         }
-        p.noFill();
+       /* p.noFill();
         p.stroke(255, 0, 0);
         p.ellipse(x, y, r * 2, r * 2);
         p.textSize(10);
         p.textAlign(p.CENTER, p.CENTER);
         p.fill(255);
-        // p.text(id,x,y);
+        p.text(id,x,y);*/
     }
 
     public void renderCurve(int x1, int y1, int x2, int y2) {
-        p.strokeWeight(strWeight);
-        p.stroke(255, 0, 0);
-        // p.stroke(col);
-        // p.line(x1, y1, x2, y2);
-        p.strokeWeight(1);
         renderBezierCurve(new PVector(x1, y1), new PVector(x2, y2));
     }
 
@@ -150,6 +147,7 @@ public class ConnectorPoint<T> implements Widgets {
             prevBt = bt;
         }
         p.line(prevBt.x, prevBt.y, bezierPoints[3].x, bezierPoints[3].y);
+        p.strokeWeight(1);
     }
 
     public void onMousePressed() {
