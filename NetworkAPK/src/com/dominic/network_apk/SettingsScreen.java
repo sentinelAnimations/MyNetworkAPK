@@ -14,7 +14,7 @@ import processing.core.PFont;
 import processing.core.PImage;
 
 public class SettingsScreen {
-	private int btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark, dark, light, lighter, mode = 0, activePathSelectorInd = 0;
+	private int btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark, dark, light, lighter, mode = 0, doOnce = 0;
 	private Boolean successfullySaved = false;
 	private float textYShift;
 	private String mySettingsPath;
@@ -28,13 +28,12 @@ public class SettingsScreen {
 	public ImageButton saveSettings_btn;
 	public EditText personalData_et;
 	public DropdownMenu masterOrSlave_dropdown;
-	public FileExplorer fileExplorer;
 	private JsonHelper jHelper;
 	private JSONArray loadedSettingsData = new JSONArray();
 	private ImageButton[] mainButtons;
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 
-	public SettingsScreen(PApplet p, int btnSize, int btnSizeSmall, int stdTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySettingsPath, String[] imgPaths, String[] HorizontalListPictoPaths, PFont stdFont) {
+	public SettingsScreen(PApplet p, int btnSize, int btnSizeSmall, int stdTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySettingsPath, String[] imgPaths, String[] HorizontalListPictoPaths, String[] fileExplorerPaths, PFont stdFont) {
 		this.p = p;
 		this.btnSize = btnSize;
 		this.btnSizeSmall = btnSizeSmall;
@@ -62,7 +61,8 @@ public class SettingsScreen {
 		for (int i = 0; i < setting_pictos.length; i++) {
 			setting_pictos[i] = new PictogramImage(p, (p.width / 8 * 4) / 2 + p.width / 8 * (i), p.height / 2 - btnSize / 2, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, imgPaths[i], description[i], null);
 			if (i > 0 && i < pathSelectors.length + 1) {
-				pathSelectors[i - 1] = new PathSelector(p, 0, btnSize, p.width / 8 - margin * 2, btnSizeSmall, edgeRad, margin, stdTs, light, textCol, textDark, textYShift, selectFolder[i - 1], true, pathSelectorHints[i - 1], imgPaths[imgPaths.length - 1], stdFont, setting_pictos[i]);
+
+				pathSelectors[i - 1] = new PathSelector(p, 0, btnSize, p.width / 8 - margin * 2, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, selectFolder[i - 1], true, pathSelectorHints[i - 1], imgPaths[imgPaths.length - 1], fileExplorerPaths, stdFont, setting_pictos[i]);
 			}
 		}
 
@@ -74,13 +74,37 @@ public class SettingsScreen {
 		String[] ddPaths = { HorizontalListPictoPaths[HorizontalListPictoPaths.length - 1], HorizontalListPictoPaths[HorizontalListPictoPaths.length - 2] };
 		masterOrSlave_dropdown = new DropdownMenu(p, 0, btnSize, p.width / 8 - margin * 2, btnSizeSmall, p.height / 4 + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, light, lighter, textCol, textDark, textYShift, "Master or Slave", ddPaths, dropdownList, stdFont, true, setting_pictos[0]);
 
-		fileExplorer = new FileExplorer(p, p.width / 2, p.height / 2, p.width - margin * 2, 6 * btnSizeSmall + 19 * margin, stdTs, edgeRad, margin, dark, light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, textYShift, HorizontalListPictoPaths, stdFont);
 		jHelper = new JsonHelper(p);
 
 		setData();
 	}
 
 	public void render() {
+
+		for (int i = 0; i < pathSelectors.length; i++) {
+			if (pathSelectors[i].getFileExplorerIsOpen()) {
+				mode = 1;
+				doOnce = 0;
+				break;
+			}
+			if (i == pathSelectors.length - 1) {
+				mode = 0;
+				doOnce = 1;
+			}
+		}
+		if (doOnce == 0) {
+			for (int i = 0; i < pathSelectors.length; i++) {
+				pathSelectors[i].setRenderPathSelector(false);
+			}
+			doOnce++;
+		} else {
+			if (doOnce >0 ) {
+				for (int i = 0; i < pathSelectors.length; i++) {
+					pathSelectors[i].setRenderPathSelector(true);
+				}
+				doOnce++;
+			}
+		}
 		if (mode == 0) { // normal mode
 			mainActivity.renderMainButtons();
 
@@ -91,15 +115,6 @@ public class SettingsScreen {
 			personalData_et.render();
 			saveSettings_btn.render();
 			masterOrSlave_dropdown.render();
-			for (int i = pathSelectors.length - 1; i >= 0; i--) {
-				PathSelector ps = pathSelectors[i];
-				ps.render();
-				if (ps.openFileExplorer_btn.getIsClicked()) {
-					mode = 1;
-					activePathSelectorInd = i;
-
-				}
-			}
 
 			if (saveSettings_btn.getIsClicked() == true) {
 				// check if all is set
@@ -142,123 +157,85 @@ public class SettingsScreen {
 				saveSettings_btn.setIsClicked(false);
 			}
 
-			if (mode == 1) {
-				fileExplorer.setIsClosed(false);
-				fileExplorer.setIsCanceled(false);
-				p.saveFrame("data\\imgs\\screenshots\\settingsScreen.png");
-				screenshot = p.loadImage("data\\imgs\\screenshots\\settingsScreen.png");
-				screenshot = new ImageBlurHelper(p).blur(screenshot, 3);
-			}
 		}
 
-		if (mode == 1) { // fileExplorer mode
-			renderFileExplorer();
+		for (int i = pathSelectors.length - 1; i >= 0; i--) {
+			PathSelector ps = pathSelectors[i];
+			ps.render();
+			if (ps.getOpenFileExplorer_btn().getIsClicked()) {
+				mode = 1;
+			}
 		}
 
 	}
 
-	private void renderFileExplorer() {
-		p.image(screenshot, p.width / 2, p.height / 2);
-
-		PathSelector ps = pathSelectors[activePathSelectorInd];
-
-		if (ps.openFileExplorer_btn.getIsClicked()) {
-			fileExplorer.render();
-
-			if (fileExplorer.getIsClosed()) {
-				if (fileExplorer.getIsCanceled()) {
-				} else {
-					String[] splitStr = p.split(fileExplorer.getPath(), "\\");
-					String setPath = "";
-					if (ps.getSelectFolder()) {
-						for (int i = 0; i < splitStr.length; i++) {
-							String[] splitStr2 = p.split(splitStr[i], ".");
-							if (splitStr2.length > 1) {
-								break;
-							}
-							setPath += splitStr[i] + "\\";
-						}
-					} else {
-						File f = new File(fileExplorer.getPath());
-						if (f.isDirectory()) {
-							p.println("no file selected");
-						} else {
-							setPath = fileExplorer.getPath();
-						}
-					}
-					if (setPath.length() > 0) {
-						ps.setText(setPath);
-					}
-				}
-				ps.openFileExplorer_btn.setIsClicked(false);
-				mode = 0;
-			}
-		}
-	}
-
-	public void onMousePressed() {
+	public void onMousePressed(int mouseButton) {
 		if (mainActivity.getLoadingScreen().firstSetup == true && mode == 0) {
 			mainActivity.getFirstSetupHelp_btn().onMousePressed();
 		}
-		
-		if(mainActivity.getLoadingScreen().firstSetup==false && mode==0) {
-			for (int i = 0; i < mainButtons.length; i++) {
-				if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
-					mainButtons[i].onMousePressed();
+		if (mode == 0) {
+			if (mainActivity.getLoadingScreen().firstSetup == false) {
+				for (int i = 0; i < mainButtons.length; i++) {
+					if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
+						mainButtons[i].onMousePressed();
+					}
 				}
 			}
+
+			saveSettings_btn.onMousePressed();
+			masterOrSlave_dropdown.dropdown_btn.onMousePressed();
 		}
-		
-		saveSettings_btn.onMousePressed();
 		for (int i = 0; i < pathSelectors.length; i++) {
-			pathSelectors[i].openFileExplorer_btn.onMousePressed();
+			pathSelectors[i].onMousePressed(mouseButton);
 		}
-		fileExplorer.onMousePressed();
-		masterOrSlave_dropdown.dropdown_btn.onMousePressed();
 	}
 
-	
 	public void onMouseReleased(int mouseButton) {
-		if (mainActivity.getLoadingScreen().firstSetup == true) {
-			mainActivity.getFirstSetupHelp_btn().onMouseReleased();
-		}
-		
-		if(mainActivity.getLoadingScreen().firstSetup==false && mode==0) {
-			for (int i = 0; i < mainButtons.length; i++) {
-				if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
-					mainButtons[i].onMouseReleased();
+		if (mode == 0) {
+			if (mainActivity.getLoadingScreen().firstSetup == true) {
+				mainActivity.getFirstSetupHelp_btn().onMouseReleased();
+			}
+
+			if (mainActivity.getLoadingScreen().firstSetup == false && mode == 0) {
+				for (int i = 0; i < mainButtons.length; i++) {
+					if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
+						mainButtons[i].onMouseReleased();
+					}
 				}
 			}
+
+			saveSettings_btn.onMouseReleased();
+			personalData_et.onMouseReleased();
+
+			masterOrSlave_dropdown.dropdown_btn.onMouseReleased();
+			masterOrSlave_dropdown.onMouseReleased();
 		}
-		
-		saveSettings_btn.onMouseReleased();
-		personalData_et.onMouseReleased();
 		for (int i = 0; i < pathSelectors.length; i++) {
-			pathSelectors[i].openFileExplorer_btn.onMouseReleased();
+			pathSelectors[i].onMouseReleased(mouseButton);
 		}
-
-		fileExplorer.onMouseReleased(mouseButton);
-
-		masterOrSlave_dropdown.dropdown_btn.onMouseReleased();
-		masterOrSlave_dropdown.onMouseReleased();
 	}
-	
-	
+
 	public void onKeyReleased(char k) {
-		if (mainActivity.getLoadingScreen().firstSetup == true) {
-			mainActivity.getFirstSetupHelp_btn().onKeyReleased(k);
-		}
-		personalData_et.onKeyReleased(k);
-		saveSettings_btn.onKeyReleased(k);
+		if (mode == 0) {
+			if (mainActivity.getLoadingScreen().firstSetup == true) {
+				mainActivity.getFirstSetupHelp_btn().onKeyReleased(k);
+			}
 
-		fileExplorer.onKeyReleased(k);
+			personalData_et.onKeyReleased(k);
+			saveSettings_btn.onKeyReleased(k);
+		}
+		for (int i = 0; i < pathSelectors.length; i++) {
+			pathSelectors[i].onKeyReleased(k);
+		}
 	}
-	
+
 	public void onScroll(float e) {
-		fileExplorer.onScroll(e);
 		masterOrSlave_dropdown.onScroll(e);
+		for (int i = 0; i < pathSelectors.length; i++) {
+			pathSelectors[i].onScroll(e);
+		}
 	}
-	
+
 	private void setData() {
 		// load settings info, if not available, goto settingsPage----------------------
 		loadedSettingsData = jHelper.getData(mySettingsPath);
@@ -277,7 +254,6 @@ public class SettingsScreen {
 		}
 		// load settings info, if not available, goto settingsPage----------------------
 	}
-	
 
 	public int getMode() {
 		return mode;

@@ -52,7 +52,7 @@ public class SearchBar<T> implements Widgets {
     }
 
     public void onMousePressed() {
-
+    	search_btn.onMousePressed();
     }
 
     public void onMouseReleased() {

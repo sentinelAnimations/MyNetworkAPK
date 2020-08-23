@@ -11,16 +11,17 @@ public class QuestionScreen {
     private int btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark;
     private float textYShift;
     private Boolean renderFileExplorer = false;
-    private String[] nodePaths1, nodePaths2, pcPaths;
+    private String[] pictoPaths;
     private PFont stdFont;
     private PImage screenshot;
     private PApplet p;
     private MainActivity mainActivity;
     private ImageButton[] mainButtons;
     private SearchBar searchBar;
+    private FileExplorer fileExplorer;
     
 
-    public QuestionScreen(PApplet p,int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] pictoPaths, PFont stdFont) {
+    public QuestionScreen(PApplet p,int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] pictoPaths,String[] fileExplorerPictoPaths, PFont stdFont) {
         this.btnSize = btnSize;
         this.btnSizeSmall = btnSizeSmall;
         this.margin = margin;
@@ -35,13 +36,14 @@ public class QuestionScreen {
         this.textCol = textCol;
         this.textDark = textDark;
         this.textYShift = textYShift;
-        this.nodePaths1 = nodePaths1;
-        this.nodePaths2 = nodePaths2;
+        this.pictoPaths=pictoPaths;
         this.stdFont = stdFont;
         this.p = p;
         mainActivity = (MainActivity)p;
         mainButtons=mainActivity.getMainButtons();
         searchBar = new SearchBar(p, p.width/2,p.height/2, p.width/2, btnSizeSmall, edgeRad, margin, stdTs, textCol, textDark, lighter, textYShift, false, "Search", pictoPaths[0], stdFont, null);
+		//fileExplorer = new FileExplorer(p, p.width / 2, p.height / 2, p.width - margin * 2, 6 * btnSizeSmall + 19 * margin, stdTs, edgeRad, margin, dark, light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, textYShift, fileExplorerPictoPaths, stdFont);
+
     }
     
     public void render() {

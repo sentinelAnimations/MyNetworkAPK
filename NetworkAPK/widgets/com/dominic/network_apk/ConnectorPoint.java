@@ -41,7 +41,6 @@ public class ConnectorPoint<T> implements Widgets {
             idLength += (int) (id.charAt(i));
         }
 
-        p.println(id, idLength);
 
     }
 
