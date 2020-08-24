@@ -8,7 +8,7 @@ import processing.core.PFont;
 
 public class Node<T> {
 
-	private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS,prevPortCount=0;
+	private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS,prevPortCount=0,cpuCores;
 	private float textYShift;
 	private Boolean isOnDrag = true, isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false;
 	private String id;
@@ -51,12 +51,45 @@ public class Node<T> {
 		this.type = type;
 		this.parent = (NodeEditor) parent;
 
+        cpuCores = (int) (p.random(24));
+		
 		mainActivity = (MainActivity) p;
 		conS = btnSizeSmall - margin;
 		headH = btnSizeSmall + margin * 2;
 		bodyH = h - headH - margin;
 		calcBodyAndHeadPos();
+		if(type<3) {
+		  type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
+          cpu_picto = new PictogramImage(p, -btnSizeSmall / 2 - margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes], "", this);
+          gpu_picto = new PictogramImage(p, +btnSizeSmall + btnSizeSmall / 2 + margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes + 1], "", this);
+          useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", pictoPaths[anzTypes + 6], stdFont, this);
+          useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", pictoPaths[anzTypes + 6], stdFont, this);
+          String[] tempList = { "dies", "und", "das", "kfdjakjfaskdjfasdkf", "askdfjasdkfjjjjjjjjj" };
+          String[] ddPaths = { pictoPaths[anzTypes + 5], pictoPaths[anzTypes + 4] };
+          pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, tempList, stdFont, true, this);
 
+          int[] conT = { 1, 2 };
+          String connectorId = UUID.randomUUID().toString();
+
+          mainActivity.getNodeEditor().addConnectorPoint(p, 0, w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT,connectorId,id, this);
+          output_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
+	}
+		if(type==3) {
+		    
+		    type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
+            String[] pp = { pictoPaths[anzTypes + 2], pictoPaths[anzTypes + 3] };
+            switchPort_CounterArea = new CounterArea(p, 0, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, w - margin * 2, btnSizeSmall, edgeRad, margin, stdTs, 2, 48, 8, lighter, textCol, textCol, textYShift, true, "Port Count", pp, stdFont, this);
+            char[] fChars = { '>', '<', ':', '"', '/', '\\', '|', '?', '*' };
+            switchName_editText = new EditText(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, stdTs, lighter, textCol, edgeRad, margin, textYShift, true, true, "Switch Name", fChars, stdFont, this);
+
+		}
+		if(type==4) {
+		    type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
+            int[] conT = { 0, 1 };
+            String connectorId = UUID.randomUUID().toString();
+            mainActivity.getNodeEditor().addConnectorPoint(p, 2, -w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT,connectorId,id, this); // type 0 = pc, type 1=switch, type 2=output
+            input_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
+		}
 	}
 
 	public void render() {
@@ -87,23 +120,6 @@ public class Node<T> {
 	}
 
 	private void renderTypePC() {
-		if (doOnce == 0) {
-			type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
-			cpu_picto = new PictogramImage(p, -btnSizeSmall / 2 - margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes], "", this);
-			gpu_picto = new PictogramImage(p, +btnSizeSmall + btnSizeSmall / 2 + margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes + 1], "", this);
-			useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", pictoPaths[anzTypes + 6], stdFont, this);
-			useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", pictoPaths[anzTypes + 6], stdFont, this);
-			String[] tempList = { "dies", "und", "das", "kfdjakjfaskdjfasdkf", "askdfjasdkfjjjjjjjjj" };
-			String[] ddPaths = { pictoPaths[anzTypes + 5], pictoPaths[anzTypes + 4] };
-			pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, tempList, stdFont, true, this);
-
-			int[] conT = { 1, 2 };
-            String connectorId = UUID.randomUUID().toString();
-
-			mainActivity.getNodeEditor().addConnectorPoint(p, 0, w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT,connectorId,id, this);
-			output_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
-			doOnce++;
-		}
 
 		if (mouseIsPressed) {
 			if (isGrabbed == false) {
@@ -140,7 +156,7 @@ public class Node<T> {
 		p.textFont(stdFont);
 		p.textSize(stdTs);
 		p.textAlign(p.LEFT, p.CENTER);
-		p.text("CPU name", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift);
+		p.text("CPU name x "+ cpuCores, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift);
 		p.text("GPU name", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs);
 		p.text("Status: ok", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2);
 
@@ -152,15 +168,6 @@ public class Node<T> {
 	}
 
 	private void renderTypeSwitch() {
-		if (doOnce == 0) {
-			type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
-			String[] pp = { pictoPaths[anzTypes + 2], pictoPaths[anzTypes + 3] };
-			switchPort_CounterArea = new CounterArea(p, 0, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, w - margin * 2, btnSizeSmall, edgeRad, margin, stdTs, 2, 48, 8, lighter, textCol, textCol, textYShift, true, "Port Count", pp, stdFont, this);
-			char[] fChars = { '>', '<', ':', '"', '/', '\\', '|', '?', '*' };
-			switchName_editText = new EditText(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, stdTs, lighter, textCol, edgeRad, margin, textYShift, true, true, "Switch Name", fChars, stdFont, this);
-
-			doOnce++;
-		}
 
 		if (mouseIsPressed) {
 			if (isGrabbed == false) {
@@ -272,15 +279,6 @@ public class Node<T> {
 	}
 
 	private void renderTypeOutput() {
-		if (doOnce == 0) {
-			type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
-			int[] conT = { 0, 1 };
-            String connectorId = UUID.randomUUID().toString();
-			mainActivity.getNodeEditor().addConnectorPoint(p, 2, -w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT,connectorId,id, this); // type 0 = pc, type 1=switch, type 2=output
-			input_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
-			doOnce++;
-		}
-
 		if (mouseIsPressed) {
 			if (isGrabbed == false) {
 				if (isDragableOutputNode()) {
@@ -594,8 +592,20 @@ public class Node<T> {
 		return isGrabbed;
 	}
 	
+	public Boolean getIsTypePc() {
+	    return isTypePC;
+	}
+	public int getCpuCores() {
+	    return cpuCores;
+	}
 	public String getId() {
 	    return id;
 	}
+	
+	public Checkbox[] getCheckoxes() {
+	    Checkbox[] cboxex= {useCpu_checkbox,useGpu_checkbox};
+	    return cboxex;
+	}
+	
 
 }

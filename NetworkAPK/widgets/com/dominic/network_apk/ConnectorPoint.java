@@ -9,7 +9,7 @@ import processing.core.PVector;
 public class ConnectorPoint<T> implements Widgets {
     private int connectedInd, type, x, y, xShift, yShift, connectedX, connectedY, r, strWeight, possibleConnections, col, idLength;
     private float handlerWeight = 0;
-    private Boolean isParented, isConnected = false, isPressed = false, isOnDrag = false;
+    private Boolean isParented, isConnected = false, isPressed = false, isOnDrag = false,isCheckedForConnection=false;
     private String id, parentId, connectedId, updatedConnectedId;
     private PApplet p;
     private int[] connectableTypes;
@@ -61,7 +61,11 @@ public class ConnectorPoint<T> implements Widgets {
                 } else {
                     if (isConnected) {
                         isConnected = false;
+                        
+                        if(connected_connectorPoint!=null) {
                         connected_connectorPoint.setIsConnected(false);
+                        }
+                        
                     }
                     isOnDrag = true;
                 }
@@ -99,6 +103,8 @@ public class ConnectorPoint<T> implements Widgets {
                 if (idLength > connected_connectorPoint.getIdLength()) {
                     renderBezierCurve(new PVector(x, y), new PVector(connectedX, connectedY));
                 }
+            }else {
+                connected_connectorPoint=null;
             }
 
         }
@@ -257,6 +263,10 @@ public class ConnectorPoint<T> implements Widgets {
     public int getIdLength() {
         return idLength;
     }
+    
+    public Boolean getCheckedForConnection() {
+        return isCheckedForConnection;
+    }
 
     public Boolean getIsOnDrag() {
         return isOnDrag;
@@ -272,6 +282,10 @@ public class ConnectorPoint<T> implements Widgets {
 
     public void setConnectedId(String conId) {
         connectedId = conId;
+    }
+    
+    public void setCheckedForConnection(Boolean state) {
+        isCheckedForConnection=state;
     }
 
 }

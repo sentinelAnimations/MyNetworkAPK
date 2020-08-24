@@ -73,7 +73,8 @@ public class PathSelector<T> implements Widgets {
 			}
 			onHover();
 		}
-
+		
+        //handle fileExplorer ------------------------------
 		if (openFileExplorer_btn.getIsClicked() == true) {
 
 			if (fileExplorerIsOpen == false) {
@@ -121,6 +122,7 @@ public class PathSelector<T> implements Widgets {
 			fileExplorer.setIsCanceled(false);
 			fileExplorer.setIsClosed(false);
 		}
+		//handle fileExplorer ------------------------------
 
 	}
 
