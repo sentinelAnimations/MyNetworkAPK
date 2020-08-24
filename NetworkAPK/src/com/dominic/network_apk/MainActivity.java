@@ -143,7 +143,7 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 1 --> home screen-------------------
 
         // variableInitialisation for mode 2 --> node editor-------------------
-        String[] btnP = { absPathPictos + "panView.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png" };
+        String[] btnP = { absPathPictos + "clearNodetree.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png" };
         String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
         String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png", absPathPictos + "checkmark.png" };
 

@@ -9,7 +9,7 @@ import processing.core.PVector;
 public class ConnectorPoint<T> implements Widgets {
     private int connectedInd, type, x, y, xShift, yShift, connectedX, connectedY, r, strWeight, possibleConnections, col, idLength;
     private float handlerWeight = 0;
-    private Boolean isParented, isConnected = false, isPressed = false, isOnDrag = false,isCheckedForConnection=false;
+    private Boolean isParented, isConnected = false, isPressed = false, isOnDrag = false;
     private String id, parentId, connectedId, updatedConnectedId;
     private PApplet p;
     private int[] connectableTypes;
@@ -132,7 +132,7 @@ public class ConnectorPoint<T> implements Widgets {
             p2 = pv1;
         }
 
-        float subdiv = p.dist(p1.x, p1.y, p2.x, p2.y) / 10;
+        float subdiv = p.dist(p1.x, p1.y, p2.x, p2.y) /30;
         if (subdiv < 10) {
             subdiv = 10;
         }
@@ -264,9 +264,7 @@ public class ConnectorPoint<T> implements Widgets {
         return idLength;
     }
     
-    public Boolean getCheckedForConnection() {
-        return isCheckedForConnection;
-    }
+  
 
     public Boolean getIsOnDrag() {
         return isOnDrag;
@@ -284,8 +282,6 @@ public class ConnectorPoint<T> implements Widgets {
         connectedId = conId;
     }
     
-    public void setCheckedForConnection(Boolean state) {
-        isCheckedForConnection=state;
-    }
+  
 
 }
