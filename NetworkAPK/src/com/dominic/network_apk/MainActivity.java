@@ -41,7 +41,7 @@ public class MainActivity extends PApplet {
     // Dimens--------------------------------------------------
 
     // Strings--------------------------------------------------
-    private String APKName = "InSevenDays©", APKDescription = "A network solution", mySettingsPath = "output/sub/settings.json";
+    private String APKName = "InSevenDays©", APKDescription = "A network solution", mySettingsPath = "output/sub/settings.json",myNodeSettingsPath="output/sub2/nodeEditor.json";
     private String[] modeNames = { "Home", "Node Editor", "Settings", "Spread Blender", "Theme", "Questions" };
     // Strings--------------------------------------------------
 
@@ -147,7 +147,7 @@ public class MainActivity extends PApplet {
         String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
         String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png", absPathPictos + "checkmark.png" };
 
-        nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, btnP, nodeP1, nodeP2, stdFont);
+        nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift,myNodeSettingsPath, btnP, nodeP1, nodeP2, stdFont);
         // variableInitialisation for mode 2 --> node editor-------------------
 
         // variableInitialisation for mode 3 --> settings screen---------------
@@ -530,6 +530,28 @@ public class MainActivity extends PApplet {
             }
             if (mode == 6) {
                 questionScreen.onScroll(e);
+            }
+        }
+    }
+    
+    @Override
+    public void keyPressed() {
+        if (loadingScreen.getInstanciatedClasses()) {
+
+            if (mode == 1) {
+            }
+            if (mode == 2) {
+                nodeEditor.onKeyPressed(key);
+            }
+
+            if (mode == 3) {
+            }
+
+            if (mode == 4) {
+            }
+            if (mode == 5) {
+            }
+            if (mode == 6) {
             }
         }
     }

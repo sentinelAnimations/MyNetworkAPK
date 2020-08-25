@@ -612,6 +612,10 @@ public class Node<T> {
 		return cboxex;
 	}
 	
+	public DropdownMenu getPcSelection_DropdownMenu() {
+	    return pcSelection_DropdownMenu;
+	}
+	
 	public void setPos(int xp,int yp) {
 		x=xp;
 		y=yp;
@@ -635,5 +639,7 @@ public class Node<T> {
 	public void setGpuText(String gpuT) {
 		gpuText=gpuT;
 	}
+	
+	
 	
 }
