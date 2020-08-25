@@ -610,6 +610,10 @@ public class Node<T> {
 	public Checkbox[] getCheckoxes() {
 		Checkbox[] cboxex = { useCpu_checkbox, useGpu_checkbox };
 		return cboxex;
+	} 
+	
+	public CounterArea getSwitchPort_CounterArea() {
+		return switchPort_CounterArea;
 	}
 	
 	public DropdownMenu getPcSelection_DropdownMenu() {
@@ -639,7 +643,4 @@ public class Node<T> {
 	public void setGpuText(String gpuT) {
 		gpuText=gpuT;
 	}
-	
-	
-	
 }

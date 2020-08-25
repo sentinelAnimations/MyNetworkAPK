@@ -46,7 +46,7 @@ public class LoadingScreen {
         loadingGearSprite = new SpriteAnimation(p, margin * 2 + btnSize / 2, p.height - p.height / 8, btnSize, btnSize, 0, 129, textDark, false, "imgs/sprites/loadingGears/", null); // endInd=129, obwohl letztes bild '0128.png' --> weil start bei '0000.png'
         mainActivity = (MainActivity) p;
         jHelper = new JsonHelper(p);
-
+ 
         Thread initializeThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -96,9 +96,9 @@ public class LoadingScreen {
         // load settings info, if not available, goto settingsPage----------------------
         loadedSettingsData = jHelper.getData(mySettingsPath);
         if (loadedSettingsData.isEmpty()) {
-            MainActivity.mode = 3;
+            mainActivity.setMode(3);
         } else {
-            MainActivity.mode = 1;
+            mainActivity.setMode(1);
             firstSetup = false;
         }
         // load settings info, if not available, goto settingsPage----------------------
@@ -107,6 +107,10 @@ public class LoadingScreen {
 
     public Boolean getInstanciatedClasses() {
         return initializedClasses;
+    }
+    
+    public void setIsFirstSetup(Boolean state) {
+    	firstSetup=state;
     }
 
 }

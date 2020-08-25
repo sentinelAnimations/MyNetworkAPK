@@ -53,7 +53,7 @@ public class JsonHelper {
 		isFlawlessLoaded = false;
 		try (FileReader reader = new FileReader(path)) {
 			isFlawlessLoaded = true;
-			Object obj = jsonParser.parse(reader);
+			Object obj = jsonParser.parse(reader); 
 			loadedData = (JSONArray) obj;
 
 		} catch (FileNotFoundException e) {

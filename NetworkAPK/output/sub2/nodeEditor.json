@@ -1,0 +1,18 @@
+[
+  {
+    "Node0001": {
+      "useGpu_checkbox": false,
+      "useCpu_checkbox": true,
+      "selectPc_dropdown": -1
+    },
+    "Node0000": {
+      "useGpu_checkbox": true,
+      "useCpu_checkbox": false,
+      "selectPc_dropdown": -1
+    },
+    "Node0003": {},
+    "Node0002": {
+      "switchPort_CounterArea": 11
+    }
+  }
+]

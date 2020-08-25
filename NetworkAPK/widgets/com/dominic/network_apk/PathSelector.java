@@ -13,7 +13,7 @@ public class PathSelector<T> implements Widgets {
 
 	private int x, y, xShift, yShift, w, h, stdTs, edgeRad, margin, bgCol, textCol, textDark, btnSize, hoverTime = 0, textStartX = 0;
 	private float textYShift;
-	private Boolean isParented, selectFolder, isHovering = false, fileExplorerIsOpen = false,renderPathSelector=true;
+	private Boolean isParented, selectFolder, isHovering = false, fileExplorerIsOpen = false, renderPathSelector = true;
 	private String t = "", displayText = "", hint, imgPath;
 	private String[] fileExplorerPictoPaths;
 	private PFont stdFont;
@@ -57,9 +57,9 @@ public class PathSelector<T> implements Widgets {
 		if (isParented) {
 			getParentPos();
 		}
-		if (fileExplorerIsOpen == false && renderPathSelector==true) {
+		if (fileExplorerIsOpen == false && renderPathSelector == true) {
 			p.fill(bgCol);
-			p.rect(x, y, w, h, edgeRad);
+			p.rect(x, y, w, h, edgeRad); 
 			openFileExplorer_btn.render();
 			p.textAlign(PConstants.LEFT, PConstants.CENTER);
 			p.textFont(stdFont);
@@ -73,8 +73,8 @@ public class PathSelector<T> implements Widgets {
 			}
 			onHover();
 		}
-		
-        //handle fileExplorer ------------------------------
+
+		// handle fileExplorer ------------------------------
 		if (openFileExplorer_btn.getIsClicked() == true) {
 
 			if (fileExplorerIsOpen == false) {
@@ -82,10 +82,19 @@ public class PathSelector<T> implements Widgets {
 				screenshot = p.loadImage("data\\imgs\\screenshots\\homeScreen.png");
 				screenshot = new ImageBlurHelper(p).blur(screenshot, 3);
 				fileExplorerIsOpen = true;
-				renderPathSelector=false;
+				renderPathSelector = false;
 			}
 			p.image(screenshot, p.width / 2, p.height / 2);
 			fileExplorer.render();
+
+			for (int i = 0; i < fileExplorer.searchBar.searchBar_et.getToastList().size(); i++) {
+				MakeToast m = (MakeToast) fileExplorer.searchBar.searchBar_et.getToastList().get(i);
+				if (m.remove) {
+					fileExplorer.searchBar.searchBar_et.removeToast(i);
+				} else {
+					m.render();
+				}
+			}
 
 			if (fileExplorer.getIsClosed()) {
 				if (fileExplorer.getIsCanceled()) {
@@ -115,14 +124,14 @@ public class PathSelector<T> implements Widgets {
 				fileExplorer.setIsClosed(false);
 				fileExplorer.setIsCanceled(false);
 				fileExplorerIsOpen = false;
-				renderPathSelector=true;
+				renderPathSelector = true;
 				openFileExplorer_btn.setIsClicked(false);
 			}
 		} else {
 			fileExplorer.setIsCanceled(false);
 			fileExplorer.setIsClosed(false);
 		}
-		//handle fileExplorer ------------------------------
+		// handle fileExplorer ------------------------------
 
 	}
 
@@ -199,32 +208,32 @@ public class PathSelector<T> implements Widgets {
 	}
 
 	public void onMousePressed(int mouseButton) {
-		if(fileExplorerIsOpen==false) {
-		openFileExplorer_btn.onMousePressed();
-		}else {
-		fileExplorer.onMousePressed();
+		if (fileExplorerIsOpen == false) {
+			openFileExplorer_btn.onMousePressed();
+		} else {
+			fileExplorer.onMousePressed();
 		}
 	}
 
 	public void onMouseReleased(int mouseButton) {
-		if(fileExplorerIsOpen==false) {
-		openFileExplorer_btn.onMouseReleased();
-		}else {
-		fileExplorer.onMouseReleased(mouseButton);
+		if (fileExplorerIsOpen == false) {
+			openFileExplorer_btn.onMouseReleased();
+		} else {
+			fileExplorer.onMouseReleased(mouseButton);
 		}
 	}
 
 	public void onKeyReleased(char key) {
-		if(fileExplorerIsOpen==false) {
-		openFileExplorer_btn.onKeyReleased(key);
-		}else {
-		fileExplorer.onKeyReleased(key);
+		if (fileExplorerIsOpen == false) {
+			openFileExplorer_btn.onKeyReleased(key);
+		} else {
+			fileExplorer.onKeyReleased(key);
 		}
 	}
 
 	public void onScroll(float e) {
-		if(fileExplorerIsOpen) {
-		fileExplorer.onScroll(e);
+		if (fileExplorerIsOpen) {
+			fileExplorer.onScroll(e);
 		}
 	}
 
@@ -282,11 +291,11 @@ public class PathSelector<T> implements Widgets {
 			try {
 				while (t.charAt(t.length() - 1) == '\\') {
 					t = t.substring(0, t.length() - 1);
-				}	
+				}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			
+
 		}
 		calcDisplayText();
 	}
@@ -294,7 +303,8 @@ public class PathSelector<T> implements Widgets {
 	public ImageButton getOpenFileExplorer_btn() {
 		return openFileExplorer_btn;
 	}
+
 	public void setRenderPathSelector(Boolean state) {
-		renderPathSelector=state;
+		renderPathSelector = state;
 	}
 }

@@ -92,6 +92,7 @@ public class SettingsScreen {
 				doOnce = 1;
 			}
 		}
+		
 		if (doOnce == 0) {
 			for (int i = 0; i < pathSelectors.length; i++) {
 				pathSelectors[i].setRenderPathSelector(false);
@@ -106,7 +107,9 @@ public class SettingsScreen {
 			}
 		}
 		if (mode == 0) { // normal mode
+			if(mainActivity.getLoadingScreen().firstSetup==false) {
 			mainActivity.renderMainButtons();
+			}
 
 			for (int i = setting_pictos.length - 1; i >= 0; i--) {
 				setting_pictos[i].render();
@@ -115,6 +118,8 @@ public class SettingsScreen {
 			personalData_et.render();
 			saveSettings_btn.render();
 			masterOrSlave_dropdown.render();
+
+			//handle save button ------------------------------------
 
 			if (saveSettings_btn.getIsClicked() == true) {
 				// check if all is set
@@ -130,7 +135,7 @@ public class SettingsScreen {
 					if (ps.getPath().length() < 1) {
 						allSet = false;
 					} else {
-						settingsDetails.put("pathSelector" + i, ps.getPath());
+						settingsDetails.put("pathSelector" + i, ps.getPath()); 
 					}
 
 				}
@@ -147,8 +152,10 @@ public class SettingsScreen {
 					settingsObject.put("Settings", settingsDetails);
 					jHelper.appendObjectToArray(settingsObject);
 					jHelper.writeData(mySettingsPath);
-					p.println(jHelper.getData(mySettingsPath));
+
 					successfullySaved = true;
+					mainActivity.setMode(1);
+					mainActivity.getLoadingScreen().setIsFirstSetup(false);
 					makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Saved settings", stdFont, null));
 
 				} else {
@@ -156,6 +163,7 @@ public class SettingsScreen {
 				}
 				saveSettings_btn.setIsClicked(false);
 			}
+			//handle save button ------------------------------------
 
 		}
 
@@ -257,10 +265,6 @@ public class SettingsScreen {
 
 	public int getMode() {
 		return mode;
-	}
-
-	public Boolean getSuccessfullySaved() {
-		return successfullySaved;
 	}
 
 	public ArrayList getToastList() {

@@ -21,7 +21,7 @@ public class MainActivity extends PApplet {
     }
 
     // Global variables -----------------------------------------
-    static int mode = 0; // 0=loadingScreen, 1=home,2=node editor,3=settings,4=download
+     int mode = 0; // 0=loadingScreen, 1=home,2=node editor,3=settings,4=download
                          // blender,5=questions,101=renderMode
 
     // integers-------------------------------------------------
@@ -324,11 +324,8 @@ public class MainActivity extends PApplet {
                     firstSetupHelp_btn.render();
                     fill(textDark);
                     textAlign(LEFT, CENTER);
+                    textSize(subtitleTs);
                     text("First setup", firstSetupPicto.getX() + btnSize + margin * 2, firstSetupPicto.getY());
-                    if (settingsScreen.getSuccessfullySaved() == true) {
-                        loadingScreen.firstSetup = true;
-                        mode = 1;
-                    }
                 } else {
                     renderMainButtons();
                 }
@@ -344,15 +341,7 @@ public class MainActivity extends PApplet {
                     }
                 }
 
-                /*
-                 * for (int i = 0; i <
-                 * settingsScreen.fileExplorer.searchBar.searchBar_et.getToastList().size();
-                 * i++) { MakeToast m = (MakeToast)
-                 * settingsScreen.fileExplorer.searchBar.searchBar_et.getToastList().get(i); if
-                 * (m.remove) {
-                 * settingsScreen.fileExplorer.searchBar.searchBar_et.removeToast(i); } else {
-                 * m.render(); } }
-                 */
+               
 
                 for (int i = 0; i < settingsScreen.getToastList().size(); i++) {
                     MakeToast m = (MakeToast) settingsScreen.getToastList().get(i);
@@ -365,7 +354,7 @@ public class MainActivity extends PApplet {
                 // render toasts----------------------------------------------
 
             }
-
+ 
             if (mode == 4) {
                 spreadBlenderScreen.render();
             }
@@ -582,6 +571,10 @@ public class MainActivity extends PApplet {
             }
         }
     }
+    
+    public int getMode() {
+    	return mode;
+    }
 
     public ImageButton[] getMainButtons() {
         return mainButtons;
@@ -598,5 +591,8 @@ public class MainActivity extends PApplet {
     public NodeEditor getNodeEditor() {
         return nodeEditor;
     }
-
+    
+    public void setMode(int setMode) {
+    	mode=setMode;
+    }
 }
