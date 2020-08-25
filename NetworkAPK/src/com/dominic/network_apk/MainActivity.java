@@ -28,7 +28,7 @@ public class MainActivity extends PApplet {
     // integers-------------------------------------------------
 
     // Booleans-------------------------------------------------
-    private Boolean fileExplorerIsOpen = false;
+    private Boolean fileExplorerIsOpen = false; 
     // Booleans-------------------------------------------------
 
     // Colors--------------------------------------------------
@@ -191,7 +191,6 @@ public class MainActivity extends PApplet {
 
             if (mode == 1) {
                 fileExplorerIsOpen = fileToRender_pathSelector.getFileExplorerIsOpen();
-                fileToRender_pathSelector.render();
 
                 // render all ---------------------------------------------------------------
                 if (fileExplorerIsOpen == false) {
@@ -307,6 +306,8 @@ public class MainActivity extends PApplet {
                         startRendering_btn.setIsClicked(false);
                     }
                 }
+                fileToRender_pathSelector.render();
+
                 // handle Buttons ------------------------------------------------------
 
             }
