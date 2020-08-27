@@ -80,6 +80,12 @@ public class JsonHelper {
 	public void appendObjectToArray(JSONObject jObj) {
 		myArray.add(jObj);
 	}
+	
+	public void setArray(JSONArray jArr) {
+	    myArray.clear();
+	    myArray=jArr;
+	}
+
 
 	public void clearArray() {
 		myArray.clear();

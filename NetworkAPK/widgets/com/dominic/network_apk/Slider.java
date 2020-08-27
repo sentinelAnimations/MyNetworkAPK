@@ -39,7 +39,6 @@ public class Slider<T> implements Widgets {
 		this.parent = parent;
 		
 		startShift = p.map(startVal, returnValBorderLow, returnValBorderHigh, -w / 2+d/2, w / 2-d/2);
-		p.println(startShift, w);
 		xShift = x;
 		yShift = y;
 		if (!isParented) {

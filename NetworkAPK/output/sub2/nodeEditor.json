@@ -1,18 +1,60 @@
 [
   {
-    "Node0001": {
+    "Node0": {
+      "connectorPointId": "c78f28d8-54e1-4ebc-babf-c0ea5e47acf3",
       "useGpu_checkbox": false,
-      "useCpu_checkbox": true,
-      "selectPc_dropdown": -1
-    },
-    "Node0000": {
-      "useGpu_checkbox": true,
+      "connectorPointConnectedId": "946bcb25-d98a-4a36-b6ee-1903a3d252b3",
       "useCpu_checkbox": false,
-      "selectPc_dropdown": -1
-    },
-    "Node0003": {},
-    "Node0002": {
-      "switchPort_CounterArea": 11
+      "connectorPointIsConnected": true,
+      "selectPc_dropdown": -1,
+      "nodeType": 0,
+      "nodeId": "3ae9512a-7a6f-4347-882b-fff7bb4b5919"
+    }
+  },
+  {
+    "Node1": {
+      "connectorPointIsConnectedArray": [
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "connectorPointIds": [
+        "946bcb25-d98a-4a36-b6ee-1903a3d252b3",
+        "8fcea2ad-e169-4919-be14-497b8b59c31a",
+        "91ea49ac-dca7-4229-a2b7-98e25e729dad",
+        "cc34b7e8-8888-4774-8ed4-4c5522897802",
+        "a4e92253-fed5-4668-8e17-1a00bfe101b3",
+        "a30adfb5-60e5-4f36-8e23-0a503b50db59",
+        "520aae5f-85e2-47d7-aa50-316585adb8d3",
+        "1ba52a0b-e92e-4a07-a9f5-5e23d684eb6c"
+      ],
+      "connectorPointConnectedIds": [
+        "c78f28d8-54e1-4ebc-babf-c0ea5e47acf3",
+        null,
+        null,
+        null,
+        "c60c4b76-a180-4f4e-83c1-7fb28aad287c",
+        null,
+        null,
+        null
+      ],
+      "nodeType": 3,
+      "switchPort_CounterArea": 8,
+      "nodeId": "a440f7c1-10ca-4621-a17a-8d57f17f47fe"
+    }
+  },
+  {
+    "Node2": {
+      "connectorPointId": "c60c4b76-a180-4f4e-83c1-7fb28aad287c",
+      "connectorPointConnectedId": "a4e92253-fed5-4668-8e17-1a00bfe101b3",
+      "connectorPointIsConnected": true,
+      "nodeType": 4,
+      "nodeId": "e02a4b08-3049-445f-8279-a89778bb2949"
     }
   }
 ]

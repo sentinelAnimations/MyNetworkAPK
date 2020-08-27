@@ -151,4 +151,8 @@ public class Checkbox<T> implements Widgets {
 		return t;
 	}
 
+	public void setIsChecked(Boolean state) {
+	    isChecked=state;
+	}
+	 
 }

@@ -17,7 +17,7 @@ public class SettingsScreen {
 	private int btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark, dark, light, lighter, mode = 0, doOnce = 0;
 	private Boolean successfullySaved = false;
 	private float textYShift;
-	private String mySettingsPath;
+	private String mySavePath;
 	private String[] imgPaths;
 	private PFont stdFont;
 	private PImage screenshot;
@@ -33,7 +33,7 @@ public class SettingsScreen {
 	private ImageButton[] mainButtons;
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 
-	public SettingsScreen(PApplet p, int btnSize, int btnSizeSmall, int stdTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySettingsPath, String[] imgPaths, String[] HorizontalListPictoPaths, String[] fileExplorerPaths, PFont stdFont) {
+	public SettingsScreen(PApplet p, int btnSize, int btnSizeSmall, int stdTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySavePath, String[] imgPaths, String[] HorizontalListPictoPaths, String[] fileExplorerPaths, PFont stdFont) {
 		this.p = p;
 		this.btnSize = btnSize;
 		this.btnSizeSmall = btnSizeSmall;
@@ -46,7 +46,7 @@ public class SettingsScreen {
 		this.dark = dark;
 		this.light = light;
 		this.lighter = lighter;
-		this.mySettingsPath = mySettingsPath;
+		this.mySavePath = mySavePath;
 		this.imgPaths = imgPaths;
 		this.stdFont = stdFont;
 		mainActivity = (MainActivity) p;
@@ -151,7 +151,7 @@ public class SettingsScreen {
 
 					settingsObject.put("Settings", settingsDetails);
 					jHelper.appendObjectToArray(settingsObject);
-					jHelper.writeData(mySettingsPath);
+					jHelper.writeData(mySavePath);
 
 					successfullySaved = true;
 					mainActivity.setMode(1);
@@ -246,7 +246,7 @@ public class SettingsScreen {
 
 	private void setData() {
 		// load settings info, if not available, goto settingsPage----------------------
-		loadedSettingsData = jHelper.getData(mySettingsPath);
+		loadedSettingsData = jHelper.getData(mySavePath);
 		if (loadedSettingsData.isEmpty()) {
 		} else {
 			JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
