@@ -108,17 +108,6 @@ public class ConnectorPoint<T> implements Widgets {
 			}
 
 		}
-		/*
-		 * p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.fill(255);
-		 * p.text(id.substring(id.length()-5,id.length()), x, y); if(isConnected) {
-		 * p.text(connectedId.substring(connectedId.length()-5,connectedId.length()), x,
-		 * y+10); }
-		 */
-
-		/*
-		 * p.noFill(); p.stroke(255, 0, 0); p.ellipse(x, y, r * 2, r * 2);
-		 * p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.fill(255); p.text(id,x,y);
-		 */
 	}
 
 	void renderCurve(PVector pv1, PVector pv2, Boolean isBezier) {

@@ -2,7 +2,9 @@ package com.dominic.network_apk;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.MouseInfo;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class MainActivity extends PApplet {
 					// blender,5=questions,101=renderMode
 
 	// integers-------------------------------------------------
+	int windowTopBarHeight;
 	// integers-------------------------------------------------
 
 	// Booleans-------------------------------------------------
@@ -67,10 +70,9 @@ public class MainActivity extends PApplet {
 	// PVectors -----------------------------------------------
 
 	// java Jframe --------------------------------------------
-    //private JFrame jf;
+	private JFrame jf;
 	// java Jframe --------------------------------------------
 
-	
 	// images--------------------------------------------------
 	PImage screenshot;
 
@@ -107,31 +109,24 @@ public class MainActivity extends PApplet {
 	public void settings() {
 
 	}
+
 	@Override
 	public void setup() {
 		getSurface().setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
 		getSurface().setTitle(APKName);
-		getSurface().setIcon(loadImage("imgs//Icon//apkIcon.png"));
-	
-		/*
-		SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
-		 jf = (JFrame) sc.getFrame();
-		Dimension d = new Dimension((int) stdScreenDimension.x, (int) stdScreenDimension.y);
-		jf.setMinimumSize(d);
-		jf.setTitle(APKName);
-		BufferedImage img;
-		try {
-			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-			InputStream is = classloader.getResourceAsStream("imgs//Icon//apkIcon.png");
-			img = ImageIO.read(new java.io.BufferedInputStream(is));
-	        ImageIcon icon=new ImageIcon(img);
-			jf.setIconImage(img);
 
-		} catch (IOException e) {
+		try {
+			// to make it work, duplicate folder in data (eg. "fonts" and rename it, else
+			// runnable jar wont find path)
+			PImage icon = loadImage("icons/apkIcon1.png");
+			getSurface().setIcon(icon);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		*/
-		
+
+		SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
+		jf = (JFrame) sc.getFrame();
+
 		getSurface().setResizable(false);
 
 		rectMode(CENTER);
@@ -146,6 +141,9 @@ public class MainActivity extends PApplet {
 	}
 
 	public void initializeClassInstances() {
+
+		windowTopBarHeight = (int) (jf.getBounds().getHeight() - stdScreenDimension.y);
+
 		String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "downloadBlender.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
 		for (int i = 0; i < mainButtons.length; i++) {
 			String s = "";
@@ -222,18 +220,15 @@ public class MainActivity extends PApplet {
 
 	@Override
 	public void draw() {
-		
-		
-		
-		/*
-		if(mode!=2) {
-			if(jf.getBounds().getHeight()>stdScreenDimension.y || jf.getBounds().getWidth()>stdScreenDimension.x) {
-				jf.setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
+
+		if (mode != 2) {
+			if (jf.getBounds().getHeight() > stdScreenDimension.y + windowTopBarHeight) {
+				jf.setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y + windowTopBarHeight);
 			}
-		}*/
-		
-		background(dark);		
-		
+		}
+
+		background(dark);
+
 		if (mode == 0) { // loadingScreen ----------------
 			loadingScreen.render();
 		}
@@ -429,9 +424,9 @@ public class MainActivity extends PApplet {
 			textSize(subtitleTs);
 			fill(textDark);
 			textAlign(CENTER, CENTER);
-			String titleBarText=APKName + " | " + APKDescription + " | " + modeNames[mode - 1];
-			if(textWidth(titleBarText)<fillUpBarW) {
-			text(titleBarText, fillUpBarX, btnSize / 2 + margin);
+			String titleBarText = APKName + " | " + APKDescription + " | " + modeNames[mode - 1];
+			if (textWidth(titleBarText) < fillUpBarW) {
+				text(titleBarText, fillUpBarX, btnSize / 2 + margin);
 			}
 		}
 
@@ -453,13 +448,15 @@ public class MainActivity extends PApplet {
 				default:
 					mode = i;
 					getSurface().setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
+					Dimension d = new Dimension((int) stdScreenDimension.x, (int) stdScreenDimension.y);
+					frame.setPreferredSize(d);
+
 					if (mode == 2) {
 						getSurface().setResizable(true);
-						//jf.setResizable(true);
+						// jf.setResizable(true);
 					} else {
 						getSurface().setResizable(false);
-						//jf.setResizable(false);
-
+						// jf.setResizable(false);
 
 					}
 					break;

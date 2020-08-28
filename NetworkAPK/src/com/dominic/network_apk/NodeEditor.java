@@ -89,6 +89,21 @@ public class NodeEditor<T> {
 		if (doOnceOnStart == 0) {
 			try {
 				setData();
+				/*for(int i=0;i<nodes.size();i++) {
+					Node n= nodes.get(i);
+					if(n.getIsTypePc()) {
+						n.getOutputConnectorPoint().render();
+					}
+					if(n.getType()==3) {
+						for(int i2=0;i2<n.getSwitchConnectorPoints().size();i2++) {
+							ConnectorPoint cp= (ConnectorPoint) n.getSwitchConnectorPoints().get(i2);
+							cp.render();
+							}
+					}
+					if(n.getType()==nodeAdderButtons.length-1) {
+						n.getInputConnectorPoint().render();
+					}
+				}*/
 			} catch (Exception e) {
 				e.printStackTrace();
 				if(nodes.size()>0) {
@@ -495,7 +510,6 @@ public class NodeEditor<T> {
 							cp.setConnectedId(connectorPointConnectedIds[i2]);
 						}
 					}
-
 				}
 				if (nodeType == nodeAdderButtons.length - 1) {
 					nh = btnSizeSmall + stdTs * 2 + margin * 7;
