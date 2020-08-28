@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="data"/>
+	<classpathentry excluding="imgs/Icon/|imgs/Icon/" kind="src" path="data"/>
 	<classpathentry kind="src" path="widgets"/>
 	<classpathentry kind="src" path="calculatorsAndHelpers"/>
 	<classpathentry kind="src" path="Objects"/>

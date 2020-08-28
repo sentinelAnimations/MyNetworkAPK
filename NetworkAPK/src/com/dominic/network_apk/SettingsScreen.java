@@ -80,7 +80,6 @@ public class SettingsScreen {
 	}
 
 	public void render() {
-
 		for (int i = 0; i < pathSelectors.length; i++) {
 			if (pathSelectors[i].getFileExplorerIsOpen()) {
 				mode = 1;

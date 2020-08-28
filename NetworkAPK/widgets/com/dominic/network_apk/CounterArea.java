@@ -213,6 +213,11 @@ public class CounterArea<T> implements Widgets {
 	public void setValueHasChanged(Boolean state) {
 		valueHasChanged = state;
 	}
+	
+	public void setCount(int cou) {
+		count=cou;
+		valueHasChanged=true;
+	}
 
 	public void setPos(int xp, int yp) {
 		x = xp;

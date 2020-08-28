@@ -70,7 +70,6 @@ public class Node<T> {
 
             int[] conT = { 1, 2 };
            // String connectorId = UUID.randomUUID().toString();
-
             mainActivity.getNodeEditor().addConnectorPoint(p, 0, w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT, stdConnectorId, id, this);
             output_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
         }
@@ -121,6 +120,9 @@ public class Node<T> {
 
     private void renderTypePC() {
 
+    	//p.println(output_connectorPoint.getConnectedId(),output_connectorPoint.getIsConnected());
+    	//p.println(output_connectorPoint.getIdLength());
+    	
         if (mouseIsPressed) {
             if (isGrabbed == false) {
                 if (isDragablePcNode()) {
@@ -627,6 +629,10 @@ public class Node<T> {
 
     public DropdownMenu getPcSelection_DropdownMenu() {
         return pcSelection_DropdownMenu;
+    }
+    
+    public EditText getSwitchNameEditText(){
+    	return switchName_editText;
     }
 
     public void setPos(int xp, int yp) {

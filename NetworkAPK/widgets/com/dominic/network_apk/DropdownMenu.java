@@ -49,12 +49,11 @@ public class DropdownMenu<T> implements Widgets {
 		for (int i = 0; i < itemsY.length; i++) {
 			itemsY[i] = y;
 		}
-		
-		calcDropdownDimens();
-		calcDisplList(list);
 
 		dropdown_btn = new ImageButton(p, x + w / 2 - margin - (h - margin * 2) / 2, yShift, h - margin * 2, h - margin * 2, stdTs, margin, edgeRad, -1, textYShift, false, true, textCol, textCol, pictoPaths[0], "", parent);
 
+		calcDropdownDimens();
+		calcDisplList(list);
 	}
 
 	public void render() {
@@ -241,10 +240,13 @@ public class DropdownMenu<T> implements Widgets {
 	private void calcDisplList(String[] l){
 		displList=new String[l.length];
 		for(int i=0;i<l.length;i++) {
-			if(p.textWidth(l[i])>w-margin*2) {
+			
+			int maxW=(int)(p.abs(dropdown_btn.getX()-(x-w/2)))-margin*2-dropdown_btn.getW()/2;
+			
+			if(p.textWidth(l[i])>maxW) {
 				String s="";
 				for(int i2=l[i].length()-1;i2>=0;i2--) {
-				if(p.textWidth(s+l[i].charAt(i2))<w-margin*2) {
+				if(p.textWidth(s+l[i].charAt(i2))<maxW) {
 					s=l[i].charAt(i2)+s;
 				}
 				}
@@ -254,6 +256,7 @@ public class DropdownMenu<T> implements Widgets {
 			}
 		}
 	}
+	
 	@Override
 	public void getParentPos() {
 		Method m;

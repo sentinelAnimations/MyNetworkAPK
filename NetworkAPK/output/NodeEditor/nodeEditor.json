@@ -1,0 +1,162 @@
+[
+  {
+    "Node0": {
+      "posX": 1110,
+      "connectorPointIsConnectedArray": [
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "posY": 295,
+      "connectorPointIds": [
+        "4c5e1fba-8070-4b55-aa1c-71bcb37f679c",
+        "4e937563-2986-4d53-90b9-ef3decb197d0",
+        "64b906ab-40e4-426c-a1f6-a204225f7c4b",
+        "60b5c3ce-9913-4c6a-bd3c-a21457d9d999",
+        "f4b3ca39-4eac-4b71-b418-1f945a023039"
+      ],
+      "connectorPointConnectedIds": [
+        "0e5f8266-eec3-4f92-8653-143982794e3d",
+        "48110369-8e7f-4a0d-a315-2d3700ebea02",
+        "92a207b3-8876-4dcf-a118-820f169a2b3b",
+        "92a207b3-8876-4dcf-a118-820f169a2b3b",
+        "dee8532d-bf33-4179-bc51-f849b317db01"
+      ],
+      "nodeType": 3,
+      "switchPort_CounterArea": 5,
+      "nodeId": "69340049-7b83-478e-81b5-0c65bb67c21d",
+      "switchName_editText": "Switch1"
+    }
+  },
+  {
+    "Node1": {
+      "posX": 615,
+      "posY": 256,
+      "connectorPointId": "0e5f8266-eec3-4f92-8653-143982794e3d",
+      "useGpu_checkbox": true,
+      "connectorPointConnectedId": "4c5e1fba-8070-4b55-aa1c-71bcb37f679c",
+      "useCpu_checkbox": true,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdown": 0,
+      "nodeType": 0,
+      "nodeId": "74b67653-7ea5-442c-9e10-d7727000e1a5"
+    }
+  },
+  {
+    "Node2": {
+      "posX": 602,
+      "posY": 429,
+      "connectorPointId": "48110369-8e7f-4a0d-a315-2d3700ebea02",
+      "useGpu_checkbox": false,
+      "connectorPointConnectedId": "4e937563-2986-4d53-90b9-ef3decb197d0",
+      "useCpu_checkbox": true,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdown": 1,
+      "nodeType": 1,
+      "nodeId": "c11a84f9-9999-48cb-9394-deebf660acc0"
+    }
+  },
+  {
+    "Node3": {
+      "posX": 611,
+      "posY": 631,
+      "connectorPointId": "92a207b3-8876-4dcf-a118-820f169a2b3b",
+      "useGpu_checkbox": false,
+      "connectorPointConnectedId": "64b906ab-40e4-426c-a1f6-a204225f7c4b",
+      "useCpu_checkbox": true,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdown": 2,
+      "nodeType": 2,
+      "nodeId": "1e77e894-56e5-403b-b5a2-f191bbddc814"
+    }
+  },
+  {
+    "Node4": {
+      "posX": 1606,
+      "posY": 522,
+      "connectorPointId": "b75c2da6-a288-4d22-ba7e-12a9f09d4f2f",
+      "connectorPointConnectedId": "f4ffeda0-7f18-4c7a-b4eb-2ee90b164bb6",
+      "connectorPointIsConnected": true,
+      "nodeType": 4,
+      "nodeId": "a82b6db0-c7e2-4407-8503-1852f218cd85"
+    }
+  },
+  {
+    "Node5": {
+      "posX": 610,
+      "posY": 826,
+      "connectorPointId": "c220dcc2-bf9f-4e2a-9725-65349ad84d13",
+      "useGpu_checkbox": true,
+      "connectorPointConnectedId": "58e2995f-e825-4efd-b92d-3d3b3135f19d",
+      "useCpu_checkbox": false,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdown": 4,
+      "nodeType": 0,
+      "nodeId": "b3b4c98d-03f6-4de5-8f48-bf8cdee1ca90"
+    }
+  },
+  {
+    "Node6": {
+      "posX": 1083,
+      "connectorPointIsConnectedArray": [
+        true,
+        false,
+        false,
+        true,
+        false
+      ],
+      "posY": 619,
+      "connectorPointIds": [
+        "58e2995f-e825-4efd-b92d-3d3b3135f19d",
+        "85cc2e7c-e2c2-4036-ae13-74725a585421",
+        "e61e6bca-3e74-45ea-8296-716ba1b6d4ec",
+        "61c29f4b-25d8-4df7-9914-b65df373559c",
+        "9e404550-3045-476b-b93a-8405599bfd6c"
+      ],
+      "connectorPointConnectedIds": [
+        "c220dcc2-bf9f-4e2a-9725-65349ad84d13",
+        null,
+        null,
+        "a925bbd0-6ea8-427d-9af0-41710278ef35",
+        null
+      ],
+      "nodeType": 3,
+      "switchPort_CounterArea": 5,
+      "nodeId": "3528e747-1713-4d62-8d50-35678d4290a1",
+      "switchName_editText": "Switch2"
+    }
+  },
+  {
+    "Node7": {
+      "posX": 1320,
+      "connectorPointIsConnectedArray": [
+        true,
+        true,
+        false,
+        false,
+        true
+      ],
+      "posY": 524,
+      "connectorPointIds": [
+        "dee8532d-bf33-4179-bc51-f849b317db01",
+        "a925bbd0-6ea8-427d-9af0-41710278ef35",
+        "b3139b6d-2f42-4715-8f8a-7d4717d54ea9",
+        "60e0362f-7463-4f81-bc98-2cec60d5db95",
+        "f4ffeda0-7f18-4c7a-b4eb-2ee90b164bb6"
+      ],
+      "connectorPointConnectedIds": [
+        "f4b3ca39-4eac-4b71-b418-1f945a023039",
+        "61c29f4b-25d8-4df7-9914-b65df373559c",
+        null,
+        null,
+        "b75c2da6-a288-4d22-ba7e-12a9f09d4f2f"
+      ],
+      "nodeType": 3,
+      "switchPort_CounterArea": 5,
+      "nodeId": "36126ea6-4556-463e-8697-d70b98783e92",
+      "switchName_editText": "Switch3"
+    }
+  }
+]

@@ -73,7 +73,7 @@ public class ConnectorPoint<T> implements Widgets {
 		}
 
 		if (isOnDrag) {
-			renderCurve(new PVector(x, y), new PVector(p.mouseX, p.mouseY),false);
+			renderCurve(new PVector(x, y), new PVector(p.mouseX, p.mouseY), false);
 			p.fill(col);
 			p.ellipse(p.mouseX, p.mouseY, r, r);
 		}
@@ -98,15 +98,23 @@ public class ConnectorPoint<T> implements Widgets {
 				connected_connectorPoint = connectorPoints.get(connectedInd);
 				connectedX = connected_connectorPoint.getX();
 				connectedY = connected_connectorPoint.getY();
-
 				if (idLength > connected_connectorPoint.getIdLength()) {
-					renderCurve(new PVector(x, y), new PVector(connectedX, connectedY),false);
+					renderCurve(new PVector(x, y), new PVector(connectedX, connectedY), false);
 				}
+				// renderCurve(new PVector(x, y), new PVector(connectedX, connectedY),false);
+
 			} else {
 				connected_connectorPoint = null;
 			}
 
 		}
+		/*
+		 * p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.fill(255);
+		 * p.text(id.substring(id.length()-5,id.length()), x, y); if(isConnected) {
+		 * p.text(connectedId.substring(connectedId.length()-5,connectedId.length()), x,
+		 * y+10); }
+		 */
+
 		/*
 		 * p.noFill(); p.stroke(255, 0, 0); p.ellipse(x, y, r * 2, r * 2);
 		 * p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.fill(255); p.text(id,x,y);

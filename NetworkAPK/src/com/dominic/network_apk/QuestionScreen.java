@@ -46,7 +46,7 @@ public class QuestionScreen {
 
     }
     
-    public void render() {
+    public void render() {	
         mainActivity.renderMainButtons();
         searchBar.render();
     }

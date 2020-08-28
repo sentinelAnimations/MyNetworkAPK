@@ -46,7 +46,7 @@ public class LoadingScreen {
         loadingGearSprite = new SpriteAnimation(p, margin * 2 + btnSize / 2, p.height - p.height / 8, btnSize, btnSize, 0, 129, textDark, false, "imgs/sprites/loadingGears/", null); // endInd=129, obwohl letztes bild '0128.png' --> weil start bei '0000.png'
         mainActivity = (MainActivity) p;
         jHelper = new JsonHelper(p);
- 
+
         Thread initializeThread = new Thread(new Runnable() {
             @Override
             public void run() {
