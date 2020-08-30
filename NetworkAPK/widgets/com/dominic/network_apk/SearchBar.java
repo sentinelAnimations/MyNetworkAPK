@@ -44,7 +44,7 @@ public class SearchBar<T> implements Widgets {
     public void render() {
         if (isParented) {
             getParentPos();
-        }
+        } 
         p.fill(bgCol);
         p.stroke(bgCol);
         searchBar_et.render();
@@ -60,6 +60,10 @@ public class SearchBar<T> implements Widgets {
         searchBar_et.onMouseReleased();
 
     }
+    
+    public void onKeyPressed(char key){
+		searchBar_et.onKeyPressed(key);
+	}
 
     public void onKeyReleased(char k) {
         search_btn.onKeyReleased(k);

@@ -26,7 +26,7 @@ public class PathSelector<T> implements Widgets {
 
 	public PathSelector(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int btnSizeSmall, int border, int bgCol, int textCol, int dark, int light, int lighter, int textDark, float textYShift, Boolean selectFolder, Boolean isParented, String hint, String imgPath, String[] fileExplorerPictoPaths, PFont stdFont, T parent) {
 		this.p = p;
-		this.x = x;
+		this.x = x; 
 		this.y = y;
 		this.w = w;
 		this.h = h;
@@ -59,6 +59,7 @@ public class PathSelector<T> implements Widgets {
 		}
 		if (fileExplorerIsOpen == false && renderPathSelector == true) {
 			p.fill(bgCol);
+			p.stroke(bgCol);
 			p.rect(x, y, w, h, edgeRad); 
 			openFileExplorer_btn.render();
 			p.textAlign(PConstants.LEFT, PConstants.CENTER);
@@ -170,7 +171,9 @@ public class PathSelector<T> implements Widgets {
 	}
 
 	private void onHover() {
-		if (t.length() > 0) {
+		p.textFont(stdFont);
+		p.textSize(stdTs);
+		if (t.length() > 0 && p.textWidth(t.replace("\\\\", "\\"))>p.textWidth(displayText.replace("\\\\", "\\"))) {
 			if (p.mouseX > x - w / 2 + h + margin && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
 				if (isHovering) {
 					hoverTime++;
@@ -202,6 +205,8 @@ public class PathSelector<T> implements Widgets {
 				p.noStroke();
 				p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
 				p.fill(textCol);
+				p.textFont(stdFont);
+				p.textSize(stdTs);
 				p.text(t, mx + tw, my + stdTs - stdTs * textYShift);
 			}
 		}
@@ -221,6 +226,10 @@ public class PathSelector<T> implements Widgets {
 		} else {
 			fileExplorer.onMouseReleased(mouseButton);
 		}
+	}
+	
+	public void onKeyPressed(char key){
+		fileExplorer.onKeyPressed(key);
 	}
 
 	public void onKeyReleased(char key) {

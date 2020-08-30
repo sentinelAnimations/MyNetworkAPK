@@ -30,7 +30,7 @@ public class FileExplorer {
 	public SearchBar searchBar;
 
 	public FileExplorer(PApplet p, int x, int y, int w, int h, int stdTs, int edgeRad, int margin, int dark, int light, int lighter, int textCol, int textDark, int border, int btnSize, int btnSizeSmall, float textYShift, String[] PictoPaths, PFont stdFont) {
-		this.p = p;
+		this.p = p; 
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -701,6 +701,10 @@ public class FileExplorer {
 		for (int i = fileExplorer_btns.length - 1; i >= 0; i--) {
 			fileExplorer_btns[i].onMousePressed();
 		}
+	}
+	
+	public void onKeyPressed(char key){
+		rename_et.onKeyPressed(key);
 	}
 
 	public void onKeyReleased(char k) {

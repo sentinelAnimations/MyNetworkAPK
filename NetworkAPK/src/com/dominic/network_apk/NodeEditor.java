@@ -87,31 +87,7 @@ public class NodeEditor<T> {
 		
 
 		if (doOnceOnStart == 0) {
-			try {
-				setData();
-				/*for(int i=0;i<nodes.size();i++) {
-					Node n= nodes.get(i);
-					if(n.getIsTypePc()) {
-						n.getOutputConnectorPoint().render();
-					}
-					if(n.getType()==3) {
-						for(int i2=0;i2<n.getSwitchConnectorPoints().size();i2++) {
-							ConnectorPoint cp= (ConnectorPoint) n.getSwitchConnectorPoints().get(i2);
-							cp.render();
-							}
-					}
-					if(n.getType()==nodeAdderButtons.length-1) {
-						n.getInputConnectorPoint().render();
-					}
-				}*/
-			} catch (Exception e) {
-				e.printStackTrace();
-				if(nodes.size()>0) {
-					for(int i=nodes.size()-1;i>=0;i--) {
-						nodes.remove(i);
-					}
-				}
-			}
+			setupAll();
 			doOnceOnStart++;
 		}
 
@@ -200,6 +176,19 @@ public class NodeEditor<T> {
 				p.noFill();
 				p.stroke(255, alpha);
 				p.rect(i, i2, gridSize, gridSize);
+			}
+		}
+	}
+	
+	public void setupAll() {
+		try {
+			setData();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if(nodes.size()>0) {
+				for(int i=nodes.size()-1;i>=0;i--) {
+					nodes.remove(i);
+				}
 			}
 		}
 	}
@@ -611,6 +600,14 @@ public class NodeEditor<T> {
 	}
 
 	public void onKeyPressed(char key) {
+		
+		for(int i=0;i<nodes.size();i++) {
+			Node n= nodes.get(i);
+			if(n.getType()==3) {
+				n.getSwitchNameEditText().onKeyPressed(key);
+			}
+		}
+		
 		if (key == 'm' || key == 'M') {
 			panViewStartX = p.mouseX;
 			panViewStartY = p.mouseY;

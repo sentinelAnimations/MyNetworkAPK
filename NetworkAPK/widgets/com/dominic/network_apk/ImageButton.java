@@ -10,7 +10,7 @@ public class ImageButton<T> implements Widgets {
 	private int x, y, xShift, yShift, w, h, stdTs, edgeRad, shortcut, col, bgCol, margin, onceOnClick = 0, hoverTime, clickCount = 0, waitAfterTransform = 0;
 	private float textYShift;
 	private String imgPath, infoText;
-	private Boolean isClicked = false, isPressed = false, isParented,useBg, isHovering=false;
+	private Boolean isClicked = false, isPressed = false, isParented, useBg, isHovering = false;
 	private PApplet p;
 	private PImage picto;
 	private T parent;
@@ -97,6 +97,8 @@ public class ImageButton<T> implements Widgets {
 
 	private void onHover() {
 		Boolean show = false;
+		p.textSize(stdTs);
+
 		if (infoText.length() > 0) {
 			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
 				if (isHovering) {
@@ -106,7 +108,7 @@ public class ImageButton<T> implements Widgets {
 			} else {
 				hoverTime = 0;
 				isHovering = false;
-			}
+			} 
 			if (hoverTime > 72) {
 				int tw = (int) p.textWidth(infoText) + margin * 2;
 				int mx, my;
@@ -124,19 +126,20 @@ public class ImageButton<T> implements Widgets {
 				if (p.mouseY > p.height - stdTs * 2) {
 					my = p.height - stdTs * 2;
 				}
-				
+
 				if (hoverTime > 120) {
 					show = false;
 				} else {
 					show = true;
 				}
-			if(show) {	
-				p.fill(0, 200);
-				p.noStroke();
-				p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
-				p.fill(col);
-				p.text(infoText, mx + tw, my + stdTs - stdTs * textYShift);
-			}
+				if (show) {
+					p.fill(0, 200);
+					p.noStroke();
+					p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
+					p.fill(col);
+					p.textSize(stdTs);
+					p.text(infoText, mx + tw, my + stdTs - stdTs * textYShift);
+				}
 			}
 		}
 	}
@@ -192,22 +195,23 @@ public class ImageButton<T> implements Widgets {
 	public int getClickCount() {
 		return clickCount;
 	}
-	
+
 	public Boolean getIsClicked() {
 		return isClicked;
 	}
-	
+
 	public Boolean mouseIsInArea() {
-		if(p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	public void setIsClicked(Boolean state) {
-		isClicked=state;
+		isClicked = state;
 	}
+
 	public void setPos(int xp, int yp) {
 		if (isParented) {
 			xShift = xp;

@@ -640,7 +640,7 @@ public class Node<T> {
         y = yp;
         dragShiftX = 0;
         dragShiftY = 0;
-        calcBodyAndHeadPos();
+        calcBodyAndHeadPos(); 
 
     }
 

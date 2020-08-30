@@ -43,7 +43,7 @@ public class SettingsScreen {
 		this.textYShift = textYShift;
 		this.textCol = textCol;
 		this.textDark = textDark;
-		this.dark = dark;
+		this.dark = dark; 
 		this.light = light;
 		this.lighter = lighter;
 		this.mySavePath = mySavePath;
@@ -91,14 +91,14 @@ public class SettingsScreen {
 				doOnce = 1;
 			}
 		}
-		
+
 		if (doOnce == 0) {
 			for (int i = 0; i < pathSelectors.length; i++) {
 				pathSelectors[i].setRenderPathSelector(false);
 			}
 			doOnce++;
 		} else {
-			if (doOnce >0 ) {
+			if (doOnce > 0) {
 				for (int i = 0; i < pathSelectors.length; i++) {
 					pathSelectors[i].setRenderPathSelector(true);
 				}
@@ -106,8 +106,8 @@ public class SettingsScreen {
 			}
 		}
 		if (mode == 0) { // normal mode
-			if(mainActivity.getLoadingScreen().firstSetup==false) {
-			mainActivity.renderMainButtons();
+			if (mainActivity.getLoadingScreen().firstSetup == false) {
+				mainActivity.renderMainButtons();
 			}
 
 			for (int i = setting_pictos.length - 1; i >= 0; i--) {
@@ -118,7 +118,7 @@ public class SettingsScreen {
 			saveSettings_btn.render();
 			masterOrSlave_dropdown.render();
 
-			//handle save button ------------------------------------
+			// handle save button ------------------------------------
 
 			if (saveSettings_btn.getIsClicked() == true) {
 				// check if all is set
@@ -134,7 +134,7 @@ public class SettingsScreen {
 					if (ps.getPath().length() < 1) {
 						allSet = false;
 					} else {
-						settingsDetails.put("pathSelector" + i, ps.getPath()); 
+						settingsDetails.put("pathSelector" + i, ps.getPath());
 					}
 
 				}
@@ -162,7 +162,7 @@ public class SettingsScreen {
 				}
 				saveSettings_btn.setIsClicked(false);
 			}
-			//handle save button ------------------------------------
+			// handle save button ------------------------------------
 
 		}
 
@@ -219,6 +219,12 @@ public class SettingsScreen {
 		}
 		for (int i = 0; i < pathSelectors.length; i++) {
 			pathSelectors[i].onMouseReleased(mouseButton);
+		}
+	}
+
+	public void onKeyPressed(char key) {
+		if(mode==0) {
+		personalData_et.onKeyPressed(key);
 		}
 	}
 

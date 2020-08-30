@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -46,7 +47,7 @@ public class MainActivity extends PApplet {
 	// Booleans-------------------------------------------------
 	private Boolean fileExplorerIsOpen = false;
 	// Booleans-------------------------------------------------
-
+ 
 	// Colors--------------------------------------------------
 	private int darkest = color(30), dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78), lightest = color(64, 77, 88), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0), green = color(0, 255, 0), textCol = color(255), textDark = color(150);
 	// colors -------------------------------------------------
@@ -115,22 +116,26 @@ public class MainActivity extends PApplet {
 		getSurface().setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
 		getSurface().setTitle(APKName);
 
+		SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
+		jf = (JFrame) sc.getFrame();
+
+		Image image = null;
+		ArrayList<Image> icons = new ArrayList<>();
 		try {
-			// to make it work, duplicate folder in data (eg. "fonts" and rename it, else
-			// runnable jar wont find path)
-			PImage icon = loadImage("icons/apkIcon1.png");
-			getSurface().setIcon(icon);
+			icons.add(new ImageIcon(getClass().getResource("/icons/apkIcon16x16.png")).getImage());
+			icons.add(new ImageIcon(getClass().getResource("/icons/apkIcon32x32.png")).getImage());
+			icons.add(new ImageIcon(getClass().getResource("/icons/apkIcon64x64.png")).getImage());
+			icons.add(new ImageIcon(getClass().getResource("/icons/apkIcon128x128.png")).getImage());
+			jf.setIconImages(icons);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		SmoothCanvas sc = (SmoothCanvas) getSurface().getNative();
-		jf = (JFrame) sc.getFrame();
 
 		getSurface().setResizable(false);
 
 		rectMode(CENTER);
 		imageMode(CENTER);
+
 		// variableInitialisation -----------------------------------------------
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
 
@@ -141,6 +146,8 @@ public class MainActivity extends PApplet {
 	}
 
 	public void initializeClassInstances() {
+		
+		String[] fileExplorerPaths = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
 
 		windowTopBarHeight = (int) (jf.getBounds().getHeight() - stdScreenDimension.y);
 
@@ -165,8 +172,7 @@ public class MainActivity extends PApplet {
 			homeSettings_checkboxes[i] = new Checkbox(this, (int) (width / 9 * 1.5f + (width / 9 * 2) * (i - is)), height / 5 * 2 + ys, width / 9, btnSizeSmall, btnSizeSmall, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, false, false, checkBoxTexts[i], absPathPictos + "checkmark.png", stdFont, null);
 		}
 
-		String[] fileExplStr = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
-		fileToRender_pathSelector = new PathSelector(this, btnSizeSmall + margin * 3, 0, width / 8 - margin, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, false, true, "...\\\\File.blend", absPathPictos + "selectFolder.png", fileExplStr, stdFont, homeSettings_checkboxes[2]);
+		fileToRender_pathSelector = new PathSelector(this, btnSizeSmall + margin * 3, 0, width / 8 - margin, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, false, true, "...\\\\File.blend", absPathPictos + "selectFolder.png", fileExplorerPaths, stdFont, homeSettings_checkboxes[2]);
 
 		String[] p0 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
 		String[] pp = { absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
@@ -191,7 +197,7 @@ public class MainActivity extends PApplet {
 		// variableInitialisation for mode 3 --> settings screen---------------
 		String[] p1 = { absPathPictos + "masterOrSlave.png", absPathPictos + "blenderExeFolder.png", absPathPictos + "imageFolder.png", absPathPictos + "pathToCloud.png", absPathPictos + "personalData.png", absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png" };
 		String[] p2 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
-		settingsScreen = new SettingsScreen(this, btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark, dark, light, lighter, border, textYShift, mySettingsPath, p1, p2, fileExplStr, stdFont);
+		settingsScreen = new SettingsScreen(this, btnSize, btnSizeSmall, stdTs, margin, edgeRad, textCol, textDark, dark, light, lighter, border, textYShift, mySettingsPath, p1, p2, fileExplorerPaths, stdFont);
 
 		firstSetupPicto = new PictogramImage(this, margin + btnSize / 2, margin + btnSize / 2, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, absPathPictos + "settings.png", "First setup page", null);
 		firstSetupHelp_btn = new ImageButton(this, width - btnSize / 2 - margin, btnSize / 2 + margin, btnSize, btnSize, stdTs, margin, edgeRad, 8, textYShift, false, false, textCol, textCol, absPathPictos + "questions.png", "questions and infos | sortcut: ctrl+h", null);
@@ -200,7 +206,7 @@ public class MainActivity extends PApplet {
 
 		// variableInitialisation for mode 4 --> blender download--------------
 		String[] pp1 = { absPathPictos + "selectFolder.png", absPathPictos + "spreadBlender.png" };
-		spreadBlenderScreen = new SpreadBlender(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp1, stdFont);
+		spreadBlenderScreen = new SpreadBlender(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp1, fileExplorerPaths, stdFont);
 		// variableInitialisation for mode 4 --> blender download--------------
 
 		// variableInitialisation for mode 5 --> Theme screen-------------------
@@ -211,7 +217,7 @@ public class MainActivity extends PApplet {
 		// variableInitialisation for mode 6 --> help screen-------------------
 		String[] pp3 = { absPathPictos + "search.png" };
 
-		questionScreen = new QuestionScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp3, fileExplStr, stdFont);
+		questionScreen = new QuestionScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp3, fileExplorerPaths, stdFont);
 		// variableInitialisation for mode 6 --> help screen-------------------
 
 		// variableInitialisation -----------------------------------------------
@@ -424,9 +430,12 @@ public class MainActivity extends PApplet {
 			textSize(subtitleTs);
 			fill(textDark);
 			textAlign(CENTER, CENTER);
-			String titleBarText = APKName + " | " + APKDescription + " | " + modeNames[mode - 1];
-			if (textWidth(titleBarText) < fillUpBarW) {
-				text(titleBarText, fillUpBarX, btnSize / 2 + margin);
+			if (mode - 1 >= 0) {
+				String titleBarText = APKName + " | " + APKDescription + " | " + modeNames[mode - 1];
+
+				if (textWidth(titleBarText) < fillUpBarW) {
+					text(titleBarText, fillUpBarX, btnSize / 2 + margin);
+				}
 			}
 		}
 
@@ -447,6 +456,7 @@ public class MainActivity extends PApplet {
 					break;
 				default:
 					mode = i;
+					getSurface().setResizable(false);
 					getSurface().setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
 					Dimension d = new Dimension((int) stdScreenDimension.x, (int) stdScreenDimension.y);
 					frame.setPreferredSize(d);
@@ -454,10 +464,6 @@ public class MainActivity extends PApplet {
 					if (mode == 2) {
 						getSurface().setResizable(true);
 						// jf.setResizable(true);
-					} else {
-						getSurface().setResizable(false);
-						// jf.setResizable(false);
-
 					}
 					break;
 				}
@@ -494,7 +500,7 @@ public class MainActivity extends PApplet {
 				settingsScreen.onMousePressed(mouseButton);
 			}
 			if (mode == 4) {
-				spreadBlenderScreen.onMousePressed();
+				spreadBlenderScreen.onMousePressed(mouseButton);
 			}
 			if (mode == 5) {
 				themeScreen.onMousePressed();
@@ -538,7 +544,7 @@ public class MainActivity extends PApplet {
 			}
 
 			if (mode == 4) {
-				spreadBlenderScreen.onMouseReleased();
+				spreadBlenderScreen.onMouseReleased(mouseButton);
 			}
 			if (mode == 5) {
 				themeScreen.onMouseReleased();
@@ -573,6 +579,7 @@ public class MainActivity extends PApplet {
 			}
 
 			if (mode == 4) {
+				spreadBlenderScreen.onScroll(e);
 			}
 			if (mode == 5) {
 				themeScreen.onScroll(e);
@@ -588,19 +595,23 @@ public class MainActivity extends PApplet {
 		if (loadingScreen.getInstanciatedClasses()) {
 
 			if (mode == 1) {
+				fileToRender_pathSelector.onKeyPressed(key);
 			}
 			if (mode == 2) {
 				nodeEditor.onKeyPressed(key);
 			}
 
 			if (mode == 3) {
+				settingsScreen.onKeyPressed(key);
 			}
 
 			if (mode == 4) {
+				spreadBlenderScreen.onKeyPressed(key);
 			}
 			if (mode == 5) {
 			}
 			if (mode == 6) {
+				questionScreen.onKeyPressed(key);
 			}
 		}
 	}

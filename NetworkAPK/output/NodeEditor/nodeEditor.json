@@ -1,7 +1,7 @@
 [
   {
     "Node0": {
-      "posX": 1110,
+      "posX": 554,
       "connectorPointIsConnectedArray": [
         true,
         true,
@@ -9,7 +9,7 @@
         false,
         true
       ],
-      "posY": 295,
+      "posY": 201,
       "connectorPointIds": [
         "4c5e1fba-8070-4b55-aa1c-71bcb37f679c",
         "4e937563-2986-4d53-90b9-ef3decb197d0",
@@ -21,7 +21,7 @@
         "0e5f8266-eec3-4f92-8653-143982794e3d",
         "48110369-8e7f-4a0d-a315-2d3700ebea02",
         "92a207b3-8876-4dcf-a118-820f169a2b3b",
-        "92a207b3-8876-4dcf-a118-820f169a2b3b",
+        null,
         "dee8532d-bf33-4179-bc51-f849b317db01"
       ],
       "nodeType": 3,
@@ -32,8 +32,8 @@
   },
   {
     "Node1": {
-      "posX": 615,
-      "posY": 256,
+      "posX": 365,
+      "posY": 29,
       "connectorPointId": "0e5f8266-eec3-4f92-8653-143982794e3d",
       "useGpu_checkbox": true,
       "connectorPointConnectedId": "4c5e1fba-8070-4b55-aa1c-71bcb37f679c",
@@ -46,8 +46,8 @@
   },
   {
     "Node2": {
-      "posX": 602,
-      "posY": 429,
+      "posX": 364,
+      "posY": 169,
       "connectorPointId": "48110369-8e7f-4a0d-a315-2d3700ebea02",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "4e937563-2986-4d53-90b9-ef3decb197d0",
@@ -60,8 +60,8 @@
   },
   {
     "Node3": {
-      "posX": 611,
-      "posY": 631,
+      "posX": 363,
+      "posY": 302,
       "connectorPointId": "92a207b3-8876-4dcf-a118-820f169a2b3b",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "64b906ab-40e4-426c-a1f6-a204225f7c4b",
@@ -74,8 +74,8 @@
   },
   {
     "Node4": {
-      "posX": 1606,
-      "posY": 522,
+      "posX": 909,
+      "posY": 295,
       "connectorPointId": "b75c2da6-a288-4d22-ba7e-12a9f09d4f2f",
       "connectorPointConnectedId": "f4ffeda0-7f18-4c7a-b4eb-2ee90b164bb6",
       "connectorPointIsConnected": true,
@@ -85,8 +85,8 @@
   },
   {
     "Node5": {
-      "posX": 610,
-      "posY": 826,
+      "posX": 373,
+      "posY": 441,
       "connectorPointId": "c220dcc2-bf9f-4e2a-9725-65349ad84d13",
       "useGpu_checkbox": true,
       "connectorPointConnectedId": "58e2995f-e825-4efd-b92d-3d3b3135f19d",
@@ -99,7 +99,7 @@
   },
   {
     "Node6": {
-      "posX": 1083,
+      "posX": 555,
       "connectorPointIsConnectedArray": [
         true,
         false,
@@ -107,7 +107,7 @@
         true,
         false
       ],
-      "posY": 619,
+      "posY": 361,
       "connectorPointIds": [
         "58e2995f-e825-4efd-b92d-3d3b3135f19d",
         "85cc2e7c-e2c2-4036-ae13-74725a585421",
@@ -130,7 +130,7 @@
   },
   {
     "Node7": {
-      "posX": 1320,
+      "posX": 723,
       "connectorPointIsConnectedArray": [
         true,
         true,
@@ -138,7 +138,7 @@
         false,
         true
       ],
-      "posY": 524,
+      "posY": 279,
       "connectorPointIds": [
         "dee8532d-bf33-4179-bc51-f849b317db01",
         "a925bbd0-6ea8-427d-9af0-41710278ef35",
