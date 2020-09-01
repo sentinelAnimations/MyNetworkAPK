@@ -1,13 +1,13 @@
 //// beim letsten wort einer leerzeile und vor zeilenumbrüchen(\n), muss das letzte zeichen ein leerschlag sein
 
 InSevenDays 1.0 - Software written to simplify the management of network
-rendering based on Blenders internal Engine 'Cycles'. Discover the full
-untaimed force of an infinite extendable amounth of PCs while rendering and
-enjoy creative workflow on a new level. 
+rendering based on Blenders internal Engine 'Cycles'. Discover the full 
+untaimed force of an infinite extendable amounth of PCs while rendering and 
+enjoy creative workflow on a new level. \n
 \n
-With builtin features such as a node-based network-editor, easy render control options, and a straightforward
-software update possibility, these program allows you to spend your time on
-more valuable tasks than worrying about rendertime. 
+With builtin features such as a node-based network-editor, easy render control options, and a straightforward 
+software update possibility, these program allows you to spend your time on 
+more valuable tasks than worrying about rendertime. \n
 \n
 Developed and designed by Dominic Gut
  

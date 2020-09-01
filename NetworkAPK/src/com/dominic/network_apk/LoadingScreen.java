@@ -45,35 +45,9 @@ public class LoadingScreen {
         img = p.loadImage(imgPath);
         img.resize(p.width, p.height);
         c = new PVector(p.width / 2, p.height / 2);
-        String s = "";
-
-        String[] lines = p.loadStrings("textSources/loadingScreen_softwareDescriptions.txt");
-        for (int i = 0; i < lines.length; i++) {
-            String[] m1 = p.match(lines[i], "////");
-            String[] splitStr=null;
-            if (m1 == null) {
-                if (lines[i].length() > 0) {
-                    splitStr = p.split(lines[i],"\\n");
-                    p.println(splitStr);
-                    if(splitStr.length>1) {
-                        Boolean allEmpty=true;
-                        for(int i2=0;i2<splitStr.length;i2++) {
-                            if(splitStr[i2].length()>0) {
-                                allEmpty=false;
-                            s+=splitStr[i2]+"\n";
-                            }
-                        }
-                        if(allEmpty) {
-                            s+="\n";
-                        }
-                    }else {
-                        s += lines[i];
-                    }
-                }
-            }
-        }
-        p.println(s);
         
+		String s = new TxtStringLoader(p).getStringFromFile("textSources/loadingScreen_softwareDescriptions.txt");
+ 
         tf = new TextField(p, p.width / 8, p.height / 2,p.width / 4 - margin * 4-btnSizeSmall/2, p.height / 2, stdTs,margin,btnSizeSmall,edgeRad,dark,light,lighter,textDark, textYShift, true, false,false,s, stdFont, null);
         loadingGearSprite = new SpriteAnimation(p, margin * 2 + btnSize / 2, p.height - p.height / 8, btnSize, btnSize, 0, 129, textDark, false, "imgs/sprites/loadingGears/", null); // endInd=129, obwohl letztes bild '0128.png' --> weil start bei '0000.png'
         mainActivity = (MainActivity) p;
