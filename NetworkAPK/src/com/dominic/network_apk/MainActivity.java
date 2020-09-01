@@ -140,7 +140,7 @@ public class MainActivity extends PApplet {
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
 
 		// variableInitialisation for mode 0 --> loading screen----------------
-		loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, dark, textCol, textDark, textYShift, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
+		loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs,btnSizeSmall,edgeRad, dark, textCol, textDark,light,lighter, textYShift, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
 		// variableInitialisation for mode 0 --> loading screen----------------
 
 	}
@@ -210,7 +210,7 @@ public class MainActivity extends PApplet {
 		// variableInitialisation for mode 4 --> blender download--------------
 
 		// variableInitialisation for mode 5 --> Theme screen-------------------
-		String[] pp2 = { absPathPictos + "colorPicker.png" };
+		String[] pp2 = { absPathPictos + "colorPicker.png" ,absPathPictos+"restart.png"};
 		themeScreen = new ThemeScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp2, stdFont);
 		// variableInitialisation for mode 5 --> Theme screen-------------------
 

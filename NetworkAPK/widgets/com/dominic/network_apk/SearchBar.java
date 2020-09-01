@@ -78,6 +78,9 @@ public class SearchBar<T> implements Widgets {
     public int getW() {
         return w;
     }
+    public int getH() {
+        return h;
+    }
 
     @Override
     public void getParentPos() {

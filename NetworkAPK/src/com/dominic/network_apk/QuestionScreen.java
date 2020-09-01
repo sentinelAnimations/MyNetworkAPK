@@ -17,8 +17,8 @@ public class QuestionScreen {
 	private MainActivity mainActivity;
 	private ImageButton[] mainButtons;
 	private SearchBar searchBar;
-	private FileExplorer fileExplorer;
-
+	private TextField answers_TextField;
+	
 	public QuestionScreen(PApplet p, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] pictoPaths, String[] fileExplorerPictoPaths, PFont stdFont) {
 		this.btnSize = btnSize;
 		this.btnSizeSmall = btnSizeSmall;
@@ -39,17 +39,45 @@ public class QuestionScreen {
 		this.p = p;
 		mainActivity = (MainActivity) p;
 		mainButtons = mainActivity.getMainButtons();
-		searchBar = new SearchBar(p, p.width / 2, p.height / 2, p.width / 2, btnSizeSmall, edgeRad, margin, stdTs, textCol, textDark, lighter, textYShift, false, "Search", pictoPaths[0], stdFont, null);
-		// fileExplorer = new FileExplorer(p, p.width / 2, p.height / 2, p.width -
-		// margin * 2, 6 * btnSizeSmall + 19 * margin, stdTs, edgeRad, margin, dark,
-		// light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, textYShift,
-		// fileExplorerPictoPaths, stdFont);
+		searchBar = new SearchBar(p, p.width / 2, mainButtons[0].getY()+mainButtons[0].getH()/2+margin+btnSizeSmall/2+btnSize, p.width -btnSize*2, btnSizeSmall, edgeRad, margin, stdTs, textCol, textDark, lighter, textYShift, false, "Search", pictoPaths[0], stdFont, null);	
+		
+	    String s = "";
+
+        String[] lines = p.loadStrings("textSources/questionsScreen_Answers.txt");
+        for (int i = 0; i < lines.length; i++) {
+            String[] m1 = p.match(lines[i], "////");
+            String[] splitStr=null;
+            if (m1 == null) {
+                if (lines[i].length() > 0) {
+                    splitStr = p.split(lines[i],"\\n");
+                    p.println(splitStr);
+                    if(splitStr.length>1) {
+                        Boolean allEmpty=true;
+                        for(int i2=0;i2<splitStr.length;i2++) {
+                            if(splitStr[i2].length()>0) {
+                                p.println(i);
+                                allEmpty=false;
+                            s+=splitStr[i2]+"\n";
+                            }
+                        }
+                        if(allEmpty) {
+                            s+="\n";
+                        }
+                    }else {
+                        s += lines[i];
+                    }
+                }
+            }
+        }	
+		
+        answers_TextField = new TextField(p, p.width / 2,searchBar.getY()+(p.height-(searchBar.getY()+searchBar.getH()/2+margin))/2,searchBar.getW(),p.height-(searchBar.getY()+searchBar.getH()/2+margin)-btnSize, stdTs,margin,btnSizeSmall,edgeRad,dark,light,lighter,textDark, textYShift, true, false,true,s, stdFont, null);
 
 	}
 
 	public void render() {
 		mainActivity.renderMainButtons();
 		searchBar.render();
+		answers_TextField.render();
 	}
 
 	public void onMousePressed() {
@@ -59,6 +87,7 @@ public class QuestionScreen {
 			}
 		}
 		searchBar.onMousePressed();
+		answers_TextField.onMousePressed();
 	}
 
 	public void onMouseReleased() {
@@ -68,6 +97,7 @@ public class QuestionScreen {
 			}
 		}
 		searchBar.onMouseReleased();
+		answers_TextField.onMouseReleased();
 	}
 
 	public void onKeyPressed(char key) {
