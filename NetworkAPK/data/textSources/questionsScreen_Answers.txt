@@ -1,4 +1,4 @@
-Home ScreenSTART: \n
+Home ScreenSTARTMid: \n
 bliblablu ajskldfjasd. \n
 \n
 Node Editor: \n
@@ -19,7 +19,7 @@ Node Editor: \n
 alkdsjafjakdjfkadfj\n
 \n
 Settings Screen: \n
-askdjfaskjfkasdjfaksdjfakf\n
+askdjfaskjfkasdjfaksdjfakfMID\n
 \n
 Spread Blender Screen: \n
 aksdfjakdfjaklfjaskdfjakdfjakdfj\n

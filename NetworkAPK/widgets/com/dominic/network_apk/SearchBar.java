@@ -13,8 +13,8 @@ public class SearchBar<T> implements Widgets {
     private PFont stdFont;
     private PApplet p;
     private T parent;
-    public EditText searchBar_et;
-    public ImageButton search_btn;
+    private EditText searchBar_et;
+    private ImageButton search_btn;
 
     public SearchBar(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int textCol, int textDark, int bgCol, float textYShift, Boolean isParented, String hint, String pictoPath, PFont stdFont, T parent) {
         this.p = p;
@@ -115,5 +115,12 @@ public class SearchBar<T> implements Widgets {
             return false;
         }
     }
-
+    
+    public ImageButton getButton() {
+        return search_btn;
+    }
+    
+    public EditText getEditText() {
+        return searchBar_et;
+    }
 }

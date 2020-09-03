@@ -89,7 +89,7 @@ public class FileExplorer {
 		rename_et = new EditText(p, margin * 2 + editBarW / 4 - btnSizeSmall + margin * 2, editBarY, editBarW / 2 - margin * 3 - btnSizeSmall, btnSizeSmall, stdTs, lighter, textCol, edgeRad, margin, textYShift, true, false, "Rename Selected Folder", fChars, stdFont, null);
 		rename_btn = new ImageButton(p, editBarX - btnSizeSmall / 2 - margin, editBarY, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, lighter, PictoPaths[6], "Rename Selected Folder", null);
 
-		searching_sprAnim = new SpriteAnimation(p, searchBar.search_btn.getX(), editBarY, btnSizeSmall - margin, btnSizeSmall - margin, 0, 129, textCol, false, "imgs/sprites/loadingGears/", null);
+		searching_sprAnim = new SpriteAnimation(p, searchBar.getButton().getX(), editBarY, btnSizeSmall - margin, btnSizeSmall - margin, 0, 129, textCol, false, "imgs/sprites/loadingGears/", null);
 	}
 
 	public void render() {
@@ -233,8 +233,8 @@ public class FileExplorer {
 
 		// search button -------------------------------------------------
 
-		if (searchBar.search_btn.getIsClicked() == true) {
-			if (searchBar.searchBar_et.getStrList().get(0).length() > 0) {
+		if (searchBar.getButton().getIsClicked() == true) {
+			if (searchBar.getEditText().getStrList().get(0).length() > 0) {
 				for (int i = allDirsAndFiles.size() - 1; i >= 0; i--) {
 					allDirsAndFiles.remove(i);
 				}
@@ -256,7 +256,7 @@ public class FileExplorer {
 				listFilesThread.start();
 
 			}
-			searchBar.search_btn.setIsClicked(false);
+			searchBar.getButton().setIsClicked(false);
 		}
 
 		if (finishedListing == true) {
@@ -270,7 +270,7 @@ public class FileExplorer {
 				@Override
 				public void run() {
 					isSearching = true;
-					searchedStr = searchForString(searchBar.searchBar_et.getStrList().get(0), allDirsAndFilesStr);
+					searchedStr = searchForString(searchBar.getEditText().getStrList().get(0), allDirsAndFilesStr);
 				}
 			});
 			searchInFilesThread.start();
@@ -291,7 +291,7 @@ public class FileExplorer {
 			// p.println("searching");
 			p.stroke(lighter);
 			p.fill(lighter);
-			p.rect(searchBar.search_btn.getX(), searchBar.search_btn.getY(), searchBar.search_btn.getW(), searchBar.search_btn.getH(), edgeRad);
+			p.rect(searchBar.getButton().getX(), searchBar.getButton().getY(), searchBar.getButton().getW(), searchBar.getButton().getH(), edgeRad);
 			searching_sprAnim.render();
 		}
 		// search button -------------------------------------------------

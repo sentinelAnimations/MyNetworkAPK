@@ -2,6 +2,12 @@ package com.dominic.network_apk;
 
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
@@ -10,16 +16,18 @@ public class ThemeScreen {
     private int btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark;
     private float textYShift;
     private Boolean renderFileExplorer = false;
-    private String[] nodePaths1, nodePaths2, pcPaths,colorPickerTitles= {"Dark","Light","Lighter","Lightest","Borders","Text","Text dark"};
+    private String mySavePath;
+    private String[] nodePaths1, nodePaths2, pcPaths, colorPickerTitles = { "Dark", "Light", "Lighter", "Lightest", "Borders", "Text", "Text dark" };
     private PFont stdFont;
     private PImage screenshot;
     private PApplet p;
     private MainActivity mainActivity;
     private ImageButton[] mainButtons;
     private ColorPicker[] colorPickers = new ColorPicker[7];
-    private ImageButton restart_ImageButton;
+    private ImageButton[] imageButons = new ImageButton[3];
+    private JsonHelper jHelper;
 
-    public ThemeScreen(PApplet p, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] pictoPaths, PFont stdFont) {
+    public ThemeScreen(PApplet p, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String mySavePath, String[] pictoPaths, PFont stdFont) {
         this.btnSize = btnSize;
         this.btnSizeSmall = btnSizeSmall;
         this.margin = margin;
@@ -34,6 +42,7 @@ public class ThemeScreen {
         this.textCol = textCol;
         this.textDark = textDark;
         this.textYShift = textYShift;
+        this.mySavePath = mySavePath;
         this.nodePaths1 = nodePaths1;
         this.nodePaths2 = nodePaths2;
         this.stdFont = stdFont;
@@ -41,43 +50,154 @@ public class ThemeScreen {
         mainActivity = (MainActivity) p;
         mainButtons = mainActivity.getMainButtons();
         for (int i = 0; i < colorPickers.length; i++) {
-            colorPickers[i] = new ColorPicker(p,p.width/(colorPickers.length+1)+p.width / (colorPickers.length+1) * i, p.height / 2, btnSize, btnSizeSmall, (int) (btnSize * 1.2f), dark, stdTs, edgeRad, margin, btnSize, btnSizeSmall, light, lighter, lightest, textCol, textYShift, false, false, true, pictoPaths[0], stdFont, null); // isParented,renderBg,stayOpen
+            colorPickers[i] = new ColorPicker(p, p.width / (colorPickers.length + 1) + p.width / (colorPickers.length + 1) * i, p.height / 2, btnSize, btnSizeSmall, (int) (btnSize * 1.2f), dark, stdTs, edgeRad, margin, btnSize, btnSizeSmall, light, lighter, lightest, textCol, textYShift, false, false, true, pictoPaths[0], stdFont, null); // isParented,renderBg,stayOpen
         }
-        restart_ImageButton= new ImageButton(p, p.width -margin -btnSizeSmall/2,p.height-margin-btnSizeSmall/2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[1],"Restart applikation", null);
+        
+        String[] imageButtonsHoverText= {"Set colors as theme","Set bright theme","Set dark theme"};
+        for (int i = 0; i < imageButons.length; i++) {
+            imageButons[i] = new ImageButton(p, p.width - margin - btnSizeSmall / 2-btnSizeSmall*i-margin*i, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[1],imageButtonsHoverText[i], null);
+        }
+        
+        jHelper = new JsonHelper(p);
 
+        setData();
     }
 
     public void render() {
         mainActivity.renderMainButtons();
         for (int i = 0; i < colorPickers.length; i++) {
-        colorPickers[i].render();
-        p.fill(textCol);
-        p.textAlign(p.CENTER,p.CENTER);
-        p.textFont(stdFont);
-        p.textSize(stdTs);
-        p.text(colorPickerTitles[i],colorPickers[i].getX(),colorPickers[i].getColorBarY()+colorPickers[i].getSlider().getH()+margin+stdTs/2);
+            colorPickers[i].render();
+            p.fill(textCol);
+            p.textAlign(p.CENTER, p.CENTER);
+            p.textFont(stdFont);
+            p.textSize(stdTs);
+            p.text(colorPickerTitles[i], colorPickers[i].getX(), colorPickers[i].getColorBarY() + colorPickers[i].getSlider().getH() + margin + stdTs / 2);
         }
-        restart_ImageButton.render();
+
+        for (int i = imageButons.length-1; i >=0; i--) {
+            imageButons[i].render();
+            if (imageButons[i].getIsClicked()) {
+
+                switch (i) {
+                case 0:
+                    if (checkForContrast() == true) {
+                        saveData();
+                        p.println("enoughContrast");
+                        mainActivity.initializeLoadingScreen();
+                    } else {
+                    }
+                    break;
+                case 1:
+                    setBrightTheme();
+                case 2:
+                    setDarkTheme();
+                }
+
+                imageButons[i].setIsClicked(false);
+            }
+        }
+
+    }
+    
+    private void setBrightTheme() {
         
-        if(restart_ImageButton.getIsClicked()) {
-            
-            restart_ImageButton.setIsClicked(false);
-        }
+    }
+    
+    private void setDarkTheme() {
         
     }
 
+    private Boolean checkForContrast() {
+        Boolean isEnoughContrast = true;
+        int minContrast = 50;
+        for (int i = 0; i < colorPickers.length; i++) {
+            if (isEnoughContrast == false) {
+                break;
+            }
+            for (int i2 = 0; i2 < colorPickers.length; i2++) {
+                if (i != i2) {
+                    Boolean redContrastToLow = false, greenContrastToLow = false, blueContrastToLow = false;
+                    int col1 = colorPickers[i].getPickedCol();
+                    int col2 = colorPickers[i2].getPickedCol();
+                    if (p.abs(p.red(col1) - p.red(col2)) < minContrast) {
+                        redContrastToLow = true;
+                    }
+                    if (p.abs(p.green(col1) - p.green(col2)) < minContrast) {
+                        greenContrastToLow = true;
+                    }
+                    if (p.abs(p.blue(col1) - p.blue(col2)) < minContrast) {
+                        blueContrastToLow = true;
+                    }
+                    if (redContrastToLow && greenContrastToLow && blueContrastToLow) {
+                        isEnoughContrast = false;
+                        break;
+                    }
+                    p.println(redContrastToLow, greenContrastToLow, blueContrastToLow, i, i2);
+                }
+            }
+        }
+        return isEnoughContrast;
+    }
+
+    private void saveData() {
+
+        jHelper.clearArray();
+
+        for (int i = 0; i < colorPickers.length; i++) {
+            JSONObject colorPickerObject = new JSONObject();
+            JSONObject colorPickerDetails = new JSONObject();
+
+            ColorPicker cp = colorPickers[i];
+            colorPickerDetails.put("index", i);
+            colorPickerDetails.put("pickedCol", cp.getPickedCol());
+            colorPickerDetails.put("brightness", cp.getBrightness());
+            colorPickerDetails.put("pickerPosX", cp.getMarkerPos().x);
+            colorPickerDetails.put("pickerPosY", cp.getMarkerPos().y);
+
+            colorPickerObject.put("colorPicker" + i, colorPickerDetails);
+            jHelper.appendObjectToArray(colorPickerObject);
+        }
+
+        jHelper.writeData(mySavePath);
+    }
+
+    private void setData() {
+        JSONArray loadedThemeScreenData = new JSONArray();
+        loadedThemeScreenData = jHelper.getData(mySavePath);
+        p.println(jHelper.getIsFlawlessLoaded(), "---");
+        if (loadedThemeScreenData.isEmpty()) {
+        } else if (jHelper.getIsFlawlessLoaded() == true) {
+            for (int i = 0; i < colorPickers.length; i++) {
+                JsonObject jsonObject = new JsonParser().parse(loadedThemeScreenData.get(i).toString()).getAsJsonObject();
+                JsonObject jsonSubObject = jsonObject.getAsJsonObject("colorPicker" + i);
+                p.println(jsonSubObject);
+
+                int pickedCol = jsonSubObject.get("pickedCol").getAsInt();
+                int brightness = jsonSubObject.get("brightness").getAsInt();
+                int pickerPosX = jsonSubObject.get("pickerPosX").getAsInt();
+                int pickerPosY = jsonSubObject.get("pickerPosY").getAsInt();
+
+                ColorPicker cp = colorPickers[i];
+                cp.setMarkerPos(pickerPosX, pickerPosY);
+                cp.setBrightness(brightness);
+            }
+        }
+    }
+
     public void onMousePressed() {
-        
+
         for (int i = 0; i < mainButtons.length; i++) {
             if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
                 mainButtons[i].onMousePressed();
             }
         }
-        
+
         for (int i = 0; i < colorPickers.length; i++) {
-        colorPickers[i].onMousePressed();
+            colorPickers[i].onMousePressed();
         }
-        restart_ImageButton.onMousePressed();
+        for (int i = 0; i < imageButons.length; i++) {
+            imageButons[i].onMousePressed();
+        }
     }
 
     public void onMouseReleased() {
@@ -87,9 +207,11 @@ public class ThemeScreen {
             }
         }
         for (int i = 0; i < colorPickers.length; i++) {
-        colorPickers[i].onMoueseReleased();
+            colorPickers[i].onMoueseReleased();
         }
-        restart_ImageButton.onMouseReleased();
+        for (int i = 0; i < imageButons.length; i++) {
+            imageButons[i].onMouseReleased();
+        }
     }
 
     public void onKeyReleased(char k) {

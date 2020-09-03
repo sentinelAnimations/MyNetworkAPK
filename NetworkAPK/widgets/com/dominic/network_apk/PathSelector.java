@@ -88,10 +88,10 @@ public class PathSelector<T> implements Widgets {
 			p.image(screenshot, p.width / 2, p.height / 2);
 			fileExplorer.render();
 
-			for (int i = 0; i < fileExplorer.searchBar.searchBar_et.getToastList().size(); i++) {
-				MakeToast m = (MakeToast) fileExplorer.searchBar.searchBar_et.getToastList().get(i);
+			for (int i = 0; i < fileExplorer.searchBar.getEditText().getToastList().size(); i++) {
+				MakeToast m = (MakeToast) fileExplorer.searchBar.getEditText().getToastList().get(i);
 				if (m.remove) {
-					fileExplorer.searchBar.searchBar_et.removeToast(i);
+					fileExplorer.searchBar.getEditText().removeToast(i);
 				} else {
 					m.render();
 				}

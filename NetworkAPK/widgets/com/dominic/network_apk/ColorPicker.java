@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
+import processing.core.PVector;
 
 public class ColorPicker<T> implements Widgets {
     private int x, y, xShift, yShift, markerX, markerY, w, h, r, dark, stdTs, edgeRad, margin, btnSize, btnSizeSmall, bgCol, lighter, lightest, textCol, pickedCol, doOnce = 0, borderW;
@@ -57,7 +58,7 @@ public class ColorPicker<T> implements Widgets {
 
         picto = new PictogramImage(p, xShift, yShift, btnSizeSmall - margin, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPath, "", parent);
 
-        brightness_slider = new Slider(p, 0, margin + r + btnSizeSmall / 2, r * 2, btnSizeSmall / 4, btnSizeSmall - margin, stdTs, edgeRad, margin, 0, 100, 0, dark, bgC, lightest, textYShift, true, true, false,true, stdFont, this);
+        brightness_slider = new Slider(p, 0, margin + r + btnSizeSmall / 2, r * 2, btnSizeSmall / 4, btnSizeSmall - margin, stdTs, edgeRad, margin, 0, 100, 0, dark, bgC, lightest, textYShift, true, true, false, true, stdFont, this);
         brightness_slider.render();
 
     }
@@ -103,7 +104,7 @@ public class ColorPicker<T> implements Widgets {
                 p.fill(bgCol);
                 p.rect(x, y + btnSizeSmall, r * 2 + margin * 2, r * 2 + margin * 3 + btnSizeSmall * 1.5f, edgeRad);
             }
-
+            p.noTint();
             p.image(rgbCircle, x, y);
             p.strokeWeight(3);
             p.stroke(dark);
@@ -129,8 +130,15 @@ public class ColorPicker<T> implements Widgets {
 
             if (brightness_slider.getIsOnDrag()) {
                 brightness = brightness_slider.getVal();
+                int d = btnSizeSmall - margin;
+                // brightness_slider.setSliderVal((int)brightness);
+                if (brightness >= 100) {
+                    markerX = x;
+                    markerY = y;
+                }
             }
         }
+
     }
 
     private PImage calcRGBCircle() {
@@ -154,7 +162,9 @@ public class ColorPicker<T> implements Widgets {
                     // 2 + 255 * brightness, p.blue(col) * 2 + 255 * brightness);
                     int convertetCol = p.color(p.red(col) - (p.red(col) / 100.0f * brightness), p.green(col) - (p.green(col) / 100.0f * brightness), p.blue(col) - (p.blue(col) / 100.0f * brightness));
 
-                    img.pixels[i] = convertetCol;
+                    // img.pixels[i] = convertetCol;
+                    img.pixels[i] = col;
+
                 }
             } else {
                 img.pixels[i] = p.color(0, 0);
@@ -322,6 +332,10 @@ public class ColorPicker<T> implements Widgets {
         }
     }
 
+    public int getPickedCol() {
+        return pickedCol;
+    }
+
     public Slider getSlider() {
         return brightness_slider;
     }
@@ -330,12 +344,21 @@ public class ColorPicker<T> implements Widgets {
         return brightness_slider.getY() + brightness_slider.getD();
     }
 
+    public PVector getMarkerPos() {
+        return new PVector(markerX, markerY);
+    }
+
     public float getBrightness() {
         return brightness;
     }
 
-    public void setBrightness(float val) {
-        brightness = val;
+    public void setBrightness(int val) {
+        brightness_slider.setSliderVal(val);
+    }
+
+    public void setMarkerPos(int mx, int my) {
+        markerX = mx;
+        markerY = my;
     }
 
 }

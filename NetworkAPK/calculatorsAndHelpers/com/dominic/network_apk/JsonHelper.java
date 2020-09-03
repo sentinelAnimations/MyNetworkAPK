@@ -48,7 +48,7 @@ public class JsonHelper {
 		}
 	}
 
-	private void readData(String path) {
+	private void readData(String path) throws Exception {
 		JSONParser jsonParser = new JSONParser();
 		isFlawlessLoaded = false;
 		try (FileReader reader = new FileReader(path)) {
@@ -69,7 +69,12 @@ public class JsonHelper {
 	}
 
 	public JSONArray getData(String path) {
-		readData(path);
+		try {
+            readData(path);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 		return loadedData;
 	}
 
