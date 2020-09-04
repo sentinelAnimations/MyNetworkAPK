@@ -14,6 +14,7 @@ public class CounterArea<T> implements Widgets {
 	private String[] pictoPaths;
 	private PFont stdFont;
 	private PApplet p;
+	private HoverText hoverText;
 	private T parent;
 	private ImageButton add_btn, subtract_btn;
 
@@ -40,6 +41,7 @@ public class CounterArea<T> implements Widgets {
 		yShift = y;
 		count = startVal;
 		initializePictoImage();
+		hoverText=new HoverText(p, stdTs, margin, edgeRad,150, textCol, textYShift, infoText, stdFont, this);
 	}
 
 	public void render() {
@@ -58,7 +60,8 @@ public class CounterArea<T> implements Widgets {
 		p.text(count, x, y - stdTs * textYShift);
 		add_btn.render();
 		subtract_btn.render();
-		onHover();
+		//onHover();
+		hoverText.render();
 
 		if (add_btn.getIsClicked() == true) {
 			count++;
@@ -95,52 +98,6 @@ public class CounterArea<T> implements Widgets {
 			}
 			checkForBorder();
 			valueHasChanged = true;
-		}
-	}
-
-	private void onHover() {
-		Boolean show = false;
-		if (infoText.length() > 0) {
-			if (mouseIsInArea()) {
-				if (isHovering) {
-					hoverTime++;
-				}
-				isHovering = true;
-			} else {
-				hoverTime = 0;
-				isHovering = false;
-			}
-			if (hoverTime > 72) {
-				int tw = (int) p.textWidth(infoText) + margin * 2;
-				int mx, my;
-				if (p.mouseX + tw < p.width) {
-					p.textAlign(PConstants.RIGHT, PConstants.CENTER);
-				} else {
-					tw *= -1;
-					p.textAlign(PConstants.LEFT, PConstants.CENTER);
-				}
-				mx = p.mouseX;
-				my = p.mouseY;
-				if (p.mouseY < stdTs) {
-					my = stdTs;
-				}
-				if (p.mouseY > p.height - stdTs * 2) {
-					my = p.height - stdTs * 2;
-				}
-
-				if (hoverTime > 120) {
-					show = false;
-				} else {
-					show = true;
-				}
-				if (show) {
-					p.fill(0, 200);
-					p.noStroke();
-					p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
-					p.fill(textCol);
-					p.text(infoText, mx + tw, my + stdTs - stdTs * textYShift);
-				}
-			}
 		}
 	}
 

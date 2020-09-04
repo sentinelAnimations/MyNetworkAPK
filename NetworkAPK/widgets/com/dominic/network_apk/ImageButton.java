@@ -13,6 +13,8 @@ public class ImageButton<T> implements Widgets {
 	private Boolean isClicked = false, isPressed = false, isParented, useBg, isHovering = false;
 	private PApplet p;
 	private PImage picto;
+	private HoverText hoverText;
+	private MainActivity mainActivity;
 	private T parent;
 
 	public ImageButton(PApplet p, int x, int y, int w, int h, int stdTs, int margin, int edgeRad, int shortcut, float textYShift, Boolean useBg, Boolean isParented, int col, int bgCol, String imgPath, String infoText, T parent) {
@@ -35,7 +37,10 @@ public class ImageButton<T> implements Widgets {
 		this.parent = parent;
 		xShift = x;
 		yShift = y;
+		mainActivity=(MainActivity)p;
 		loadPicto();
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, col, textYShift, infoText, mainActivity.getStdFont(), this);
+
 	}
 
 	public void render() {
@@ -55,8 +60,7 @@ public class ImageButton<T> implements Widgets {
 		}
 		p.tint(col);
 		p.image(picto, x, y);
-
-		onHover();
+		hoverText.render();
 	}
 
 	public void onMousePressed() {
@@ -94,56 +98,7 @@ public class ImageButton<T> implements Widgets {
 			}
 		}
 	}
-
-	private void onHover() {
-		Boolean show = false;
-		p.textSize(stdTs);
-
-		if (infoText.length() > 0) {
-			if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
-				if (isHovering) {
-					hoverTime++;
-				}
-				isHovering = true;
-			} else {
-				hoverTime = 0;
-				isHovering = false;
-			} 
-			if (hoverTime > 72) {
-				int tw = (int) p.textWidth(infoText) + margin * 2;
-				int mx, my;
-				if (p.mouseX + tw < p.width) {
-					p.textAlign(PConstants.RIGHT, PConstants.CENTER);
-				} else {
-					tw *= -1;
-					p.textAlign(PConstants.LEFT, PConstants.CENTER);
-				}
-				mx = p.mouseX;
-				my = p.mouseY;
-				if (p.mouseY < stdTs) {
-					my = stdTs;
-				}
-				if (p.mouseY > p.height - stdTs * 2) {
-					my = p.height - stdTs * 2;
-				}
-
-				if (hoverTime > 120) {
-					show = false;
-				} else {
-					show = true;
-				}
-				if (show) {
-					p.fill(0, 200);
-					p.noStroke();
-					p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
-					p.fill(col);
-					p.textSize(stdTs);
-					p.text(infoText, mx + tw, my + stdTs - stdTs * textYShift);
-				}
-			}
-		}
-	}
-
+	
 	private void loadPicto() {
 		picto = p.loadImage(imgPath);
 		int dim = 0;

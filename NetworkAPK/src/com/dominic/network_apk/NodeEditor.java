@@ -488,7 +488,12 @@ public class NodeEditor<T> {
 					nodes.add(new Node(p, xp, yp, nodeW, nh, nodeType, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, light, textCol, textDark, lighter, lightest, border, textYShift, nodeId, UUID.randomUUID().toString(), nodePaths2, stdFont, this));
 					Node<T> n = nodes.get(nodes.size() - 1);
 					n.setIsGrabbed(false);
+					if(switchName_editText.length()>0) {
 					n.getSwitchNameEditText().setText(switchName_editText);
+					}else {
+		                   n.getSwitchNameEditText().setText("No name");
+
+					}
 					n.getSwitchPort_CounterArea().setCount(switchPort_CounterArea);
 					n.updateSwitchConnectorPoints(true, connectorPointIds);
 
@@ -609,6 +614,16 @@ public class NodeEditor<T> {
 		}
 		
 		if (key == 'm' || key == 'M') {
+		    
+		    Boolean noEditTextAcitve=true;
+		    for(int i=0;i<nodes.size();i++) {
+	              Node n = nodes.get(i);
+	              if(n.getType()==3) {
+	                     n.getSwitchNameEditText().setIsActive(false);
+	              }
+		    }
+		    
+		    if(noEditTextAcitve) {
 			panViewStartX = p.mouseX;
 			panViewStartY = p.mouseY;
 			allNodePosOnMousePressed.clear();
@@ -618,6 +633,7 @@ public class NodeEditor<T> {
 			}
 			mouseIsPressed = true;
 			middleMouseWasPressed = true;
+		}
 		} else {
 			middleMouseWasPressed = false;
 			mouseIsPressed = false;

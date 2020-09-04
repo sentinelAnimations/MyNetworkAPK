@@ -1,0 +1,65 @@
+[
+  {
+    "colorPicker0": {
+      "brightness": 0.0,
+      "index": 0,
+      "pickedCol": -1,
+      "pickerPosX": 131.0,
+      "pickerPosY": 225.0
+    }
+  },
+  {
+    "colorPicker1": {
+      "brightness": 15.000001,
+      "index": 1,
+      "pickedCol": -2565928,
+      "pickerPosX": 262.0,
+      "pickerPosY": 225.0
+    }
+  },
+  {
+    "colorPicker2": {
+      "brightness": 24.0,
+      "index": 2,
+      "pickedCol": -4079167,
+      "pickerPosX": 393.0,
+      "pickerPosY": 225.0
+    }
+  },
+  {
+    "colorPicker3": {
+      "brightness": 37.0,
+      "index": 3,
+      "pickedCol": -9264992,
+      "pickerPosX": 507.0,
+      "pickerPosY": 227.0
+    }
+  },
+  {
+    "colorPicker4": {
+      "brightness": 0.0,
+      "index": 4,
+      "pickedCol": -24553,
+      "pickerPosX": 701.0,
+      "pickerPosY": 254.0
+    }
+  },
+  {
+    "colorPicker5": {
+      "brightness": 58.0,
+      "index": 5,
+      "pickedCol": -13472917,
+      "pickerPosX": 755.0,
+      "pickerPosY": 220.0
+    }
+  },
+  {
+    "colorPicker6": {
+      "brightness": 52.0,
+      "index": 6,
+      "pickedCol": -8750984,
+      "pickerPosX": 918.0,
+      "pickerPosY": 225.0
+    }
+  }
+]

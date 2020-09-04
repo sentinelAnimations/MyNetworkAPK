@@ -23,6 +23,7 @@ public class PathSelector<T> implements Widgets {
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 	private ImageButton openFileExplorer_btn;
 	private FileExplorer fileExplorer;
+	private HoverText hoverText;
 
 	public PathSelector(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int btnSizeSmall, int border, int bgCol, int textCol, int dark, int light, int lighter, int textDark, float textYShift, Boolean selectFolder, Boolean isParented, String hint, String imgPath, String[] fileExplorerPictoPaths, PFont stdFont, T parent) {
 		this.p = p;
@@ -48,9 +49,12 @@ public class PathSelector<T> implements Widgets {
 		btnSize = h - margin;
 		openFileExplorer_btn = new ImageButton(p, x - w / 2 + margin + btnSize / 2, yShift, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, false, isParented, textCol, textCol, imgPath, "open file explorer", parent);
 		textStartX = x - w / 2 + margin + btnSize;
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, "", stdFont, this);
 		calcDisplayText();
 		fileExplorer = new FileExplorer(p, p.width / 2, p.height / 2, p.width - margin * 2, 6 * btnSizeSmall + 19 * margin, stdTs, edgeRad, margin, dark, light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, textYShift, fileExplorerPictoPaths, stdFont);
+		
 
+		
 	}
 
 	public void render() {
@@ -72,19 +76,20 @@ public class PathSelector<T> implements Widgets {
 				p.fill(textCol);
 				p.text(displayText, x - w / 2 + margin + btnSize, y - stdTs * textYShift);
 			}
-			onHover();
+			hoverText.render();
 		}
 
 		// handle fileExplorer ------------------------------
 		if (openFileExplorer_btn.getIsClicked() == true) {
 
 			if (fileExplorerIsOpen == false) {
-				p.saveFrame("data\\imgs\\screenshots\\homeScreen.png");
-				screenshot = p.loadImage("data\\imgs\\screenshots\\homeScreen.png");
+				p.saveFrame("data\\imgs\\screenshots\\fileExplorer.png");
+				screenshot = p.loadImage("data\\imgs\\screenshots\\fileExplorer.png");
 				screenshot = new ImageBlurHelper(p).blur(screenshot, 3);
 				fileExplorerIsOpen = true;
 				renderPathSelector = false;
 			}
+			p.noTint();
 			p.image(screenshot, p.width / 2, p.height / 2);
 			fileExplorer.render();
 
@@ -168,48 +173,7 @@ public class PathSelector<T> implements Widgets {
 				displayText = displayText.substring(0, displayText.length() - 1);
 			}
 		}
-	}
-
-	private void onHover() {
-		p.textFont(stdFont);
-		p.textSize(stdTs);
-		if (t.length() > 0 && p.textWidth(t.replace("\\\\", "\\"))>p.textWidth(displayText.replace("\\\\", "\\"))) {
-			if (p.mouseX > x - w / 2 + h + margin && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
-				if (isHovering) {
-					hoverTime++;
-				}
-				isHovering = true;
-			} else {
-				hoverTime = 0;
-				isHovering = false;
-			}
-			if (hoverTime > 72) {
-				int tw = (int) p.textWidth(t) + margin * 2;
-				int mx, my;
-				if (p.mouseX + tw < p.width) {
-					p.textAlign(PConstants.RIGHT, PConstants.CENTER);
-				} else {
-					tw *= -1;
-					p.textAlign(PConstants.LEFT, PConstants.CENTER);
-				}
-				mx = p.mouseX;
-				my = p.mouseY;
-				if (p.mouseY < stdTs) {
-					my = stdTs;
-				}
-				if (p.mouseY > p.height - stdTs * 2) {
-					my = p.height - stdTs * 2;
-				}
-
-				p.fill(0, 200);
-				p.noStroke();
-				p.rect(mx + tw / 2, my + stdTs, PApplet.abs(tw) + margin * 2, stdTs * 2, edgeRad);
-				p.fill(textCol);
-				p.textFont(stdFont);
-				p.textSize(stdTs);
-				p.text(t, mx + tw, my + stdTs - stdTs * textYShift);
-			}
-		}
+		hoverText.setInfoText(t);
 	}
 
 	public void onMousePressed(int mouseButton) {
@@ -279,6 +243,13 @@ public class PathSelector<T> implements Widgets {
 		} else {
 			return false;
 		}
+	}
+	
+	public int getW() {
+	    return w;
+	}
+	public int getH() {
+	    return h;
 	}
 
 	// whether PathSelector should be used to select Folder or File

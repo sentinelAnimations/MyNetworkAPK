@@ -656,6 +656,10 @@ public class MainActivity extends PApplet {
     public int getMode() {
         return mode;
     }
+    
+    public PFont getStdFont() {
+        return stdFont;
+    }
 
     public PVector getStdScreenDimensions() {
         return stdScreenDimension;
@@ -676,6 +680,7 @@ public class MainActivity extends PApplet {
     public NodeEditor getNodeEditor() {
         return nodeEditor;
     }
+    
 
     public void setMode(int setMode) {
         mode = setMode;

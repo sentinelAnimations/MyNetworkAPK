@@ -80,12 +80,8 @@ public class ThemeScreen {
 
                 switch (i) {
                 case 0:
-                    if (checkForContrast() == true) {
                         saveData();
-                        p.println("enoughContrast");
                         mainActivity.initializeLoadingScreen();
-                    } else {
-                    }
                     break;
                 case 1:
                     setBrightTheme();
@@ -132,7 +128,7 @@ public class ThemeScreen {
                         isEnoughContrast = false;
                         break;
                     }
-                    p.println(redContrastToLow, greenContrastToLow, blueContrastToLow, i, i2);
+
                 }
             }
         }
@@ -164,13 +160,11 @@ public class ThemeScreen {
     private void setData() {
         JSONArray loadedThemeScreenData = new JSONArray();
         loadedThemeScreenData = jHelper.getData(mySavePath);
-        p.println(jHelper.getIsFlawlessLoaded(), "---");
         if (loadedThemeScreenData.isEmpty()) {
         } else if (jHelper.getIsFlawlessLoaded() == true) {
             for (int i = 0; i < colorPickers.length; i++) {
                 JsonObject jsonObject = new JsonParser().parse(loadedThemeScreenData.get(i).toString()).getAsJsonObject();
                 JsonObject jsonSubObject = jsonObject.getAsJsonObject("colorPicker" + i);
-                p.println(jsonSubObject);
 
                 int pickedCol = jsonSubObject.get("pickedCol").getAsInt();
                 int brightness = jsonSubObject.get("brightness").getAsInt();

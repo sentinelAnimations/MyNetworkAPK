@@ -105,6 +105,23 @@ public class SettingsScreen {
 				doOnce++;
 			}
 		}
+	      //render edittext before path selectors
+		if(mode==0) {
+	          personalData_et.render();
+		}
+		//render edittext before path selectors
+		
+		//render pathselector --------------------------------------
+		  for (int i = pathSelectors.length - 1; i >= 0; i--) {
+	            PathSelector ps = pathSelectors[i];
+	            ps.render();
+	            if (ps.getOpenFileExplorer_btn().getIsClicked()) {
+	                mode = 1;
+	            }
+	        }
+	      //render pathselector --------------------------------------
+
+		
 		if (mode == 0) { // normal mode
 			if (mainActivity.getLoadingScreen().firstSetup == false) {
 				mainActivity.renderMainButtons();
@@ -114,7 +131,6 @@ public class SettingsScreen {
 				setting_pictos[i].render();
 			}
 
-			personalData_et.render();
 			saveSettings_btn.render();
 			masterOrSlave_dropdown.render();
 
@@ -164,14 +180,6 @@ public class SettingsScreen {
 			}
 			// handle save button ------------------------------------
 
-		}
-
-		for (int i = pathSelectors.length - 1; i >= 0; i--) {
-			PathSelector ps = pathSelectors[i];
-			ps.render();
-			if (ps.getOpenFileExplorer_btn().getIsClicked()) {
-				mode = 1;
-			}
 		}
 
 	}
