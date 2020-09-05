@@ -1,7 +1,7 @@
 [
   {
     "Node0": {
-      "posX": 463,
+      "posX": 464,
       "connectorPointIsConnectedArray": [
         true,
         false,
@@ -10,7 +10,7 @@
         true,
         false
       ],
-      "posY": 153,
+      "posY": 141,
       "connectorPointIds": [
         "5f70d0d1-2c2e-4ddf-9e3f-356dad8b7807",
         "09377fd0-a6bb-4172-8077-3ab8e493eef1",
@@ -30,13 +30,13 @@
       "nodeType": 3,
       "switchPort_CounterArea": 6,
       "nodeId": "9c82b954-30f1-4e94-951e-14619f7272fa",
-      "switchName_editText": "Name"
+      "switchName_editText": ""
     }
   },
   {
     "Node1": {
-      "posX": 240,
-      "posY": 132,
+      "posX": 241,
+      "posY": 120,
       "connectorPointId": "fbf047d0-120f-4b26-ac73-8df825f5642d",
       "useGpu_checkbox": true,
       "connectorPointConnectedId": "5f70d0d1-2c2e-4ddf-9e3f-356dad8b7807",
@@ -49,8 +49,8 @@
   },
   {
     "Node2": {
-      "posX": 235,
-      "posY": 279,
+      "posX": 236,
+      "posY": 267,
       "connectorPointId": "a6a1b8c6-3f4a-4dfb-9e23-3c43de2b73aa",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "49b79022-07be-4587-9fba-94aa0bc7a4ce",
@@ -63,7 +63,7 @@
   },
   {
     "Node3": {
-      "posX": 467,
+      "posX": 468,
       "connectorPointIsConnectedArray": [
         false,
         true,
@@ -75,7 +75,7 @@
         false,
         false
       ],
-      "posY": 347,
+      "posY": 335,
       "connectorPointIds": [
         "12b2e0c4-a1c2-4e71-82e6-a6e9fae12ea9",
         "49b79022-07be-4587-9fba-94aa0bc7a4ce",
@@ -106,7 +106,7 @@
   },
   {
     "Node4": {
-      "posX": 732,
+      "posX": 733,
       "connectorPointIsConnectedArray": [
         true,
         false,
@@ -116,7 +116,7 @@
         false,
         false
       ],
-      "posY": 218,
+      "posY": 206,
       "connectorPointIds": [
         "051a9b8e-db1b-4738-9a24-f7127d856d07",
         "6a06bb2b-f477-425e-90f9-4c8947d320a7",
@@ -143,8 +143,8 @@
   },
   {
     "Node5": {
-      "posX": 916,
-      "posY": 218,
+      "posX": 917,
+      "posY": 206,
       "connectorPointId": "564ac388-7a9b-49c5-af89-a96261a01a62",
       "connectorPointConnectedId": "9ee99add-4b1d-490e-a53a-c3b89b1d697c",
       "connectorPointIsConnected": true,
@@ -154,8 +154,8 @@
   },
   {
     "Node6": {
-      "posX": 248,
-      "posY": 418,
+      "posX": 249,
+      "posY": 406,
       "connectorPointId": "c034bac0-ba72-4924-a320-63db10c13f7d",
       "useGpu_checkbox": true,
       "connectorPointConnectedId": "feac2eb5-426c-4b90-8f49-15ae90269b5a",

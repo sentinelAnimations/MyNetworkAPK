@@ -49,7 +49,7 @@ public class LoadingScreen {
 		String s = new TxtStringLoader(p).getStringFromFile("textSources/loadingScreen_softwareDescriptions.txt");
  
         tf = new TextField(p, p.width / 8, p.height / 2,p.width / 4 - margin * 4-btnSizeSmall/2, p.height / 2, stdTs,margin,btnSizeSmall,edgeRad,dark,light,lighter,textDark, textYShift, true, false,false,s, stdFont, null);
-        loadingGearSprite = new SpriteAnimation(p, margin * 2 + btnSize / 2, p.height - p.height / 8, btnSize, btnSize, 0, 129, textDark, false, "imgs/sprites/loadingGears/", null); // endInd=129, obwohl letztes bild '0128.png' --> weil start bei '0000.png'
+        loadingGearSprite = new SpriteAnimation(p, margin * 2 + btnSize / 2, p.height - p.height / 8, btnSize, btnSize, 0, 129, textCol, false, "imgs/sprites/loadingGears/", null); // endInd=129, obwohl letztes bild '0128.png' --> weil start bei '0000.png'
         mainActivity = (MainActivity) p;
         jHelper = new JsonHelper(p);
 

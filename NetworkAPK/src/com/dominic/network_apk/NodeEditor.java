@@ -28,7 +28,7 @@ public class NodeEditor<T> {
 	private MainActivity mainActivity;
 	private JsonHelper jHelper;
 	private ImageButton[] mainButtons;
-	private ImageButton[] nodeEditorButtons = new ImageButton[4];
+	private ImageButton[] nodeEditorButtons = new ImageButton[5];
 	private ImageButton[] nodeAdderButtons = new ImageButton[5];
 	private ArrayList<Node> nodes = new ArrayList<>();
 	private ArrayList<ConnectorPoint> connectorPoints = new ArrayList<ConnectorPoint>();
@@ -67,8 +67,8 @@ public class NodeEditor<T> {
 		prevScreenX=p.width;
 		prevScreenY=p.height;
 		
-		String[] btnDescriptions = { "Delete all Nodes | shorcut: ctrl+d", "Add node | shortcut: ctrl+a", "Center nodes | shortcut: ctrl+c ", "Save | shortcut: ctrl+s"};
-		int[] shortcuts = { 4, 1, 3, 19,6 };
+		String[] btnDescriptions = { "Delete all Nodes | shorcut: ctrl+d", "Add node | shortcut: ctrl+a", "Center nodes | shortcut: ctrl+c ", "Save | shortcut: ctrl+s","Reload from file | shortcut: ctrl+r"};
+		int[] shortcuts = { 4, 1, 3, 19,18 };
 		for (int i = 0; i < nodeEditorButtons.length; i++) {
 			nodeEditorButtons[i] = new ImageButton(p, mainButtons[0].getX(), mainButtons[0].getY() + mainButtons[0].getH() + margin + btnSize * i + margin * i, btnSize, btnSize, stdTs, margin, edgeRad, shortcuts[i], textYShift, true, false, textCol, light, buttonPaths[i], btnDescriptions[i], null);
 		}
@@ -139,15 +139,16 @@ public class NodeEditor<T> {
 		mainActivity.renderMainButtons();
 
 		if (mainButtons[0].getClickCount() % 2 == 0) {
-			for (int i = 0; i < nodeEditorButtons.length; i++) {
-				nodeEditorButtons[i].render();
-			}
 
 			int rectH = p.height - (nodeEditorButtons[nodeEditorButtons.length - 1].getY() + nodeEditorButtons[nodeEditorButtons.length - 1].getH() / 2 + margin * 2);
 			int rectY = nodeEditorButtons[nodeEditorButtons.length - 1].getY() + nodeEditorButtons[nodeEditorButtons.length - 1].getH() / 2 + margin + rectH / 2;
 			p.fill(light);
 			p.stroke(light);
 			p.rect(nodeEditorButtons[nodeEditorButtons.length - 1].getX(), rectY, btnSize, rectH, edgeRad);
+			
+			for (int i = 0; i < nodeEditorButtons.length; i++) {
+				nodeEditorButtons[i].render();
+			}
 		}
 
 		if (renderNodeMenu == true) {
@@ -324,6 +325,10 @@ public class NodeEditor<T> {
 				case 3:
 					saveNodeEditor();
 					break;
+				case 4:
+					mainActivity.initializeNodeEditor();
+					break;
+					
 				}
 
 				nodeEditorButtons[i].setIsClicked(false);

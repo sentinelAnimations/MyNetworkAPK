@@ -234,9 +234,9 @@ public class TextField<T> implements Widgets {
         if (mouseIsInArea()) {
             int step = stdTs;
             if (e > 0) {
-                textScroll_slider.setSliderVal((int) textScroll_slider.getSliderShift() + step);
+                textScroll_slider.setSliderShift((int) textScroll_slider.getSliderShift() + step,false);
             } else {
-                textScroll_slider.setSliderVal((int) textScroll_slider.getSliderShift() - step);
+                textScroll_slider.setSliderShift((int) textScroll_slider.getSliderShift() - step,false);
             }
         }
     }

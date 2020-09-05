@@ -128,7 +128,7 @@ public class ColorPicker<T> implements Widgets {
             p.fill(pickedCol);
             p.rect(x, brightness_slider.getY() + brightness_slider.getD(), brightness_slider.getW(), brightness_slider.getH(), edgeRad);
 
-            if (brightness_slider.getIsOnDrag()) {
+            if (brightness_slider.getIsOnDrag() || brightness_slider.getNewValueSet()){
                 brightness = brightness_slider.getVal();
                 int d = btnSizeSmall - margin;
                 // brightness_slider.setSliderVal((int)brightness);
@@ -136,6 +136,7 @@ public class ColorPicker<T> implements Widgets {
                     markerX = x;
                     markerY = y;
                 }
+                brightness_slider.setNewValueSet(false);
             }
         }
 
@@ -353,7 +354,7 @@ public class ColorPicker<T> implements Widgets {
     }
 
     public void setBrightness(int val) {
-        brightness_slider.setSliderVal(val);
+        brightness_slider.setSliderShift(val,true);
     }
 
     public void setMarkerPos(int mx, int my) {

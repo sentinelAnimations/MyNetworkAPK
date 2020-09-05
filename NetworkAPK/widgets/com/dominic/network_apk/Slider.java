@@ -9,7 +9,7 @@ import processing.core.PImage;
 public class Slider<T> implements Widgets {
     private int x, y, sliderX, sliderY, sliderShiftX = 0, sliderShiftY = 0, xShift, yShift, startX, startY, w, h, margin, returnValBorderLow, returnValBorderHigh, startVal, d, dark, bgCol, sliderCol, stdTs, edgeRad, doOnce = 0;
     private float textYShift, startShift;
-    private Boolean isParented, isHorizontalSlider, isPressed = false, isOnDrag = false, showDefault, showOnlyHandle;
+    private Boolean isParented, isHorizontalSlider, isPressed = false, isOnDrag = false, showDefault, showOnlyHandle,newValueSet=false;
     private PFont stdFont;
     private PApplet p;
     private T parent;
@@ -202,7 +202,9 @@ public class Slider<T> implements Widgets {
     public Boolean getIsOnDrag() {
         return isOnDrag;
     }
-
+    public Boolean getNewValueSet() {
+    	return newValueSet;
+    }
     public float getVal() {
         float val, convertVal;
         if (isHorizontalSlider) {
@@ -214,14 +216,22 @@ public class Slider<T> implements Widgets {
         return val;
     }
 
-    public void setSliderVal(int val) {
-        p.println(val, "--");
-        p.println((int) p.map(val, returnValBorderLow, returnValBorderHigh, -w / 2 + d / 2, w / 2 - d / 2));
-        int calculatedShift = (int) p.map(val, returnValBorderLow, returnValBorderHigh, -w / 2 + d / 2, w / 2 - d / 2);
+    public void setSliderShift(int val,Boolean valIsInPercentage) {
+    	int calculatedShift=val;
+    	if(valIsInPercentage) {
+    	    calculatedShift = (int) p.map(val, returnValBorderLow, returnValBorderHigh, -w / 2 + d / 2, w / 2 - d / 2);
+            //p.println(val,calculatedShift);
+    	}else {
+    		calculatedShift=p.constrain(val, -w / 2 + d / 2, w / 2 - d / 2);
+    	}
         if (isHorizontalSlider) {
             sliderShiftX = calculatedShift;
         } else {
             sliderShiftY = calculatedShift;
         }
+        newValueSet=true;
+    }
+    public void setNewValueSet(Boolean state) {
+    	newValueSet=state;
     }
 }

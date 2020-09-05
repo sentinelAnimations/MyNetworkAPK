@@ -151,7 +151,6 @@ public class MainActivity extends PApplet {
         mode = 0;
         setColorTheme();
         loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, btnSizeSmall, edgeRad, dark, textCol, textDark, light, lighter, textYShift, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
-        println("initialized loading screen");
         // variableInitialisation for mode 0 --> loading screen----------------
     }
 
@@ -197,11 +196,7 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 1 --> home screen-------------------
 
         // variableInitialisation for mode 2 --> node editor-------------------
-        String[] btnP = { absPathPictos + "clearNodetree.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png" };
-        String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
-        String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png", absPathPictos + "checkmark.png" };
-
-        nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, myNodeSettingsPath, btnP, nodeP1, nodeP2, stdFont);
+       initializeNodeEditor();
         // variableInitialisation for mode 2 --> node editor-------------------
 
         // variableInitialisation for mode 3 --> settings screen---------------
@@ -220,7 +215,7 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 4 --> blender download--------------
 
         // variableInitialisation for mode 5 --> Theme screen-------------------
-        String[] pp2 = { absPathPictos + "colorPicker.png", absPathPictos + "restart.png" };
+        String[] pp2 = { absPathPictos + "colorPicker.png", absPathPictos + "restart.png",absPathPictos+"brightTheme.png",absPathPictos+"darkTheme.png" };
         themeScreen = new ThemeScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, myThemeScreenPath, pp2, stdFont);
         // variableInitialisation for mode 5 --> Theme screen-------------------
 
@@ -232,6 +227,14 @@ public class MainActivity extends PApplet {
 
         // variableInitialisation -----------------------------------------------
 
+    }
+    
+    public void initializeNodeEditor() {
+    	 String[] btnP = { absPathPictos + "clearNodetree.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png",absPathPictos+"reloadFromFile.png" };
+         String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
+         String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png", absPathPictos + "checkmark.png" };
+
+         nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, myNodeSettingsPath, btnP, nodeP1, nodeP2, stdFont);
     }
 
     @Override
@@ -690,7 +693,6 @@ public class MainActivity extends PApplet {
         JsonHelper jHelper = new JsonHelper(this);
         JSONArray loadedThemeScreenData = new JSONArray();
         loadedThemeScreenData = jHelper.getData(myThemeScreenPath);
-        println(jHelper.getIsFlawlessLoaded());
         if (loadedThemeScreenData.isEmpty()) {
         } else if(jHelper.getIsFlawlessLoaded()) {
             for (int i = 0; i < loadedThemeScreenData.size(); i++) {
