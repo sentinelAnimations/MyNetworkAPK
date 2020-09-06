@@ -23,11 +23,13 @@ public class FileExplorer {
 	private StringList allInPathsDeleteFolder = new StringList();
 	private ArrayList<File> allDirsAndFiles = new ArrayList<File>();
 	private SpriteAnimation searching_sprAnim;
-	public HorizontalList[] horizontalLists = new HorizontalList[5];
-	public ImageButton[] fileExplorer_btns = new ImageButton[9];
-	public ImageButton rename_btn;
-	public EditText rename_et;
-	public SearchBar searchBar;
+	private HorizontalList[] horizontalLists = new HorizontalList[5];
+	private ImageButton[] fileExplorer_btns = new ImageButton[9];
+	private ImageButton rename_btn;
+	private EditText rename_et;
+	private SearchBar searchBar;
+	private FileInteractionHelper fileInteractionHelper;
+	
 
 	public FileExplorer(PApplet p, int x, int y, int w, int h, int stdTs, int edgeRad, int margin, int dark, int light, int lighter, int textCol, int textDark, int border, int btnSize, int btnSizeSmall, float textYShift, String[] PictoPaths, PFont stdFont) {
 		this.p = p; 
@@ -48,6 +50,9 @@ public class FileExplorer {
 		this.textYShift = textYShift;
 		this.isParented = isParented;
 		this.stdFont = stdFont;
+		
+		fileInteractionHelper=new FileInteractionHelper(p);
+		
 		String[][] l = { {}, {}, {}, {}, {} };
 		String[] titles = { "Volumes", "Current path", "Folders", "Files", "Search Results" };
 		Boolean[] showSelected = { true, false, false, false, false };
@@ -73,7 +78,7 @@ public class FileExplorer {
 		int lastHListInd = horizontalLists.length - 1;
 		horizontalLists[lastHListInd] = new HorizontalList(p, x, y - 3 * btnSizeSmall - btnSizeSmall / 2 - margin * 3 + margin / 2 + lastHListInd * btnSizeSmall + lastHListInd * (margin * 3), w - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Search Results") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, showSelected[lastHListInd], showMarked[lastHListInd], titles[lastHListInd], hoLiPictoPaths, l[lastHListInd], stdFont, null);
 
-		horizontalLists[0].setList(getVolumes());
+		horizontalLists[0].setList(fileInteractionHelper.getVolumes());
 		horizontalLists[0].isNewSelected = true;
 		horizontalLists[2].isNewSelected = false;
 		horizontalLists[3].isNewSelected = false;
@@ -90,6 +95,7 @@ public class FileExplorer {
 		rename_btn = new ImageButton(p, editBarX - btnSizeSmall / 2 - margin, editBarY, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, lighter, PictoPaths[6], "Rename Selected Folder", null);
 
 		searching_sprAnim = new SpriteAnimation(p, searchBar.getButton().getX(), editBarY, btnSizeSmall - margin, btnSizeSmall - margin, 0, 129, textCol, false, "imgs/sprites/loadingGears/", null);
+		
 	}
 
 	public void render() {
@@ -122,8 +128,8 @@ public class FileExplorer {
 			String[] l0 = horizontalLists[0].getList();
 			String[] l1 = { l0[horizontalLists[0].getSelectedInd()] };
 			horizontalLists[1].setList(l1);
-			horizontalLists[2].setList(getFoldersAndFiles(l1[0], true));
-			horizontalLists[3].setList(getFoldersAndFiles(l1[0], false));
+			horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(l1[0], true));
+			horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(l1[0], false));
 			horizontalLists[0].isNewSelected = false;
 		}
 
@@ -141,8 +147,8 @@ public class FileExplorer {
 			}
 
 			horizontalLists[1].setList(l1New);
-			horizontalLists[2].setList(getFoldersAndFiles(path, true));
-			horizontalLists[3].setList(getFoldersAndFiles(path, false));
+			horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(path, true));
+			horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(path, false));
 			horizontalLists[2].isNewSelected = false;
 		}
 
@@ -156,8 +162,8 @@ public class FileExplorer {
 					path += l1New[i];
 				}
 				PApplet.println(path);
-				horizontalLists[2].setList(getFoldersAndFiles(path, true));
-				horizontalLists[3].setList(getFoldersAndFiles(path, false));
+				horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(path, true));
+				horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(path, false));
 				horizontalLists[1].setList(l1New);
 				horizontalLists[1].isNewSelected = false;
 			}
@@ -186,8 +192,8 @@ public class FileExplorer {
 				}
 
 				horizontalLists[1].setList(handOverStr);
-				horizontalLists[2].setList(getFoldersAndFiles(path, true));
-				horizontalLists[3].setList(getFoldersAndFiles(path, false));
+				horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(path, true));
+				horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(path, false));
 				horizontalLists[4].isNewSelected = false;
 			}
 		}
@@ -222,8 +228,8 @@ public class FileExplorer {
 					newFileName = originalFileName + rename_et.getStrList().get(0);
 					newFile = new File(newFileName);
 					originalFile.renameTo(newFile);
-					horizontalLists[2].setList(getFoldersAndFiles(originalFileName, true));
-					horizontalLists[3].setList(getFoldersAndFiles(originalFileName, false));
+					horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(originalFileName, true));
+					horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(originalFileName, false));
 				}
 			}
 			rename_btn.setIsClicked(false);
@@ -249,7 +255,7 @@ public class FileExplorer {
 					@Override
 					public void run() {
 						isListing = true;
-						allDirsAndFiles = listFilesRecursive(searchDir);
+						allDirsAndFiles = fileInteractionHelper.listFilesRecursive(searchDir);
 						finishedListing = true;
 					}
 				});
@@ -335,11 +341,11 @@ public class FileExplorer {
 					}
 					if (pathToCopy.length() > 0 && destination.length() > 0) {
 						Boolean isCopied = false;
-						copyFolder(pathToCopy, destination);
+						fileInteractionHelper.copyFolder(pathToCopy, destination);
 						isCopied = true;
 						if (btnMode == 1 && isCopied) {
 							p.println(pathToCopy, "----");
-							deleteFolder(pathToCopy);
+							fileInteractionHelper.deleteFolder(pathToCopy);
 						}
 						pathToCopy = "";
 					}
@@ -347,8 +353,8 @@ public class FileExplorer {
 					for (int i2 = 0; i2 < c2List1.length; i2++) {
 						pathToCopy += c2List1[i2];
 					}
-					horizontalLists[2].setList(getFoldersAndFiles(pathToCopy, true));
-					horizontalLists[3].setList(getFoldersAndFiles(pathToCopy, false));
+					horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(pathToCopy, true));
+					horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(pathToCopy, false));
 					pathToCopy = "";
 
 					btnMode = -1;
@@ -388,7 +394,7 @@ public class FileExplorer {
 					c3curPath += "\\" + newFolderName;
 					File f = new File(c3curPath);
 					f.mkdir();
-					horizontalLists[2].setList(getFoldersAndFiles(c3curPath2, true));
+					horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(c3curPath2, true));
 					break;
 
 				case 4: // delete folder
@@ -399,8 +405,8 @@ public class FileExplorer {
 					}
 					String[] c4List2 = horizontalLists[2].getList();
 					if (c4List2.length > 0) {
-						deleteFolder(pathToDelete + "\\" + c4List2[horizontalLists[2].getMarkedInd()]);
-						horizontalLists[2].setList(getFoldersAndFiles(pathToDelete, true));
+						fileInteractionHelper.deleteFolder(pathToDelete + "\\" + c4List2[horizontalLists[2].getMarkedInd()]);
+						horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(pathToDelete, true));
 					}
 					break;
 
@@ -418,7 +424,7 @@ public class FileExplorer {
 						if (f1.exists()) {
 							f1.delete();
 						}
-						horizontalLists[3].setList(getFoldersAndFiles(pathToDelete, false));
+						horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(pathToDelete, false));
 					}
 					break;
 
@@ -452,78 +458,7 @@ public class FileExplorer {
 
 	}
 
-	void copyFolder(String copyFolderPath, String destination) {
-		if (copyFolderPath.equals(destination) == false) {
-			File f;
-			String[] splitStr1 = p.split(copyFolderPath, "\\");
-			String[] basePath = p.split(copyFolderPath, "\\");
-
-			ArrayList<File> allFiles = listFilesRecursive(copyFolderPath);
-			for (int i = 0; i < allFiles.size(); i++) {
-				if (allFiles.get(i).isDirectory()) {
-					String[] relativePath = p.split(allFiles.get(i).toString(), "\\");
-					String path = splitStr1[splitStr1.length - 1] + "\\";
-					for (int i2 = basePath.length; i2 < relativePath.length; i2++) {
-						path += relativePath[i2] + "\\";
-					}
-					f = new File(destination + "\\" + path);
-					f.mkdir();
-				} else {
-					String[] splitStr = p.split(allFiles.get(i).toString(), "\\");
-
-					String[] relativePath = p.split(allFiles.get(i).toString(), "\\");
-					String path = "";
-					for (int i2 = basePath.length; i2 < relativePath.length; i2++) {
-						path += relativePath[i2] + "\\";
-					}
-
-					Path oldFile = Paths.get(allFiles.get(i).toString());
-					Path newFile = Paths.get(destination + splitStr1[splitStr1.length - 1] + "\\" + path);
-					p.println(newFile, oldFile);
-					try {
-						p.println(p.frameCount);
-						Files.copy(oldFile, newFile);
-					} catch (IOException e) {
-						p.println(e);
-					}
-				}
-			}
-		} else {
-			p.println("cant copy to same path!");
-		}
-	}
-
-	public void deleteFolder(String path) {
-		allInPathsDeleteFolder.clear();
-		allInPathsDeleteFolder.append(path);
-		recursGetPaths(path);
-
-		if (allInPathsDeleteFolder.size() > 1) {
-			PApplet.println("data in folder");
-		}
-		p.println(allInPathsDeleteFolder);
-		for (int i = allInPathsDeleteFolder.size() - 1; i >= 0; i--) {
-			File curFile = new File(allInPathsDeleteFolder.get(i));
-			curFile.delete();
-		}
-	}
-
-	public void recursGetPaths(String pa) {
-		File index = new File(pa);
-		String[] entries = index.list();
-		if (index.list() != null) {
-			for (String s : entries) {
-				allInPathsDeleteFolder.append(pa + "/" + s);
-				String[] splitString = PApplet.split(s, ".");
-				if (splitString.length == 1) {
-					recursGetPaths(pa + "/" + s);
-				}
-			}
-		} else {
-			p.println("Cant delete path");
-		}
-	}
-
+	
 	public String[] searchForString(String searchStr, String[] searchArray) {
 		ArrayList<String> resultsFiles = new ArrayList<String>();
 		ArrayList<String> resultsFolders = new ArrayList<String>();
@@ -600,73 +535,6 @@ public class FileExplorer {
 		}
 		finishedSearching = true;
 		return resStr;
-	}
-
-	// Function to get a list of all files in a directory and all subdirectories
-	ArrayList<File> listFilesRecursive(String dir) {
-		ArrayList<File> fileList = new ArrayList<File>();
-		recurseDir(fileList, dir);
-		return fileList;
-	}
-
-	// Recursive function to traverse subdirectories
-	void recurseDir(ArrayList<File> a, String dir) {
-		File file = new File(dir);
-		if (file.isDirectory()) {
-			// If you want to include directories in the list
-			a.add(file);
-			File[] subfiles = file.listFiles();
-			if (subfiles != null) {
-				for (int i = 0; i < subfiles.length; i++) {
-					// Call this function on all files in this directory
-					recurseDir(a, subfiles[i].getAbsolutePath());
-				}
-			}
-		} else {
-			a.add(file);
-		}
-	}
-
-	public String[] getVolumes() {
-		File[] roots = File.listRoots();
-		String[] result = new String[roots.length];
-		for (int i = 0; i < roots.length; i++) {
-			result[i] = roots[i].getAbsolutePath();
-		}
-		return result;
-	}
-
-	public String[] getFoldersAndFiles(String path, Boolean getFolders) {
-		String[] result;
-		StringList folders = new StringList();
-		File file = new File(path);
-
-		if (file.isDirectory()) {
-			File[] files = file.listFiles();
-			String names[] = file.list();
-			// return names;
-			try {
-				for (int i = 0; i < files.length; i++) {
-					if (files[i].isDirectory() == getFolders) {
-						if (Files.isReadable(files[i].getAbsoluteFile().toPath())) {
-							folders.append(names[i]);
-						} else {
-						}
-					}
-				}
-				result = new String[folders.size()];
-				for (int i = 0; i < result.length; i++) {
-					result[i] = folders.get(i);
-				}
-
-				return result;
-			} catch (Exception e) {
-				return null;
-			}
-		} else {
-			return null;
-		}
-
 	}
 
 	public void onMouseReleased(int mouseButton) {
@@ -756,5 +624,9 @@ public class FileExplorer {
 
 	public String getPath() {
 		return selectedPath;
+	}
+	
+	public SearchBar getSearchBar() {
+		return searchBar;
 	}
 }

@@ -18,6 +18,7 @@ public class SpreadBlender {
 	private ImageButton[] mainButtons;
 	private ImageButton spreadBlender_ImageButton;
 	private PathSelector pathSelector;
+	private FileInteractionHelper fileInteractionHelper;
 
 	public SpreadBlender(PApplet p, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] pictoPaths, String[] fileExplStr, PFont stdFont) {
 		this.btnSize = btnSize;
@@ -41,8 +42,8 @@ public class SpreadBlender {
 		mainButtons = mainActivity.getMainButtons();
 		int psW= p.width / 3; 
 		pathSelector = new PathSelector(p, p.width/2-btnSizeSmall/2, p.height/2,psW, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, true, false, "...\\\\Folder to copy Blender from", pictoPaths[0], fileExplStr, stdFont, null);
-		spreadBlender_ImageButton = new ImageButton(p, psW/2+margin+btnSizeSmall/2, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, lighter, pictoPaths[1], "Rename Selected Folder", pathSelector);
-
+		spreadBlender_ImageButton = new ImageButton(p, psW/2+margin+btnSizeSmall/2, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, lighter, pictoPaths[1], "Share Blender", pathSelector);
+		fileInteractionHelper=new FileInteractionHelper(p);
 	}
 
 	public void render() {
@@ -50,6 +51,19 @@ public class SpreadBlender {
 		spreadBlender_ImageButton.render();
 		pathSelector.render();
 
+		if(spreadBlender_ImageButton.getIsClicked()) {
+			if(pathSelector.getPath().length()>0) {
+				String copyToPath=mainActivity.getSettingsScreen().getPathSelectors()[2].getPath();
+				if(copyToPath.charAt(copyToPath.length()-1)!='\\' || copyToPath.charAt(copyToPath.length()-1)!='/') {
+					copyToPath+="\\";
+				}
+				//String copyToPath="C:\\Users\\Dominic\\OneDrive\\Dokumente\\NetworkRendering\\";
+				String copyFromPath=pathSelector.getPath();
+				fileInteractionHelper.copyFolder(copyFromPath, copyToPath);
+			}
+			spreadBlender_ImageButton.setIsClicked(false);
+		}
+		
 	}
 
 	public void onMousePressed(int mouseButton) {

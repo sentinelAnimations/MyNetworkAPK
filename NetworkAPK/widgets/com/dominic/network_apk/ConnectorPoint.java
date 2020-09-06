@@ -16,6 +16,7 @@ public class ConnectorPoint<T> implements Widgets {
 	private PVector[] bezierPoints = new PVector[4];
 	private T parent;
 	private ConnectorPoint connected_connectorPoint;
+	private MainActivity mainActivity;
 	private ArrayList<ConnectorPoint> connectorPoints = new ArrayList<ConnectorPoint>();
 
 	public ConnectorPoint(PApplet p, int type, int x, int y, int r, int strWeight, int col, Boolean isParented, int[] connectableTypes, String id, String parentId, T parent) {
@@ -32,6 +33,7 @@ public class ConnectorPoint<T> implements Widgets {
 		this.id = id;
 		this.parentId = parentId;
 		this.parent = parent;
+		mainActivity=(MainActivity)p;
 
 		xShift = x;
 		yShift = y;
@@ -48,7 +50,16 @@ public class ConnectorPoint<T> implements Widgets {
 			getParentPos();
 		}
 		if (isPressed) {
-			if (mouseIsInArea() && !isOnDrag) {
+			Boolean nodeIsOnDrag=false;
+			for(int i=0;i<mainActivity.getNodeEditor().getNodes().size();i++) {
+				Node n =(Node) mainActivity.getNodeEditor().getNodes().get(i);
+				if(n.getIsGrabbed()) {
+					nodeIsOnDrag=true;
+					break;
+				}
+			}
+			
+			if (mouseIsInArea() && !isOnDrag && !nodeIsOnDrag) {
 				Boolean anotherIsOnDrag = false;
 				for (int i = 0; i < getAllConnectorPoints().size(); i++) {
 					ConnectorPoint cp = getAllConnectorPoints().get(i);

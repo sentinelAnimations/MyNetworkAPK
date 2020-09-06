@@ -283,6 +283,9 @@ public class SettingsScreen {
 	public ArrayList getToastList() {
 		return makeToasts;
 	}
+	public PathSelector[] getPathSelectors() {
+		return pathSelectors;
+	}
 
 	public void removeToast(int i) {
 		makeToasts.remove(i);

@@ -45,7 +45,7 @@ public class QuestionScreen {
 
         String s = new TxtStringLoader(p).getStringFromFile("textSources/questionsScreen_Answers.txt"); 
 
-        answers_TextField = new TextField(p, p.width / 2, searchBar.getY() + (p.height - (searchBar.getY() + searchBar.getH() / 2 + margin)) / 2, searchBar.getW(), p.height - (searchBar.getY() + searchBar.getH() / 2 + margin) - btnSize, stdTs, margin, btnSizeSmall, edgeRad, dark, light, lighter, textDark, textYShift, true, false, true, s, stdFont, null);
+        answers_TextField = new TextField(p, p.width / 2, searchBar.getY() + (p.height - (searchBar.getY() + searchBar.getH() / 2 + margin)) / 2, searchBar.getW(), p.height - (searchBar.getY() + searchBar.getH() / 2 + margin) - btnSize, stdTs, margin, btnSizeSmall, edgeRad, dark, light, lighter, textCol, textYShift, true, false, true, s, stdFont, null);
 
     }
 
@@ -67,21 +67,23 @@ public class QuestionScreen {
         } else {
             for (int i = 0; i < foundStringLineIndex.size(); i++) {
 
-                //float markerY = answers_TextField.getYPosByLineIndex(foundStringLineIndex.get(i)) + answers_TextField.getTs() * textYShift;
+                float markerY = answers_TextField.getYPosByLineIndex(foundStringLineIndex.get(i)) + answers_TextField.getTs() * textYShift+margin/2;
                 float markerY2 = p.map(answers_TextField.getYPosByLineIndexUnshifted(foundStringLineIndex.get(i)), 0, answers_TextField.getTextH(), 0, answers_TextField.getH()) + answers_TextField.getY()-answers_TextField.getH()/2;
-                /*if (markerY > answers_TextField.getY() - answers_TextField.getH() / 2 && markerY < answers_TextField.getY() + answers_TextField.getH() / 2) {
-                    p.fill(markerCol);
-                    p.rect(answers_TextField.getX() - answers_TextField.getW() / 2 - stdTs / 2, markerY, stdTs / 2, stdTs / 2, edgeRad);
-                }*/
+               
                 int dp=0;
                 if(answers_TextField.getSlider().getW()>answers_TextField.getSlider().getH()) {
                     dp=answers_TextField.getSlider().getH();
                 }else {
                     dp=answers_TextField.getSlider().getW();
                 }
+                
+                if (markerY > answers_TextField.getY() - answers_TextField.getH() / 2 +margin+stdTs/2 && markerY < answers_TextField.getY() + answers_TextField.getH() / 2-margin-stdTs/2) {
+                    p.fill(markerCol);
+                    p.rect(answers_TextField.getX() - answers_TextField.getW() / 2 - stdTs / 2, markerY, dp, dp*2);
+                }
+               
                 p.fill(markerCol);
                 p.rect(answers_TextField.getSlider().getX(), markerY2,dp,dp*2, edgeRad);
-                
             }
         }
         answers_TextField.getSlider().renderHandle();

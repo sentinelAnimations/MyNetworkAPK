@@ -160,7 +160,7 @@ public class MainActivity extends PApplet {
 
         windowTopBarHeight = (int) (jf.getBounds().getHeight() - stdScreenDimension.y);
 
-        String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "downloadBlender.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
+        String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "spreadBlender.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
         for (int i = 0; i < mainButtons.length; i++) {
             String s = "";
             if (i > 0) {
@@ -682,6 +682,9 @@ public class MainActivity extends PApplet {
 
     public NodeEditor getNodeEditor() {
         return nodeEditor;
+    }
+    public SettingsScreen getSettingsScreen() {
+    	return settingsScreen;
     }
     
 

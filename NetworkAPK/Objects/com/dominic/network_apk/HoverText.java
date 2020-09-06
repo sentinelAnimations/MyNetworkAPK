@@ -32,6 +32,8 @@ public class HoverText<T> {
         getParentPos();
         Boolean show = false;
         if (infoText.length() > 0) {
+        	p.textFont(stdFont);
+            p.textSize(stdTs);
             if (mouseIsInArea()) {
                 if (isHovering) {
                     hoverTime++;

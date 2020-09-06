@@ -17,7 +17,7 @@ public class ThemeScreen {
 	private float textYShift;
 	private Boolean renderFileExplorer = false;
 	private String mySavePath, darkThemePath, brightThemePath;
-	private String[] nodePaths1, nodePaths2, pcPaths, colorPickerTitles = { "Dark", "Light", "Lighter", "Lightest", "Borders", "Text", "Text dark" };
+	private String[] nodePaths1, nodePaths2, pcPaths, colorPickerTitles = { "Background", "Layer 1", "Layer 2", "Layer 3", "Highlights", "Text", "Text transparent" };
 	private PFont stdFont;
 	private PImage screenshot;
 	private PApplet p;

@@ -52,7 +52,6 @@ public class PathSelector<T> implements Widgets {
         hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, "", stdFont, this);
 		calcDisplayText();
 		fileExplorer = new FileExplorer(p, p.width / 2, p.height / 2, p.width - margin * 2, 6 * btnSizeSmall + 19 * margin, stdTs, edgeRad, margin, dark, light, lighter, textCol, textDark, border, btnSize, btnSizeSmall, textYShift, fileExplorerPictoPaths, stdFont);
-		
 
 		
 	}
@@ -93,10 +92,10 @@ public class PathSelector<T> implements Widgets {
 			p.image(screenshot, p.width / 2, p.height / 2);
 			fileExplorer.render();
 
-			for (int i = 0; i < fileExplorer.searchBar.getEditText().getToastList().size(); i++) {
-				MakeToast m = (MakeToast) fileExplorer.searchBar.getEditText().getToastList().get(i);
+			for (int i = 0; i < fileExplorer.getSearchBar().getEditText().getToastList().size(); i++) {
+				MakeToast m = (MakeToast) fileExplorer.getSearchBar().getEditText().getToastList().get(i);
 				if (m.remove) {
-					fileExplorer.searchBar.getEditText().removeToast(i);
+					fileExplorer.getSearchBar().getEditText().removeToast(i);
 				} else {
 					m.render();
 				}
@@ -105,12 +104,14 @@ public class PathSelector<T> implements Widgets {
 			if (fileExplorer.getIsClosed()) {
 				if (fileExplorer.getIsCanceled()) {
 				} else {
+					p.println(fileExplorer.getPath());
 					String[] splitStr = p.split(fileExplorer.getPath(), "\\");
 					String setPath = "";
 					if (selectFolder) {
 						for (int i = 0; i < splitStr.length; i++) {
-							String[] splitStr2 = p.split(splitStr[i], ".");
-							if (splitStr2.length > 1) {
+							//String[] splitStr2 = p.split(splitStr[i], ".");
+							File f = new File(setPath+splitStr[i]);
+							if (f.isDirectory()==false) {
 								break;
 							}
 							setPath += splitStr[i] + "\\";

@@ -40,7 +40,6 @@ public class ImageButton<T> implements Widgets {
 		mainActivity=(MainActivity)p;
 		loadPicto();
         hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, col, textYShift, infoText, mainActivity.getStdFont(), this);
-
 	}
 
 	public void render() {
