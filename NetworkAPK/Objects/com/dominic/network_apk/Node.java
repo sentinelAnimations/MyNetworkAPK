@@ -62,8 +62,8 @@ public class Node<T> {
             type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
             cpu_picto = new PictogramImage(p, -btnSizeSmall / 2 - margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes], "", this);
             gpu_picto = new PictogramImage(p, +btnSizeSmall + btnSizeSmall / 2 + margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes + 1], "", this);
-            useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", pictoPaths[anzTypes + 6], stdFont, this);
-            useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", pictoPaths[anzTypes + 6], stdFont, this);
+            useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "","", pictoPaths[anzTypes + 6], stdFont, this);
+            useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "","", pictoPaths[anzTypes + 6], stdFont, this);
             String[] tempList = { "dies", "und", "das", "kfdjakjfaskdjfasdkf", "askdfjasdkfjjjjjjjjj" };
             String[] ddPaths = { pictoPaths[anzTypes + 5], pictoPaths[anzTypes + 4] };
             pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, tempList, stdFont, true, this);
@@ -99,7 +99,7 @@ public class Node<T> {
             break;
 
         case 1:
-            renderTypePC(); // Pc
+            renderTypePC(); // pc
             isTypePC = true;
             break;
 
@@ -109,11 +109,12 @@ public class Node<T> {
             break;
 
         case 3:
-            renderTypeSwitch(); // switch
+            renderTypeSwitch(); // Switch
             break;
 
         case 4:
             renderTypeOutput(); // engine output
+            p.println("");
             break;
         }
     }
@@ -141,9 +142,9 @@ public class Node<T> {
         }
 
         if (isSelected) {
-            p.stroke(lightest);
+            p.stroke(border);
         } else {
-            p.stroke(darkest);
+            p.stroke(lighter);
         }
         p.fill(bgCol);
         p.rect(x, bodyY, w, bodyH, 0, 0, edgeRad, edgeRad);
@@ -200,9 +201,9 @@ public class Node<T> {
         }
 
         if (isSelected) {
-            p.stroke(lightest);
+            p.stroke(border);
         } else {
-            p.stroke(darkest);
+            p.stroke(lighter);
         }
         p.fill(bgCol);
         p.rect(x, bodyY, w, bodyH, 0, 0, edgeRad, edgeRad);
@@ -308,9 +309,9 @@ public class Node<T> {
         }
 
         if (isSelected) {
-            p.stroke(lightest);
+            p.stroke(border);
         } else {
-            p.stroke(darkest);
+            p.stroke(lighter);
         }
         p.fill(bgCol);
         p.rect(x, bodyY, w, bodyH, 0, 0, edgeRad, edgeRad);
@@ -345,9 +346,9 @@ public class Node<T> {
 
         p.noFill();
         if (isSelected) {
-            p.stroke(lightest);
+            p.stroke(border);
         } else {
-            p.stroke(darkest);
+            p.stroke(lighter);
         }
         p.arc(conX, conY, conS, conS, a1, a2, p.OPEN);
 
@@ -609,7 +610,7 @@ public class Node<T> {
     public Boolean getCheckedForConnection() {
         return isCheckedForConnection;
     }
-
+    
     public int getCpuCores() {
         return cpuCores;
     }
@@ -641,7 +642,6 @@ public class Node<T> {
         dragShiftX = 0;
         dragShiftY = 0;
         calcBodyAndHeadPos(); 
-
     }
 
     public void setCheckedForConnection(Boolean state) {
@@ -664,3 +664,4 @@ public class Node<T> {
         gpuText = gpuT;
     }
 }
+
