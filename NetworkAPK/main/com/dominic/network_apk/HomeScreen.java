@@ -269,7 +269,7 @@ public class HomeScreen {
 		fileToRender_pathSelector.onKeyPressed(key);
 
 	}
-
+	
 	public void onKeyReleased(char key) {
 		fileToRender_pathSelector.onKeyReleased(key);
 		if(key == p.DELETE) {
