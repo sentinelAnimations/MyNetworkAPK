@@ -123,7 +123,7 @@ public class SettingsScreen {
 
 		
 		if (mode == 0) { // normal mode
-			if (mainActivity.getLoadingScreen().firstSetup == false) {
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
 				mainActivity.renderMainButtons();
 			}
 
@@ -185,11 +185,11 @@ public class SettingsScreen {
 	}
 
 	public void onMousePressed(int mouseButton) {
-		if (mainActivity.getLoadingScreen().firstSetup == true && mode == 0) {
+		if (mainActivity.getLoadingScreen().getIsFirstSetup() == true && mode == 0) {
 			mainActivity.getFirstSetupHelp_btn().onMousePressed();
 		}
 		if (mode == 0) {
-			if (mainActivity.getLoadingScreen().firstSetup == false) {
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
 				for (int i = 0; i < mainButtons.length; i++) {
 					if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
 						mainButtons[i].onMousePressed();
@@ -207,11 +207,11 @@ public class SettingsScreen {
 
 	public void onMouseReleased(int mouseButton) {
 		if (mode == 0) {
-			if (mainActivity.getLoadingScreen().firstSetup == true) {
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
 				mainActivity.getFirstSetupHelp_btn().onMouseReleased();
 			}
 
-			if (mainActivity.getLoadingScreen().firstSetup == false && mode == 0) {
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false && mode == 0) {
 				for (int i = 0; i < mainButtons.length; i++) {
 					if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
 						mainButtons[i].onMouseReleased();
@@ -238,7 +238,7 @@ public class SettingsScreen {
 
 	public void onKeyReleased(char k) {
 		if (mode == 0) {
-			if (mainActivity.getLoadingScreen().firstSetup == true) {
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
 				mainActivity.getFirstSetupHelp_btn().onKeyReleased(k);
 			}
 

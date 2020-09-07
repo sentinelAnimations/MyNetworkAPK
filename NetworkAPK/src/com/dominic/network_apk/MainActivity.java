@@ -45,7 +45,6 @@ public class MainActivity extends PApplet {
     // integers-------------------------------------------------
 
     // Booleans-------------------------------------------------
-    private Boolean fileExplorerIsOpen = false;
     // Booleans-------------------------------------------------
 
     // Colors--------------------------------------------------
@@ -88,6 +87,7 @@ public class MainActivity extends PApplet {
     // Classes--------------------------------------------------
     // Main classes-------------------------------
     private LoadingScreen loadingScreen;
+    private HomeScreen homeScreen;
     private NodeEditor nodeEditor;
     private SettingsScreen settingsScreen;
     private SpreadBlender spreadBlenderScreen;
@@ -97,13 +97,7 @@ public class MainActivity extends PApplet {
     // widgets -----------------------------------
     private PictogramImage firstSetupPicto;
     private ImageButton firstSetupHelp_btn;
-    private PathSelector fileToRender_pathSelector;
-    private CounterArea startFrame_counterArea, endFrame_counterArea, stillFrame_counterArea;
-    private ImageButton startRendering_btn;
     private ImageButton[] mainButtons = new ImageButton[7];
-    private Checkbox[] homeSettings_checkboxes = new Checkbox[8];
-    private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
-
     // widgets -----------------------------------
     // Classes--------------------------------------------------
     // Global variables
@@ -170,33 +164,15 @@ public class MainActivity extends PApplet {
         }
 
         // variableInitialisation for mode 1 --> home screen-------------------
-        String[] checkBoxTexts = { "Render with full force", "Render only with slaves", "", "Render on Sheepit", "Use CPU", "Use GPU", "", "" };
-        for (int i = 0; i < homeSettings_checkboxes.length; i++) {
-            int ys = 0;
-            int is = 0;
-            if (i > 3) {
-                ys = height / 8;
-                is = 4;
-            }
-            homeSettings_checkboxes[i] = new Checkbox(this, (int) (width / 9 * 1.5f + (width / 9 * 2) * (i - is)), height / 5 * 2 + ys, width / 9, btnSizeSmall, btnSizeSmall, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, false, false, checkBoxTexts[i], absPathPictos + "checkmark.png", stdFont, null);
-        }
-
-        fileToRender_pathSelector = new PathSelector(this, btnSizeSmall + margin * 3, 0, width / 8 - margin, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, false, true, "...\\\\File.blend", absPathPictos + "selectFolder.png", fileExplorerPaths, stdFont, homeSettings_checkboxes[2]);
-
-        String[] p0 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
+       // String[] p0 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
         String[] pp = { absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-        int sfW = (int) (width / 16 - margin);
-        int sfX = (int) ((homeSettings_checkboxes[6].getX() - homeSettings_checkboxes[6].getW() / 2 + homeSettings_checkboxes[6].getBoxDim() + margin * 2)) - homeSettings_checkboxes[6].getX() + sfW / 2;
-        startFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Startframe", pp, stdFont, homeSettings_checkboxes[6]);
-        endFrame_counterArea = new CounterArea(this, sfX + sfW + margin, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Endframe", pp, stdFont, homeSettings_checkboxes[6]);
-        sfW = (int) textWidth(checkBoxTexts[3]);
-        sfX = (int) ((homeSettings_checkboxes[7].getX() - homeSettings_checkboxes[7].getW() / 2 + homeSettings_checkboxes[7].getBoxDim() + margin * 2)) - homeSettings_checkboxes[7].getX() + sfW / 2;
-        stillFrame_counterArea = new CounterArea(this, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Still frame", pp, stdFont, homeSettings_checkboxes[7]);
-        startRendering_btn = new ImageButton(this, width / 2, height - height / 7 * 2, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, absPathPictos + "startEngine.png", "Start rendering", null);
+        String[] hoLiPictoPaths = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
+        String[] homeScreenPictoPaths= { absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png", absPathPictos + "startEngine.png"};
+        homeScreen = new HomeScreen(this, btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark, textYShift,homeScreenPictoPaths, pp, hoLiPictoPaths, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 1 --> home screen-------------------
 
         // variableInitialisation for mode 2 --> node editor-------------------
-       initializeNodeEditor();
+        initializeNodeEditor();
         // variableInitialisation for mode 2 --> node editor-------------------
 
         // variableInitialisation for mode 3 --> settings screen---------------
@@ -215,7 +191,7 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 4 --> blender download--------------
 
         // variableInitialisation for mode 5 --> Theme screen-------------------
-        String[] pp2 = { absPathPictos + "colorPicker.png", absPathPictos + "restart.png",absPathPictos+"brightTheme.png",absPathPictos+"darkTheme.png" };
+        String[] pp2 = { absPathPictos + "colorPicker.png", absPathPictos + "restart.png", absPathPictos + "brightTheme.png", absPathPictos + "darkTheme.png" };
         themeScreen = new ThemeScreen(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, myThemeScreenPath, pp2, stdFont);
         // variableInitialisation for mode 5 --> Theme screen-------------------
 
@@ -228,13 +204,13 @@ public class MainActivity extends PApplet {
         // variableInitialisation -----------------------------------------------
 
     }
-    
-    public void initializeNodeEditor() {
-    	 String[] btnP = { absPathPictos + "clearNodetree.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png",absPathPictos+"reloadFromFile.png" };
-         String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
-         String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png", absPathPictos + "checkmark.png" };
 
-         nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, myNodeSettingsPath, btnP, nodeP1, nodeP2, stdFont);
+    public void initializeNodeEditor() {
+        String[] btnP = { absPathPictos + "clearNodetree.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png", absPathPictos + "reloadFromFile.png" };
+        String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
+        String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png", absPathPictos + "checkmark.png" };
+
+        nodeEditor = new NodeEditor(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, myNodeSettingsPath, btnP, nodeP1, nodeP2, stdFont);
     }
 
     @Override
@@ -255,126 +231,7 @@ public class MainActivity extends PApplet {
         if (loadingScreen.getInstanciatedClasses()) {
 
             if (mode == 1) {
-                fileExplorerIsOpen = fileToRender_pathSelector.getFileExplorerIsOpen();
-
-                // render all ---------------------------------------------------------------
-                if (fileExplorerIsOpen == false) {
-                    renderMainButtons();
-
-                    for (int i = 0; i < homeSettings_checkboxes.length; i++) {
-                        homeSettings_checkboxes[i].render();
-                    }
-                    endFrame_counterArea.render();
-                    startFrame_counterArea.render();
-                    stillFrame_counterArea.render();
-                    startRendering_btn.render();
-                    stroke(light);
-                    line(homeSettings_checkboxes[0].getBoxX() - homeSettings_checkboxes[0].getBoxDim() / 2, startRendering_btn.getY(), startRendering_btn.getX() - startRendering_btn.getW() / 2 - margin * 2, startRendering_btn.getY());
-                    line(startRendering_btn.getX() + startRendering_btn.getW() / 2 + margin * 2, startRendering_btn.getY(), stillFrame_counterArea.getX() + stillFrame_counterArea.getW() / 2, startRendering_btn.getY());
-
-                    // render toasts -----------------------------------
-                    for (int i = 0; i < makeToasts.size(); i++) {
-                        MakeToast m = makeToasts.get(i);
-                        if (m.remove) {
-                            makeToasts.remove(i);
-                        } else {
-                            m.render();
-                        }
-                    }
-                    // render toasts -----------------------------------
-                    // render all ---------------------------------------------------------------
-
-                    // handle Buttons ------------------------------------------------------
-                    if (startRendering_btn.getIsClicked() == true) {
-                        Boolean correctlySelected = true;
-                        String errorMessage = "";
-
-                        if (homeSettings_checkboxes[6].getIsChecked() == false && homeSettings_checkboxes[7].getIsChecked() == false) {
-                            correctlySelected = false;
-                            if (homeSettings_checkboxes[3].getIsChecked()) {
-                                correctlySelected = true;
-                            }
-                            if (correctlySelected == false) {
-                                if (errorMessage.length() > 0) {
-                                    errorMessage += " - ";
-                                }
-                                errorMessage += "Either render animation or still frame";
-                            }
-                        }
-
-                        if (homeSettings_checkboxes[0].getIsChecked() == false && homeSettings_checkboxes[1].getIsChecked() == false) {
-                            correctlySelected = false;
-                            if (errorMessage.length() > 0) {
-                                errorMessage += " - ";
-                            }
-                            errorMessage += "Either select 'Render with full force' or 'Render only with slaves'";
-                        }
-
-                        if (homeSettings_checkboxes[2].getIsChecked() == false && homeSettings_checkboxes[3].getIsChecked() == false) {
-                            correctlySelected = false;
-                            if (errorMessage.length() > 0) {
-                                errorMessage += " - ";
-                            }
-                            errorMessage += "Either select .blend file or choose 'Render on Sheepit'";
-                        }
-
-                        if (homeSettings_checkboxes[4].getIsChecked() == false && homeSettings_checkboxes[5].getIsChecked() == false) {
-                            correctlySelected = false;
-                            if (errorMessage.length() > 0) {
-                                errorMessage += " - ";
-                            }
-                            errorMessage += "Either use CPU or GPU";
-                        }
-
-                        if (homeSettings_checkboxes[2].getIsChecked() && homeSettings_checkboxes[3].getIsChecked()) {
-                            correctlySelected = false;
-                            if (errorMessage.length() > 0) {
-                                errorMessage += " - ";
-                            }
-                            errorMessage += "Cant render File AND on Sheepit";
-                        }
-
-                        if (homeSettings_checkboxes[6].getIsChecked() && homeSettings_checkboxes[7].getIsChecked()) {
-                            correctlySelected = false;
-                            if (errorMessage.length() > 0) {
-                                errorMessage += " - ";
-                            }
-                            errorMessage += "Cant render Animation AND still frame";
-                        }
-
-                        if (homeSettings_checkboxes[6].getIsChecked()) {
-                            if (endFrame_counterArea.getCount() < startFrame_counterArea.getCount()) {
-                                if (errorMessage.length() > 0) {
-                                    errorMessage += " - ";
-                                }
-                                correctlySelected = false;
-                                errorMessage += "Cant render negative frame range";
-                            }
-                        }
-
-                        if (homeSettings_checkboxes[3].getIsChecked()) {
-                            if (homeSettings_checkboxes[6].getIsChecked() || homeSettings_checkboxes[7].getIsChecked()) {
-                                if (errorMessage.length() > 0) {
-                                    errorMessage += " - ";
-                                }
-                                correctlySelected = false;
-                                errorMessage += "Cant render frame/Animation AND on Sheepit";
-                            }
-                        }
-
-                        if (correctlySelected) {
-                            mode = 101;
-                        } else {
-                            makeToasts.add(new MakeToast(this, width / 2, height - stdTs * 2, stdTs, margin, edgeRad, errorMessage.length() * 2, light, textCol, textYShift, false, errorMessage, stdFont, null));
-                        }
-
-                        startRendering_btn.setIsClicked(false);
-                    }
-                }
-                fileToRender_pathSelector.render();
-
-                // handle Buttons ------------------------------------------------------
-
+                homeScreen.render();
             }
 
             if (mode == 2) {
@@ -382,7 +239,7 @@ public class MainActivity extends PApplet {
             }
 
             if (mode == 3) {// setup for the first time -----------------
-                if (loadingScreen.firstSetup == true && settingsScreen.getMode() == 0) {
+                if (loadingScreen.getIsFirstSetup() == true && settingsScreen.getMode() == 0) {
                     fill(light);
                     stroke(light);
                     rect(width / 2, btnSize / 2 + margin, width, btnSize + margin * 2);
@@ -490,20 +347,7 @@ public class MainActivity extends PApplet {
         if (loadingScreen.getInstanciatedClasses()) {
 
             if (mode == 1) {
-                startFrame_counterArea.onMousePressed();
-                endFrame_counterArea.onMousePressed();
-                stillFrame_counterArea.onMousePressed();
-                startRendering_btn.onMousePressed();
-
-                if (loadingScreen.firstSetup == false) {
-                    for (int i = 0; i < mainButtons.length; i++) {
-                        if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
-                            mainButtons[i].onMousePressed();
-                        }
-                    }
-                }
-                fileToRender_pathSelector.onMousePressed(mouseButton);
-
+                homeScreen.onMousePressed(mouseButton);
             }
             if (mode == 2) {
                 nodeEditor.onMousePressed(mouseButton);
@@ -529,23 +373,7 @@ public class MainActivity extends PApplet {
         if (loadingScreen.getInstanciatedClasses()) {
 
             if (mode == 1) {
-                for (int i = 0; i < homeSettings_checkboxes.length; i++) {
-                    homeSettings_checkboxes[i].onMouseReleased();
-                }
-                startFrame_counterArea.onMouseReleased();
-                endFrame_counterArea.onMouseReleased();
-                stillFrame_counterArea.onMouseReleased();
-                startRendering_btn.onMouseReleased();
-
-                if (loadingScreen.firstSetup == false) {
-                    for (int i = 0; i < mainButtons.length; i++) {
-                        if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
-                            mainButtons[i].onMouseReleased();
-                        }
-                    }
-                }
-                fileToRender_pathSelector.onMouseReleased(mouseButton);
-
+                homeScreen.onMouseReleased(mouseButton);
             }
 
             if (mode == 2) {
@@ -576,11 +404,7 @@ public class MainActivity extends PApplet {
             float e = event.getCount();
 
             if (mode == 1) {
-                fileToRender_pathSelector.onScroll(e);
-                startFrame_counterArea.onScroll(e);
-                endFrame_counterArea.onScroll(e);
-                stillFrame_counterArea.onScroll(e);
-
+                homeScreen.onScroll(e);
             }
 
             if (mode == 2) {
@@ -608,7 +432,7 @@ public class MainActivity extends PApplet {
         if (loadingScreen.getInstanciatedClasses()) {
 
             if (mode == 1) {
-                fileToRender_pathSelector.onKeyPressed(key);
+                homeScreen.onKeyPressed(key);
             }
             if (mode == 2) {
                 nodeEditor.onKeyPressed(key);
@@ -634,7 +458,7 @@ public class MainActivity extends PApplet {
         if (loadingScreen.getInstanciatedClasses()) {
 
             if (mode == 1) {
-                fileToRender_pathSelector.onKeyReleased(key);
+                homeScreen.onKeyReleased(key);
             }
             if (mode == 2) {
                 nodeEditor.onKeyReleased(key);
@@ -659,7 +483,7 @@ public class MainActivity extends PApplet {
     public int getMode() {
         return mode;
     }
-    
+
     public PFont getStdFont() {
         return stdFont;
     }
@@ -683,10 +507,10 @@ public class MainActivity extends PApplet {
     public NodeEditor getNodeEditor() {
         return nodeEditor;
     }
+
     public SettingsScreen getSettingsScreen() {
-    	return settingsScreen;
+        return settingsScreen;
     }
-    
 
     public void setMode(int setMode) {
         mode = setMode;
@@ -697,7 +521,7 @@ public class MainActivity extends PApplet {
         JSONArray loadedThemeScreenData = new JSONArray();
         loadedThemeScreenData = jHelper.getData(myThemeScreenPath);
         if (loadedThemeScreenData.isEmpty()) {
-        } else if(jHelper.getIsFlawlessLoaded()) {
+        } else if (jHelper.getIsFlawlessLoaded()) {
             for (int i = 0; i < loadedThemeScreenData.size(); i++) {
                 JsonObject jsonObject = new JsonParser().parse(loadedThemeScreenData.get(i).toString()).getAsJsonObject();
                 JsonObject jsonSubObject = jsonObject.getAsJsonObject("colorPicker" + i);

@@ -193,7 +193,8 @@ public class HorizontalList<T> implements Widgets {
 
 	public void onMousePressed() {
 		if (type == 0) {
-
+		    goLeft_btn.onMousePressed();
+		    goRight_btn.onMousePressed();
 		}
 
 		if (type == 1) {
@@ -201,43 +202,48 @@ public class HorizontalList<T> implements Widgets {
 		}
 	}
 
-	public void onMouseReleased() {
-		if (type == 0 && listX.length > 0) {
-			for (int i = firstDisplayedInd; i <= lastDisplayedInd; i++) {
-				if (i >= 0) {
-					if (p.mouseY > y - h / 2 + margin && p.mouseY < y + h / 2 - margin) {
-						if (p.mouseX > listX[i] - p.textWidth(displayList[i]) / 2 - margin && p.mouseX < listX[i] + p.textWidth(displayList[i]) / 2 + margin) {
-							selectedInd = i;
-							isNewSelected = true;
-						}
-					}
-				}
-			}
-		}
+	public void onMouseReleased(int mouseButton) {
+	    if (mouseButton==p.RIGHT) {
+	        if (type == 0 && listX.length > 0) {
+	            for (int i = firstDisplayedInd; i <= lastDisplayedInd; i++) {
+	                if (i >= 0) {
+	                    if (p.mouseY > y - h / 2 + margin && p.mouseY < y + h / 2 - margin) {
+	                        if (p.mouseX > listX[i] - p.textWidth(displayList[i]) / 2 - margin && p.mouseX < listX[i] + p.textWidth(displayList[i]) / 2 + margin) {
+	                            markedInd = i;
+	                            isNewMarked = true;
+	                        }
+	                    }
+	                }
+	            }
+	        }
 
-		if (type == 1) {
+	        if (type == 1) {
 
-		}
+	        }
+	    }
+        if (mouseButton==p.LEFT) {
+            if (type == 0 && listX.length > 0) {
+                for (int i = firstDisplayedInd; i <= lastDisplayedInd; i++) {
+                    if (i >= 0) {
+                        if (p.mouseY > y - h / 2 + margin && p.mouseY < y + h / 2 - margin) {
+                            if (p.mouseX > listX[i] - p.textWidth(displayList[i]) / 2 - margin && p.mouseX < listX[i] + p.textWidth(displayList[i]) / 2 + margin) {
+                                selectedInd = i;
+                                isNewSelected = true;
+                            }
+                        }
+                    }
+                }
+                 goLeft_btn.onMouseReleased();
+                 goRight_btn.onMouseReleased();
+            }
+
+            if (type == 1) {
+
+            }
+        }
+		
 	}
 
-	public void onMouseRightReleased() {
-		if (type == 0 && listX.length > 0) {
-			for (int i = firstDisplayedInd; i <= lastDisplayedInd; i++) {
-				if (i >= 0) {
-					if (p.mouseY > y - h / 2 + margin && p.mouseY < y + h / 2 - margin) {
-						if (p.mouseX > listX[i] - p.textWidth(displayList[i]) / 2 - margin && p.mouseX < listX[i] + p.textWidth(displayList[i]) / 2 + margin) {
-							markedInd = i;
-							isNewMarked = true;
-						}
-					}
-				}
-			}
-		}
-
-		if (type == 1) {
-
-		}
-	}
 
 	public void onScroll(float e) {
 		if (type == 0) {

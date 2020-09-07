@@ -11,7 +11,7 @@ import processing.core.PVector;
 public class LoadingScreen {
     private int btnSize, margin,  stdTs,btnSizeSmall,edgeRad, titleTs, subtitleTs,dark,light,lighter, textCol, textDark;
     private float textYShift;
-    public boolean firstSetup = true, initializedClasses = false;
+    private boolean firstSetup = true, initializedClasses = false;
     private String APKDescription, APKName, loadingStatus = "Loading Data", mySettingsPath;
     private PApplet p;
     private PImage img;
@@ -112,6 +112,10 @@ public class LoadingScreen {
         }
         // load settings info, if not available, goto settingsPage----------------------
 
+    }
+    
+    public Boolean getIsFirstSetup() {
+        return firstSetup;
     }
 
     public Boolean getInstanciatedClasses() {

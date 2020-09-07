@@ -7,181 +7,186 @@ import processing.core.PConstants;
 import processing.core.PFont;
 
 public class CounterArea<T> implements Widgets {
-	private int x, y, xShift, yShift, w, h, edgeRad, margin, stdTs, bgCol, textCol, lighter, calcOnceOnStartup = 0, count, counterBorderLow, counterBorderHigh, hoverTime;
-	private float textYShift;
-	private Boolean isParented, isHovering = false, valueHasChanged = true;
-	private String infoText;
-	private String[] pictoPaths;
-	private PFont stdFont;
-	private PApplet p;
-	private HoverText hoverText;
-	private T parent;
-	private ImageButton add_btn, subtract_btn;
+    private int x, y, xShift, yShift, w, h, edgeRad, margin, stdTs, bgCol, textCol, lighter, calcOnceOnStartup = 0, count, counterBorderLow, counterBorderHigh, hoverTime;
+    private float textYShift;
+    private Boolean isParented, isHovering = false, valueHasChanged = true;
+    private String infoText;
+    private String[] pictoPaths;
+    private PFont stdFont;
+    private PApplet p;
+    private HoverText hoverText;
+    private T parent;
+    private ImageButton add_btn, subtract_btn;
 
-	public CounterArea(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int counterBorderLow, int counterBorderHigh, int startVal, int bgCol, int lighter, int textCol, float textYShift, Boolean isParented, String infoText, String[] pictoPaths, PFont stdFont, T parent) {
-		this.p = p;
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-		this.edgeRad = edgeRad;
-		this.margin = margin;
-		this.stdTs = stdTs;
-		this.counterBorderLow = counterBorderLow;
-		this.counterBorderHigh = counterBorderHigh;
-		this.bgCol = bgCol;
-		this.textCol = textCol;
-		this.lighter = lighter;
-		this.isParented = isParented;
-		this.infoText = infoText;
-		this.pictoPaths = pictoPaths;
-		this.stdFont = stdFont;
-		this.parent = parent;
-		xShift = x;
-		yShift = y;
-		count = startVal;
-		initializePictoImage();
-		hoverText=new HoverText(p, stdTs, margin, edgeRad,150, textCol, textYShift, infoText, stdFont, this);
-	}
+    public CounterArea(PApplet p, int x, int y, int w, int h, int edgeRad, int margin, int stdTs, int counterBorderLow, int counterBorderHigh, int startVal, int bgCol, int lighter, int textCol, float textYShift, Boolean isParented, String infoText, String[] pictoPaths, PFont stdFont, T parent) {
+        this.p = p;
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.edgeRad = edgeRad;
+        this.margin = margin;
+        this.stdTs = stdTs;
+        this.counterBorderLow = counterBorderLow;
+        this.counterBorderHigh = counterBorderHigh;
+        this.bgCol = bgCol;
+        this.textCol = textCol;
+        this.lighter = lighter;
+        this.isParented = isParented;
+        this.infoText = infoText;
+        this.pictoPaths = pictoPaths;
+        this.stdFont = stdFont;
+        this.parent = parent;
+        xShift = x;
+        yShift = y;
+        count = startVal;
+        initializePictoImage();
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, infoText, stdFont, this);
+        if (isParented) {
+            getParentPos();
+        }
+    }
 
-	public void render() {
-		if (isParented) {
-			getParentPos();
-		}
-		checkForBorder();
-		
-		p.fill(bgCol);
-		p.stroke(bgCol);
-		p.rect(x, y, w, h, edgeRad);
-		p.textAlign(p.CENTER, p.CENTER);
-		p.textFont(stdFont);
-		p.textSize(stdTs);
-		p.fill(textCol);
-		p.text(count, x, y - stdTs * textYShift);
-		add_btn.render();
-		subtract_btn.render();
-		//onHover();
-		hoverText.render();
+    public void render() {
+        if (isParented) {
+            getParentPos();
+        }
+        checkForBorder();
 
-		if (add_btn.getIsClicked() == true) {
-			count++;
-			checkForBorder();
-			valueHasChanged = true;
-			add_btn.setIsClicked(false);
-		}
+        p.fill(bgCol);
+        p.stroke(bgCol);
+        p.rect(x, y, w, h, edgeRad);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.textFont(stdFont);
+        p.textSize(stdTs);
+        p.fill(textCol);
+        p.text(count, x, y - stdTs * textYShift);
+        add_btn.render();
+        subtract_btn.render();
+        // onHover();
+        hoverText.render();
 
-		if (subtract_btn.getIsClicked() == true) {
-			count--;
-			checkForBorder();
-			valueHasChanged = true;
-			subtract_btn.setIsClicked(false);
-		}
+        if (add_btn.getIsClicked() == true) {
+            count++;
+            checkForBorder();
+            valueHasChanged = true;
+            add_btn.setIsClicked(false);
+        }
 
-	}
+        if (subtract_btn.getIsClicked() == true) {
+            count--;
+            checkForBorder();
+            valueHasChanged = true;
+            subtract_btn.setIsClicked(false);
+        }
 
-	public void onMouseReleased() {
-		add_btn.onMouseReleased();
-		subtract_btn.onMouseReleased();
-	}
+    }
 
-	public void onMousePressed() {
-		add_btn.onMousePressed();
-		subtract_btn.onMousePressed();
-	}
+    public void onMouseReleased() {
+        add_btn.onMouseReleased();
+        subtract_btn.onMouseReleased();
+    }
 
-	public void onScroll(float e) {
-		if (mouseIsInArea()) {
-			if (e > 0) {
-				count += 10;
-			} else {
-				count -= 10;
-			}
-			checkForBorder();
-			valueHasChanged = true;
-		}
-	}
+    public void onMousePressed() {
+        add_btn.onMousePressed();
+        subtract_btn.onMousePressed();
+    }
 
-	private void initializePictoImage() {
-		add_btn = new ImageButton(p, xShift + w / 2 - w / 8, yShift, h / 2, h / 2, stdTs, margin, edgeRad, -1, textYShift, false, isParented, lighter, textCol, pictoPaths[1], "", parent);
-		subtract_btn = new ImageButton(p, xShift - w / 2 + w / 8, yShift, h / 2, h / 2, stdTs, margin, edgeRad, -1, textYShift, false, isParented, lighter, textCol, pictoPaths[0], "", parent);
+    public void onScroll(float e) {
+        if (mouseIsInArea()) {
+            if (e > 0) {
+                count += 10;
+            } else {
+                count -= 10;
+            }
+            checkForBorder();
+            valueHasChanged = true;
+        }
+    }
 
-	}
-	private void checkForBorder() {
-		if (count < counterBorderLow) {
-			count = counterBorderLow;
-		}
-		if (count > counterBorderHigh) {
-			count = counterBorderHigh;
-		}
-	}
+    private void initializePictoImage() {
+        add_btn = new ImageButton(p, xShift + w / 2 - w / 8, yShift, h / 2, h / 2, stdTs, margin, edgeRad, -1, textYShift, false, isParented, lighter, textCol, pictoPaths[1], "", parent);
+        subtract_btn = new ImageButton(p, xShift - w / 2 + w / 8, yShift, h / 2, h / 2, stdTs, margin, edgeRad, -1, textYShift, false, isParented, lighter, textCol, pictoPaths[0], "", parent);
 
-	@Override
-	public void getParentPos() {
-		Method m;
-		try {
-			m = parent.getClass().getMethod("getX");
-			x = (int) m.invoke(parent) + xShift;
+    }
 
-			m = parent.getClass().getMethod("getY");
-			y = (int) m.invoke(parent) + yShift;
-			if (calcOnceOnStartup == 0) {
-				initializePictoImage();
-				calcOnceOnStartup++;
-			}
+    private void checkForBorder() {
+        if (count < counterBorderLow) {
+            count = counterBorderLow;
+        }
+        if (count > counterBorderHigh) {
+            count = counterBorderHigh;
+        }
+    }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void getParentPos() {
+        Method m;
+        try {
+            m = parent.getClass().getMethod("getX");
+            x = (int) m.invoke(parent) + xShift;
 
-	@Override
-	public int getX() {
-		return x;
-	}
+            m = parent.getClass().getMethod("getY");
+            y = (int) m.invoke(parent) + yShift;
+            if (calcOnceOnStartup == 0) {
+                initializePictoImage();
+                calcOnceOnStartup++;
+            }
 
-	@Override
-	public int getY() {
-		return y;
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	public Boolean mouseIsInArea() {
-		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public int getX() {
+        return x;
+    }
 
-	public int getW() {
-		return w;
-	}
-	public int  getH() {
-		return h;
-	}
+    @Override
+    public int getY() {
+        return y;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public int getW() {
+        return w;
+    }
 
-	public Boolean getValueHasChanged() {
-		return valueHasChanged;
-	}
+    public int getH() {
+        return h;
+    }
 
-	public void setValueHasChanged(Boolean state) {
-		valueHasChanged = state;
-	}
-	
-	public void setCount(int cou) {
-		count=cou;
-		valueHasChanged=true;
-	}
+    public int getCount() {
+        return count;
+    }
 
-	public void setPos(int xp, int yp) {
-		x = xp;
-		xShift = x;
-		y = yp;
-		yShift = y;
-		add_btn.setPos(xShift + w / 2 - w / 8, yShift);
-		subtract_btn.setPos(xShift - w / 2 + w / 8, yShift);
-	}
+    public Boolean mouseIsInArea() {
+        if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean getValueHasChanged() {
+        return valueHasChanged;
+    }
+
+    public void setValueHasChanged(Boolean state) {
+        valueHasChanged = state;
+    }
+
+    public void setCount(int cou) {
+        count = cou;
+        valueHasChanged = true;
+    }
+
+    public void setPos(int xp, int yp) {
+        x = xp;
+        xShift = x;
+        y = yp;
+        yShift = y;
+        add_btn.setPos(xShift + w / 2 - w / 8, yShift);
+        subtract_btn.setPos(xShift - w / 2 + w / 8, yShift);
+    }
 }
