@@ -14,9 +14,10 @@ public class Checkbox<T> implements Widgets {
 	private PApplet p;
 	private T parent;
 	private PictogramImage picto;
+	private HoverText hoverText;
 
 
-	public Checkbox(PApplet p, int x, int y, int w, int h, int boxDim, int edgeRad, int margin, int stdTs, int bgCol, int boxCol, int tickCol, int textCol, float textYShift, Boolean isParented, Boolean renderBg, String t,String pictoPath, PFont stdFont, T parent) {
+	public Checkbox(PApplet p, int x, int y, int w, int h, int boxDim, int edgeRad, int margin, int stdTs, int bgCol, int boxCol, int tickCol, int textCol, float textYShift, Boolean isParented, Boolean renderBg, String t,String infoText,String pictoPath, PFont stdFont, T parent) {
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -41,6 +42,8 @@ public class Checkbox<T> implements Widgets {
 		xShift = x;
 		yShift = y;
 		
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, infoText, stdFont, this);
+
 		initializePictoImage();
 
 	}
@@ -68,6 +71,7 @@ public class Checkbox<T> implements Widgets {
 			//renderTick();
 			picto.render();
 		}
+		hoverText.render();
 	}
 	
 	private void renderTick() {
@@ -127,6 +131,7 @@ public class Checkbox<T> implements Widgets {
 			return false;
 		}
 	}
+
 	public Boolean getIsChecked() {
 		return isChecked;
 	}
@@ -147,6 +152,9 @@ public class Checkbox<T> implements Widgets {
 		return w;
 	}
 	
+	public int getH() {
+		return boxDim;
+	}
 	public String getText() {
 		return t;
 	}

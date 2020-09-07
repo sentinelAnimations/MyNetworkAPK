@@ -104,7 +104,6 @@ public class PathSelector<T> implements Widgets {
 			if (fileExplorer.getIsClosed()) {
 				if (fileExplorer.getIsCanceled()) {
 				} else {
-					p.println(fileExplorer.getPath());
 					String[] splitStr = p.split(fileExplorer.getPath(), "\\");
 					String setPath = "";
 					if (selectFolder) {

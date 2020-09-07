@@ -17,7 +17,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 public class NodeEditor<T> {
-	private int nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH,screenX,screenY,prevScreenX,prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, doOnceOnPressed = 0, doOnceOnStart = 0;
+	private int nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH, screenX, screenY, prevScreenX, prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, doOnceOnPressed = 0, doOnceOnStart = 0;
 	private float textYShift;
 	private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false;
 	private String mySavePath = "";
@@ -61,14 +61,14 @@ public class NodeEditor<T> {
 		mainActivity = (MainActivity) p;
 		gridSize = btnSizeSmall / 2;
 		mainButtons = mainActivity.getMainButtons();
-		
-		screenX=p.width;
-		screenY=p.height;
-		prevScreenX=p.width;
-		prevScreenY=p.height;
-		
-		String[] btnDescriptions = { "Delete all Nodes | shorcut: ctrl+d", "Add node | shortcut: ctrl+a", "Center nodes | shortcut: ctrl+c ", "Save | shortcut: ctrl+s","Reload from file | shortcut: ctrl+r"};
-		int[] shortcuts = { 4, 1, 3, 19,18 };
+
+		screenX = p.width;
+		screenY = p.height;
+		prevScreenX = p.width;
+		prevScreenY = p.height;
+
+		String[] btnDescriptions = { "Delete all Nodes | shorcut: ctrl+d", "Add node | shortcut: ctrl+a", "Center nodes | shortcut: ctrl+c ", "Save | shortcut: ctrl+s", "Reload from file | shortcut: ctrl+r" };
+		int[] shortcuts = { 4, 1, 3, 19, 18 };
 		for (int i = 0; i < nodeEditorButtons.length; i++) {
 			nodeEditorButtons[i] = new ImageButton(p, mainButtons[0].getX(), mainButtons[0].getY() + mainButtons[0].getH() + margin + btnSize * i + margin * i, btnSize, btnSize, stdTs, margin, edgeRad, shortcuts[i], textYShift, true, false, textCol, light, buttonPaths[i], btnDescriptions[i], null);
 		}
@@ -84,7 +84,6 @@ public class NodeEditor<T> {
 	}
 
 	public void render() {
-		
 
 		if (doOnceOnStart == 0) {
 			setupAll();
@@ -99,16 +98,16 @@ public class NodeEditor<T> {
 				}
 			}
 		}
-		
-		screenX=p.width;
-		screenY=p.height;
-		if(screenX!=prevScreenX || screenY!=prevScreenY) {
-			
+
+		screenX = p.width;
+		screenY = p.height;
+		if (screenX != prevScreenX || screenY != prevScreenY) {
+
 			for (int i = 0; i < nodeAdderButtons.length; i++) {
 				nodeAdderButtons[i].setPos(p.width / 2 - (nodeAdderButtons.length / 2) * btnSize - (nodeAdderButtons.length / 2) * margin + i * btnSize + i * margin, p.height / 2);
-			}		
-			prevScreenX=screenX;
-			prevScreenY=screenY;
+			}
+			prevScreenX = screenX;
+			prevScreenY = screenY;
 		}
 
 		renderGrid();
@@ -145,7 +144,7 @@ public class NodeEditor<T> {
 			p.fill(light);
 			p.stroke(light);
 			p.rect(nodeEditorButtons[nodeEditorButtons.length - 1].getX(), rectY, btnSize, rectH, edgeRad);
-			
+
 			for (int i = 0; i < nodeEditorButtons.length; i++) {
 				nodeEditorButtons[i].render();
 			}
@@ -180,14 +179,14 @@ public class NodeEditor<T> {
 			}
 		}
 	}
-	
+
 	public void setupAll() {
 		try {
 			setData();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if(nodes.size()>0) {
-				for(int i=nodes.size()-1;i>=0;i--) {
+			if (nodes.size() > 0) {
+				for (int i = nodes.size() - 1; i >= 0; i--) {
 					nodes.remove(i);
 				}
 			}
@@ -292,6 +291,7 @@ public class NodeEditor<T> {
 
 		// Edit node tree buttons --------------------------------------------
 		for (int i = 0; i < nodeEditorButtons.length; i++) {
+
 			if (nodeEditorButtons[i].getIsClicked() == true) {
 				switch (i) {
 				case 0:
@@ -301,12 +301,16 @@ public class NodeEditor<T> {
 					}
 					break;
 				case 1:
+					mainActivity.initializeNodeEditor();
+					break;
+				case 2:
 					renderNodeMenu = true;
 					p.saveFrame("data\\imgs\\screenshots\\homeScreen.png");
 					screenshot = p.loadImage("data\\imgs\\screenshots\\homeScreen.png");
 					screenshot = new ImageBlurHelper(p).blur(screenshot, 3);
 					break;
-				case 2:
+
+				case 3:
 					int averageX = 0, averageY = 0;
 					for (int i2 = 0; i2 < nodes.size(); i2++) {
 						Node n = nodes.get(i2);
@@ -322,13 +326,11 @@ public class NodeEditor<T> {
 					}
 
 					break;
-				case 3:
+
+				case 4:
 					saveNodeEditor();
 					break;
-				case 4:
-					mainActivity.initializeNodeEditor();
-					break;
-					
+
 				}
 
 				nodeEditorButtons[i].setIsClicked(false);
@@ -482,10 +484,7 @@ public class NodeEditor<T> {
 						connectorPointIds[connectorPointIds.length - i2 - 1] = jsonObject.getAsJsonObject("Node" + i).get("connectorPointIds").getAsJsonArray().get(ind).toString().replace("\"", "");
 						connectorPointIsConnectedArray[i2] = Boolean.parseBoolean(jsonObject.getAsJsonObject("Node" + i).get("connectorPointIsConnectedArray").getAsJsonArray().get(ind).toString());
 
-
 					}
-
-				
 
 					int xp = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("posX").getAsString()));
 					int yp = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("posY").getAsString()));
@@ -493,10 +492,10 @@ public class NodeEditor<T> {
 					nodes.add(new Node(p, xp, yp, nodeW, nh, nodeType, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, light, textCol, textDark, lighter, lightest, border, textYShift, nodeId, UUID.randomUUID().toString(), nodePaths2, stdFont, this));
 					Node<T> n = nodes.get(nodes.size() - 1);
 					n.setIsGrabbed(false);
-					if(switchName_editText.length()>0) {
-					n.getSwitchNameEditText().setText(switchName_editText);
-					}else {
-		                   n.getSwitchNameEditText().setText("No name");
+					if (switchName_editText.length() > 0) {
+						n.getSwitchNameEditText().setText(switchName_editText);
+					} else {
+						n.getSwitchNameEditText().setText("No name");
 
 					}
 					n.getSwitchPort_CounterArea().setCount(switchPort_CounterArea);
@@ -526,7 +525,6 @@ public class NodeEditor<T> {
 					if (isConnectorPointConnected) {
 						n.getInputConnectorPoint().setConnectedId(connectorPointConnectedId);
 					}
-
 
 				}
 			}
@@ -610,35 +608,35 @@ public class NodeEditor<T> {
 	}
 
 	public void onKeyPressed(char key) {
-		
-		for(int i=0;i<nodes.size();i++) {
-			Node n= nodes.get(i);
-			if(n.getType()==3) {
+
+		for (int i = 0; i < nodes.size(); i++) {
+			Node n = nodes.get(i);
+			if (n.getType() == 3) {
 				n.getSwitchNameEditText().onKeyPressed(key);
 			}
 		}
-		
+
 		if (key == 'm' || key == 'M') {
-		    
-		    Boolean noEditTextAcitve=true;
-		    for(int i=0;i<nodes.size();i++) {
-	              Node n = nodes.get(i);
-	              if(n.getType()==3) {
-	                     n.getSwitchNameEditText().setIsActive(false);
-	              }
-		    }
-		    
-		    if(noEditTextAcitve) {
-			panViewStartX = p.mouseX;
-			panViewStartY = p.mouseY;
-			allNodePosOnMousePressed.clear();
+
+			Boolean noEditTextAcitve = true;
 			for (int i = 0; i < nodes.size(); i++) {
 				Node n = nodes.get(i);
-				allNodePosOnMousePressed.add(new PVector(n.getX(), n.getY()));
+				if (n.getType() == 3) {
+					n.getSwitchNameEditText().setIsActive(false);
+				}
 			}
-			mouseIsPressed = true;
-			middleMouseWasPressed = true;
-		}
+
+			if (noEditTextAcitve) {
+				panViewStartX = p.mouseX;
+				panViewStartY = p.mouseY;
+				allNodePosOnMousePressed.clear();
+				for (int i = 0; i < nodes.size(); i++) {
+					Node n = nodes.get(i);
+					allNodePosOnMousePressed.add(new PVector(n.getX(), n.getY()));
+				}
+				mouseIsPressed = true;
+				middleMouseWasPressed = true;
+			}
 		} else {
 			middleMouseWasPressed = false;
 			mouseIsPressed = false;

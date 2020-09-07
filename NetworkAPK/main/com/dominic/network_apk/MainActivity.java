@@ -206,7 +206,7 @@ public class MainActivity extends PApplet {
     }
 
     public void initializeNodeEditor() {
-        String[] btnP = { absPathPictos + "clearNodetree.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png", absPathPictos + "reloadFromFile.png" };
+        String[] btnP = { absPathPictos + "clearNodetree.png", absPathPictos + "reloadFromFile.png", absPathPictos + "addNode.png", absPathPictos + "center.png", absPathPictos + "save.png" };
         String[] nodeP1 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png" };
         String[] nodeP2 = { absPathPictos + "masterPC.png", absPathPictos + "pc.png", absPathPictos + "laptop.png", absPathPictos + "switch.png", absPathPictos + "engine.png", absPathPictos + "cpu.png", absPathPictos + "gpu.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png", absPathPictos + "checkmark.png" };
 
