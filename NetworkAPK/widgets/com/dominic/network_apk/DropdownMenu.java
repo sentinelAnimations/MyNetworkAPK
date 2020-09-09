@@ -53,7 +53,7 @@ public class DropdownMenu<T> implements Widgets {
 
         dropdown_btn = new ImageButton(p, x + w / 2 - margin - (h - margin * 2) / 2, yShift, h - margin * 2, h - margin * 2, stdTs, margin, edgeRad, -1, textYShift, false, true, textCol, textCol, pictoPaths[0], "", parent);
 
-        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, "", stdFont, this);
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, "","getX","getY","getW","getH", stdFont, this);
 
         calcDropdownDimens();
         calcDisplList(list);

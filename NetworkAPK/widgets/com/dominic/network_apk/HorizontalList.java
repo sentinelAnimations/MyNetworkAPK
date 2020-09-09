@@ -216,7 +216,6 @@ public class HorizontalList<T> implements Widgets {
 	                }
 	            }
 	        }
-
 	        if (type == 1) {
 
 	        }
@@ -240,6 +239,11 @@ public class HorizontalList<T> implements Widgets {
             if (type == 1) {
 
             }
+        }
+        
+        if (type == 0) {
+            goLeft_btn.onMouseReleased();
+            goRight_btn.onMouseReleased();
         }
 		
 	}

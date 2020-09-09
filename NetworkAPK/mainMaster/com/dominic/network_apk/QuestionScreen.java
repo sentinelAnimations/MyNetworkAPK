@@ -40,17 +40,29 @@ public class QuestionScreen {
         this.stdFont = stdFont;
         this.p = p;
         mainActivity = (MainActivity) p;
-        mainButtons = mainActivity.getMainButtons();
+        
+        if (mainActivity.getIsMaster()) {
+            mainButtons = mainActivity.getMainButtonsMaster();
+        } else {
+            mainButtons = mainActivity.getMainButtonsSlave();
+        }
+        
         searchBar = new SearchBar(p, p.width / 2, mainButtons[0].getY() + mainButtons[0].getH() / 2 + margin + btnSizeSmall / 2 + btnSize, p.width - btnSize * 2, btnSizeSmall, edgeRad, margin, stdTs, textCol, textDark, light, textYShift, false, "Search", pictoPaths[0], stdFont, null);
 
-        String s = new TxtStringLoader(p).getStringFromFile("textSources/questionsScreen_Answers.txt"); 
+        String s = new TxtStringLoader(p).getStringFromFile("textSources/questionsScreen_Answers.txt");
 
         answers_TextField = new TextField(p, p.width / 2, searchBar.getY() + (p.height - (searchBar.getY() + searchBar.getH() / 2 + margin)) / 2, searchBar.getW(), p.height - (searchBar.getY() + searchBar.getH() / 2 + margin) - btnSize, stdTs, margin, btnSizeSmall, edgeRad, dark, light, lighter, textCol, textYShift, true, false, true, s, stdFont, null);
-
+        
     }
 
     public void render() {
-        mainActivity.renderMainButtons();
+        
+        if (mainActivity.getIsMaster()) {
+            mainActivity.renderMainButtonsMaster();
+        } else {
+            mainActivity.renderMainButtonsSlave();
+        }
+        
         searchBar.render();
         answers_TextField.render();
 
@@ -67,23 +79,23 @@ public class QuestionScreen {
         } else {
             for (int i = 0; i < foundStringLineIndex.size(); i++) {
 
-                float markerY = answers_TextField.getYPosByLineIndex(foundStringLineIndex.get(i)) + answers_TextField.getTs() * textYShift+margin/2;
-                float markerY2 = p.map(answers_TextField.getYPosByLineIndexUnshifted(foundStringLineIndex.get(i)), 0, answers_TextField.getTextH(), 0, answers_TextField.getH()) + answers_TextField.getY()-answers_TextField.getH()/2;
-               
-                int dp=0;
-                if(answers_TextField.getSlider().getW()>answers_TextField.getSlider().getH()) {
-                    dp=answers_TextField.getSlider().getH();
-                }else {
-                    dp=answers_TextField.getSlider().getW();
+                float markerY = answers_TextField.getYPosByLineIndex(foundStringLineIndex.get(i)) + answers_TextField.getTs() * textYShift + margin / 2;
+                float markerY2 = p.map(answers_TextField.getYPosByLineIndexUnshifted(foundStringLineIndex.get(i)), 0, answers_TextField.getTextH(), 0, answers_TextField.getH()) + answers_TextField.getY() - answers_TextField.getH() / 2;
+
+                int dp = 0;
+                if (answers_TextField.getSlider().getW() > answers_TextField.getSlider().getH()) {
+                    dp = answers_TextField.getSlider().getH();
+                } else {
+                    dp = answers_TextField.getSlider().getW();
                 }
-                
-                if (markerY > answers_TextField.getY() - answers_TextField.getH() / 2 +margin+stdTs/2 && markerY < answers_TextField.getY() + answers_TextField.getH() / 2-margin-stdTs/2) {
+
+                if (markerY > answers_TextField.getY() - answers_TextField.getH() / 2 + margin + stdTs / 2 && markerY < answers_TextField.getY() + answers_TextField.getH() / 2 - margin - stdTs / 2) {
                     p.fill(markerCol);
-                    p.rect(answers_TextField.getX() - answers_TextField.getW() / 2 - stdTs / 2, markerY, dp, dp*2);
+                    p.rect(answers_TextField.getX() - answers_TextField.getW() / 2 - stdTs / 2, markerY, dp, dp * 2);
                 }
-               
+
                 p.fill(markerCol);
-                p.rect(answers_TextField.getSlider().getX(), markerY2,dp,dp*2, edgeRad);
+                p.rect(answers_TextField.getSlider().getX(), markerY2, dp, dp * 2, edgeRad);
             }
         }
         answers_TextField.getSlider().renderHandle();
@@ -109,21 +121,33 @@ public class QuestionScreen {
     }
 
     public void onMousePressed() {
+        if(mainActivity.getIsMaster()) {
         for (int i = 0; i < mainButtons.length; i++) {
             if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
                 mainButtons[i].onMousePressed();
             }
+        }
+        }else {
+            for (int i = 0; i < mainButtons.length; i++) {
+                    mainButtons[i].onMousePressed(); 
+            } 
         }
         searchBar.onMousePressed();
         answers_TextField.onMousePressed();
     }
 
     public void onMouseReleased() {
+        if(mainActivity.getIsMaster()) {
         for (int i = 0; i < mainButtons.length; i++) {
             if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
                 mainButtons[i].onMouseReleased();
             }
         }
+    }else {
+        for (int i = 0; i < mainButtons.length; i++) {
+                mainButtons[i].onMouseReleased();
+        }
+    }
         searchBar.onMouseReleased();
         answers_TextField.onMouseReleased();
     }

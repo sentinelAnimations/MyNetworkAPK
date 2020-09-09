@@ -39,7 +39,7 @@ public class ImageButton<T> implements Widgets {
 		yShift = y;
 		mainActivity=(MainActivity)p;
 		loadPicto();
-        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, col, textYShift, infoText, mainActivity.getStdFont(), this);
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, col, textYShift, infoText,"getX","getY","getW","getH", mainActivity.getStdFont(), this);
 	}
 
 	public void render() {
@@ -153,6 +153,14 @@ public class ImageButton<T> implements Widgets {
 	public Boolean getIsClicked() {
 		return isClicked;
 	}
+	
+	public int getCol() {
+	    return col;
+	}
+	
+	public int getBgCol() {
+	    return bgCol;
+	}
 
 	public Boolean mouseIsInArea() {
 		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
@@ -181,4 +189,7 @@ public class ImageButton<T> implements Widgets {
 		imgPath = path;
 		loadPicto();
 	}
+	
+	
+	
 }

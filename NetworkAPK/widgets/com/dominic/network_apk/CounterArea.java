@@ -41,7 +41,7 @@ public class CounterArea<T> implements Widgets {
         yShift = y;
         count = startVal;
         initializePictoImage();
-        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, infoText, stdFont, this);
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, infoText,"getX","getY","getW","getH", stdFont, this);
         if (isParented) {
             getParentPos();
         }

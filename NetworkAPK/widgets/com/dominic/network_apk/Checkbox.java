@@ -42,7 +42,7 @@ public class Checkbox<T> implements Widgets {
 		xShift = x;
 		yShift = y;
 		
-        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, infoText, stdFont, this);
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, infoText,"getBoxX","getBoxY","getBoxDim","getBoxDim", stdFont, this);
 
 		initializePictoImage();
 
@@ -153,7 +153,7 @@ public class Checkbox<T> implements Widgets {
 	}
 	
 	public int getH() {
-		return boxDim;
+		return h;
 	}
 	public String getText() {
 		return t;

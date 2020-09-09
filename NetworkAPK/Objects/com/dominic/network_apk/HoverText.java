@@ -10,12 +10,12 @@ public class HoverText<T> {
     private int parentX, parentY, parentW, parentH, stdTs, margin, edgeRad, textCol, hoverTime = 0,maxShowTime=0;
     private float textYShift;
     private Boolean mouseIsInArea = false, isHovering = false;
-    private String infoText;
+    private String infoText,getWFunction,getHFunction,getXFunction,getYFunction;
     private PFont stdFont;
     private PApplet p;
     private T parent;
 
-    public HoverText(PApplet p, int stdTs, int margin, int edgeRad,int maxShowTime, int textCol, float textYShift, String infoText, PFont stdFont, T parent) {
+    public HoverText(PApplet p, int stdTs, int margin, int edgeRad,int maxShowTime, int textCol, float textYShift, String infoText,String getXFunction,String getYFunction,String getWFunction,String getHFunction, PFont stdFont, T parent) {
         this.p = p;
         this.stdTs = stdTs;
         this.margin = margin;
@@ -25,7 +25,12 @@ public class HoverText<T> {
         this.textYShift = textYShift;
         this.stdFont = stdFont;
         this.infoText = infoText;
+        this.getWFunction=getWFunction;
+        this.getHFunction=getHFunction;
+        this.getXFunction=getXFunction;
+        this.getYFunction=getYFunction;
         this.parent = parent;
+        
     }
 
     public void render() {
@@ -89,14 +94,14 @@ public class HoverText<T> {
         Method m;
         try {
 
-            m = parent.getClass().getMethod("getX");
+            m = parent.getClass().getMethod(getXFunction);
             parentX = (int) m.invoke(parent);
-            m = parent.getClass().getMethod("getY");
+            m = parent.getClass().getMethod(getYFunction);
             parentY = (int) m.invoke(parent);
 
-            m = parent.getClass().getMethod("getW");
+            m = parent.getClass().getMethod(getWFunction);
             parentW = (int) m.invoke(parent);
-            m = parent.getClass().getMethod("getH");
+            m = parent.getClass().getMethod(getHFunction);
             parentH = (int) m.invoke(parent);
 
         } catch (Exception e) {

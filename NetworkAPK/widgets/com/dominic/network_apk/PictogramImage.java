@@ -36,7 +36,7 @@ public class PictogramImage<T> implements Widgets {
 		yShift = y;
 		img = p.loadImage(imgPath);
 		img.resize(dim, dim);
-        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, col, textYShift, infoText, mainActivity.getStdFont(), this);
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, col, textYShift, infoText,"getX","getY","getW","getH", mainActivity.getStdFont(), this);
 
 	}
 

@@ -60,8 +60,11 @@ public class NodeEditor<T> {
 		nodeH = (int) (btnSize * 2.5f);
 		mainActivity = (MainActivity) p;
 		gridSize = btnSizeSmall / 2;
-		mainButtons = mainActivity.getMainButtons();
-
+		   if(mainActivity.getIsMaster()) {
+		        mainButtons = mainActivity.getMainButtonsMaster();
+		        }else {
+		            mainButtons = mainActivity.getMainButtonsSlave();
+		        }
 		screenX = p.width;
 		screenY = p.height;
 		prevScreenX = p.width;
@@ -135,8 +138,11 @@ public class NodeEditor<T> {
 				}
 			}
 		}
-		mainActivity.renderMainButtons();
-
+		   if(mainActivity.getIsMaster()) {
+	            mainActivity.renderMainButtonsMaster();
+	            }else {
+	                mainActivity.renderMainButtonsSlave();
+	            }
 		if (mainButtons[0].getClickCount() % 2 == 0) {
 
 			int rectH = p.height - (nodeEditorButtons[nodeEditorButtons.length - 1].getY() + nodeEditorButtons[nodeEditorButtons.length - 1].getH() / 2 + margin * 2);
