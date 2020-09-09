@@ -170,7 +170,7 @@ public class MainActivity extends PApplet {
     public void initializeClassInstancesMaster() {
         windowTopBarHeight = (int) (jf.getBounds().getHeight() - stdScreenDimension.y);
 
-        String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "spreadBlender.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
+        String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "share.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
         for (int i = 0; i < mainButtonsMaster.length; i++) {
             String s = "";
             if (i > 0) {
@@ -195,7 +195,7 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 3 --> settings screen---------------
 
         // variableInitialisation for mode 4 --> blender download--------------
-        String[] pp1 = { absPathPictos + "selectFolder.png", absPathPictos + "spreadBlender.png" };
+        String[] pp1 = { absPathPictos + "selectFolder.png", absPathPictos + "blender.png",absPathPictos+"sheepit.png" };
         spreadBlenderScreen = new SpreadBlender(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp1, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 4 --> blender download--------------
 
@@ -253,7 +253,6 @@ public class MainActivity extends PApplet {
         // initialize mode 0 --> homeScreenSlaves-----------------
         String[] hSSpp = {};
         homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, hSSpp, stdFont);
-
         // initialize mode 0 --> homeScreenSlaves-----------------
 
         initializeSettingsScreen();

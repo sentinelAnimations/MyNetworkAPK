@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.swing.filechooser.FileSystemView;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.data.StringList;
@@ -49,7 +51,14 @@ public class FileExplorer {
         this.textYShift = textYShift;
         this.isParented = isParented;
         this.stdFont = stdFont;
-
+        
+        String home = System.getProperty("user.home");
+        String downloads = home+"\\Downloads";
+       File desctop= javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory();
+       File documents=FileSystemView.getFileSystemView().getDefaultDirectory();
+       File[] pictures = FileSystemView.getFileSystemView().getFiles(new File(home), true);
+        p.println(home,downloads,desctop.getAbsolutePath(),documents.getPath());
+        p.println(pictures);
         fileInteractionHelper = new FileInteractionHelper(p);
 
         String[][] l = { {}, {}, {}, {}, {} };
