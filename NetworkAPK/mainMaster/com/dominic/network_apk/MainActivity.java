@@ -51,7 +51,7 @@ public class MainActivity extends PApplet {
     // integers-------------------------------------------------
 
     // Booleans-------------------------------------------------
-    private Boolean isMaster;
+    private Boolean isMaster = true;
     // Booleans-------------------------------------------------
 
     // Colors--------------------------------------------------
@@ -69,7 +69,12 @@ public class MainActivity extends PApplet {
     private String[] modeNamesSlaves = { modeNamesMaster[0], modeNamesMaster[2], modeNamesMaster[4], modeNamesMaster[5] };
 
     // Save paths ----------------------
-    private String mySettingsPath = "output/SettingsScreen/settings.json", myNodeSettingsPath = "output/NodeEditor/nodeEditor.json", myThemeScreenPath = "output/ThemeScreen/colorTheme.json";
+    // Local -----------
+    private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json";
+    // Local -----------
+    // shared ----------
+
+    // shared ----------
     // Save paths ----------------------
     // Strings--------------------------------------------------
 
@@ -93,7 +98,7 @@ public class MainActivity extends PApplet {
     private String[] startImgPaths = { "muffins.png" };
 
     // string arrays -------------------
-    private String[] fileExplorerPaths = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
+    private String[] fileExplorerPaths = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos+"home.png",absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
     // string arrays -------------------
     // images--------------------------------------------------
 
@@ -161,6 +166,8 @@ public class MainActivity extends PApplet {
 
     public void initializeLoadingScreen() {
         // variableInitialisation for mode 0 --> loading screen----------------
+        windowTopBarHeight = (int) (jf.getBounds().getHeight() - stdScreenDimension.y);
+
         mode = 0;
         setColorTheme();
         loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, btnSizeSmall, edgeRad, dark, textCol, textDark, light, lighter, textYShift, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
@@ -168,7 +175,6 @@ public class MainActivity extends PApplet {
     }
 
     public void initializeClassInstancesMaster() {
-        windowTopBarHeight = (int) (jf.getBounds().getHeight() - stdScreenDimension.y);
 
         String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "share.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
         for (int i = 0; i < mainButtonsMaster.length; i++) {
@@ -195,7 +201,7 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 3 --> settings screen---------------
 
         // variableInitialisation for mode 4 --> blender download--------------
-        String[] pp1 = { absPathPictos + "selectFolder.png", absPathPictos + "blender.png",absPathPictos+"sheepit.png" };
+        String[] pp1 = { absPathPictos + "selectFolder.png", absPathPictos + "blender.png", absPathPictos + "sheepit.png" };
         spreadBlenderScreen = new SpreadBlender(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp1, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 4 --> blender download--------------
 
@@ -244,6 +250,12 @@ public class MainActivity extends PApplet {
     }
 
     public void initializeClassInstancesSlave() {
+
+        if (mode != 2) {
+            if (jf.getBounds().getHeight() > stdScreenDimension.y + windowTopBarHeight) {
+                jf.setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y + windowTopBarHeight);
+            }
+        }
 
         String[] p3 = { absPathPictos + "home.png", absPathPictos + "settings.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
         for (int i = 0; i < mainButtonsSlave.length; i++) {
@@ -676,6 +688,23 @@ public class MainActivity extends PApplet {
 
     public RenderOverview getRenderOverview() {
         return renderOverview;
+    }
+
+    public String getPCName() {
+        if (loadingScreen.getInstanciatedClasses()) {
+            EditText et = settingsScreen.getEditText();
+            if (et.getStrList().get(0).length() > 0) {
+                return et.getStrList().get(0);
+            } else {
+                return "";
+            }
+        } else {
+            return "";
+        }
+    }
+
+    public String getSavePath(String basePath) {
+        return "output" + getPCName() + "/" + basePath;
     }
 
     public void setMode(int setMode) {

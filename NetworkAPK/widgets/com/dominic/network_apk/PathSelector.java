@@ -79,13 +79,10 @@ public class PathSelector<T> implements Widgets {
 
         // handle fileExplorer ------------------------------
         if (openFileExplorer_btn.getIsClicked() == true) {
-
             if (fileExplorerIsOpen == false) {
-                p.saveFrame("data\\imgs\\screenshots\\fileExplorer.png");
-                screenshot = p.loadImage("data\\imgs\\screenshots\\fileExplorer.png");
-                screenshot = new ImageBlurHelper(p).blur(screenshot, 3);
-                fileExplorerIsOpen = true;
-                renderPathSelector = false;
+            makeScreenshot();
+            fileExplorerIsOpen = true;
+            renderPathSelector = false;
             }
             p.noTint();
             p.image(screenshot, p.width / 2, p.height / 2);
@@ -264,6 +261,9 @@ public class PathSelector<T> implements Widgets {
     public String getPath() {
         return t;
     }
+    public HoverText getHoverText() {
+        return hoverText;
+    }
 
     public ImageButton getOpenFileExplorer_btn() {
         return openFileExplorer_btn;
@@ -286,6 +286,14 @@ public class PathSelector<T> implements Widgets {
 
     public void setRenderPathSelector(Boolean state) {
         renderPathSelector = state;
+    }
+
+    public void makeScreenshot() {
+            p.saveFrame("data\\imgs\\screenshots\\fileExplorer.png");
+            screenshot = p.loadImage("data\\imgs\\screenshots\\fileExplorer.png");
+            screenshot = new ImageBlurHelper(p).blur(screenshot, 3);
+            p.println("adsifj");
+        
     }
 
 }

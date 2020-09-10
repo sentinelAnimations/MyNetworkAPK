@@ -107,8 +107,6 @@ public class HomeScreenMaster {
         // add to list --------------------------------------------------
 
         // render all ---------------------------------------------------------------
-        fileToRender_pathSelector.render();
-
         if (fileExplorerIsOpen == false) {
             if (mainActivity.getIsMaster()) {
                 mainActivity.renderMainButtonsMaster();
@@ -137,6 +135,7 @@ public class HomeScreenMaster {
                 }
             }
             // render toasts -----------------------------------
+
             // render all ---------------------------------------------------------------
 
             // handle checkboxes ------------------------------------------------------
@@ -245,6 +244,7 @@ public class HomeScreenMaster {
                 startRendering_btn.setIsClicked(false);
             }
         }
+        fileToRender_pathSelector.render();
 
         prevFileExplorerIsOpen = fileExplorerIsOpen;
         // handle checkboxes ------------------------------------------------------

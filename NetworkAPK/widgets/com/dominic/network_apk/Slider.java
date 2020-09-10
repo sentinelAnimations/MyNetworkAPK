@@ -74,6 +74,7 @@ public class Slider<T> implements Widgets {
 
         sliderX = x + sliderShiftX;
         sliderY = y + sliderShiftY;
+        try {
         p.noStroke();
         p.fill(bgCol);
         p.stroke(bgCol);
@@ -95,6 +96,9 @@ public class Slider<T> implements Widgets {
                     p.strokeWeight(1);
                 }
             }
+        }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
         if (showDefault) {
             p.noStroke();

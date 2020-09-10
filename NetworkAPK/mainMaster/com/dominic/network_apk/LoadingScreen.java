@@ -15,7 +15,7 @@ public class LoadingScreen {
     private int btnSize, margin, stdTs, btnSizeSmall, edgeRad, titleTs, subtitleTs, dark, light, lighter, textCol, textDark;
     private float textYShift;
     private boolean firstSetup = true, initializedClasses = false;
-    private String APKDescription, APKName, loadingStatus = "Loading Data", mySettingsPath;
+    private String APKDescription, APKName, loadingStatus = "Loading Data", mySavePath;
     private PApplet p;
     private PImage img;
     private PVector c;
@@ -25,7 +25,7 @@ public class LoadingScreen {
     private JsonHelper jHelper;
     private MainActivity mainActivity;
 
-    public LoadingScreen(PApplet p, int btnSize, int margin, int stdTs, int titleTs, int subtitleTs, int btnSizeSmall, int edgeRad, int dark, int textCol, int textDark, int light, int lighter, float textYShift, String APKName, String APKDescription, String imgPath, String mySettingsPath, PFont stdFont) {
+    public LoadingScreen(PApplet p, int btnSize, int margin, int stdTs, int titleTs, int subtitleTs, int btnSizeSmall, int edgeRad, int dark, int textCol, int textDark, int light, int lighter, float textYShift, String APKName, String APKDescription, String imgPath, String mySavePath, PFont stdFont) {
         this.p = p;
         this.btnSize = btnSize;
         this.margin = margin;
@@ -42,7 +42,7 @@ public class LoadingScreen {
         this.textYShift = textYShift;
         this.APKDescription = APKDescription;
         this.APKName = APKName;
-        this.mySettingsPath = mySettingsPath;
+        this.mySavePath = mySavePath;
         this.stdFont = stdFont;
         img = p.loadImage(imgPath);
         img.resize(p.width, p.height);
@@ -58,9 +58,14 @@ public class LoadingScreen {
         Thread initializeThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                JSONArray loadedSettingsData = jHelper.getData(mySettingsPath);
-                JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
-                int selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
+                JSONArray loadedSettingsData = jHelper.getData(mySavePath);
+                int selectedInd=0;
+                if (loadedSettingsData.isEmpty()) {
+                } else {
+                    JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
+                    selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
+                }
+               
                 switch (selectedInd) {
                 case 0:
                     mainActivity.setIsMaster(true);
@@ -81,9 +86,10 @@ public class LoadingScreen {
 
     public void render() {
         if (initializedClasses) {
-            /*p.background(dark);
-            mainActivity.getNodeEditor().render();
-            p.background(dark);*/
+            /*
+             * p.background(dark); mainActivity.getNodeEditor().render();
+             * p.background(dark);
+             */
             Thread loadDataThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -118,11 +124,11 @@ public class LoadingScreen {
 
     private void loadData() {
         // load settings info, if not available, goto settingsPage----------------------
-        JSONArray loadedSettingsData = jHelper.getData(mySettingsPath);
+        JSONArray loadedSettingsData = jHelper.getData(mySavePath);
         if (loadedSettingsData.isEmpty()) {
-            if(mainActivity.getIsMaster()) {
-            mainActivity.setMode(3);
-            }else {
+            if (mainActivity.getIsMaster()) {
+                mainActivity.setMode(3);
+            } else {
                 mainActivity.setMode(0);
             }
         } else {

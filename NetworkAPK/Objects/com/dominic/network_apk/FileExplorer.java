@@ -26,7 +26,7 @@ public class FileExplorer {
     private ArrayList<File> allDirsAndFiles = new ArrayList<File>();
     private SpriteAnimation searching_sprAnim;
     private HorizontalList[] horizontalLists = new HorizontalList[5];
-    private ImageButton[] fileExplorer_btns = new ImageButton[9];
+    private ImageButton[] fileExplorer_btns = new ImageButton[10];
     private ImageButton rename_btn;
     private EditText rename_et;
     private SearchBar searchBar;
@@ -51,14 +51,14 @@ public class FileExplorer {
         this.textYShift = textYShift;
         this.isParented = isParented;
         this.stdFont = stdFont;
-        
+
         String home = System.getProperty("user.home");
-        String downloads = home+"\\Downloads";
-       File desctop= javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory();
-       File documents=FileSystemView.getFileSystemView().getDefaultDirectory();
-       File[] pictures = FileSystemView.getFileSystemView().getFiles(new File(home), true);
-        p.println(home,downloads,desctop.getAbsolutePath(),documents.getPath());
-        p.println(pictures);
+        String downloads = home + "\\Downloads";
+        File desctop = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory();
+        File documents = FileSystemView.getFileSystemView().getDefaultDirectory();
+        
+        //p.println(home, downloads, desctop.getAbsolutePath(), documents.getPath());
+
         fileInteractionHelper = new FileInteractionHelper(p);
 
         String[][] l = { {}, {}, {}, {}, {} };
@@ -92,7 +92,7 @@ public class FileExplorer {
         horizontalLists[3].isNewSelected = false;
         horizontalLists[4].isNewSelected = false;
 
-        String[] infoTexts = { "Copy", "Cut", "Paste", "New folder", "Delete folder", "Delete file", "Help", "", "" };
+        String[] infoTexts = { "Home","Copy", "Cut", "Paste", "New folder", "Delete folder", "Delete file", "Help", "", "" };
         for (int i = 0; i < fileExplorer_btns.length; i++) {
             fileExplorer_btns[i] = new ImageButton(p, startXBtns + (i * bs + i * margin), editBarY, bs, bs, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, PictoPaths[i + 8], infoTexts[i], null);
         }
@@ -184,10 +184,9 @@ public class FileExplorer {
             String[] handOverStr = new String[splitStr.length];
 
             if (splitStr.length > 0) {
-                String[] splitStr2 = PApplet.split(splitStr[splitStr.length - 1], ".");
-                PApplet.println(splitStr2);
-                if (splitStr2.length > 1) {
-                    PApplet.println("now");
+                //String[] splitStr2 = PApplet.split(splitStr[splitStr.length - 1], ".");
+                File f=new File(l4[horizontalLists[4].getSelectedInd()]);
+                if (f.isDirectory()) {
                     handOverStr = new String[splitStr.length - 1];
                     handOverStr = Arrays.copyOf(splitStr, splitStr.length - 1);
                 } else {
@@ -314,7 +313,43 @@ public class FileExplorer {
         for (int i = 0; i < fileExplorer_btns.length; i++) {
             if (fileExplorer_btns[i].getIsClicked() == true) {
                 switch (i) {
-                case 0: // copy folder
+                case 0:
+                    String home = System.getProperty("user.home");
+                    String path = "";
+                    String[] splitStr = PApplet.split(home, "\\");
+                    String[] handOverStr = new String[splitStr.length];
+
+                    if (splitStr.length > 0) {
+                        //String[] splitStr2 = PApplet.split(splitStr[splitStr.length - 1], ".");
+                        File f=new File(home);
+                        if (f.isDirectory()) {
+                            handOverStr = new String[splitStr.length - 1];
+                            handOverStr = Arrays.copyOf(splitStr, splitStr.length - 1);
+                        } else {
+                            handOverStr = splitStr;
+                        }
+
+                        for (int i2 = 0; i2 < handOverStr.length; i2++) {
+                            path += handOverStr[i2] + "\\";
+                            handOverStr[i2] = handOverStr[i2] + "\\";
+                        }
+                        
+                        String[] hl0=horizontalLists[0].getList();
+                        for(int i2=0;i2<hl0.length;i2++) {
+                            String[] splitString2=p.split(hl0[i2],"\\");
+                            p.println(hl0[i2],splitString2[0],splitStr[0]);
+                           if(splitString2[0].equals(splitStr[0])) {
+                               horizontalLists[0].setSelectedInd(i);
+                               break;
+                           }
+                        }
+                        
+                        horizontalLists[1].setList(handOverStr);
+                        horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(path, true));
+                        horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(path, false));
+                    }                
+                    break;
+                case 1: // copy folder
                     pathToCopy = "";
                     String[] c0List1 = horizontalLists[1].getList();
                     for (int i2 = 0; i2 < c0List1.length; i2++) {
@@ -330,7 +365,7 @@ public class FileExplorer {
                     btnMode = 0;
                     break;
 
-                case 1: // cut folder
+                case 2: // cut folder
                     pathToCopy = "";
                     String[] c1List1 = horizontalLists[1].getList();
                     for (int i2 = 0; i2 < c1List1.length; i2++) {
@@ -341,7 +376,7 @@ public class FileExplorer {
                     btnMode = 1;
                     break;
 
-                case 2: // paste folder
+                case 3: // paste folder
                     String destination = "";
                     String[] c2List1 = horizontalLists[1].getList();
                     for (int i2 = 0; i2 < c2List1.length; i2++) {
@@ -368,7 +403,7 @@ public class FileExplorer {
                     btnMode = -1;
                     break;
 
-                case 3: // new folder
+                case 4: // new folder
                     String c3curPath = "", c3curPath2;
                     String[] c3List1 = horizontalLists[1].getList();
                     for (int i2 = 0; i2 < c3List1.length; i2++) {
@@ -405,7 +440,7 @@ public class FileExplorer {
                     horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(c3curPath2, true));
                     break;
 
-                case 4: // delete folder
+                case 5: // delete folder
                     String pathToDelete = "";
                     String[] c4List1 = horizontalLists[1].getList();
                     for (int i2 = 0; i2 < c4List1.length; i2++) {
@@ -418,7 +453,7 @@ public class FileExplorer {
                     }
                     break;
 
-                case 5: // delete file
+                case 6: // delete file
                     pathToDelete = "";
                     String[] c5List1 = horizontalLists[1].getList();
                     for (int i2 = 0; i2 < c5List1.length; i2++) {
@@ -436,15 +471,15 @@ public class FileExplorer {
                     }
                     break;
 
-                case 6: // questions
+                case 7: // questions
                     break;
 
-                case 7: // cancel selection
+                case 8: // cancel selection
                     isClosed = true;
                     isCanceled = true;
                     break;
 
-                case 8: // select
+                case 9: // select
 
                     selectedPath = "";
                     String[] c8List1 = horizontalLists[1].getList();

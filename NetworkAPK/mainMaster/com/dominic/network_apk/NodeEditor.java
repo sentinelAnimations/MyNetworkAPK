@@ -20,7 +20,7 @@ public class NodeEditor<T> {
 	private int nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH, screenX, screenY, prevScreenX, prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, doOnceOnPressed = 0, doOnceOnStart = 0;
 	private float textYShift;
 	private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false;
-	private String mySavePath = "";
+	private String mySavePath;
 	private String[] nodePaths1, nodePaths2, pcPaths;
 	private PFont stdFont;
 	private PImage screenshot;

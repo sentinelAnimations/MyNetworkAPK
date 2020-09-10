@@ -363,7 +363,10 @@ public class SettingsScreen {
     public PathSelector[] getPathSelectors() {
         return pathSelectors;
     }
-
+    
+    public EditText getEditText() {
+        return personalData_et;
+    }
     public void removeToast(int i) {
         makeToasts.remove(i);
     }

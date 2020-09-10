@@ -114,7 +114,6 @@ public class Node<T> {
 
         case 4:
             renderTypeOutput(); // engine output
-            p.println("");
             break;
         }
     }
