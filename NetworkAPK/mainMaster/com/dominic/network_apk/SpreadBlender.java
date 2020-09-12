@@ -87,7 +87,9 @@ public class SpreadBlender {
 			
 			// share sheepit with slaves ---------------------------------
 			if (spreadSheepit_ImageButton.getIsClicked()) {
-				if (spreadBlender_pathSelector.getPath().length() > 0) {
+				p.println("now1");
+
+				if (spreadSheepit_PathSelector.getPath().length() > 0) {
 					String copyToPath = mainActivity.getSettingsScreen().getPathSelectors()[2].getPath();
 					if (copyToPath.charAt(copyToPath.length() - 1) != '\\' || copyToPath.charAt(copyToPath.length() - 1) != '/') {
 						copyToPath += "\\";
@@ -95,6 +97,8 @@ public class SpreadBlender {
 					
 					String copyFromPath = spreadSheepit_PathSelector.getPath();
 					fileInteractionHelper.copyFolder(copyFromPath, copyToPath);
+					p.println("now");
+
 				}
 				spreadSheepit_ImageButton.setIsClicked(false);
 			}

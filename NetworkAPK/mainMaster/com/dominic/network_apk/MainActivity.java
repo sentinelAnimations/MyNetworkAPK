@@ -70,7 +70,7 @@ public class MainActivity extends PApplet {
 
     // Save paths ----------------------
     // Local -----------
-    private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json";
+    private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json",masterCommandSavePath="";
     // Local -----------
     // shared ----------
 
@@ -214,9 +214,9 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 6 --> help screen-------------------
 
         // variableInitialisation for mode 101 --> RenderOverview -------------
-        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png" };
+        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png",absPathPictos+"sleeping.png" };
         String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rOpp, hoLiPictoPathsRenderOverview, stdFont);
+        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift,masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, stdFont);
         // variableInitialisation for mode 101 --> RenderOverview -------------
 
         // variableInitialisation -----------------------------------------------
@@ -713,6 +713,9 @@ public class MainActivity extends PApplet {
 
     public void setIsMaster(Boolean state) {
         isMaster = state;
+    }
+    public void setMasterComandPath(String setComPath) {
+    	masterCommandSavePath=setComPath;
     }
 
     public void setColorTheme() {

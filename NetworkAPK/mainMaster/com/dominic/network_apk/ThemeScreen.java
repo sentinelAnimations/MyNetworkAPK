@@ -66,7 +66,7 @@ public class ThemeScreen {
 
         jHelper = new JsonHelper(p);
 
-        String[] splitSavePath = p.split(mySavePath, "/");
+        /*String[] splitSavePath = p.split(mySavePath, "/");
         brightThemePath = "";
         darkThemePath = "";
         for (int i = 0; i < splitSavePath.length - 1; i++) {
@@ -74,7 +74,10 @@ public class ThemeScreen {
             darkThemePath += splitSavePath[i] + "/";
         }
         brightThemePath += "colorThemeLight.json";
-        darkThemePath += "colorThemeDark.json";
+        darkThemePath += "colorThemeDark.json";*/
+        
+        brightThemePath="icons.copy/colorThemeLight.json";
+        darkThemePath="colorThemes/colorThemeDark.json";
 
         setData(mySavePath);
     }

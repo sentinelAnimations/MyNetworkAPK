@@ -158,6 +158,9 @@ public class Checkbox<T> implements Widgets {
 	public String getText() {
 		return t;
 	}
+	public HoverText getHoverText() {
+		return hoverText;
+	}
 
 	public void setIsChecked(Boolean state) {
 	    isChecked=state;

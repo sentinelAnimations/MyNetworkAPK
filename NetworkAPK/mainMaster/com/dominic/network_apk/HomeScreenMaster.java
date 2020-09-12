@@ -245,7 +245,7 @@ public class HomeScreenMaster {
             }
         }
         fileToRender_pathSelector.render();
-
+        homeSettings_checkboxes[2].getHoverText().render();
         prevFileExplorerIsOpen = fileExplorerIsOpen;
         // handle checkboxes ------------------------------------------------------
 

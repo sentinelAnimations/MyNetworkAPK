@@ -64,6 +64,9 @@ public class LoadingScreen {
                 } else {
                     JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
                     selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
+                    String comPath =jsonObject.getAsJsonObject("Settings").get("pathSelector2").getAsString();
+
+                    mainActivity.setMasterComandPath(comPath);
                 }
                
                 switch (selectedInd) {

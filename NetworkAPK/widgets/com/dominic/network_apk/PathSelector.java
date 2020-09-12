@@ -74,7 +74,7 @@ public class PathSelector<T> implements Widgets {
                 p.fill(textCol);
                 p.text(displayText, x - w / 2 + margin + btnSize, y - stdTs * textYShift);
             }
-            // hoverText.render();
+             hoverText.render();
         }
 
         // handle fileExplorer ------------------------------
