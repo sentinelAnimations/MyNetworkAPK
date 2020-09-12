@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import processing.core.PApplet;
 
@@ -51,6 +52,7 @@ public class JsonHelper {
 	private void readData(String path) throws Exception {
 		JSONParser jsonParser = new JSONParser();
 		isFlawlessLoaded = false;
+		
 		try (FileReader reader = new FileReader(path)) {
 			isFlawlessLoaded = true;
 			Object obj = jsonParser.parse(reader); 
@@ -67,6 +69,7 @@ public class JsonHelper {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public JSONArray getData(String path) {
 		try {
@@ -75,6 +78,20 @@ public class JsonHelper {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+		return loadedData;
+	}
+	
+	public JSONArray getDataFromSourceFolder(String path) {
+		isFlawlessLoaded = false;
+
+		try (InputStreamReader inputStreamReader =new InputStreamReader(JsonHelper.class.getResourceAsStream(path))) {
+			loadedData = (JSONArray) new JSONParser().parse(inputStreamReader);
+			isFlawlessLoaded = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			isFlawlessLoaded = false;
+		}
 		return loadedData;
 	}
 
