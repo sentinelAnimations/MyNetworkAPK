@@ -76,6 +76,7 @@ public class ThemeScreen {
         brightThemePath += "colorThemeLight.json";
         darkThemePath += "colorThemeDark.json";*/
         
+        
         brightThemePath="icons.copy/colorThemeLight.json";
         darkThemePath="colorThemes/colorThemeDark.json";
 
