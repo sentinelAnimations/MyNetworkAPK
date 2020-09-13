@@ -186,10 +186,10 @@ public class MainActivity extends PApplet {
         }
 
         // variableInitialisation for mode 1 --> home screen-------------------
-        String[] pp = { absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
+        String[] arrowPaths = { absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
         String[] hoLiPictoPathsHome = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
         String[] homeScreenPictoPaths = { absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png", absPathPictos + "startEngine.png" };
-        homeScreen = new HomeScreenMaster(this, btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark, textYShift, homeScreenPictoPaths, pp, hoLiPictoPathsHome, fileExplorerPaths, stdFont);
+        homeScreen = new HomeScreenMaster(this, btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark, textYShift, homeScreenPictoPaths, arrowPaths, hoLiPictoPathsHome, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 1 --> home screen-------------------
 
         // variableInitialisation for mode 2 --> node editor-------------------
@@ -214,9 +214,9 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 6 --> help screen-------------------
 
         // variableInitialisation for mode 101 --> RenderOverview -------------
-        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png",absPathPictos+"sleeping.png" };
+        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png",absPathPictos+"sleeping.png",absPathPictos+"checkmark.png" };
         String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift,masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, stdFont);
+        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift,masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview,arrowPaths, stdFont);
         // variableInitialisation for mode 101 --> RenderOverview -------------
 
         // variableInitialisation -----------------------------------------------
@@ -688,6 +688,10 @@ public class MainActivity extends PApplet {
 
     public RenderOverview getRenderOverview() {
         return renderOverview;
+    }
+    
+    public HomeScreenMaster getHomeScreenMaster() {
+    	return homeScreen;
     }
 
     public String getPCName() {

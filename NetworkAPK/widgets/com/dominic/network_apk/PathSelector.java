@@ -291,9 +291,7 @@ public class PathSelector<T> implements Widgets {
     public void makeScreenshot() {
             p.saveFrame("data\\imgs\\screenshots\\fileExplorer.png");
             screenshot = p.loadImage("data\\imgs\\screenshots\\fileExplorer.png");
-            screenshot = new ImageBlurHelper(p).blur(screenshot, 3);
-            p.println("adsifj");
-        
+            screenshot = new ImageBlurHelper(p).blur(screenshot, 3);        
     }
 
 }

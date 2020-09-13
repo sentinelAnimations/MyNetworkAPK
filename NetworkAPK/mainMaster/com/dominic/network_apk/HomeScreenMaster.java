@@ -232,6 +232,8 @@ public class HomeScreenMaster {
                     mainActivity.setMode(101);
                     if (homeSettings_checkboxes[2].getIsChecked()) {
                         mainActivity.getRenderOverview().setRenderMode(0.1f);
+                        mainActivity.getRenderOverview().setFileList(fileSelector_HorizontalList.getList());
+                        mainActivity.getRenderOverview().getRenderFilesSettings().setStartupVals();
                     }
                     if (homeSettings_checkboxes[3].getIsChecked()) {
                         mainActivity.getRenderOverview().setRenderMode(1);
@@ -326,5 +328,17 @@ public class HomeScreenMaster {
             fileSelector_HorizontalList.onScroll(e);
         }
     }
-
+    
+    public Checkbox[] getCheckboxes() {
+    	return homeSettings_checkboxes;
+    }
+    public CounterArea getStartFrame_CounterArea() {
+    	return startFrame_counterArea;
+    }
+    public CounterArea getEndFrame_CounterArea() {
+    	return endFrame_counterArea;
+    }
+    public CounterArea getStillFrame_counterArea() {
+    	return stillFrame_counterArea;
+    }
 }

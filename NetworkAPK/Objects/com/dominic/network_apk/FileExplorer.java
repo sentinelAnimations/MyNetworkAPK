@@ -169,7 +169,7 @@ public class FileExplorer {
                     l1New[i] = l1[i];
                     path += l1New[i];
                 }
-                PApplet.println(path);
+
                 horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(path, true));
                 horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(path, false));
                 horizontalLists[1].setList(l1New);

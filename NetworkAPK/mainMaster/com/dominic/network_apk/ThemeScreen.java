@@ -82,9 +82,6 @@ public class ThemeScreen {
 		brightThemePath = "/colorThemes/colorThemeLight.json";
 		darkThemePath = "/colorThemes/colorThemeDark.json";
 
-		// p.println(jHelper.getDataFromSourceFolder(brightThemePath));
-		// p.println(ThemeScreen.class.getResourceAsStream(brightThemePath));
-
 		setData(mySavePath, false);
 	}
 

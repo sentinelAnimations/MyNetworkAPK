@@ -8,6 +8,8 @@ public class FilesRenderingScreen {
 
     private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border;
     private float textYShift;
+    private Boolean[] renderAnimation,renderStillFrame;
+    private int[] startFrames,endFrames,stillFrames;
     private String[] pictoPaths;
     private PFont stdFont;
     private PApplet p;
@@ -66,6 +68,17 @@ public class FilesRenderingScreen {
         return allFiles_HorizontalList;
     }
 
+    public void setFileList(String[] l) {
+    	allFiles_HorizontalList.setList(l);
+    }
+    public void setStartupVals() {
+    	renderAnimation=mainActivity.getRenderOverview().getRenderFilesSettings().getRenderAnimation();
+    	renderStillFrame=mainActivity.getRenderOverview().getRenderFilesSettings().getRenderStillFrame();
+    	startFrames=mainActivity.getRenderOverview().getRenderFilesSettings().getStartFrames();
+    	endFrames=mainActivity.getRenderOverview().getRenderFilesSettings().getEndFrames();
+    	stillFrames=mainActivity.getRenderOverview().getRenderFilesSettings().getStilFrames();
+    }
+    
 }
 
 

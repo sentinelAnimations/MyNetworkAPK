@@ -35,20 +35,17 @@ public class RenderOnSheepitScreen {
 		this.stdFont = stdFont;
 		mainActivity = (MainActivity) p;
 
-		sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2 - btnSizeLarge / 2 - margin / 2, p.height / 2, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPaths[0], "Rendering on Sheepit", null);
-		loadingGear_SpriteAnimation = new SpriteAnimation(p, p.width / 2 + btnSizeLarge / 2 + margin / 2, p.height / 2, btnSizeLarge, btnSizeLarge, 0, 129, textCol, false, "imgs/sprites/loadingGears/", null); // endInd=129, obwohl letztes bild '0128.png' --> weil start bei '0000.png'
+		sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPaths[0], "Rendering on Sheepit", null);
 		sheepitSleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPaths[1], "Sheepit sleeping", null);
 
 	}
 
 	public void render() {
 		if (isRendering) {
-			loadingGear_SpriteAnimation.render();
 			sheepitRendering_PictogramImage.render();
 		} else {
 			sheepitSleeping_PictogramImage.render();
 		}
-
 	}
 
 	public void onMousePressed(int mouseButton) {

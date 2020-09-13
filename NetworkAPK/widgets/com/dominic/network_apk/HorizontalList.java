@@ -345,6 +345,12 @@ public class HorizontalList<T> implements Widgets {
 			return false;
 		}
 	}
+	public int getW() {
+		return w;
+	}
+	public int getH() {
+		return h;
+	}
 	
 	public void setSelectedInd(int setInd) {
 	    selectedInd=setInd;
