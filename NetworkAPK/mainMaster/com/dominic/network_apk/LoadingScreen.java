@@ -12,7 +12,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 public class LoadingScreen {
-    private int btnSize, margin, stdTs, btnSizeSmall, edgeRad, titleTs, subtitleTs, dark, light, lighter, textCol, textDark;
+    private int btnSize, margin, stdTs, btnSizeSmall, edgeRad, titleTs, subtitleTs, dark, light, lighter, textCol, textDark,once=0;
     private float textYShift;
     private boolean firstSetup = true, initializedClasses = false;
     private String APKDescription, APKName, loadingStatus = "Loading Data", mySavePath;
@@ -55,44 +55,48 @@ public class LoadingScreen {
         mainActivity = (MainActivity) p;
         jHelper = new JsonHelper(p);
 
-        Thread initializeThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                JSONArray loadedSettingsData = jHelper.getData(mySavePath);
-                int selectedInd=0;
-                if (loadedSettingsData.isEmpty()) {
-                } else {
-                    JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
-                    selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
-                    String comPath =jsonObject.getAsJsonObject("Settings").get("pathSelector2").getAsString();
-
-                    mainActivity.setMasterComandPath(comPath);
-                }
-               
-                switch (selectedInd) {
-                case 0:
-                    mainActivity.setIsMaster(true);
-                    mainActivity.initializeClassInstancesMaster();
-                    break;
-                case 1:
-                    mainActivity.setIsMaster(false);
-                    mainActivity.initializeClassInstancesSlave();
-                    break;
-                }
-
-                initializedClasses = true;
-            }
-        });
-        initializeThread.start();
+        
 
     }
 
     public void render() {
+        
+        if(once==0) {
+            loadingStatus="Start initializing";
+            Thread initializeThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONArray loadedSettingsData = jHelper.getData(mySavePath);
+                    int selectedInd=0;
+                    if (loadedSettingsData.isEmpty()) {
+                    } else {
+                        JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
+                        selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
+                        String comPath =jsonObject.getAsJsonObject("Settings").get("pathSelector2").getAsString();
+
+                        mainActivity.setMasterComandPath(comPath);
+                    }
+                   
+                    switch (selectedInd) {
+                    case 0:
+                        mainActivity.setIsMaster(true);
+                        mainActivity.initializeClassInstancesMaster();
+                        break;
+                    case 1:
+                        mainActivity.setIsMaster(false);
+                        mainActivity.initializeClassInstancesSlave();
+                        break;
+                    }
+
+                    initializedClasses = true;
+                }
+            });
+            initializeThread.start();
+            once++;
+        }
         if (initializedClasses) {
-            /*
-             * p.background(dark); mainActivity.getNodeEditor().render();
-             * p.background(dark);
-             */
+            loadingStatus="Loading data";
+
             Thread loadDataThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -153,5 +157,7 @@ public class LoadingScreen {
     public void setIsFirstSetup(Boolean state) {
         firstSetup = state;
     }
-
+    public void setLoadingStatus(String lstat) {
+        loadingStatus=lstat;   
+    }
 }

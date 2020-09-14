@@ -57,24 +57,10 @@ public class Slider<T> implements Widgets {
     }
 
     public void render() {
-        if (isParented) {
-            getParentPos();
-        }
 
-        if (isOnDrag) {
-
-            if (isHorizontalSlider) {
-                sliderShiftX = p.constrain(p.mouseX, x - w / 2 + d / 2, x + w / 2 - d / 2) - x;
-                sliderShiftY = 0;
-            } else {
-                sliderShiftX = 0;
-                sliderShiftY = p.constrain(p.mouseY, y - w / 2 + d / 2, y + w / 2 - d / 2) - y;
-            }
-        }
-
-        sliderX = x + sliderShiftX;
-        sliderY = y + sliderShiftY;
-        try {
+        calculations();
+        
+        
         p.noStroke();
         p.fill(bgCol);
         p.stroke(bgCol);
@@ -97,9 +83,7 @@ public class Slider<T> implements Widgets {
                 }
             }
         }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+       
         if (showDefault) {
             p.noStroke();
             p.fill(sliderCol);
@@ -115,6 +99,26 @@ public class Slider<T> implements Widgets {
         p.ellipse(sliderX, sliderY, d, d);
         p.fill(bgCol);
         p.ellipse(sliderX, sliderY, d / 1.5f, d / 1.5f);
+    }
+    
+    public void calculations() {
+        if (isParented) {
+            getParentPos();
+        }
+
+        if (isOnDrag) {
+
+            if (isHorizontalSlider) {
+                sliderShiftX = p.constrain(p.mouseX, x - w / 2 + d / 2, x + w / 2 - d / 2) - x;
+                sliderShiftY = 0;
+            } else {
+                sliderShiftX = 0;
+                sliderShiftY = p.constrain(p.mouseY, y - w / 2 + d / 2, y + w / 2 - d / 2) - y;
+            }
+        }
+
+        sliderX = x + sliderShiftX;
+        sliderY = y + sliderShiftY;
     }
 
     public void onMousePressed() {

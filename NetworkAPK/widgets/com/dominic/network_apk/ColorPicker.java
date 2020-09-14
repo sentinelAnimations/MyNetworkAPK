@@ -59,8 +59,7 @@ public class ColorPicker<T> implements Widgets {
         picto = new PictogramImage(p, xShift, yShift, btnSizeSmall - margin, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPath, "", parent);
 
         brightness_slider = new Slider(p, 0, margin + r + btnSizeSmall / 2, r * 2, btnSizeSmall / 4, btnSizeSmall - margin, stdTs, edgeRad, margin, 0, 100, 0, dark, bgC, lightest, textYShift, true, true, false, true, stdFont, this);
-        brightness_slider.render();
-
+        brightness_slider.calculations();
     }
 
     public void render() {

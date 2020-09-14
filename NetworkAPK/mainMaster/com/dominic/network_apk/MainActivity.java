@@ -6,9 +6,11 @@ import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -65,12 +67,12 @@ public class MainActivity extends PApplet {
 
     // Strings--------------------------------------------------
     private String APKName = "InSevenDays©", APKDescription = "A network solution";
-    private String[] modeNamesMaster = { "Home", "Node Editor", "Settings", "Spread Blender", "Theme", "Questions" };
+    private String[] modeNamesMaster = { "Home", "Node Editor", "Settings", "Share", "Theme", "Questions" };
     private String[] modeNamesSlaves = { modeNamesMaster[0], modeNamesMaster[2], modeNamesMaster[4], modeNamesMaster[5] };
 
     // Save paths ----------------------
     // Local -----------
-    private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json",masterCommandSavePath="";
+    private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", masterCommandSavePath = "";
     // Local -----------
     // shared ----------
 
@@ -98,7 +100,7 @@ public class MainActivity extends PApplet {
     private String[] startImgPaths = { "muffins.png" };
 
     // string arrays -------------------
-    private String[] fileExplorerPaths = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos+"home.png",absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
+    private String[] fileExplorerPaths = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "home.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
     // string arrays -------------------
     // images--------------------------------------------------
 
@@ -129,7 +131,6 @@ public class MainActivity extends PApplet {
 
     @Override
     public void settings() {
-
     }
 
     @Override
@@ -171,11 +172,13 @@ public class MainActivity extends PApplet {
         mode = 0;
         setColorTheme();
         loadingScreen = new LoadingScreen(this, btnSize, margin, stdTs, titleTs, subtitleTs, btnSizeSmall, edgeRad, dark, textCol, textDark, light, lighter, textYShift, APKName, APKDescription, "imgs/startImgs/muffins.png", mySettingsPath, stdFont);
+        loadingScreen.setLoadingStatus("LoadingScreen ready");
         // variableInitialisation for mode 0 --> loading screen----------------
     }
 
     public void initializeClassInstancesMaster() {
 
+        loadingScreen.setLoadingStatus("Init MainButtons");
         String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "share.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
         for (int i = 0; i < mainButtonsMaster.length; i++) {
             String s = "";
@@ -186,6 +189,7 @@ public class MainActivity extends PApplet {
         }
 
         // variableInitialisation for mode 1 --> home screen-------------------
+        loadingScreen.setLoadingStatus("Init " + modeNamesMaster[0]);
         String[] arrowPaths = { absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
         String[] hoLiPictoPathsHome = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
         String[] homeScreenPictoPaths = { absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png", absPathPictos + "startEngine.png" };
@@ -193,30 +197,36 @@ public class MainActivity extends PApplet {
         // variableInitialisation for mode 1 --> home screen-------------------
 
         // variableInitialisation for mode 2 --> node editor-------------------
+        loadingScreen.setLoadingStatus("Init " + modeNamesMaster[1]);
         initializeNodeEditor();
         // variableInitialisation for mode 2 --> node editor-------------------
 
         // variableInitialisation for mode 3 --> settings screen---------------
+        loadingScreen.setLoadingStatus("Init " + modeNamesMaster[2]);
         initializeSettingsScreen();
         // variableInitialisation for mode 3 --> settings screen---------------
 
         // variableInitialisation for mode 4 --> blender download--------------
+        loadingScreen.setLoadingStatus("Init " + modeNamesMaster[3]);
         String[] pp1 = { absPathPictos + "selectFolder.png", absPathPictos + "blender.png", absPathPictos + "sheepit.png" };
         spreadBlenderScreen = new SpreadBlender(this, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, textYShift, pp1, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 4 --> blender download--------------
 
         // variableInitialisation for mode 5 --> Theme screen-------------------
+        loadingScreen.setLoadingStatus("Init " + modeNamesMaster[4]);
         initializeThemeScreen();
         // variableInitialisation for mode 5 --> Theme screen-------------------
 
         // variableInitialisation for mode 6 --> help screen-------------------
+        loadingScreen.setLoadingStatus("Init " + modeNamesMaster[5]);
         initializeQuestionScreen();
         // variableInitialisation for mode 6 --> help screen-------------------
 
         // variableInitialisation for mode 101 --> RenderOverview -------------
-        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png",absPathPictos+"sleeping.png",absPathPictos+"checkmark.png" };
+        loadingScreen.setLoadingStatus("Init RenderOverview");
+        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png",absPathPictos+"cmd.png"};
         String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift,masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview,arrowPaths, stdFont);
+        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, arrowPaths, stdFont);
         // variableInitialisation for mode 101 --> RenderOverview -------------
 
         // variableInitialisation -----------------------------------------------
@@ -250,12 +260,12 @@ public class MainActivity extends PApplet {
     }
 
     public void initializeClassInstancesSlave() {
-
         if (mode != 2) {
             if (jf.getBounds().getHeight() > stdScreenDimension.y + windowTopBarHeight) {
                 jf.setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y + windowTopBarHeight);
             }
         }
+        loadingScreen.setLoadingStatus("Init MainButtons");
 
         String[] p3 = { absPathPictos + "home.png", absPathPictos + "settings.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
         for (int i = 0; i < mainButtonsSlave.length; i++) {
@@ -263,12 +273,15 @@ public class MainActivity extends PApplet {
         }
 
         // initialize mode 0 --> homeScreenSlaves-----------------
+        loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[0]);
         String[] hSSpp = {};
         homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, hSSpp, stdFont);
         // initialize mode 0 --> homeScreenSlaves-----------------
-
+        loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[1]);
         initializeSettingsScreen();
+        loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[2]);
         initializeThemeScreen();
+        loadingScreen.setLoadingStatus("Init "+mainButtonsSlave[3]);
         initializeQuestionScreen();
     }
 
@@ -689,9 +702,9 @@ public class MainActivity extends PApplet {
     public RenderOverview getRenderOverview() {
         return renderOverview;
     }
-    
+
     public HomeScreenMaster getHomeScreenMaster() {
-    	return homeScreen;
+        return homeScreen;
     }
 
     public String getPCName() {
@@ -718,8 +731,9 @@ public class MainActivity extends PApplet {
     public void setIsMaster(Boolean state) {
         isMaster = state;
     }
+
     public void setMasterComandPath(String setComPath) {
-    	masterCommandSavePath=setComPath;
+        masterCommandSavePath = setComPath;
     }
 
     public void setColorTheme() {
