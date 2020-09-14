@@ -14,7 +14,7 @@ import processing.core.PVector;
 public class LoadingScreen {
     private int btnSize, margin, stdTs, btnSizeSmall, edgeRad, titleTs, subtitleTs, dark, light, lighter, textCol, textDark,once=0;
     private float textYShift;
-    private boolean firstSetup = true, initializedClasses = false;
+    private boolean firstSetup = true;
     private String APKDescription, APKName, loadingStatus = "Loading Data", mySavePath;
     private PApplet p;
     private PImage img;
@@ -24,6 +24,7 @@ public class LoadingScreen {
     private SpriteAnimation loadingGearSprite;
     private JsonHelper jHelper;
     private MainActivity mainActivity;
+    private Thread loadDataThread,initializeThread;
 
     public LoadingScreen(PApplet p, int btnSize, int margin, int stdTs, int titleTs, int subtitleTs, int btnSizeSmall, int edgeRad, int dark, int textCol, int textDark, int light, int lighter, float textYShift, String APKName, String APKDescription, String imgPath, String mySavePath, PFont stdFont) {
         this.p = p;
@@ -63,7 +64,7 @@ public class LoadingScreen {
         
         if(once==0) {
             loadingStatus="Start initializing";
-            Thread initializeThread = new Thread(new Runnable() {
+             initializeThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     JSONArray loadedSettingsData = jHelper.getData(mySavePath);
@@ -87,17 +88,15 @@ public class LoadingScreen {
                         mainActivity.initializeClassInstancesSlave();
                         break;
                     }
-
-                    initializedClasses = true;
                 }
             });
             initializeThread.start();
             once++;
         }
-        if (initializedClasses) {
+        if (!initializeThread.isAlive()) {
             loadingStatus="Loading data";
 
-            Thread loadDataThread = new Thread(new Runnable() {
+             loadDataThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     loadData();
@@ -151,7 +150,7 @@ public class LoadingScreen {
     }
 
     public Boolean getInstanciatedClasses() {
-        return initializedClasses;
+        return !initializeThread.isAlive();
     }
 
     public void setIsFirstSetup(Boolean state) {

@@ -16,6 +16,7 @@ public class PictogramImage<T> implements Widgets {
 	private HoverText hoverText;
 	private MainActivity mainActivity;
 	private T parent;
+	private Thread loadDataThread;
 
 	public PictogramImage(PApplet p, int x, int y, int dim, int margin, int stdTs, int edgeRad, int col, float textYShift, Boolean isParented, String imgPath, String infoText, T parent) {
 		this.p = p;
@@ -34,8 +35,9 @@ public class PictogramImage<T> implements Widgets {
 		mainActivity=(MainActivity)p;
 		xShift = x;
 		yShift = y;
-		img = p.loadImage(imgPath);
-		img.resize(dim, dim);
+		
+		initialize();
+		
         hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, col, textYShift, infoText,"getX","getY","getW","getH", mainActivity.getStdFont(), this);
 
 	}
@@ -44,11 +46,39 @@ public class PictogramImage<T> implements Widgets {
 		if (isParented) {
 			getParentPos();
 		}
+		if(!loadDataThread.isAlive()) {
 		p.tint(col);
 		p.image(img, x, y);
 		hoverText.render();
+		}
 	}
-
+	
+	private void initialize() {
+		  loadDataThread = new Thread(new Runnable() {
+             @Override
+             public void run() {
+            		img = p.loadImage(imgPath);
+            		float xDim=dim,yDim=dim;
+            		if(img.width>img.height) {
+            			float scale=img.width/dim;
+            			xDim=dim;
+            			yDim=img.height/scale;
+            		}else {
+            			float scale=img.height/dim;
+            			yDim=dim;
+            			xDim=img.width/scale;
+            		}
+            		if(xDim>dim) {
+            			xDim=dim;
+            		}
+            		if(yDim>dim) {
+            			yDim=dim;
+            		}
+            		img.resize((int)xDim, (int)yDim);
+             }
+         });
+         loadDataThread.start();
+	}
 
 	@Override
 	public void getParentPos() {

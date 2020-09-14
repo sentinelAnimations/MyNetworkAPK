@@ -224,9 +224,9 @@ public class MainActivity extends PApplet {
 
         // variableInitialisation for mode 101 --> RenderOverview -------------
         loadingScreen.setLoadingStatus("Init RenderOverview");
-        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png",absPathPictos+"cmd.png"};
+        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png",absPathPictos+"cmd.png",absPathPictos+"imageFolder.png",absPathPictos+"selectFolder.png"};
         String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, arrowPaths, stdFont);
+        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter,lightest, textCol, textDark, border, textYShift, masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, arrowPaths,fileExplorerPaths, stdFont);
         // variableInitialisation for mode 101 --> RenderOverview -------------
 
         // variableInitialisation -----------------------------------------------

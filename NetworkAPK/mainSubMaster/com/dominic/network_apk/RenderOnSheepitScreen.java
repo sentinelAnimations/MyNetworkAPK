@@ -46,6 +46,12 @@ public class RenderOnSheepitScreen {
 		} else {
 			sheepitSleeping_PictogramImage.render();
 		}
+		String time = p.str(p.hour())+" : "+p.str(p.minute())+" : "+p.str(p.second());
+		p.fill(textCol);
+		p.textFont(stdFont);
+		p.textAlign(p.LEFT,p.CENTER);
+		p.textSize(stdTs);
+		p.text(time, margin, mainActivity.getRenderOverview().getCancelImageButton().getY());
 	}
 
 	public void onMousePressed(int mouseButton) {

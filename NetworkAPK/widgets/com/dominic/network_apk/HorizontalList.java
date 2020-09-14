@@ -105,6 +105,7 @@ public class HorizontalList<T> implements Widgets {
 			p.fill(lighter);
 			p.rect(x - w / 2 + margin + titleBoxWidth / 2, y, titleBoxWidth, btnSizeSmall, edgeRad);
 			picto.render();
+			p.stroke(light);
 			p.fill(textCol);
 			p.textAlign(PConstants.LEFT, PConstants.CENTER);
 			p.textFont(stdFont);
