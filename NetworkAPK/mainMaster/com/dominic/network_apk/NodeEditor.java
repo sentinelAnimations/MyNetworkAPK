@@ -19,7 +19,7 @@ import processing.core.PVector;
 public class NodeEditor<T> {
 	private int nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH, screenX, screenY, prevScreenX, prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, doOnceOnPressed = 0, doOnceOnStart = 0;
 	private float textYShift;
-	private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false;
+	private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false,isSetup=false;
 	private String mySavePath;
 	private String[] nodePaths1, nodePaths2, pcPaths;
 	private PFont stdFont;
@@ -116,27 +116,7 @@ public class NodeEditor<T> {
 		renderGrid();
 		if (renderNodeMenu == false) {
 
-			for (int i = nodes.size() - 1; i >= 0; i--) {
-				Node n = nodes.get(i);
-				if (n.getIsDeleted()) {
-					if (n.getType() < 3) {
-						connectorPoints.remove(n.getOutputConnectorPoint());
-					}
-					if (n.getType() == 3) {
-						for (int i2 = n.getSwitchConnectorPoints().size() - 1; i2 >= 0; i2--) {
-							ConnectorPoint cp = (ConnectorPoint) n.getSwitchConnectorPoints().get(i2);
-							connectorPoints.remove(cp);
-
-						}
-					}
-					if (n.getType() == 4) {
-						connectorPoints.remove(n.getInputConnectorPoint());
-					}
-					nodes.remove(i);
-				} else {
-					n.render();
-				}
-			}
+	handleNodes();
 		}
 		   if(mainActivity.getIsMaster()) {
 	            mainActivity.renderMainButtonsMaster();
@@ -169,9 +149,10 @@ public class NodeEditor<T> {
 
 		if (p.frameCount % 30 == 0) {
 			calcConnectedNodes();
-			for (int i = 0; i < allConnectedNodes.size(); i++) {
+			/*for (int i = 0; i < allConnectedNodes.size(); i++) {
 				Node n = allConnectedNodes.get(i);
-			}
+			}*/
+			p.println(allConnectedNodes.size());
 		}
 	}
 
@@ -185,10 +166,35 @@ public class NodeEditor<T> {
 			}
 		}
 	}
+	
+	public void handleNodes() {
+	       for (int i = nodes.size() - 1; i >= 0; i--) {
+               Node n = nodes.get(i);
+               if (n.getIsDeleted()) {
+                   if (n.getType() < 3) {
+                       connectorPoints.remove(n.getOutputConnectorPoint());
+                   }
+                   if (n.getType() == 3) {
+                       for (int i2 = n.getSwitchConnectorPoints().size() - 1; i2 >= 0; i2--) {
+                           ConnectorPoint cp = (ConnectorPoint) n.getSwitchConnectorPoints().get(i2);
+                           connectorPoints.remove(cp);
+                       }
+                   }
+                   if (n.getType() == 4) {
+                       connectorPoints.remove(n.getInputConnectorPoint());
+                   }
+                   nodes.remove(i);
+               } else {
+                   n.render();
+               }
+           }
+	}
 
 	public void setupAll() {
+	    if(isSetup==false) {
 		try {
 			setData();
+			isSetup=true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (nodes.size() > 0) {
@@ -197,10 +203,10 @@ public class NodeEditor<T> {
 				}
 			}
 		}
+	    }
 	}
 
-	private void calcConnectedNodes() {
-
+	public void calcConnectedNodes() {
 		allConnectedNodes.clear();
 
 		// search for output node -------------
@@ -216,9 +222,12 @@ public class NodeEditor<T> {
 			recursiveGetConnectedNodes(outputNode);
 			int connectedCpus = 0;
 			int connectedGpus = 0;
+			p.println("--",allConnectedNodes.size());
 			for (int i = 0; i < allConnectedNodes.size(); i++) {
 				Node n = allConnectedNodes.get(i);
+				
 				if (n.getIsTypePc()) {
+				    p.println(n.getCpuCores());
 					if (n.getCheckoxes()[0].getIsChecked()) {
 						connectedCpus += n.getCpuCores();
 					}
@@ -236,7 +245,6 @@ public class NodeEditor<T> {
 	}
 
 	private void recursiveGetConnectedNodes(Node n) {
-
 		if (n.getCheckedForConnection() == false) {
 			if (n.getIsTypePc()) {
 				// p.println(n.getType(),"--");
@@ -505,7 +513,7 @@ public class NodeEditor<T> {
 
 					}
 					n.getSwitchPort_CounterArea().setCount(switchPort_CounterArea);
-					n.updateSwitchConnectorPoints(true, connectorPointIds);
+					n.updateSwitchConnectorPoints(true, connectorPointIds,true);
 
 					for (int i2 = n.getSwitchConnectorPoints().size() - 1; i2 >= 0; i2--) {
 						ConnectorPoint<T> cp = n.getSwitchConnectorPoints().get(i2);
@@ -675,6 +683,10 @@ public class NodeEditor<T> {
 			}
 		}
 	}
+	
+	public Boolean getIsSetup() {
+	    return isSetup;
+	}
 
 	public void removeConnectorPoint(String remId) {
 		ConnectorPoint remCon;
@@ -699,5 +711,9 @@ public class NodeEditor<T> {
 
 	public ArrayList<ConnectorPoint> getConnectorPoints() {
 		return connectorPoints;
+	}
+	
+	public ArrayList<Node> getAllConnectedNodes(){
+	    return allConnectedNodes;
 	}
 }

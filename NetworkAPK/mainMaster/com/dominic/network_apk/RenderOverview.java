@@ -20,7 +20,7 @@ public class RenderOverview {
 	private RenderOnSheepitScreen renderOnSheepitScreen;
 	private ImageViewScreen imageViewScreen;
 
-	public RenderOverview(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter,int lightest, int textCol, int textDark, int border, float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths,String[] fileExplorerPaths, PFont stdFont) {
+	public RenderOverview(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter,int lightest, int textCol, int textDark, int border,int green,int red, int blue,float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths,String[] fileExplorerPaths, PFont stdFont) {
 		this.p = p;
 		this.stdTs = stdTs;
 		this.edgeRad = edgeRad;
@@ -45,7 +45,7 @@ public class RenderOverview {
 		String[] rFSPictoPaths = { pictoPaths[3] };
 		filesSettingsScreen = new FilesSettingsScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rFSPictoPaths, hoLiPictoPaths, arrowPaths, stdFont);
 		String[] fRSPictoPaths = { pictoPaths[4] };
-		filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
+		filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border,green,red,blue, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
 		String[] rOSPictoPaths = { pictoPaths[1], pictoPaths[2] };
 		renderOnSheepitScreen = new RenderOnSheepitScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rOSPictoPaths, stdFont);
 		String[] iVSPictoPaths = { pictoPaths[6] };
@@ -77,6 +77,9 @@ public class RenderOverview {
 
 		// button handling -------------------------
 		if (cancelRendering_ImageButton.getIsClicked()) {
+		    if(renderMode==0.1f) {
+		        mainActivity.setMode(1);
+		    }
 			if (renderMode == 0) {
 				cancelFileRendering();
 				mainActivity.setMode(1);

@@ -55,7 +55,8 @@ public class ImageView<T> implements Widgets {
 			getParentPos();
 		}
 
-		setFolder("D:\\algemeine Bilder");
+		//setFolder("D:\\algemeine Bilder");
+		setFolder("C:\\Users\\domin\\OneDrive\\Pictures\\Eigene Aufnahmen");
 	}
 
 	public void render() {

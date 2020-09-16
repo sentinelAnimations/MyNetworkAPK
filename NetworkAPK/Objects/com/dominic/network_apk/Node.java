@@ -10,7 +10,7 @@ public class Node<T> {
 
     private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores;
     private float textYShift;
-    private Boolean  isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false;
+    private Boolean isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false;
     private String id, cpuText = "CPU threads: 0", gpuText = "GPUs: 0";
     private String[] pictoPaths;
     private PFont stdFont;
@@ -26,7 +26,7 @@ public class Node<T> {
     private ArrayList<String> switch_connectorPointIds = new ArrayList<String>();
     private ArrayList<ConnectorPoint> switch_connectorPoints = new ArrayList<ConnectorPoint>();
 
-    public Node(PApplet p, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, float textYShift, String id,String stdConnectorId, String[] pictoPaths, PFont stdFont, T parent) {
+    public Node(PApplet p, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, float textYShift, String id, String stdConnectorId, String[] pictoPaths, PFont stdFont, T parent) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -62,16 +62,18 @@ public class Node<T> {
             type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
             cpu_picto = new PictogramImage(p, -btnSizeSmall / 2 - margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes], "", this);
             gpu_picto = new PictogramImage(p, +btnSizeSmall + btnSizeSmall / 2 + margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes + 1], "", this);
-            useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "","", pictoPaths[anzTypes + 6], stdFont, this);
-            useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "","", pictoPaths[anzTypes + 6], stdFont, this);
+            useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", "", pictoPaths[anzTypes + 6], stdFont, this);
+            useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", "", pictoPaths[anzTypes + 6], stdFont, this);
             String[] tempList = { "dies", "und", "das", "kfdjakjfaskdjfasdkf", "askdfjasdkfjjjjjjjjj" };
             String[] ddPaths = { pictoPaths[anzTypes + 5], pictoPaths[anzTypes + 4] };
             pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, tempList, stdFont, true, this);
 
             int[] conT = { 1, 2 };
-           // String connectorId = UUID.randomUUID().toString();
+            // String connectorId = UUID.randomUUID().toString();
             mainActivity.getNodeEditor().addConnectorPoint(p, 0, w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT, stdConnectorId, id, this);
             output_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
+            isTypePC = true;
+
         }
         if (type == 3) {
 
@@ -85,7 +87,7 @@ public class Node<T> {
         if (type == 4) {
             type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
             int[] conT = { 0, 1 };
-            //String connectorId = UUID.randomUUID().toString();
+            // String connectorId = UUID.randomUUID().toString();
             mainActivity.getNodeEditor().addConnectorPoint(p, 2, -w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT, stdConnectorId, id, this); // type 0 = pc, type 1=switch, type 2=output
             input_connectorPoint = getConnectorPoints().get(getConnectorPoints().size() - 1);
         }
@@ -95,17 +97,14 @@ public class Node<T> {
         switch (type) {
         case 0:
             renderTypePC(); // Master pc
-            isTypePC = true;
             break;
 
         case 1:
             renderTypePC(); // pc
-            isTypePC = true;
             break;
 
         case 2:
             renderTypePC(); // laptop
-            isTypePC = true;
             break;
 
         case 3:
@@ -120,9 +119,9 @@ public class Node<T> {
 
     private void renderTypePC() {
 
-    	//p.println(output_connectorPoint.getConnectedId(),output_connectorPoint.getIsConnected());
-    	//p.println(output_connectorPoint.getIdLength());
-    	
+        // p.println(output_connectorPoint.getConnectedId(),output_connectorPoint.getIsConnected());
+        // p.println(output_connectorPoint.getIdLength());
+
         if (mouseIsPressed) {
             if (isGrabbed == false) {
                 if (isDragablePcNode()) {
@@ -162,7 +161,7 @@ public class Node<T> {
         p.text("GPU name", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs);
         p.text("Status: ok", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2);
 
-        renderConnector(x + w / 2, bodyY, false);
+        renderConnector(x + w / 2, bodyY, false,"");
         output_connectorPoint.render();
 
         pcSelection_DropdownMenu.render();
@@ -211,7 +210,7 @@ public class Node<T> {
         type_picto.render();
         switchPort_CounterArea.render();
 
-        updateSwitchConnectorPoints(false,null);
+        updateSwitchConnectorPoints(false, null, false);
 
         for (int i = 0; i < switch_connectorPoints.size(); i++) {
             ConnectorPoint cp = switch_connectorPoints.get(i);
@@ -222,7 +221,7 @@ public class Node<T> {
 
     }
 
-    public void updateSwitchConnectorPoints(Boolean useIds,String[] conIds) {
+    public void updateSwitchConnectorPoints(Boolean useIds, String[] conIds, Boolean onlyDoCalculations) {
 
         Boolean isEven;
         int conBorder;
@@ -249,13 +248,9 @@ public class Node<T> {
             if (i <= conBorder) {
                 xp = x - w / 2 - 1;
                 yp = conS / 2 + bodyY - bodyH / 2 + margin * 2 + switchPort_CounterArea.getH() + i * conS + i * margin;
-                renderConnector(xp, yp, true);
-
-                p.fill(textCol);
-                p.textFont(stdFont);
-                p.textSize(stdTs);
-                p.textAlign(p.LEFT, p.CENTER);
-                p.text("Port: " + (i + 1), xp + conS / 2 + margin, yp - stdTs * textYShift);
+                if (onlyDoCalculations == false) {  //for startup calculations if true, else rendering
+                    renderConnector(xp, yp, true,"Port: " + (i + 1));
+                }
             } else {
                 int ind = i - p.ceil(switchPort_CounterArea.getCount() / 2);
                 if (!isEven) {
@@ -263,22 +258,18 @@ public class Node<T> {
                 }
                 xp = x + w / 2;
                 yp = conS / 2 + bodyY - bodyH / 2 + margin * 2 + switchPort_CounterArea.getH() + ind * conS + ind * margin;
-                renderConnector(xp, yp, false);
-
-                p.fill(textCol);
-                p.textFont(stdFont);
-                p.textSize(stdTs);
-                p.textAlign(p.RIGHT, p.CENTER);
-                p.text("Port: " + (i + 1), xp - conS / 2 - margin, yp - stdTs * textYShift);
+                if (onlyDoCalculations == false) {
+                    renderConnector(xp, yp, false,"Port: " + (i + 1));
+                }
             }
 
             if (switch_connectorPoints.size() < switchPort_CounterArea.getCount()) {
                 int[] conT = { 0, 1, 2 };
                 String connectorId;
-                if(useIds) {
-                    connectorId=conIds[i];
-                }else {
-                     connectorId = UUID.randomUUID().toString();   
+                if (useIds) {
+                    connectorId = conIds[i];
+                } else {
+                    connectorId = UUID.randomUUID().toString();
                 }
                 mainActivity.getNodeEditor().addConnectorPoint(p, 2, xp - x, yp - y, conS / 2, 2, bgCol, true, conT, connectorId, id, this);
                 switch_connectorPoints.add(getConnectorPoints().get(getConnectorPoints().size() - 1));
@@ -324,19 +315,31 @@ public class Node<T> {
         p.text("Output", x - w / 2 + margin, headY - stdTs * textYShift);
         p.text(cpuText + "\n" + gpuText, x - w / 2 + margin + conS / 2, bodyY - stdTs * textYShift);
 
-        renderConnector(x - w / 2, bodyY, true);
+        renderConnector(x - w / 2, bodyY, true,"");
         input_connectorPoint.render();
 
     }
 
-    private void renderConnector(int conX, int conY, Boolean isLeft) {
+    private void renderConnector(int conX, int conY, Boolean isLeft,String text) {
         float a1, a2;
         if (isLeft) {
             a1 = 2 * p.PI - p.HALF_PI;
             a2 = 3 * p.PI - p.HALF_PI;
+            
+            p.fill(textCol);
+            p.textFont(stdFont);
+            p.textSize(stdTs);
+            p.textAlign(p.LEFT, p.CENTER);
+            p.text(text, conX + conS / 2 + margin, conY - stdTs * textYShift);
         } else {
             a1 = p.HALF_PI;
             a2 = 2 * p.PI - p.HALF_PI;
+            
+            p.fill(textCol);
+            p.textFont(stdFont);
+            p.textSize(stdTs);
+            p.textAlign(p.RIGHT, p.CENTER);
+            p.text(text, conX - conS / 2 - margin, conY - stdTs * textYShift);
         }
 
         p.fill(dark);
@@ -609,7 +612,7 @@ public class Node<T> {
     public Boolean getCheckedForConnection() {
         return isCheckedForConnection;
     }
-    
+
     public int getCpuCores() {
         return cpuCores;
     }
@@ -630,9 +633,9 @@ public class Node<T> {
     public DropdownMenu getPcSelection_DropdownMenu() {
         return pcSelection_DropdownMenu;
     }
-    
-    public EditText getSwitchNameEditText(){
-    	return switchName_editText;
+
+    public EditText getSwitchNameEditText() {
+        return switchName_editText;
     }
 
     public void setPos(int xp, int yp) {
@@ -640,15 +643,15 @@ public class Node<T> {
         y = yp;
         dragShiftX = 0;
         dragShiftY = 0;
-        calcBodyAndHeadPos(); 
+        calcBodyAndHeadPos();
     }
 
     public void setCheckedForConnection(Boolean state) {
         isCheckedForConnection = state;
     }
-    
+
     public void setIsGrabbed(Boolean state) {
-        isGrabbed=state;
+        isGrabbed = state;
     }
 
     public void setIsDeleted(Boolean state) {
@@ -663,4 +666,3 @@ public class Node<T> {
         gpuText = gpuT;
     }
 }
-

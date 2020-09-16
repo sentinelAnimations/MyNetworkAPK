@@ -230,6 +230,8 @@ public class HomeScreenMaster {
 
                 if (correctlySelected) {
                     mainActivity.setMode(101);
+                    mainActivity.getRenderOverview().getFilesRenderingScreen().setupAll();
+                    
                     if (homeSettings_checkboxes[2].getIsChecked()) {
                         mainActivity.getRenderOverview().setRenderMode(0.1f);
                         mainActivity.getRenderOverview().setFileList(fileSelector_HorizontalList.getList());

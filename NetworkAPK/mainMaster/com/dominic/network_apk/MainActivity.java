@@ -57,7 +57,7 @@ public class MainActivity extends PApplet {
     // Booleans-------------------------------------------------
 
     // Colors--------------------------------------------------
-    private int darkest = color(30), dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78), lightest = color(64, 77, 88), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0), green = color(0, 255, 0), textCol = color(255), textDark = color(150);
+    private int darkest = color(30), dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78), lightest = color(64, 77, 88), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0), green = color(0, 255, 0),blue=color(0,0,255), textCol = color(255), textDark = color(150);
     // colors -------------------------------------------------
 
     // Dimens--------------------------------------------------
@@ -224,9 +224,9 @@ public class MainActivity extends PApplet {
 
         // variableInitialisation for mode 101 --> RenderOverview -------------
         loadingScreen.setLoadingStatus("Init RenderOverview");
-        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png",absPathPictos+"cmd.png",absPathPictos+"imageFolder.png",absPathPictos+"selectFolder.png"};
+        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageFolder.png", absPathPictos + "selectFolder.png" };
         String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter,lightest, textCol, textDark, border, textYShift, masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, arrowPaths,fileExplorerPaths, stdFont);
+        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red,blue,textYShift, masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, arrowPaths, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 101 --> RenderOverview -------------
 
         // variableInitialisation -----------------------------------------------
@@ -281,7 +281,7 @@ public class MainActivity extends PApplet {
         initializeSettingsScreen();
         loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[2]);
         initializeThemeScreen();
-        loadingScreen.setLoadingStatus("Init "+mainButtonsSlave[3]);
+        loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[3]);
         initializeQuestionScreen();
     }
 

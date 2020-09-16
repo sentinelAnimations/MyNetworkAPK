@@ -8,7 +8,7 @@ import processing.core.PFont;
 
 public class FilesSettingsScreen {
 
-    private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, onceOnStartup = 0, prevMarkedListInd;
+    private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, onceOnStartup = 0, prevSelectedListInd;
     private float textYShift;
     private Boolean[] renderAnimation, renderStillFrame;
     private int[] startFrame, endFrame, stillFrame;
@@ -41,7 +41,7 @@ public class FilesSettingsScreen {
         this.stdFont = stdFont;
         mainActivity = (MainActivity) p;
         String[] startList = {};
-        allFiles_HorizontalList = new HorizontalList(p, p.width / 2, p.height / 2 - btnSize / 2 - margin, p.width - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, false, true, "Files to render", hoLiPictoPaths, startList, stdFont, null);
+        allFiles_HorizontalList = new HorizontalList(p, p.width / 2, p.height / 2 - btnSize / 2 - margin, p.width - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, true, false, "Files to render", hoLiPictoPaths, startList, stdFont, null);
 
         settings_checkboxes[0] = new Checkbox(p, -allFiles_HorizontalList.getW() / 2 + btnSizeSmall / 2 - margin, allFiles_HorizontalList.getH() / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, true, false, "", "Render Animation", pictoPaths[0], stdFont, allFiles_HorizontalList);
 
@@ -55,7 +55,7 @@ public class FilesSettingsScreen {
         sfX = (int) (settings_checkboxes[1].getBoxDim() / 2 + margin * 2 + sfW / 2);
         stillFrame_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Still frame", arrowPaths, stdFont, settings_checkboxes[1]);
 
-        prevMarkedListInd = allFiles_HorizontalList.getMarkedInd();
+        prevSelectedListInd = allFiles_HorizontalList.getSelectedInd();
 
     }
 
@@ -76,7 +76,7 @@ public class FilesSettingsScreen {
             p.textFont(stdFont);
             p.textSize(stdTs);
             p.textAlign(p.CENTER, p.CENTER);
-            String textToSplit = allFiles_HorizontalList.getList()[allFiles_HorizontalList.getMarkedInd()];
+            String textToSplit = allFiles_HorizontalList.getList()[allFiles_HorizontalList.getSelectedInd()];
             String[] splitStr = p.split(textToSplit, "\\");
             String displT = "";
             if (splitStr.length > 0) {
@@ -86,14 +86,15 @@ public class FilesSettingsScreen {
             }
             p.text("Render settings for: " + displT, fillUpBarX, settings_checkboxes[0].getBoxY());
 
-            endFrame_counterArea.render();
-            startFrame_counterArea.render();
+           
             stillFrame_counterArea.render();
             allFiles_HorizontalList.render();
             startRendering_imageButon.render();
             for (int i = 0; i < settings_checkboxes.length; i++) {
                 settings_checkboxes[i].render();
             }
+            endFrame_counterArea.render();
+            startFrame_counterArea.render();
 
             // render toasts -----------------------------------
             for (int i = 0; i < makeToasts.size(); i++) {
@@ -108,18 +109,11 @@ public class FilesSettingsScreen {
             // render all ----------------------------------------
 
             // calculate all ----------------------------------------
-            if (allFiles_HorizontalList.getMarkedInd() != prevMarkedListInd) {
+            if (allFiles_HorizontalList.getSelectedInd() != prevSelectedListInd) {
 
                 writeToArray();
-
-                int curInd = allFiles_HorizontalList.getMarkedInd();
-                p.println(curInd);
-                settings_checkboxes[0].setIsChecked(renderAnimation[curInd]);
-                settings_checkboxes[1].setIsChecked(renderStillFrame[curInd]);
-
-                startFrame_counterArea.setCount(startFrame[curInd]);
-                endFrame_counterArea.setCount(endFrame[curInd]);
-                stillFrame_counterArea.setCount(stillFrame[curInd]);
+                updateWidgets();
+              
 
             }
         }
@@ -128,10 +122,7 @@ public class FilesSettingsScreen {
 
             Boolean isRenderable = true;
             String errorMessage = "";
-            p.println(renderAnimation);
-            p.println(renderStillFrame);
-            p.println(startFrame);
-            p.println(endFrame);
+
             for (int i = 0; i < renderAnimation.length; i++) {
 
                 if (renderAnimation[i] == true && renderStillFrame[i] == true) {
@@ -172,21 +163,31 @@ public class FilesSettingsScreen {
 
         }
 
-        prevMarkedListInd = allFiles_HorizontalList.getMarkedInd();
+        prevSelectedListInd = allFiles_HorizontalList.getSelectedInd();
         // calculate all ----------------------------------------
 
     }
 
     private void writeToArray() {
         try {
-            renderAnimation[prevMarkedListInd] = settings_checkboxes[0].getIsChecked();
-            renderStillFrame[prevMarkedListInd] = settings_checkboxes[1].getIsChecked();
-            startFrame[prevMarkedListInd] = startFrame_counterArea.getCount();
-            endFrame[prevMarkedListInd] = endFrame_counterArea.getCount();
-            stillFrame[prevMarkedListInd] = stillFrame_counterArea.getCount();
+            renderAnimation[prevSelectedListInd] = settings_checkboxes[0].getIsChecked();
+            renderStillFrame[prevSelectedListInd] = settings_checkboxes[1].getIsChecked();
+            startFrame[prevSelectedListInd] = startFrame_counterArea.getCount();
+            endFrame[prevSelectedListInd] = endFrame_counterArea.getCount();
+            stillFrame[prevSelectedListInd] = stillFrame_counterArea.getCount();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    private void updateWidgets() {
+        int curInd = allFiles_HorizontalList.getSelectedInd();
+        settings_checkboxes[0].setIsChecked(renderAnimation[curInd]);
+        settings_checkboxes[1].setIsChecked(renderStillFrame[curInd]);
+
+        startFrame_counterArea.setCount(startFrame[curInd]);
+        endFrame_counterArea.setCount(endFrame[curInd]);
+        stillFrame_counterArea.setCount(stillFrame[curInd]);
     }
 
     public void onMousePressed(int mouseButton) {
@@ -213,7 +214,49 @@ public class FilesSettingsScreen {
     }
 
     public void onKeyReleased(char key) {
+        if (key == p.DELETE) {
+            String[] hoLi1 = allFiles_HorizontalList.getList();
+            String[] newHoLi1 = new String[hoLi1.length - 1];
+            Boolean[] newRenderAnimation = new Boolean[renderAnimation.length-1];
+            Boolean[] newRenderStillFrame = new Boolean[renderStillFrame.length-1];
+            int[] newStartFrame = new int[startFrame.length-1];
+            int[] newEndFrame = new int[endFrame.length-1];
+            int[] newStillFrame = new int[stillFrame.length-1];
 
+            for (int i = 0; i < hoLi1.length; i++) {
+                if (i < allFiles_HorizontalList.getMarkedInd()) {
+                    newHoLi1[i] = hoLi1[i];
+                    newRenderAnimation[i] = renderAnimation[i];
+                    newRenderStillFrame[i] = renderStillFrame[i];
+                    newStartFrame[i] = startFrame[i];
+                    newEndFrame[i] = endFrame[i];
+                    newStillFrame[i] = stillFrame[i];
+
+                }
+                if (i > allFiles_HorizontalList.getMarkedInd()) {
+                    newHoLi1[i - 1] = hoLi1[i];
+                    newRenderAnimation[i - 1] = renderAnimation[i];
+                    newRenderStillFrame[i - 1] = renderStillFrame[i];
+                    newStartFrame[i - 1] = startFrame[i];
+                    newEndFrame[i - 1] = endFrame[i];
+                    newStillFrame[i - 1] = stillFrame[i];
+                }
+            }
+            renderAnimation=new Boolean[renderAnimation.length-1];
+            renderStillFrame=new Boolean[renderStillFrame.length-1];
+            startFrame=new int[startFrame.length-1];
+            endFrame=new int[endFrame.length];
+            stillFrame=new int[stillFrame.length];
+            
+            renderAnimation=newRenderAnimation;
+            renderStillFrame=newRenderStillFrame;
+            startFrame=newStartFrame;
+            endFrame=newEndFrame;
+            stillFrame=newStillFrame;
+            
+            allFiles_HorizontalList.setList(newHoLi1);
+            updateWidgets();
+        }
     }
 
     public void onScroll(float e) {
