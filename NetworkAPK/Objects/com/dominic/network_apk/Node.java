@@ -637,6 +637,9 @@ public class Node<T> {
     public EditText getSwitchNameEditText() {
         return switchName_editText;
     }
+    public PictogramImage getTypePicto() {
+        return type_picto;
+    }
 
     public void setPos(int xp, int yp) {
         x = xp;

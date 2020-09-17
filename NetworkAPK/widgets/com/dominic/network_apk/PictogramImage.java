@@ -120,6 +120,10 @@ public class PictogramImage<T> implements Widgets {
 	public int getH() {
 	    return dim;
 	}
+	
+	public String getPictoPath() {
+	    return imgPath;
+	}
 
 	public void setPos(int xp, int yp) {
 		x = xp;

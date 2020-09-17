@@ -273,15 +273,15 @@ public class MainActivity extends PApplet {
         }
 
         // initialize mode 0 --> homeScreenSlaves-----------------
-        loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[0]);
-        String[] hSSpp = {};
+        loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[0]);
+        String[] hSSpp = {absPathPictos+"sheepit.png",absPathPictos+"sleeping.png",absPathPictos+"file.png"};
         homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, hSSpp, stdFont);
         // initialize mode 0 --> homeScreenSlaves-----------------
-        loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[1]);
+        loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[1]);
         initializeSettingsScreen();
-        loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[2]);
+        loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[2]);
         initializeThemeScreen();
-        loadingScreen.setLoadingStatus("Init " + mainButtonsSlave[3]);
+        loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[3]);
         initializeQuestionScreen();
     }
 

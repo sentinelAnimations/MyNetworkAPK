@@ -7,13 +7,13 @@ import processing.core.PFont;
 
 public class FilesRenderingScreen {
 
-    private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, green, red, blue, lighter, lightest, textCol, textDark, border, curRenderingFile = 1;
+    private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, green, red, blue, lighter, lightest, textCol, textDark, border, curRenderingFile = 1, prevPCListSelectedInd = -1, onStartup = 0;
     private float textYShift;
     private float[] listX, listW, allFiles_listX, allFiles_listW;
-    private Boolean[] renderAnimation, renderStillFrame;
-    private int[] startFrame, endFrame, stillFrame;
+    private Boolean[] renderAnimation, renderStillFrame, startedRenderingTiles;
+    private int[] startFrame, endFrame, stillFrame,allPCStatus; //allPCStatus: 0=prog responding, 1=prog not responding
     private String[] pictoPaths, hoLiPictoPaths;
-    private String[] allPCNames, allLastLogLines;
+    private String[] allPCNames, allLastLogLines, allRenderInfos;
     private PFont stdFont;
     private PApplet p;
     private MainActivity mainActivity;
@@ -50,6 +50,11 @@ public class FilesRenderingScreen {
     }
 
     public void render() {
+
+        if (onStartup == 0) {
+            updateLists();
+            onStartup++;
+        }
         // render all ----------------------------------------------
         allFiles_HorizontalList.render();
         // allFiles_horizontallist ------------------------
@@ -71,7 +76,7 @@ public class FilesRenderingScreen {
                     }
                 }
                 if (allFiles_HorizontalList.getSelectedInd() == i) {
-                    p.stroke(border);
+                    p.stroke(255);
                 }
                 p.rect(allFiles_listX[i], allFiles_HorizontalList.getY(), allFiles_listW[i], allFiles_HorizontalList.getH() - margin * 2, edgeRad);
             }
@@ -90,10 +95,11 @@ public class FilesRenderingScreen {
                 listX = allPCs_HorizontalList.getListX();
                 listW = allPCs_HorizontalList.getListW();
 
-                int val = (int) p.random(600);
+                // int val = (int) p.random(600);
                 for (int i = 0; i < allPCLoadingbars.length; i++) {
                     allPCLoadingbars[i].setPos((int) listX[i], allPCs_HorizontalList.getY() + allPCs_HorizontalList.getH() / 2 - margin * 2 - allPCLoadingbars[i].getH() / 2);
-                    allPCLoadingbars[i].setValue(val);
+                    allPCPictos[i].setPos((int) listX[i], (int) (allPCs_HorizontalList.getY() - listW[i] / 2 + margin*2 + allPCPictos[i].getH() / 2));
+                    // allPCLoadingbars[i].setValue(val);
                 }
                 allPCs_HorizontalList.setIsShifted(false);
             }
@@ -102,14 +108,72 @@ public class FilesRenderingScreen {
                 if (allPCs_HorizontalList.getSelectedInd() == i) {
                     p.stroke(border);
                 } else {
-                    p.stroke(255, 0, 0);
+                    p.stroke(lighter);
                 }
                 p.rect(listX[i], allPCs_HorizontalList.getY(), listW[i], allPCs_HorizontalList.getH() - margin * 2, edgeRad);
                 allPCLoadingbars[i].render();
+                allPCPictos[i].render();
+
+                p.fill(textCol);
+                p.textFont(stdFont);
+                p.textSize(stdTs);
+                p.textAlign(p.CENTER, p.TOP);
+                p.text(allRenderInfos[i], listX[i], allPCPictos[i].getY() + allPCPictos[i].getH() / 2 + margin-stdTs/2);
             }
         }
         // render allPCs_horizontalList --------------------
         // render all ----------------------------------------------
+
+        // update PCView---------------------------------------------
+        if (allPCs_HorizontalList.getSelectedInd() != prevPCListSelectedInd) {
+            logBar.setText(allLastLogLines[allPCs_HorizontalList.getSelectedInd()]);
+        }
+        if (p.frameCount % 30 == 0) {
+            updateLists();
+        }
+        // update PCView---------------------------------------------
+
+        prevPCListSelectedInd = allPCs_HorizontalList.getSelectedInd();
+    }
+
+    private void updateLists() {
+        
+        for (int i = 0; i < allPCs_HorizontalList.getList().length; i++) {
+            // check render status if ok, update last log line -------------------
+            
+            // check render status if ok, update last log line -------------------
+
+            
+            //prepare infoString and so on-----------------------------------
+            String[] splitStr = p.split(allLastLogLines[i], "|");
+            String renderInfoString = "PC name: " + allPCNames[i]+"\n";
+            for (int i2 = 0; i2 < splitStr.length; i2++) {
+                if (i2 == 0) {
+                    String[] splStr = p.split(splitStr[i2], " ");
+
+                    renderInfoString += splStr[0] + "\n";
+                } else {
+                    renderInfoString += splitStr[i2] + "\n";
+                }
+            }
+            allRenderInfos[i] = renderInfoString;
+            String[] m1 = p.match(splitStr[splitStr.length - 1], "Tiles");
+            if (m1 != null) {
+                String[] splitStr2 = p.split(splitStr[splitStr.length - 1], " ");
+                String[] splitStr3 = p.split(splitStr2[2], "/");
+                if (splitStr3.length == 2) {
+                    if (startedRenderingTiles[i] == null) {
+                        allPCLoadingbars[i].setMin(0);
+                        allPCLoadingbars[i].setMax(Integer.parseInt(splitStr3[1]));
+                    }
+                    allPCLoadingbars[i].setValue(Integer.parseInt(splitStr3[0]));
+                    startedRenderingTiles[i] = true;
+                }
+
+            }
+            //prepare infoString and so on-----------------------------------
+
+        }
     }
 
     public void onMousePressed(int mouseButton) {
@@ -128,16 +192,14 @@ public class FilesRenderingScreen {
 
     public void onKeyReleased(char key) {
         if (curRenderingFile < allFiles_HorizontalList.getSelectedInd()) {
-            p.println("now1");
             if (key == p.DELETE) {
-                p.println("now2");
                 String[] hoLi1 = allFiles_HorizontalList.getList();
                 String[] newHoLi1 = new String[hoLi1.length - 1];
-                Boolean[] newRenderAnimation = new Boolean[renderAnimation.length-1];
-                Boolean[] newRenderStillFrame = new Boolean[renderStillFrame.length-1];
-                int[] newStartFrame = new int[startFrame.length-1];
-                int[] newEndFrame = new int[endFrame.length-1];
-                int[] newStillFrame = new int[stillFrame.length-1];
+                Boolean[] newRenderAnimation = new Boolean[renderAnimation.length - 1];
+                Boolean[] newRenderStillFrame = new Boolean[renderStillFrame.length - 1];
+                int[] newStartFrame = new int[startFrame.length - 1];
+                int[] newEndFrame = new int[endFrame.length - 1];
+                int[] newStillFrame = new int[stillFrame.length - 1];
 
                 for (int i = 0; i < hoLi1.length; i++) {
                     if (i < allFiles_HorizontalList.getSelectedInd()) {
@@ -173,11 +235,6 @@ public class FilesRenderingScreen {
                 allFiles_HorizontalList.setList(newHoLi1);
             }
         }
-        p.println(renderAnimation);
-        p.println(renderStillFrame);
-        p.println(endFrame);
-        p.println(startFrame);
-        p.println(stillFrame);
     }
 
     public void onScroll(float e) {
@@ -231,15 +288,21 @@ public class FilesRenderingScreen {
         }
         allPCs_HorizontalList = new HorizontalList(p, 0, allFiles_HorizontalList.getH() / 2 + margin + listH / 2, p.width - margin * 2, listH, margin, edgeRad, stdTs, (int) p.textWidth("Rendering PCs") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', true, false, true, "Rendering PCs", hoLiPictoPaths, startList, stdFont, allFiles_HorizontalList);
         logBar = new LogBar(p, 0, allPCs_HorizontalList.getH() / 2 + margin * 2 + btnSizeSmall / 2, allFiles_HorizontalList.getW(), btnSizeSmall + margin * 2, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, pictoPaths[0], stdFont, allPCs_HorizontalList);
-        logBar.setText("Rendertime 10:00:30 | Memory 10GB | MemPeak 11GB | Tile 325/512 | sample 68/128");
+        logBar.setText("Render Log of selected PC");
 
         allPCNames = new String[allPCs_HorizontalList.getList().length];
         allLastLogLines = new String[allPCs_HorizontalList.getList().length];
         allPCPictos = new PictogramImage[allPCs_HorizontalList.getList().length];
         allPCLoadingbars = new Loadingbar[allPCs_HorizontalList.getList().length];
+        startedRenderingTiles = new Boolean[allPCs_HorizontalList.getList().length];
+        allRenderInfos = new String[allPCs_HorizontalList.getList().length];
+        allPCStatus=new int[allPCs_HorizontalList.getList().length];
 
         for (int i = 0; i < allPCLoadingbars.length; i++) {
             allPCLoadingbars[i] = new Loadingbar(p, 0, 0, listH, margin, stdTs, edgeRad, margin, border, dark, textCol, 0, 600, textYShift, false, stdFont, null);
+            allPCNames[i] = allConnectedNodes.get(i).getPcSelection_DropdownMenu().getSelectedItem();
+            allLastLogLines[i] = "Fra:2 Mem:142.26M (0.00M, Peak 152.21M) | Time:00:00.36 | Remaining:00:02.01 | Mem:11.84M, Peak:21.80M | Scene, View Layer | Rendered 1/680 Tiles: " + i;
+            allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
         }
     }
 

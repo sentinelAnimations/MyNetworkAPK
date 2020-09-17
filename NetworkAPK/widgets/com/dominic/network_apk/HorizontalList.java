@@ -397,7 +397,9 @@ public class HorizontalList<T> implements Widgets {
     public Boolean getIsShifted() {
         return isShifted;
     }
-
+    public String getSelectedItem() {
+        return list[selectedInd];
+    }
     public float[] getListX() {
         return listX;
     }
