@@ -35,6 +35,7 @@ import processing.event.MouseEvent;
 public class MainActivity extends PApplet {
 
     public static void main(String[] args) {
+    	//System.setProperty("prism.allowhidpi", "false");
         PApplet.main("com.dominic.network_apk.MainActivity");
     }
 
@@ -135,6 +136,7 @@ public class MainActivity extends PApplet {
 
     @Override
     public void setup() {
+    	pixelDensity(displayDensity());
         getSurface().setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
         getSurface().setTitle(APKName);
 
@@ -224,7 +226,7 @@ public class MainActivity extends PApplet {
 
         // variableInitialisation for mode 101 --> RenderOverview -------------
         loadingScreen.setLoadingStatus("Init RenderOverview");
-        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageFolder.png", absPathPictos + "selectFolder.png" };
+        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png",absPathPictos+"freeze.png" };
         String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
         renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red,blue,textYShift, masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, arrowPaths, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 101 --> RenderOverview -------------
@@ -274,7 +276,7 @@ public class MainActivity extends PApplet {
 
         // initialize mode 0 --> homeScreenSlaves-----------------
         loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[0]);
-        String[] hSSpp = {absPathPictos+"sheepit.png",absPathPictos+"sleeping.png",absPathPictos+"file.png"};
+        String[] hSSpp = {absPathPictos+"sheepit.png",absPathPictos+"sleeping.png",absPathPictos+"renderFile.png"};
         homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, hSSpp, stdFont);
         // initialize mode 0 --> homeScreenSlaves-----------------
         loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[1]);
@@ -401,27 +403,28 @@ public class MainActivity extends PApplet {
     }
 
     public void renderMainButtonsSlave() {
+    	 fill(mainButtonsSlave[0].getBgCol());
+         stroke(mainButtonsSlave[0].getBgCol());
+         int fillUpBarW = width - (mainButtonsSlave[mainButtonsSlave.length - 1].getX() + btnSize / 2 + margin * 2);
+         int fillUpBarX = mainButtonsSlave[mainButtonsSlave.length - 1].getX() + btnSize / 2 + margin + fillUpBarW / 2;
+         rect(fillUpBarX, mainButtonsSlave[0].getY(), fillUpBarW, mainButtonsSlave[0].getH(), edgeRad);
+         textFont(stdFont);
+         textSize(subtitleTs);
+         fill(textDark);
+         textAlign(CENTER, CENTER);
+         if (mode - 1 >= 0) {
+             String titleBarText = APKName + " | " + APKDescription + " | " + modeNamesSlaves[mode - 1];
+
+             if (textWidth(titleBarText) < fillUpBarW) {
+                 text(titleBarText, fillUpBarX, btnSize / 2 + margin);
+             }
+         }
+         
         for (int i = mainButtonsSlave.length - 1; i >= 0; i--) {
             mainButtonsSlave[i].render();
             if (mainButtonsSlave[i].getIsClicked()) {
                 mode = i + 1;
                 mainButtonsSlave[i].setIsClicked(false);
-            }
-        }
-        fill(mainButtonsSlave[0].getBgCol());
-        stroke(mainButtonsSlave[0].getBgCol());
-        int fillUpBarW = width - (mainButtonsSlave[mainButtonsSlave.length - 1].getX() + btnSize / 2 + margin * 2);
-        int fillUpBarX = mainButtonsSlave[mainButtonsSlave.length - 1].getX() + btnSize / 2 + margin + fillUpBarW / 2;
-        rect(fillUpBarX, mainButtonsSlave[0].getY(), fillUpBarW, mainButtonsSlave[0].getH(), edgeRad);
-        textFont(stdFont);
-        textSize(subtitleTs);
-        fill(textDark);
-        textAlign(CENTER, CENTER);
-        if (mode - 1 >= 0) {
-            String titleBarText = APKName + " | " + APKDescription + " | " + modeNamesSlaves[mode - 1];
-
-            if (textWidth(titleBarText) < fillUpBarW) {
-                text(titleBarText, fillUpBarX, btnSize / 2 + margin);
             }
         }
     }

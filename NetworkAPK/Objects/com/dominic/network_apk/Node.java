@@ -271,7 +271,7 @@ public class Node<T> {
                 } else {
                     connectorId = UUID.randomUUID().toString();
                 }
-                mainActivity.getNodeEditor().addConnectorPoint(p, 2, xp - x, yp - y, conS / 2, 2, bgCol, true, conT, connectorId, id, this);
+                mainActivity.getNodeEditor().addConnectorPoint(p, 1, xp - x, yp - y, conS / 2, 2, bgCol, true, conT, connectorId, id, this);
                 switch_connectorPoints.add(getConnectorPoints().get(getConnectorPoints().size() - 1));
                 switch_connectorPointIds.add(connectorId);
             } else {
@@ -317,7 +317,6 @@ public class Node<T> {
 
         renderConnector(x - w / 2, bodyY, true,"");
         input_connectorPoint.render();
-
     }
 
     private void renderConnector(int conX, int conY, Boolean isLeft,String text) {

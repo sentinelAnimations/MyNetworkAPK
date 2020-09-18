@@ -19,7 +19,7 @@ import processing.core.PVector;
 public class NodeEditor<T> {
 	private int nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH, screenX, screenY, prevScreenX, prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, doOnceOnPressed = 0, doOnceOnStart = 0;
 	private float textYShift;
-	private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false,isSetup=false;
+	private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false, isSetup = false;
 	private String mySavePath;
 	private String[] nodePaths1, nodePaths2, pcPaths;
 	private PFont stdFont;
@@ -60,18 +60,18 @@ public class NodeEditor<T> {
 		nodeH = (int) (btnSize * 2.5f);
 		mainActivity = (MainActivity) p;
 		gridSize = btnSizeSmall / 2;
-		   if(mainActivity.getIsMaster()) {
-		        mainButtons = mainActivity.getMainButtonsMaster();
-		        }else {
-		            mainButtons = mainActivity.getMainButtonsSlave();
-		        }
+		if (mainActivity.getIsMaster()) {
+			mainButtons = mainActivity.getMainButtonsMaster();
+		} else {
+			mainButtons = mainActivity.getMainButtonsSlave();
+		}
 		screenX = p.width;
 		screenY = p.height;
 		prevScreenX = p.width;
 		prevScreenY = p.height;
 
-		String[] btnDescriptions = { "Delete all Nodes | shorcut: ctrl+d", "Add node | shortcut: ctrl+a", "Center nodes | shortcut: ctrl+c ", "Save | shortcut: ctrl+s", "Reload from file | shortcut: ctrl+r" };
-		int[] shortcuts = { 4, 1, 3, 19, 18 };
+		String[] btnDescriptions = { "Delete all Nodes | shorcut: ctrl+d", "Reload from file | shortcut: ctrl+r", "Add node | shortcut: ctrl+a", "Center nodes | shortcut: ctrl+c ", "Save | shortcut: ctrl+s" };
+		int[] shortcuts = { 4, 18, 1, 3, 19 };
 		for (int i = 0; i < nodeEditorButtons.length; i++) {
 			nodeEditorButtons[i] = new ImageButton(p, mainButtons[0].getX(), mainButtons[0].getY() + mainButtons[0].getH() + margin + btnSize * i + margin * i, btnSize, btnSize, stdTs, margin, edgeRad, shortcuts[i], textYShift, true, false, textCol, light, buttonPaths[i], btnDescriptions[i], null);
 		}
@@ -116,13 +116,13 @@ public class NodeEditor<T> {
 		renderGrid();
 		if (renderNodeMenu == false) {
 
-	handleNodes();
+			handleNodes();
 		}
-		   if(mainActivity.getIsMaster()) {
-	            mainActivity.renderMainButtonsMaster();
-	            }else {
-	                mainActivity.renderMainButtonsSlave();
-	            }
+		if (mainActivity.getIsMaster()) {
+			mainActivity.renderMainButtonsMaster();
+		} else {
+			mainActivity.renderMainButtonsSlave();
+		}
 		if (mainButtons[0].getClickCount() % 2 == 0) {
 
 			int rectH = p.height - (nodeEditorButtons[nodeEditorButtons.length - 1].getY() + nodeEditorButtons[nodeEditorButtons.length - 1].getH() / 2 + margin * 2);
@@ -149,10 +149,10 @@ public class NodeEditor<T> {
 
 		if (p.frameCount % 30 == 0) {
 			calcConnectedNodes();
-			/*for (int i = 0; i < allConnectedNodes.size(); i++) {
-				Node n = allConnectedNodes.get(i);
-			}*/
-			p.println(allConnectedNodes.size());
+			/*
+			 * for (int i = 0; i < allConnectedNodes.size(); i++) { Node n =
+			 * allConnectedNodes.get(i); }
+			 */
 		}
 	}
 
@@ -166,44 +166,44 @@ public class NodeEditor<T> {
 			}
 		}
 	}
-	
+
 	public void handleNodes() {
-	       for (int i = nodes.size() - 1; i >= 0; i--) {
-               Node n = nodes.get(i);
-               if (n.getIsDeleted()) {
-                   if (n.getType() < 3) {
-                       connectorPoints.remove(n.getOutputConnectorPoint());
-                   }
-                   if (n.getType() == 3) {
-                       for (int i2 = n.getSwitchConnectorPoints().size() - 1; i2 >= 0; i2--) {
-                           ConnectorPoint cp = (ConnectorPoint) n.getSwitchConnectorPoints().get(i2);
-                           connectorPoints.remove(cp);
-                       }
-                   }
-                   if (n.getType() == 4) {
-                       connectorPoints.remove(n.getInputConnectorPoint());
-                   }
-                   nodes.remove(i);
-               } else {
-                   n.render();
-               }
-           }
+		for (int i = nodes.size() - 1; i >= 0; i--) {
+			Node n = nodes.get(i);
+			if (n.getIsDeleted()) {
+				if (n.getType() < 3) {
+					connectorPoints.remove(n.getOutputConnectorPoint());
+				}
+				if (n.getType() == 3) {
+					for (int i2 = n.getSwitchConnectorPoints().size() - 1; i2 >= 0; i2--) {
+						ConnectorPoint cp = (ConnectorPoint) n.getSwitchConnectorPoints().get(i2);
+						connectorPoints.remove(cp);
+					}
+				}
+				if (n.getType() == 4) {
+					connectorPoints.remove(n.getInputConnectorPoint());
+				}
+				nodes.remove(i);
+			} else {
+				n.render();
+			}
+		}
 	}
 
 	public void setupAll() {
-	    if(isSetup==false) {
-		try {
-			setData();
-			isSetup=true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (nodes.size() > 0) {
-				for (int i = nodes.size() - 1; i >= 0; i--) {
-					nodes.remove(i);
+		if (isSetup == false) {
+			try {
+				setData();
+				isSetup = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (nodes.size() > 0) {
+					for (int i = nodes.size() - 1; i >= 0; i--) {
+						nodes.remove(i);
+					}
 				}
 			}
 		}
-	    }
 	}
 
 	public void calcConnectedNodes() {
@@ -222,12 +222,10 @@ public class NodeEditor<T> {
 			recursiveGetConnectedNodes(outputNode);
 			int connectedCpus = 0;
 			int connectedGpus = 0;
-			p.println("--",allConnectedNodes.size());
 			for (int i = 0; i < allConnectedNodes.size(); i++) {
 				Node n = allConnectedNodes.get(i);
-				
+
 				if (n.getIsTypePc()) {
-				    p.println(n.getCpuCores());
 					if (n.getCheckoxes()[0].getIsChecked()) {
 						connectedCpus += n.getCpuCores();
 					}
@@ -325,26 +323,26 @@ public class NodeEditor<T> {
 					break;
 
 				case 3:
-					int averageX = 0, averageY = 0;
-					for (int i2 = 0; i2 < nodes.size(); i2++) {
-						Node n = nodes.get(i2);
-						averageX += n.getX();
-						averageY += n.getY();
-					}
-					averageX /= nodes.size();
-					averageY /= nodes.size();
+					if (nodes.size() > 0) {
+						int averageX = 0, averageY = 0;
+						for (int i2 = 0; i2 < nodes.size(); i2++) {
+							Node n = nodes.get(i2);
+							averageX += n.getX();
+							averageY += n.getY();
+						}
+						averageX /= nodes.size();
+						averageY /= nodes.size();
 
-					for (int i2 = 0; i2 < nodes.size(); i2++) {
-						Node n = nodes.get(i2);
-						n.setPos(n.getX() + (p.width / 2 - averageX), n.getY() + (p.height / 2 - averageY));
+						for (int i2 = 0; i2 < nodes.size(); i2++) {
+							Node n = nodes.get(i2);
+							n.setPos(n.getX() + (p.width / 2 - averageX), n.getY() + (p.height / 2 - averageY));
+						}
 					}
-
 					break;
 
 				case 4:
 					saveNodeEditor();
 					break;
-
 				}
 
 				nodeEditorButtons[i].setIsClicked(false);
@@ -379,6 +377,7 @@ public class NodeEditor<T> {
 				JSONObject nodeObject = new JSONObject();
 
 				if (n.getIsTypePc()) {
+					p.println("now", n.getOutputConnectorPoint().getConnectedId());
 					int dd_selectedInd = -1;
 					if (n.getPcSelection_DropdownMenu().getIsSelected()) {
 						dd_selectedInd = n.getPcSelection_DropdownMenu().getSelectedInd();
@@ -389,7 +388,11 @@ public class NodeEditor<T> {
 					nodeDetails.put("posY", n.getY());
 					nodeDetails.put("connectorPointId", n.getOutputConnectorPoint().getId());
 					nodeDetails.put("connectorPointIsConnected", n.getOutputConnectorPoint().getIsConnected());
-					nodeDetails.put("connectorPointConnectedId", n.getOutputConnectorPoint().getConnectedId());
+					if (n.getOutputConnectorPoint().getIsConnected()) {
+						nodeDetails.put("connectorPointConnectedId", n.getOutputConnectorPoint().getConnectedId());
+					} else {
+						nodeDetails.put("connectorPointConnectedId", "-1");
+					}
 					nodeDetails.put("selectPc_dropdown", dd_selectedInd);
 					nodeDetails.put("useCpu_checkbox", n.getCheckoxes()[0].getIsChecked());
 					nodeDetails.put("useGpu_checkbox", n.getCheckoxes()[1].getIsChecked());
@@ -430,7 +433,13 @@ public class NodeEditor<T> {
 					nodeDetails.put("posY", n.getY());
 					nodeDetails.put("connectorPointId", n.getInputConnectorPoint().getId());
 					nodeDetails.put("connectorPointIsConnected", n.getInputConnectorPoint().getIsConnected());
-					nodeDetails.put("connectorPointConnectedId", n.getInputConnectorPoint().getConnectedId());
+					// nodeDetails.put("connectorPointConnectedId",
+					// n.getInputConnectorPoint().getConnectedId());
+					if (n.getInputConnectorPoint().getIsConnected()) {
+						nodeDetails.put("connectorPointConnectedId", n.getInputConnectorPoint().getConnectedId());
+					} else {
+						nodeDetails.put("connectorPointConnectedId", "-1");
+					}
 				}
 
 				nodeObject.put("Node" + i, nodeDetails);
@@ -443,6 +452,7 @@ public class NodeEditor<T> {
 
 	private void setData() throws Exception {
 		loadedData = jHelper.getData(mySavePath);
+		p.println(mySavePath, loadedData);
 		if (loadedData.isEmpty()) {
 		} else {
 			for (int i = 0; i < loadedData.size(); i++) {
@@ -455,7 +465,6 @@ public class NodeEditor<T> {
 				// set data for nodes of type pc
 				// -----------------------------------------------------
 				if (nodeType < 3) {
-
 					String connectorPointConnectedId = jsonObject.getAsJsonObject("Node" + i).get("connectorPointConnectedId").getAsString();
 					String connectorPointId = jsonObject.getAsJsonObject("Node" + i).get("connectorPointId").getAsString();
 					int xp = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("posX").getAsString()));
@@ -513,7 +522,7 @@ public class NodeEditor<T> {
 
 					}
 					n.getSwitchPort_CounterArea().setCount(switchPort_CounterArea);
-					n.updateSwitchConnectorPoints(true, connectorPointIds,true);
+					n.updateSwitchConnectorPoints(true, connectorPointIds, true);
 
 					for (int i2 = n.getSwitchConnectorPoints().size() - 1; i2 >= 0; i2--) {
 						ConnectorPoint<T> cp = n.getSwitchConnectorPoints().get(i2);
@@ -683,9 +692,9 @@ public class NodeEditor<T> {
 			}
 		}
 	}
-	
+
 	public Boolean getIsSetup() {
-	    return isSetup;
+		return isSetup;
 	}
 
 	public void removeConnectorPoint(String remId) {
@@ -712,8 +721,8 @@ public class NodeEditor<T> {
 	public ArrayList<ConnectorPoint> getConnectorPoints() {
 		return connectorPoints;
 	}
-	
-	public ArrayList<Node> getAllConnectedNodes(){
-	    return allConnectedNodes;
+
+	public ArrayList<Node> getAllConnectedNodes() {
+		return allConnectedNodes;
 	}
 }
