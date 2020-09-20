@@ -59,9 +59,9 @@ public class Node<T> {
         bodyH = h - headH - margin;
         calcBodyAndHeadPos();
         if (type < 3) {
-            type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
-            cpu_picto = new PictogramImage(p, -btnSizeSmall / 2 - margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes], "", this);
-            gpu_picto = new PictogramImage(p, +btnSizeSmall + btnSizeSmall / 2 + margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[anzTypes + 1], "", this);
+            type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall,btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true,false, pictoPaths[type], "", this);
+            cpu_picto = new PictogramImage(p, -btnSizeSmall / 2 - margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall,btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, false,pictoPaths[anzTypes], "", this);
+            gpu_picto = new PictogramImage(p, +btnSizeSmall + btnSizeSmall / 2 + margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall,btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true,false, pictoPaths[anzTypes + 1], "", this);
             useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", "", pictoPaths[anzTypes + 6], stdFont, this);
             useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", "", pictoPaths[anzTypes + 6], stdFont, this);
             String[] tempList = { "dies", "und", "das", "kfdjakjfaskdjfasdkf", "askdfjasdkfjjjjjjjjj" };
@@ -77,7 +77,7 @@ public class Node<T> {
         }
         if (type == 3) {
 
-            type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
+            type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall,btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, false,pictoPaths[type], "", this);
             String[] pp = { pictoPaths[anzTypes + 2], pictoPaths[anzTypes + 3] };
             switchPort_CounterArea = new CounterArea(p, 0, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, w - margin * 2, btnSizeSmall, edgeRad, margin, stdTs, 2, 48, 8, lighter, textCol, textCol, textYShift, true, "Port Count", pp, stdFont, this);
             char[] fChars = { '>', '<', ':', '"', '/', '\\', '|', '?', '*' };
@@ -85,7 +85,7 @@ public class Node<T> {
 
         }
         if (type == 4) {
-            type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[type], "", this);
+            type_picto = new PictogramImage(p, w / 2 - btnSizeSmall / 2 - margin, headY - y, btnSizeSmall,btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true,false, pictoPaths[type], "", this);
             int[] conT = { 0, 1 };
             // String connectorId = UUID.randomUUID().toString();
             mainActivity.getNodeEditor().addConnectorPoint(p, 2, -w / 2, bodyY - y, conS / 2, 2, bgCol, true, conT, stdConnectorId, id, this); // type 0 = pc, type 1=switch, type 2=output

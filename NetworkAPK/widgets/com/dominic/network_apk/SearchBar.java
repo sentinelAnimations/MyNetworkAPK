@@ -8,7 +8,7 @@ import processing.core.PFont;
 public class SearchBar<T> implements Widgets {
     private int x, y, w, h, xShift, yShift, edgeRad, margin, stdTs, textCol, textDark, bgCol, bs;
     private float textYShift;
-    private String hint, t;
+    private String hint, t="";
     private Boolean isParented;
     private PFont stdFont;
     private PApplet p;

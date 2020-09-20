@@ -40,7 +40,7 @@ public class LogBar<T> implements Widgets{
         xShift=x;
         yShift=y;
         hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, "","getX","getY","getW","getH", stdFont, this);
-        picto = new PictogramImage(p, -w/2+btnSizeSmall/2+margin,0, btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPath, "", this);
+        picto = new PictogramImage(p, -w/2+btnSizeSmall/2+margin,0, btnSizeSmall,btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, false,pictoPath, "", this);
     }
     
     public void render() {

@@ -36,8 +36,8 @@ public class RenderOnSheepitScreen {
 		this.stdFont = stdFont;
 		mainActivity = (MainActivity) p;
 
-		sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPaths[0], "Rendering on Sheepit", null);
-		sheepitSleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPaths[1], "Sheepit sleeping", null);
+		sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false,false, pictoPaths[0], "Rendering on Sheepit", null);
+		sheepitSleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false,false, pictoPaths[1], "Sheepit sleeping", null);
 	}
 
 	public void render() {

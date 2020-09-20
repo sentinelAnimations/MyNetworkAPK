@@ -1,10 +1,10 @@
 [
   {
     "Node0": {
-      "posX": 716,
-      "posY": 232,
+      "posX": 1062,
+      "posY": 284,
       "connectorPointId": "97c28b3f-fdd4-4fbc-b8ba-4a5f26bde35d",
-      "connectorPointConnectedId": "2a81c5dc-6158-4cbf-a0db-a8ef427f2c52",
+      "connectorPointConnectedId": "71006358-f709-4dbf-be1f-c608dbaac5f0",
       "connectorPointIsConnected": true,
       "nodeType": 4,
       "nodeId": "f552af37-7cf9-45a3-ba1d-68b46a476d93"
@@ -12,8 +12,8 @@
   },
   {
     "Node1": {
-      "posX": 223,
-      "posY": 188,
+      "posX": 119,
+      "posY": -11,
       "connectorPointId": "8ed0a792-a6a2-4bf8-be02-387cacfa7c73",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "01ec109b-1e0e-41fb-bd5d-06f3588d5371",
@@ -26,10 +26,10 @@
   },
   {
     "Node2": {
-      "posX": 505,
+      "posX": 461,
       "connectorPointIsConnectedArray": [
         true,
-        false,
+        true,
         true,
         false,
         true,
@@ -37,7 +37,7 @@
         false,
         false
       ],
-      "posY": 199,
+      "posY": 244,
       "connectorPointIds": [
         "01ec109b-1e0e-41fb-bd5d-06f3588d5371",
         "afadbd12-23d7-4cf8-9d1f-9f6fbc52767c",
@@ -50,10 +50,10 @@
       ],
       "connectorPointConnectedIds": [
         "8ed0a792-a6a2-4bf8-be02-387cacfa7c73",
-        null,
+        "58505f67-da16-4088-a5ca-4a96a112301a",
         "beebcade-9342-487b-af7c-50afe385513e",
-        null,
-        "97c28b3f-fdd4-4fbc-b8ba-4a5f26bde35d",
+        "2fbd9abd-b258-484a-a841-4e5ddf056646",
+        "a72b9220-2fab-469f-ab30-0b526667702f",
         null,
         null,
         null
@@ -66,8 +66,8 @@
   },
   {
     "Node3": {
-      "posX": 212,
-      "posY": 346,
+      "posX": 117,
+      "posY": 272,
       "connectorPointId": "beebcade-9342-487b-af7c-50afe385513e",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "cbce4429-84cc-47da-b6c7-f33109ed55b8",
@@ -76,6 +76,142 @@
       "selectPc_dropdown": -1,
       "nodeType": 1,
       "nodeId": "4fb1bc00-4b61-49b5-b85c-51634b1de3b4"
+    }
+  },
+  {
+    "Node4": {
+      "posX": 122,
+      "posY": 127,
+      "connectorPointId": "58505f67-da16-4088-a5ca-4a96a112301a",
+      "useGpu_checkbox": false,
+      "connectorPointConnectedId": "afadbd12-23d7-4cf8-9d1f-9f6fbc52767c",
+      "useCpu_checkbox": false,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdown": -1,
+      "nodeType": 0,
+      "nodeId": "c7eb48b9-7698-4994-82ab-dc9319babd2d"
+    }
+  },
+  {
+    "Node5": {
+      "posX": 116,
+      "posY": 416,
+      "connectorPointId": "2fbd9abd-b258-484a-a841-4e5ddf056646",
+      "useGpu_checkbox": false,
+      "connectorPointConnectedId": "-1",
+      "useCpu_checkbox": false,
+      "connectorPointIsConnected": false,
+      "selectPc_dropdown": -1,
+      "nodeType": 0,
+      "nodeId": "05f4675a-119e-494f-9fbe-6a57e9edba45"
+    }
+  },
+  {
+    "Node6": {
+      "posX": 107,
+      "posY": 581,
+      "connectorPointId": "ead67985-1fe4-41a5-b531-2f7f9e1d73b1",
+      "useGpu_checkbox": false,
+      "connectorPointConnectedId": "693af379-9949-4d76-adab-299c68b1c004",
+      "useCpu_checkbox": false,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdown": -1,
+      "nodeType": 1,
+      "nodeId": "912b0e4b-438c-40b9-a0fe-878da73a360e"
+    }
+  },
+  {
+    "Node7": {
+      "posX": 468,
+      "connectorPointIsConnectedArray": [
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "posY": 513,
+      "connectorPointIds": [
+        "693af379-9949-4d76-adab-299c68b1c004",
+        "97789df0-0905-4c3c-8a61-b839b23b9dfa",
+        "7c7c342b-f880-4d42-9c6f-030218481481",
+        "9fb6a72e-78ed-4fa6-b6c7-512e20627d1f",
+        "d4fc6d49-c2b2-4baa-aa9c-dc5d96a51af2",
+        "9b34894e-8791-4e59-aef7-08ee18c9d4c9",
+        "ecfdd754-f852-4863-94c4-8b4481853d4b",
+        "be964967-adf1-4808-bf4b-bdb11dfeb33f"
+      ],
+      "connectorPointConnectedIds": [
+        "ead67985-1fe4-41a5-b531-2f7f9e1d73b1",
+        "e0c4d04c-6304-4256-aa18-83c94662230b",
+        null,
+        null,
+        "6deaccf7-b161-4356-979d-4c55bb7bcdd2",
+        null,
+        null,
+        null
+      ],
+      "nodeType": 3,
+      "switchPort_CounterArea": 8,
+      "nodeId": "ff804fcf-1832-4244-b2c3-d4dbd208c872",
+      "switchName_editText": "No name"
+    }
+  },
+  {
+    "Node8": {
+      "posX": 760,
+      "connectorPointIsConnectedArray": [
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "posY": 330,
+      "connectorPointIds": [
+        "a72b9220-2fab-469f-ab30-0b526667702f",
+        "9407861b-9584-40e3-9e73-0462b0fc2ee5",
+        "f62ec8ab-170e-4269-8d5f-cfb604c52997",
+        "6deaccf7-b161-4356-979d-4c55bb7bcdd2",
+        "71006358-f709-4dbf-be1f-c608dbaac5f0",
+        "f9fda208-30e5-47b2-ad14-c8f03cd657aa",
+        "df5f85c3-9715-4610-99ac-b5f4e9458960",
+        "012d7941-594c-4ed3-8310-931fe965588a"
+      ],
+      "connectorPointConnectedIds": [
+        "2a81c5dc-6158-4cbf-a0db-a8ef427f2c52",
+        null,
+        null,
+        "d4fc6d49-c2b2-4baa-aa9c-dc5d96a51af2",
+        "97c28b3f-fdd4-4fbc-b8ba-4a5f26bde35d",
+        null,
+        null,
+        null
+      ],
+      "nodeType": 3,
+      "switchPort_CounterArea": 8,
+      "nodeId": "c5e81163-eed7-4418-ad95-9b73a1547509",
+      "switchName_editText": "No name"
+    }
+  },
+  {
+    "Node9": {
+      "posX": 105,
+      "posY": 734,
+      "connectorPointId": "e0c4d04c-6304-4256-aa18-83c94662230b",
+      "useGpu_checkbox": false,
+      "connectorPointConnectedId": "97789df0-0905-4c3c-8a61-b839b23b9dfa",
+      "useCpu_checkbox": false,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdown": -1,
+      "nodeType": 2,
+      "nodeId": "18ce5059-6879-4a62-a69c-c01313febf1b"
     }
   }
 ]

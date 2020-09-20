@@ -20,7 +20,7 @@ public class RenderOverview {
 	private RenderOnSheepitScreen renderOnSheepitScreen;
 	private ImageViewScreen imageViewScreen;
 
-	public RenderOverview(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter,int lightest, int textCol, int textDark, int border,int green,int red, int blue,float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths,String[] fileExplorerPaths, PFont stdFont) {
+	public RenderOverview(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int lightest, int textCol, int textDark, int border, int green, int red, int blue, float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths, String[] fileExplorerPaths, PFont stdFont) {
 		this.p = p;
 		this.stdTs = stdTs;
 		this.edgeRad = edgeRad;
@@ -40,16 +40,16 @@ public class RenderOverview {
 		this.stdFont = stdFont;
 		mainActivity = (MainActivity) p;
 		cancelRendering_ImageButton = new ImageButton(p, p.width - margin - btnSizeSmall / 2, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[0], "Quit render process", null);
-		viewImages_imageButton = new ImageButton(p, p.width - margin*2 - btnSizeSmall / 2-btnSizeSmall, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[5], "Image view", null);
+		viewImages_imageButton = new ImageButton(p, p.width - margin * 2 - btnSizeSmall / 2 - btnSizeSmall, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[5], "Image view", null);
 
 		String[] rFSPictoPaths = { pictoPaths[3] };
 		filesSettingsScreen = new FilesSettingsScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rFSPictoPaths, hoLiPictoPaths, arrowPaths, stdFont);
 		String[] fRSPictoPaths = { pictoPaths[4] };
-		filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border,green,red,blue, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
+		filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, green, red, blue, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
 		String[] rOSPictoPaths = { pictoPaths[1], pictoPaths[2] };
 		renderOnSheepitScreen = new RenderOnSheepitScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rOSPictoPaths, stdFont);
-		String[] iVSPictoPaths = { pictoPaths[6] };
-		imageViewScreen = new ImageViewScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter,lightest, textCol, textDark, border, textYShift, iVSPictoPaths,fileExplorerPaths, stdFont);
+		String[] iVSPictoPaths = { pictoPaths[6], pictoPaths[8] };
+		imageViewScreen = new ImageViewScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green,textYShift, iVSPictoPaths, fileExplorerPaths, stdFont);
 
 	}
 
@@ -71,15 +71,16 @@ public class RenderOverview {
 		if (renderMode == 2) {
 			imageViewScreen.render();
 		}
-
-		cancelRendering_ImageButton.render();
+		if (imageViewScreen.getImageView_PathSelector().getFileExplorerIsOpen() == false) {
+			cancelRendering_ImageButton.render();
+		}
 		// render all ---------------------------------------
 
 		// button handling -------------------------
 		if (cancelRendering_ImageButton.getIsClicked()) {
-		    if(renderMode==0.1f) {
-		        mainActivity.setMode(1);
-		    }
+			if (renderMode == 0.1f) {
+				mainActivity.setMode(1);
+			}
 			if (renderMode == 0) {
 				cancelFileRendering();
 				mainActivity.setMode(1);
@@ -133,8 +134,9 @@ public class RenderOverview {
 		if (renderMode == 2) {
 			imageViewScreen.onMousePressed(mouseButton);
 		}
-
-		cancelRendering_ImageButton.onMousePressed();
+		if (imageViewScreen.getImageView_PathSelector().getFileExplorerIsOpen() == false) {
+			cancelRendering_ImageButton.onMousePressed();
+		}
 	}
 
 	public void onMouseReleased(int mouseButton) {
@@ -152,7 +154,9 @@ public class RenderOverview {
 		if (renderMode == 2) {
 			imageViewScreen.onMouseReleased(mouseButton);
 		}
-		cancelRendering_ImageButton.onMouseReleased();
+		if (imageViewScreen.getImageView_PathSelector().getFileExplorerIsOpen() == false) {
+			cancelRendering_ImageButton.onMouseReleased();
+		}
 	}
 
 	public void onKeyPressed(char key) {

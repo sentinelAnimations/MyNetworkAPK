@@ -90,7 +90,7 @@ public class Checkbox<T> implements Widgets {
 	}
 	
 	private void initializePictoImage(){
-		picto = new PictogramImage(p, xShift-(x-boxX),yShift-(y-boxY), boxDim - margin, margin, stdTs, edgeRad, tickCol, textYShift,isParented, pictoPath, "", parent);
+		picto = new PictogramImage(p, xShift-(x-boxX),yShift-(y-boxY), boxDim - margin,boxDim-margin, margin, stdTs, edgeRad, tickCol, textYShift,isParented,false, pictoPath, "", parent);
 	}
 	
 	@Override

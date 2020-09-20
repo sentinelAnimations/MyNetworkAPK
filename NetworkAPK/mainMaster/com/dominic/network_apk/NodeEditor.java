@@ -377,7 +377,6 @@ public class NodeEditor<T> {
 				JSONObject nodeObject = new JSONObject();
 
 				if (n.getIsTypePc()) {
-					p.println("now", n.getOutputConnectorPoint().getConnectedId());
 					int dd_selectedInd = -1;
 					if (n.getPcSelection_DropdownMenu().getIsSelected()) {
 						dd_selectedInd = n.getPcSelection_DropdownMenu().getSelectedInd();
@@ -452,7 +451,6 @@ public class NodeEditor<T> {
 
 	private void setData() throws Exception {
 		loadedData = jHelper.getData(mySavePath);
-		p.println(mySavePath, loadedData);
 		if (loadedData.isEmpty()) {
 		} else {
 			for (int i = 0; i < loadedData.size(); i++) {

@@ -42,9 +42,9 @@ public class HomeScreenSlaves {
             mainButtons = mainActivity.getMainButtonsSlave();
         }
         
-        sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPaths[0], "Rendering on Sheepit", null);
-        sleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPaths[1], "sleeping", null);
-        fileRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, pictoPaths[2], "Rendering file", null);
+        sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false,false, pictoPaths[0], "Rendering on Sheepit", null);
+        sleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false,pictoPaths[1], "sleeping", null);
+        fileRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false,false, pictoPaths[2], "Rendering file", null);
         timeField = new TimeField(p, margin,p.height-btnSizeSmall/2-margin, stdTs, margin, edgeRad, textCol, light, false, false,"Timestamp: ","", stdFont, null);
         timeField.setPos(timeField.getW()/2+margin, timeField.getY());
     }

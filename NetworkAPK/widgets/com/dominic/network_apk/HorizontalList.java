@@ -66,7 +66,7 @@ public class HorizontalList<T> implements Widgets {
         // btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1,textYShift, true,
         // false, textCol, lighter, pictoPaths[2], "", null);
 
-        picto = new PictogramImage(p, -w / 2 + margin * 2 + btnSizeSmall / 2, 0, btnSizeSmall - margin, margin, stdTs, edgeRad, textCol, textYShift, true, pictoPaths[0], "", this);
+        picto = new PictogramImage(p, -w / 2 + margin * 2 + btnSizeSmall / 2, 0, btnSizeSmall - margin,btnSizeSmall-margin, margin, stdTs, edgeRad, textCol, textYShift, true, false,pictoPaths[0], "", this);
         goLeft_btn = new ImageButton(p, -w / 2 + margin * 2 + titleBoxWidth + btnSizeSmall / 2, 0, btnSizeSmall, h - margin * 2, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, lighter, pictoPaths[1], "", this);
         goRight_btn = new ImageButton(p, w / 2 - margin - btnSizeSmall / 2, 0, btnSizeSmall, h - margin * 2, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, lighter, pictoPaths[2], "", this);
 

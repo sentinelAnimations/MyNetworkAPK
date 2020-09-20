@@ -84,7 +84,6 @@ public class FilesRenderingScreen {
 		// allFiles_horizontallist ------------------------
 
 		logBar.render();
-
 		// render allPCs_horizontalList --------------------
 		allPCs_HorizontalList.render();
 		if (allPCs_HorizontalList.getList().length > 0) {
@@ -95,11 +94,9 @@ public class FilesRenderingScreen {
 				listX = allPCs_HorizontalList.getListX();
 				listW = allPCs_HorizontalList.getListW();
 
-				// int val = (int) p.random(600);
 				for (int i = 0; i < allPCLoadingbars.length; i++) {
-					allPCLoadingbars[i].setPos((int) listX[i], allPCs_HorizontalList.getY() + allPCs_HorizontalList.getH() / 2 - margin * 2 - allPCLoadingbars[i].getH() / 2);
+					allPCLoadingbars[i].setPos((int) listX[i], (int) (allPCs_HorizontalList.getY() + listW[i] / 2 - margin * 3 - allPCLoadingbars[i].getH() / 2));
 					allPCPictos[i].setPos((int) listX[i], (int) (allPCs_HorizontalList.getY() - listW[i] / 2 + margin * 2 + allPCPictos[i].getH() / 2));
-					// allPCLoadingbars[i].setValue(val);
 				}
 				allPCs_HorizontalList.setIsShifted(false);
 			}
@@ -307,7 +304,7 @@ public class FilesRenderingScreen {
 			allPCLoadingbars[i] = new Loadingbar(p, 0, 0, listH, margin, stdTs, edgeRad, margin, border, dark, textCol, 0, 600, textYShift, false, stdFont, null);
 			allPCNames[i] = allConnectedNodes.get(i).getPcSelection_DropdownMenu().getSelectedItem();
 			allLastLogLines[i] = "Fra:2 Mem:142.26M (0.00M, Peak 152.21M) | Time:00:00.36 | Remaining:00:02.01 | Mem:11.84M, Peak:21.80M | Scene, View Layer | Rendered 1/680 Tiles: " + i;
-			allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
+			allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize,btnSize, margin, stdTs, edgeRad, textCol, textYShift, false,true, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
 		}
 	}
 
