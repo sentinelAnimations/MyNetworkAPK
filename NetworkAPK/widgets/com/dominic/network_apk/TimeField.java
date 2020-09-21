@@ -51,12 +51,12 @@ public class TimeField<T> implements Widgets {
         p.textFont(stdFont);
         p.textAlign(p.CENTER, p.CENTER);
         p.textSize(stdTs);
-        p.text(time, x, y);
+        p.text(prefix + time+ postfix, x, y);
     }
 
     private void calcTime() {
-        time = prefix + p.str(p.hour()) + " : " + p.str(p.minute()) + " : " + p.str(p.second()) + postfix;
-        w = (int) p.textWidth(time) + margin * 2;
+        time = p.str(p.hour()) + " : " + p.str(p.minute()) + " : " + p.str(p.second()) ;
+        w = (int) p.textWidth(prefix + time+ postfix) + margin * 2;
         h = stdTs + margin * 2;
     }
 

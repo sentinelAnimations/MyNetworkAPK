@@ -1,5 +1,7 @@
 package com.dominic.network_apk;
 
+import java.io.PrintWriter;
+
 import org.json.simple.JSONObject;
 
 import processing.core.PApplet;
@@ -12,6 +14,7 @@ public class HomeScreenSlaves {
     private float textYShift;
     private String pathToCloud,pcAlias;
     private String[] pictoPaths;
+    private long curTime,lastLogTime;
     private PFont stdFont;
     private PApplet p;
     private ImageButton[] mainButtons;
@@ -65,6 +68,7 @@ public class HomeScreenSlaves {
         }
         jsonHelper=new JsonHelper(p);
         p.println(pathToCloud+"\\"+pcAlias);
+
     }
 
     public void render() {
@@ -85,12 +89,14 @@ public class HomeScreenSlaves {
         }
         timeField.render();
         
-        if(p.frameCount%50==0) {
+        curTime=System.nanoTime()/1000000000;
+        if(curTime-lastLogTime>5*60) {
+        	p.println(curTime,lastLogTime,curTime-lastLogTime);
             logData();
+            lastLogTime=System.nanoTime()/1000000000;
         }
     }
     private void logData() {
-        long curTime = System.nanoTime() / 1000000000;
 
         jsonHelper.clearArray();
         JSONObject settingsDetails = new JSONObject();
@@ -99,9 +105,10 @@ public class HomeScreenSlaves {
         settingsDetails.put("logTime",curTime);
         settingsObject.put("Settings", settingsDetails);
         jsonHelper.appendObjectToArray(settingsObject);
-        jsonHelper.writeData(pathToCloud+"\\"+pcAlias);
-
+        jsonHelper.writeData(pathToCloud+"\\"+pcAlias+"\\logFile.json");
     }
+    
+
 
     public void onMousePressed(int mouseButton) {
         for (int i = 0; i < mainButtons.length; i++) {
