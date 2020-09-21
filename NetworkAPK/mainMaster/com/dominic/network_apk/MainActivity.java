@@ -35,7 +35,7 @@ import processing.event.MouseEvent;
 public class MainActivity extends PApplet {
 
     public static void main(String[] args) {
-    	//System.setProperty("prism.allowhidpi", "false");
+        // System.setProperty("prism.allowhidpi", "false");
         PApplet.main("com.dominic.network_apk.MainActivity");
     }
 
@@ -58,7 +58,7 @@ public class MainActivity extends PApplet {
     // Booleans-------------------------------------------------
 
     // Colors--------------------------------------------------
-    private int darkest = color(30), dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78), lightest = color(64, 77, 88), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0), green = color(0, 255, 0),blue=color(0,0,255), textCol = color(255), textDark = color(150);
+    private int darkest = color(30), dark = color(26, 32, 37), light = color(39, 48, 56), lighter = color(54, 67, 78), lightest = color(64, 77, 88), border = color(255, 191, 0), darkTransparent = color(26, 32, 37, 100), red = color(255, 0, 0), green = color(0, 255, 0), blue = color(0, 0, 255), textCol = color(255), textDark = color(150);
     // colors -------------------------------------------------
 
     // Dimens--------------------------------------------------
@@ -136,7 +136,7 @@ public class MainActivity extends PApplet {
 
     @Override
     public void setup() {
-    	pixelDensity(displayDensity());
+        pixelDensity(displayDensity());
         getSurface().setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
         getSurface().setTitle(APKName);
 
@@ -226,9 +226,9 @@ public class MainActivity extends PApplet {
 
         // variableInitialisation for mode 101 --> RenderOverview -------------
         loadingScreen.setLoadingStatus("Init RenderOverview");
-        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png",absPathPictos+"freeze.png" ,absPathPictos+"search.png"};
+        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png" };
         String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red,blue,textYShift, masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, arrowPaths, fileExplorerPaths, stdFont);
+        renderOverview = new RenderOverview(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red, blue, textYShift, masterCommandSavePath, rOpp, hoLiPictoPathsRenderOverview, arrowPaths, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 101 --> RenderOverview -------------
 
         // variableInitialisation -----------------------------------------------
@@ -274,17 +274,19 @@ public class MainActivity extends PApplet {
             mainButtonsSlave[i] = new ImageButton(this, btnSize / 2 + margin + btnSize * i + margin * i, btnSize / 2 + margin, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, p3[i], modeNamesSlaves[i], null);
         }
 
-        // initialize mode 0 --> homeScreenSlaves-----------------
-        loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[0]);
-        String[] hSSpp = {absPathPictos+"sheepit.png",absPathPictos+"sleeping.png",absPathPictos+"renderFile.png"};
-        homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, hSSpp, stdFont);
-        // initialize mode 0 --> homeScreenSlaves-----------------
         loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[1]);
         initializeSettingsScreen();
         loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[2]);
         initializeThemeScreen();
         loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[3]);
         initializeQuestionScreen();
+
+        // initialize mode 0 --> homeScreenSlaves-----------------
+        loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[0]);
+        String[] hSSpp = { absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "renderFile.png" };
+        homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, hSSpp, stdFont);
+        // initialize mode 0 --> homeScreenSlaves-----------------
+
     }
 
     @Override
@@ -403,23 +405,23 @@ public class MainActivity extends PApplet {
     }
 
     public void renderMainButtonsSlave() {
-    	 fill(mainButtonsSlave[0].getBgCol());
-         stroke(mainButtonsSlave[0].getBgCol());
-         int fillUpBarW = width - (mainButtonsSlave[mainButtonsSlave.length - 1].getX() + btnSize / 2 + margin * 2);
-         int fillUpBarX = mainButtonsSlave[mainButtonsSlave.length - 1].getX() + btnSize / 2 + margin + fillUpBarW / 2;
-         rect(fillUpBarX, mainButtonsSlave[0].getY(), fillUpBarW, mainButtonsSlave[0].getH(), edgeRad);
-         textFont(stdFont);
-         textSize(subtitleTs);
-         fill(textDark);
-         textAlign(CENTER, CENTER);
-         if (mode - 1 >= 0) {
-             String titleBarText = APKName + " | " + APKDescription + " | " + modeNamesSlaves[mode - 1];
+        fill(mainButtonsSlave[0].getBgCol());
+        stroke(mainButtonsSlave[0].getBgCol());
+        int fillUpBarW = width - (mainButtonsSlave[mainButtonsSlave.length - 1].getX() + btnSize / 2 + margin * 2);
+        int fillUpBarX = mainButtonsSlave[mainButtonsSlave.length - 1].getX() + btnSize / 2 + margin + fillUpBarW / 2;
+        rect(fillUpBarX, mainButtonsSlave[0].getY(), fillUpBarW, mainButtonsSlave[0].getH(), edgeRad);
+        textFont(stdFont);
+        textSize(subtitleTs);
+        fill(textDark);
+        textAlign(CENTER, CENTER);
+        if (mode - 1 >= 0) {
+            String titleBarText = APKName + " | " + APKDescription + " | " + modeNamesSlaves[mode - 1];
 
-             if (textWidth(titleBarText) < fillUpBarW) {
-                 text(titleBarText, fillUpBarX, btnSize / 2 + margin);
-             }
-         }
-         
+            if (textWidth(titleBarText) < fillUpBarW) {
+                text(titleBarText, fillUpBarX, btnSize / 2 + margin);
+            }
+        }
+
         for (int i = mainButtonsSlave.length - 1; i >= 0; i--) {
             mainButtonsSlave[i].render();
             if (mainButtonsSlave[i].getIsClicked()) {
@@ -711,20 +713,11 @@ public class MainActivity extends PApplet {
     }
 
     public String getPCName() {
-        if (loadingScreen.getInstanciatedClasses()) {
-            EditText et = settingsScreen.getEditText();
-            if (et.getStrList().get(0).length() > 0) {
-                return et.getStrList().get(0);
-            } else {
-                return "";
-            }
-        } else {
-            return "";
-        }
+        return settingsScreen.getEditText().getStrList().get(0);
     }
 
-    public String getSavePath(String basePath) {
-        return "output" + getPCName() + "/" + basePath;
+    public String getPathToCloud() {
+        return settingsScreen.getPathSelectors()[2].getPath();
     }
 
     public void setMode(int setMode) {

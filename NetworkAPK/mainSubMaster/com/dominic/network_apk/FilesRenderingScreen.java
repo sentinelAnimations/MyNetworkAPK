@@ -10,6 +10,7 @@ public class FilesRenderingScreen {
 	private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, green, red, blue, lighter, lightest, textCol, textDark, border, curRenderingFile = 1, prevPCListSelectedInd = -1, onStartup = 0;
 	private float textYShift;
 	private float[] listX, listW, allFiles_listX, allFiles_listW;
+	private Boolean isFreezed=false;
 	private Boolean[] renderAnimation, renderStillFrame, startedRenderingTiles;
 	private int[] startFrame, endFrame, stillFrame, allPCStatus; // allPCStatus: 0=prog responding, 1=prog not responding
 	private String[] pictoPaths, hoLiPictoPaths;
@@ -22,6 +23,7 @@ public class FilesRenderingScreen {
 	private Loadingbar[] allPCLoadingbars;
 	private HorizontalList allFiles_HorizontalList, allPCs_HorizontalList;
 	private LogBar logBar;
+	private ImageButton freeze_imageButton;
 
 	public FilesRenderingScreen(PApplet p, int stdTs, int edgeRad, int margin, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int green, int red, int blue, float textYShift, String[] pictoPaths, String[] hoLiPictoPaths, PFont stdFont) {
 		this.p = p;
@@ -84,6 +86,7 @@ public class FilesRenderingScreen {
 		// allFiles_horizontallist ------------------------
 
 		logBar.render();
+		freeze_imageButton.render();
 		// render allPCs_horizontalList --------------------
 		allPCs_HorizontalList.render();
 		if (allPCs_HorizontalList.getList().length > 0) {
@@ -124,6 +127,17 @@ public class FilesRenderingScreen {
 		}
 		// render allPCs_horizontalList --------------------
 		// render all ----------------------------------------------
+		
+		if(freeze_imageButton.getIsClicked()) {
+		    isFreezed=!isFreezed;
+		    freeze_imageButton.setIsClicked(false);
+		}
+		
+		//get loglines -----------------------------------
+		if(!isFreezed) {
+		    //to do: get logLines
+		}
+        //get loglines -----------------------------------
 
 		// update PCView---------------------------------------------
 		if (allConnectedNodes.size() > 0) {
@@ -181,11 +195,13 @@ public class FilesRenderingScreen {
 	public void onMousePressed(int mouseButton) {
 		allFiles_HorizontalList.onMousePressed();
 		allPCs_HorizontalList.onMousePressed();
+		freeze_imageButton.onMousePressed();
 	}
 
 	public void onMouseReleased(int mouseButton) {
 		allFiles_HorizontalList.onMouseReleased(mouseButton);
 		allPCs_HorizontalList.onMouseReleased(mouseButton);
+		freeze_imageButton.onMouseReleased();
 	}
 
 	public void onKeyPressed(char key) {
@@ -291,6 +307,8 @@ public class FilesRenderingScreen {
 		allPCs_HorizontalList = new HorizontalList(p, 0, allFiles_HorizontalList.getH() / 2 + margin + listH / 2, p.width - margin * 2, listH, margin, edgeRad, stdTs, (int) p.textWidth("Rendering PCs") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', true, false, true, "Rendering PCs", hoLiPictoPaths, startList, stdFont, allFiles_HorizontalList);
 		logBar = new LogBar(p, 0, allPCs_HorizontalList.getH() / 2 + margin * 2 + btnSizeSmall / 2, allFiles_HorizontalList.getW(), btnSizeSmall + margin * 2, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, pictoPaths[0], stdFont, allPCs_HorizontalList);
 		logBar.setText("Render Log of selected PC");
+        freeze_imageButton = new ImageButton(p, logBar.getW()/2-btnSizeSmall/2-margin,0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, lighter, pictoPaths[1], "Start rendering", logBar);
+
 
 		allPCNames = new String[allPCs_HorizontalList.getList().length];
 		allLastLogLines = new String[allPCs_HorizontalList.getList().length];
@@ -304,7 +322,7 @@ public class FilesRenderingScreen {
 			allPCLoadingbars[i] = new Loadingbar(p, 0, 0, listH, margin, stdTs, edgeRad, margin, border, dark, textCol, 0, 600, textYShift, false, stdFont, null);
 			allPCNames[i] = allConnectedNodes.get(i).getPcSelection_DropdownMenu().getSelectedItem();
 			allLastLogLines[i] = "Fra:2 Mem:142.26M (0.00M, Peak 152.21M) | Time:00:00.36 | Remaining:00:02.01 | Mem:11.84M, Peak:21.80M | Scene, View Layer | Rendered 1/680 Tiles: " + i;
-			allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize,btnSize, margin, stdTs, edgeRad, textCol, textYShift, false,true, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
+			allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize,btnSize, margin, stdTs, edgeRad, textCol, textYShift, false,false, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
 		}
 	}
 

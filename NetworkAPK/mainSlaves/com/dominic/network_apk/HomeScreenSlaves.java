@@ -1,5 +1,7 @@
 package com.dominic.network_apk;
 
+import org.json.simple.JSONObject;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -8,6 +10,7 @@ public class HomeScreenSlaves {
     private float renderMode; // rendermode --> 0=render files, 1=render on
                               // sheepit,2=sleeping
     private float textYShift;
+    private String pathToCloud,pcAlias;
     private String[] pictoPaths;
     private PFont stdFont;
     private PApplet p;
@@ -16,6 +19,7 @@ public class HomeScreenSlaves {
     private MainActivity mainActivity;
     private PictogramImage fileRendering_PictogramImage,sheepitRendering_PictogramImage,sleeping_PictogramImage;
     private TimeField timeField;
+    private JsonHelper jsonHelper;
 
     public HomeScreenSlaves(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, float textYShift, String[] pictoPaths, PFont stdFont) {
         this.p = p;
@@ -47,6 +51,20 @@ public class HomeScreenSlaves {
         fileRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false,false, pictoPaths[2], "Rendering file", null);
         timeField = new TimeField(p, margin,p.height-btnSizeSmall/2-margin, stdTs, margin, edgeRad, textCol, light, false, false,"Timestamp: ","", stdFont, null);
         timeField.setPos(timeField.getW()/2+margin, timeField.getY());
+        p.println("now setting paths");
+        pathToCloud=mainActivity.getPathToCloud();
+        pcAlias=mainActivity.getPCName();
+        while(p.str(pathToCloud.charAt(pathToCloud.length()-1))=="\\") {
+            pathToCloud=pathToCloud.substring(0,pathToCloud.length()-1);
+        }
+        if(pathToCloud==null) {
+            pathToCloud="";
+        }
+        if(pcAlias==null) {
+            pcAlias="";
+        }
+        jsonHelper=new JsonHelper(p);
+        p.println(pathToCloud+"\\"+pcAlias);
     }
 
     public void render() {
@@ -66,6 +84,23 @@ public class HomeScreenSlaves {
            sleeping_PictogramImage.render(); 
         }
         timeField.render();
+        
+        if(p.frameCount%50==0) {
+            logData();
+        }
+    }
+    private void logData() {
+        long curTime = System.nanoTime() / 1000000000;
+
+        jsonHelper.clearArray();
+        JSONObject settingsDetails = new JSONObject();
+        JSONObject settingsObject = new JSONObject();
+        
+        settingsDetails.put("logTime",curTime);
+        settingsObject.put("Settings", settingsDetails);
+        jsonHelper.appendObjectToArray(settingsObject);
+        jsonHelper.writeData(pathToCloud+"\\"+pcAlias);
+
     }
 
     public void onMousePressed(int mouseButton) {

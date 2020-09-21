@@ -33,6 +33,7 @@ public class SettingsScreen {
     private JSONArray loadedSettingsData = new JSONArray();
     private ImageButton[] mainButtons;
     private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
+    private FileInteractionHelper fileInteractionHelper;
 
     public SettingsScreen(PApplet p, int btnSize, int btnSizeSmall, int stdTs, int subtitleTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySavePath, String[] imgPaths, String[] HorizontalListPictoPaths, String[] fileExplorerPaths, String[] firstSetupPictos, PFont stdFont) {
         this.p = p;
@@ -66,7 +67,7 @@ public class SettingsScreen {
         String[] pathSelectorHints = { "...\\\\Blender.exe", "...\\\\images", "...\\\\Cloud" };
 
         for (int i = 0; i < setting_pictos.length; i++) {
-            setting_pictos[i] = new PictogramImage(p, (p.width / 8 * 4) / 2 + p.width / 8 * (i), p.height / 2 - btnSize / 2, btnSize,btnSize, margin, stdTs, edgeRad, textCol, textYShift, false,false, imgPaths[i], description[i], null);
+            setting_pictos[i] = new PictogramImage(p, (p.width / 8 * 4) / 2 + p.width / 8 * (i), p.height / 2 - btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, imgPaths[i], description[i], null);
             if (i > 0 && i < pathSelectors.length + 1) {
 
                 pathSelectors[i - 1] = new PathSelector(p, 0, btnSize, p.width / 8 - margin * 2, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, selectFolder[i - 1], true, pathSelectorHints[i - 1], imgPaths[imgPaths.length - 1], fileExplorerPaths, stdFont, setting_pictos[i]);
@@ -81,12 +82,14 @@ public class SettingsScreen {
         String[] ddPaths = { HorizontalListPictoPaths[HorizontalListPictoPaths.length - 1], HorizontalListPictoPaths[HorizontalListPictoPaths.length - 2] };
         masterOrSlave_dropdown = new DropdownMenu(p, 0, btnSize, p.width / 8 - margin * 2, btnSizeSmall, p.height / 4 + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, light, lighter, textCol, textDark, textYShift, "Master or Slave", ddPaths, dropdownList, stdFont, true, setting_pictos[0]);
 
-        firstSetupPicto = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize,btnSize, margin, stdTs, edgeRad, textCol, textYShift, false,false, firstSetupPictos[0], "First setup page", null);
+        firstSetupPicto = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, firstSetupPictos[0], "First setup page", null);
         firstSetupHelp_btn = new ImageButton(p, p.width - btnSize / 2 - margin, btnSize / 2 + margin, btnSize, btnSize, stdTs, margin, edgeRad, 8, textYShift, false, false, textCol, textCol, firstSetupPictos[1], "questions and infos | sortcut: ctrl+h", null);
 
         jHelper = new JsonHelper(p);
+        fileInteractionHelper = new FileInteractionHelper(p);
 
         setData();
+        p.println("data is set");
     }
 
     public void render() {
@@ -216,7 +219,22 @@ public class SettingsScreen {
                 if (personalData_et.getStrList().get(0).length() < 1) {
                     allSet = false;
                 } else {
-                    settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
+                    if (allSet == true) {
+                        String[] allFoldersInCloud = fileInteractionHelper.getFoldersAndFiles(pathSelectors[pathSelectors.length - 1].getPath(), true);
+                        Boolean noFolderWithSameName = true;
+                        for (int i = 0; i < allFoldersInCloud.length; i++) {
+                            p.println(allFoldersInCloud[i], pathSelectors[pathSelectors.length - 1].getPath());
+                            String[] splitStr = p.split(allFoldersInCloud[i], ".");
+                            if (splitStr[0].toUpperCase().equals(personalData_et.getStrList().get(0).toUpperCase())) {
+                                noFolderWithSameName = false;
+                            }
+                        }
+                        if (noFolderWithSameName) {
+                            settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
+                        } else {
+                            allSet = false;
+                        }
+                    }
                 }
                 // write to jsonfile;
                 if (allSet == true) {
@@ -228,17 +246,12 @@ public class SettingsScreen {
 
                     successfullySaved = true;
                     mainActivity.initializeLoadingScreen();
-                    /*
-                     * mainActivity.setMode(1);
-                     * 
-                     * if (masterOrSlave_dropdown.getSelectedInd() == 0) {
-                     * mainActivity.setIsMaster(true); } else { mainActivity.setIsMaster(false); }
-                     */
+
                     mainActivity.getLoadingScreen().setIsFirstSetup(false);
                     makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Saved settings", stdFont, null));
 
                 } else {
-                    makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Set all required data", stdFont, null));
+                    makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Set all required data & use unique Alias", stdFont, null));
                 }
                 saveSettings_btn.setIsClicked(false);
             }
@@ -349,6 +362,7 @@ public class SettingsScreen {
             String t = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
             personalData_et.setText(t);
         }
+        p.println("--",personalData_et.getStrList().get(0),pathSelectors[2].getPath());
         // load settings info, if not available, goto settingsPage----------------------
     }
 
@@ -363,10 +377,11 @@ public class SettingsScreen {
     public PathSelector[] getPathSelectors() {
         return pathSelectors;
     }
-    
+
     public EditText getEditText() {
         return personalData_et;
     }
+
     public void removeToast(int i) {
         makeToasts.remove(i);
     }

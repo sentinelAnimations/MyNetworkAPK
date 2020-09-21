@@ -62,8 +62,6 @@ public class ImageViewScreen {
 			searchBar.render();
 			if (searchBar.getButton().getIsClicked()) {
 				if (allImgs_ImageView.getIsLoaded()) {
-					// p.println(searchBar.getText().length() > 0 ,
-					// allImgs_ImageView.getAllImgsList().size() > 0);
 					if (searchBar.getEditText().getStrList().get(0).length() > 0 && allImgs_ImageView.getAllImgsList().size() > 0) {
 						String[] sList = new String[allImgs_ImageView.getAllImgsList().size()];
 						for (int i = 0; i < sList.length; i++) {
@@ -99,7 +97,6 @@ public class ImageViewScreen {
 		for (int i = 0; i < searchList.length; i++) {
 			String[] m1 = p.match(searchList[i].toUpperCase(), searchStr.toUpperCase());
 			if (m1 != null) {
-				p.println(searchList[i], searchStr);
 				searchResultList[i] = true;
 				borderCols[i] = green;
 				foundSearchResults++;

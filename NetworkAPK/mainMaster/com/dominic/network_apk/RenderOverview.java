@@ -44,7 +44,7 @@ public class RenderOverview {
 
 		String[] rFSPictoPaths = { pictoPaths[3] };
 		filesSettingsScreen = new FilesSettingsScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rFSPictoPaths, hoLiPictoPaths, arrowPaths, stdFont);
-		String[] fRSPictoPaths = { pictoPaths[4] };
+		String[] fRSPictoPaths = { pictoPaths[4],pictoPaths[7] };
 		filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, green, red, blue, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
 		String[] rOSPictoPaths = { pictoPaths[1], pictoPaths[2] };
 		renderOnSheepitScreen = new RenderOnSheepitScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rOSPictoPaths, stdFont);
