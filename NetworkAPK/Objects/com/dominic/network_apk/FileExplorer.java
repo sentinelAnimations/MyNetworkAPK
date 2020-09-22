@@ -610,6 +610,7 @@ public class FileExplorer {
 
     public void onKeyPressed(char key) {
         rename_et.onKeyPressed(key);
+        searchBar.onKeyPressed(key);
     }
 
     public void onKeyReleased(char k) {

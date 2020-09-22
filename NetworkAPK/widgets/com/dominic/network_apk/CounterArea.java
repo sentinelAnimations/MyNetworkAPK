@@ -85,6 +85,13 @@ public class CounterArea<T> implements Widgets {
     public void onMouseReleased() {
         add_btn.onMouseReleased();
         subtract_btn.onMouseReleased();
+        if(mouseIsInArea()) {
+        	if(p.mouseX<x) {
+        		subtract_btn.setIsClicked(true);
+        	}else {
+				add_btn.setIsClicked(true);
+			}
+        }
     }
 
     public void onMousePressed() {

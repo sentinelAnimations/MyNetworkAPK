@@ -90,7 +90,7 @@ public class HomeScreenSlaves {
         timeField.render();
         
         curTime=System.nanoTime()/1000000000;
-        if(curTime-lastLogTime>5*60) {
+        if(curTime-lastLogTime>mainActivity.getStdLogTimeIntervall()) {
         	p.println(curTime,lastLogTime,curTime-lastLogTime);
             logData();
             lastLogTime=System.nanoTime()/1000000000;
@@ -103,9 +103,9 @@ public class HomeScreenSlaves {
         JSONObject settingsObject = new JSONObject();
         
         settingsDetails.put("logTime",curTime);
-        settingsObject.put("Settings", settingsDetails);
+        settingsObject.put("SystemLog", settingsDetails);
         jsonHelper.appendObjectToArray(settingsObject);
-        jsonHelper.writeData(pathToCloud+"\\"+pcAlias+"\\logFile.json");
+        jsonHelper.writeData(pathToCloud+"\\"+pcAlias+"\\"+mainActivity.getLogFileName());
     }
     
 

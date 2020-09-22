@@ -301,7 +301,6 @@ public class HomeScreenMaster {
 
     public void onKeyPressed(char key) {
         fileToRender_pathSelector.onKeyPressed(key);
-
     }
 
     public void onKeyReleased(char key) {

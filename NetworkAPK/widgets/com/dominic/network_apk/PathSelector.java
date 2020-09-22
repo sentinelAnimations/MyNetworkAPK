@@ -183,6 +183,9 @@ public class PathSelector<T> implements Widgets {
     public void onMouseReleased(int mouseButton) {
         if (fileExplorerIsOpen == false) {
             openFileExplorer_btn.onMouseReleased();
+            if(mouseIsInArea()) {
+            	openFileExplorer_btn.setIsClicked(true);
+            }
         } else {
             fileExplorer.onMouseReleased(mouseButton);
         }

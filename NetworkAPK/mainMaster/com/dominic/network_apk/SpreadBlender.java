@@ -77,14 +77,14 @@ public class SpreadBlender {
 					if (copyToPath.charAt(copyToPath.length() - 1) != '\\' || copyToPath.charAt(copyToPath.length() - 1) != '/') {
 						copyToPath += "\\";
 					}
-					
+
 					String copyFromPath = spreadBlender_pathSelector.getPath();
 					fileInteractionHelper.copyFolder(copyFromPath, copyToPath);
 				}
 				spreadBlender_ImageButton.setIsClicked(false);
 			}
 			// share blender folder with slaves ---------------------------------
-			
+
 			// share sheepit with slaves ---------------------------------
 			if (spreadSheepit_ImageButton.getIsClicked()) {
 				p.println("now1");
@@ -94,7 +94,7 @@ public class SpreadBlender {
 					if (copyToPath.charAt(copyToPath.length() - 1) != '\\' || copyToPath.charAt(copyToPath.length() - 1) != '/') {
 						copyToPath += "\\";
 					}
-					
+
 					String copyFromPath = spreadSheepit_PathSelector.getPath();
 					fileInteractionHelper.copyFolder(copyFromPath, copyToPath);
 					p.println("now");
@@ -105,9 +105,12 @@ public class SpreadBlender {
 			// share sheepit with slaves ---------------------------------
 
 		}
-
-		spreadBlender_pathSelector.render();
-		spreadSheepit_PathSelector.render();
+		if (spreadSheepit_PathSelector.getFileExplorerIsOpen() == false) {
+			spreadBlender_pathSelector.render();
+		}
+		if (spreadSheepit_PathSelector.getFileExplorerIsOpen()) {
+			spreadSheepit_PathSelector.render();
+		}
 	}
 
 	public void onMousePressed(int mouseButton) {
