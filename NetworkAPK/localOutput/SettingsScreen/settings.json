@@ -1,11 +1,11 @@
 [
   {
     "Settings": {
-      "masterOrSlave_dropdown_selectedInd": 1,
+      "masterOrSlave_dropdown_selectedInd": 0,
       "pathSelector0": "C:\\bootmgr",
-      "pathSelector1": "C:",
-      "pathSelector2": "C:\\Users\\Dominic\\OneDrive\\NetworkAPK",
-      "personalData_et": "Laptop 1"
+      "pathSelector1": "C:\\bilder",
+      "pathSelector2": "C:\\Users\\domin\\\\OneDrive\\\\NetworkAPK",
+      "personalData_et": "myLaptop001"
     }
   }
 ]

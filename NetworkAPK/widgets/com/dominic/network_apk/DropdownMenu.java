@@ -53,7 +53,7 @@ public class DropdownMenu<T> implements Widgets {
 
         dropdown_btn = new ImageButton(p, x + w / 2 - margin - (h - margin * 2) / 2, yShift, h - margin * 2, h - margin * 2, stdTs, margin, edgeRad, -1, textYShift, false, true, textCol, textCol, pictoPaths[0], "", parent);
 
-        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, "","getX","getY","getW","getH", stdFont, this);
+        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, "", "getX", "getY", "getW", "getH", stdFont, this);
 
         calcDropdownDimens();
         calcDisplList(list);
@@ -261,7 +261,11 @@ public class DropdownMenu<T> implements Widgets {
     }
 
     public int getSelectedInd() {
-        return selectedInd;
+        if (isSelected) {
+            return selectedInd;
+        } else {
+            return -1;
+        }
     }
 
     public String[] getList() {
@@ -282,7 +286,11 @@ public class DropdownMenu<T> implements Widgets {
     }
 
     public String getSelectedItem() {
-        return list[selectedInd];
+        if (isSelected) {
+            return list[selectedInd];
+        } else {
+            return "";
+        }
     }
 
     public void setList(String[] l) {

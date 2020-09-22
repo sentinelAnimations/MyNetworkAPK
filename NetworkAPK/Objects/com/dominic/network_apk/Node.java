@@ -10,8 +10,8 @@ public class Node<T> {
 
     private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores;
     private float textYShift;
-    private Boolean isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false;
-    private String id, cpuText = "CPU threads: 0", gpuText = "GPUs: 0";
+    private Boolean isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false,isReady=true;
+    private String id, cpuText = "CPU threads: 0", gpuText = "GPUs: 0",pathToCloud;
     private String[] pictoPaths;
     private PFont stdFont;
     private PApplet p;
@@ -54,6 +54,7 @@ public class Node<T> {
         cpuCores = (int) (p.random(24));
 
         mainActivity = (MainActivity) p;
+        pathToCloud=mainActivity.getPathToCloud();
         conS = btnSizeSmall - margin;
         headH = btnSizeSmall + margin * 2;
         bodyH = h - headH - margin;
@@ -165,7 +166,13 @@ public class Node<T> {
         output_connectorPoint.render();
 
         pcSelection_DropdownMenu.render();
-
+        
+        checkForLifeSign();
+    }
+    private Boolean checkForLifeSign(){
+        Boolean pcAlive=true;
+        
+        return pcAlive;
     }
 
     private void renderTypeSwitch() {

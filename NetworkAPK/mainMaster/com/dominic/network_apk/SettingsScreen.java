@@ -17,7 +17,7 @@ public class SettingsScreen {
     private int btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, mode = 0, doOnce = 0;
     private Boolean successfullySaved = false;
     private float textYShift;
-    private String mySavePath, savePathPrefix = "";
+    private String mySavePath, savePathPrefix = "", aliasOnStartup;
     private String[] imgPaths;
     private PFont stdFont;
     private PImage screenshot;
@@ -89,7 +89,6 @@ public class SettingsScreen {
         fileInteractionHelper = new FileInteractionHelper(p);
 
         setData();
-        p.println("data is set");
     }
 
     public void render() {
@@ -222,21 +221,31 @@ public class SettingsScreen {
                     if (allSet == true) {
                         String[] allFoldersInCloud = fileInteractionHelper.getFoldersAndFiles(pathSelectors[pathSelectors.length - 1].getPath(), true);
                         Boolean noFolderWithSameName = true;
-                        for (int i = 0; i < allFoldersInCloud.length; i++) {
-                            p.println(allFoldersInCloud[i], pathSelectors[pathSelectors.length - 1].getPath());
-                            String[] splitStr = p.split(allFoldersInCloud[i], ".");
-                            if (splitStr[0].toUpperCase().equals(personalData_et.getStrList().get(0).toUpperCase())) {
-                                noFolderWithSameName = false;
+                        if (allFoldersInCloud != null) {
+                            for (int i = 0; i < allFoldersInCloud.length; i++) {
+                                String[] splitStr = p.split(allFoldersInCloud[i], ".");
+                                if (splitStr[0].toUpperCase().equals(personalData_et.getStrList().get(0).toUpperCase())) {
+                                    noFolderWithSameName = false;
+                                }
                             }
                         }
                         if (noFolderWithSameName) {
                             settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
+                            File file= new File(mainActivity.getPathToCloud()+"\\"+aliasOnStartup);
+                            if(file.exists()) {
+                                fileInteractionHelper.deleteFolder(file.getAbsolutePath());
+                            }
                         } else {
-                            allSet = false;
+                            if (aliasOnStartup.toUpperCase().equals(personalData_et.getStrList().get(0).toUpperCase())) {
+                                settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
+                                
+                            } else {
+                                allSet = false;
+                            }
                         }
                     }
                 }
-                // write to jsonfile;
+                // write to jsonfile;--------------------
                 if (allSet == true) {
                     jHelper.clearArray();
 
@@ -359,10 +368,9 @@ public class SettingsScreen {
                 String t = jsonObject.getAsJsonObject("Settings").get("pathSelector" + i).getAsString();
                 ps.setText(t);
             }
-            String t = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
-            personalData_et.setText(t);
+            aliasOnStartup = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
+            personalData_et.setText(aliasOnStartup);
         }
-        p.println("--",personalData_et.getStrList().get(0),pathSelectors[2].getPath());
         // load settings info, if not available, goto settingsPage----------------------
     }
 
