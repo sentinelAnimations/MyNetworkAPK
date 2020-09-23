@@ -22,6 +22,7 @@ public class NodeEditor<T> {
 	private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false, isSetup = false;
 	private String mySavePath;
 	private String[] nodePaths1, nodePaths2, pcPaths;
+	private long curTime,prevTime;
 	private PFont stdFont;
 	private PImage screenshot;
 	private PApplet p;
@@ -164,10 +165,12 @@ public class NodeEditor<T> {
 		// render toasts ---------------
 
 		handleButtons();
-
-		if (p.frameCount % 30 == 0) {
+        curTime = System.nanoTime() / 1000000000;
+		if (curTime-prevTime>mainActivity.getSuperShortTimeIntervall()) {
 			// node cpu/gpu checkboxes have to be checked for output count
 			calcConnectedNodes();
+	        prevTime = System.nanoTime() / 1000000000;
+
 		}
 	}
 
@@ -503,17 +506,11 @@ public class NodeEditor<T> {
 						if (selectPc_dropdown < n.getPcSelection_DropdownMenu().getList().length) {
 							if (allFoldersInCloud[selectPc_dropdown].toUpperCase().equals(selectPc_dropdownItem.toUpperCase())) {
 								n.getPcSelection_DropdownMenu().setIsSelected(selectPc_dropdown);
-								p.println("set");
-
 							}else {
 								n.setIsReady(false);
-								p.println("now1");
-
 							}
 						}else {
 							n.setIsReady(false);
-							p.println("now1");
-
 						}
 					}
 

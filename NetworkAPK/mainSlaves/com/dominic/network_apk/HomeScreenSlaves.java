@@ -9,18 +9,18 @@ import processing.core.PFont;
 
 public class HomeScreenSlaves {
     private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border;
-    private float renderMode; // rendermode --> 0=render files, 1=render on
+    private int renderMode; // rendermode --> 0=render files, 1=render on
                               // sheepit,2=sleeping
     private float textYShift;
-    private String pathToCloud,pcAlias;
+    private String pathToCloud, pcAlias;
     private String[] pictoPaths;
-    private long curTime,lastLogTime;
+    private long curTime, lastLogTime;
     private PFont stdFont;
     private PApplet p;
     private ImageButton[] mainButtons;
     private ImageButton cancelRendering_ImageButton;
     private MainActivity mainActivity;
-    private PictogramImage fileRendering_PictogramImage,sheepitRendering_PictogramImage,sleeping_PictogramImage;
+    private PictogramImage fileRendering_PictogramImage, sheepitRendering_PictogramImage, sleeping_PictogramImage;
     private TimeField timeField;
     private JsonHelper jsonHelper;
 
@@ -48,27 +48,25 @@ public class HomeScreenSlaves {
         } else {
             mainButtons = mainActivity.getMainButtonsSlave();
         }
-        
-        sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false,false, pictoPaths[0], "Rendering on Sheepit", null);
-        sleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false,pictoPaths[1], "sleeping", null);
-        fileRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge,btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false,false, pictoPaths[2], "Rendering file", null);
-        timeField = new TimeField(p, margin,p.height-btnSizeSmall/2-margin, stdTs, margin, edgeRad, textCol, light, false, false,"Timestamp: ","", stdFont, null);
-        timeField.setPos(timeField.getW()/2+margin, timeField.getY());
-        p.println("now setting paths");
-        pathToCloud=mainActivity.getPathToCloud();
-        pcAlias=mainActivity.getPCName();
-        while(p.str(pathToCloud.charAt(pathToCloud.length()-1))=="\\") {
-            pathToCloud=pathToCloud.substring(0,pathToCloud.length()-1);
-        }
-        if(pathToCloud==null) {
-            pathToCloud="";
-        }
-        if(pcAlias==null) {
-            pcAlias="";
-        }
-        jsonHelper=new JsonHelper(p);
-        p.println(pathToCloud+"\\"+pcAlias);
 
+        sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[0], "Rendering on Sheepit", null);
+        sleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[1], "sleeping", null);
+        fileRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[2], "Rendering file", null);
+        timeField = new TimeField(p, margin, p.height - btnSizeSmall / 2 - margin, stdTs, margin, edgeRad, textCol, light, false, false, "Timestamp: ", "", stdFont, null);
+        timeField.setPos(timeField.getW() / 2 + margin, timeField.getY());
+        p.println("now setting paths");
+        pathToCloud = mainActivity.getPathToCloud();
+        pcAlias = mainActivity.getPCName();
+        while (p.str(pathToCloud.charAt(pathToCloud.length() - 1)) == "\\") {
+            pathToCloud = pathToCloud.substring(0, pathToCloud.length() - 1);
+        }
+        if (pathToCloud == null) {
+            pathToCloud = "";
+        }
+        if (pcAlias == null) {
+            pcAlias = "";
+        }
+        jsonHelper = new JsonHelper(p);
     }
 
     public void render() {
@@ -77,38 +75,39 @@ public class HomeScreenSlaves {
         } else {
             mainActivity.renderMainButtonsSlave();
         }
-        
-        if(renderMode==0) {
+
+        if (renderMode == 0) {
             fileRendering_PictogramImage.render();
         }
-        if(renderMode==1) {
+        if (renderMode == 1) {
             sheepitRendering_PictogramImage.render();
         }
-        if(renderMode==2) {
-           sleeping_PictogramImage.render(); 
+        if (renderMode == 2) {
+            sleeping_PictogramImage.render();
         }
         timeField.render();
-        
-        curTime=System.nanoTime()/1000000000;
-        if(curTime-lastLogTime>mainActivity.getStdLogTimeIntervall()) {
-        	p.println(curTime,lastLogTime,curTime-lastLogTime);
+
+        curTime = System.nanoTime() / 1000000000;
+        if (curTime - lastLogTime > mainActivity.getStdTimeIntervall()) {
+            p.println(curTime, lastLogTime, curTime - lastLogTime);
             logData();
-            lastLogTime=System.nanoTime()/1000000000;
+            lastLogTime = curTime;
         }
     }
+
     private void logData() {
 
         jsonHelper.clearArray();
         JSONObject settingsDetails = new JSONObject();
         JSONObject settingsObject = new JSONObject();
-        
-        settingsDetails.put("logTime",curTime);
+
+        settingsDetails.put("logTime", curTime);
+        settingsDetails.put("readableTime", timeField.getTimeString());
+        settingsDetails.put("renderMode", renderMode);
         settingsObject.put("SystemLog", settingsDetails);
         jsonHelper.appendObjectToArray(settingsObject);
-        jsonHelper.writeData(pathToCloud+"\\"+pcAlias+"\\"+mainActivity.getLogFileName());
+        jsonHelper.writeData(pathToCloud + "\\" + pcAlias + "\\" + mainActivity.getLogFileName());
     }
-    
-
 
     public void onMousePressed(int mouseButton) {
         for (int i = 0; i < mainButtons.length; i++) {

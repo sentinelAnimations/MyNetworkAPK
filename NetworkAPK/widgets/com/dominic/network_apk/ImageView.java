@@ -91,6 +91,11 @@ public class ImageView<T> implements Widgets {
                 }
             }
         }
+        
+        for (int i = pictos.size() - 1; i >= 0; i--) {
+            pictos.get(i).getHoverText().render();
+        }
+        
         if (loadingThread != null && loadingThread.isAlive()) {
             String loadingString = "Loading Images: " + loadedImgs + "/" + allImgsSize;
             p.fill(lighter);
@@ -142,18 +147,26 @@ public class ImageView<T> implements Widgets {
     public void onKeyReleased(char key) {
         if (key == p.CODED) {
             if (p.keyCode == p.UP) {
-
+                doScrollAction(true);
             }
             if (p.keyCode == p.DOWN) {
-
+                doScrollAction(false);
             }
         }
     }
 
     public void onScroll(float e) {
+    if(e<0) {
+        doScrollAction(true);
+    }else {
+        doScrollAction(false);
+    }
+    }
+    
+    private void doScrollAction(Boolean scrollUpwards) {
         int scrollSpeed = pictoDimens + margin;
         if (pictos.size() > 0) {
-            if (e < 0) {
+            if (scrollUpwards) {
                 if (pictos.get(0).getY() < y - h / 2 + pictoDimens / 2 + margin) {
                     for (int i = 0; i < pictos.size(); i++) {
                         PictogramImage p = pictos.get(i);

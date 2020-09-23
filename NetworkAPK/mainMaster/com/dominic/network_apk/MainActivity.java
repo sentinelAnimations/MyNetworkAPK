@@ -50,7 +50,7 @@ public class MainActivity extends PApplet {
 	int mode = 0;
 
 	// integers-------------------------------------------------
-	int windowTopBarHeight,stdLogTimeIntervall=1*60;
+	int windowTopBarHeight,stdTimeIntervall=60,shortTimeIntervall=10,superShortTimeIntervall=1,longTimeIntervall=5*60;
 	// integers-------------------------------------------------
 
 	// Booleans-------------------------------------------------
@@ -67,7 +67,7 @@ public class MainActivity extends PApplet {
 	// Dimens--------------------------------------------------
 
 	// Strings--------------------------------------------------
-	private String APKName = "InSevenDays©", APKDescription = "A network solution";
+	private String APKName = "InSevenDays© 1.0", APKDescription = "A network solution";
 	private String[] modeNamesMaster = { "Home", "Node Editor", "Settings", "Share", "Theme", "Questions" };
 	private String[] modeNamesSlaves = { modeNamesMaster[0], modeNamesMaster[2], modeNamesMaster[4], modeNamesMaster[5] };
 
@@ -679,8 +679,17 @@ public class MainActivity extends PApplet {
 	public Boolean getIsMaster() {
 		return isMaster;
 	}
-	public int getStdLogTimeIntervall() {
-		return stdLogTimeIntervall;
+	public int getStdTimeIntervall() {
+		return stdTimeIntervall;
+	}
+	public int getSuperShortTimeIntervall() {
+	    return superShortTimeIntervall;
+	}
+	public int getShortTimeIntervall() {
+	    return shortTimeIntervall;
+	}
+	public int getLongTimeIntervall() {
+	    return longTimeIntervall;
 	}
 
 	public String getLogFileName() {

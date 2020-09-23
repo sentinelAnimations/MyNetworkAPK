@@ -167,6 +167,10 @@ public class PictogramImage<T> implements Widgets {
     public String getPictoPath() {
         return imgPath;
     }
+    
+    public HoverText getHoverText() {
+        return hoverText;
+    }
 
     public void setPos(int xp, int yp) {
         x = xp;
