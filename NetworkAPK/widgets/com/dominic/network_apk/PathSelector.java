@@ -74,15 +74,15 @@ public class PathSelector<T> implements Widgets {
                 p.fill(textCol);
                 p.text(displayText, x - w / 2 + margin + btnSize, y - stdTs * textYShift);
             }
-             hoverText.render();
+            hoverText.render();
         }
 
         // handle fileExplorer ------------------------------
         if (openFileExplorer_btn.getIsClicked() == true) {
             if (fileExplorerIsOpen == false) {
-            makeScreenshot();
-            fileExplorerIsOpen = true;
-            renderPathSelector = false;
+                makeScreenshot();
+                fileExplorerIsOpen = true;
+                renderPathSelector = false;
             }
             p.noTint();
             p.image(screenshot, p.width / 2, p.height / 2);
@@ -183,8 +183,8 @@ public class PathSelector<T> implements Widgets {
     public void onMouseReleased(int mouseButton) {
         if (fileExplorerIsOpen == false) {
             openFileExplorer_btn.onMouseReleased();
-            if(mouseIsInArea()) {
-            	openFileExplorer_btn.setIsClicked(true);
+            if (mouseIsInArea()) {
+                openFileExplorer_btn.setIsClicked(true);
             }
         } else {
             fileExplorer.onMouseReleased(mouseButton);
@@ -264,6 +264,7 @@ public class PathSelector<T> implements Widgets {
     public String getPath() {
         return t;
     }
+
     public HoverText getHoverText() {
         return hoverText;
     }
@@ -280,7 +281,7 @@ public class PathSelector<T> implements Widgets {
                     t = t.substring(0, t.length() - 1);
                 }
             } catch (Exception e) {
-                // TODO: handle exception
+                e.printStackTrace();
             }
 
         }
@@ -291,10 +292,24 @@ public class PathSelector<T> implements Widgets {
         renderPathSelector = state;
     }
 
+    public void setPath(String setPath) {
+        File f = new File(setPath);
+        if (f.exists()) {
+            if (f.isDirectory() == false) {
+                File parentFile = f.getParentFile();
+                if (parentFile != null) {
+                    f = parentFile;
+                }
+            }
+            fileExplorer.setPath(setPath);
+            setText(f.getAbsolutePath());
+        }
+    }
+
     public void makeScreenshot() {
-            p.saveFrame("data\\imgs\\screenshots\\fileExplorer.png");
-            screenshot = p.loadImage("data\\imgs\\screenshots\\fileExplorer.png");
-            screenshot = new ImageBlurHelper(p).blur(screenshot, 3);        
+        p.saveFrame("data\\imgs\\screenshots\\fileExplorer.png");
+        screenshot = p.loadImage("data\\imgs\\screenshots\\fileExplorer.png");
+        screenshot = new ImageBlurHelper(p).blur(screenshot, 3);
     }
 
 }

@@ -16,13 +16,14 @@ public class FilesSettingsScreen {
     private PFont stdFont;
     private PApplet p;
     private MainActivity mainActivity;
+    private PathSelector saveResults_PathSelector;
     private ImageButton startRendering_imageButon;
     private HorizontalList allFiles_HorizontalList;
     private CounterArea startFrame_counterArea, endFrame_counterArea, stillFrame_counterArea;
     private Checkbox[] settings_checkboxes = new Checkbox[2];
     private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 
-    public FilesSettingsScreen(PApplet p, int stdTs, int edgeRad, int margin, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, float textYShift, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths, PFont stdFont) {
+    public FilesSettingsScreen(PApplet p, int stdTs, int edgeRad, int margin, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, float textYShift, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths, String[] fileExplorerPaths, PFont stdFont) {
         this.p = p;
         this.stdTs = stdTs;
         this.edgeRad = edgeRad;
@@ -55,6 +56,9 @@ public class FilesSettingsScreen {
         sfX = (int) (settings_checkboxes[1].getBoxDim() / 2 + margin * 2 + sfW / 2);
         stillFrame_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Still frame", arrowPaths, stdFont, settings_checkboxes[1]);
 
+        sfX = (int) (stillFrame_counterArea.getW() / 2 + margin*2 + sfW);
+        saveResults_PathSelector = new PathSelector(p, sfX, 0, sfW * 2, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, true, true, "select Folder to save Results", pictoPaths[1], fileExplorerPaths, stdFont, stillFrame_counterArea);
+
         prevSelectedListInd = allFiles_HorizontalList.getSelectedInd();
 
     }
@@ -64,108 +68,109 @@ public class FilesSettingsScreen {
             startRendering_imageButon = new ImageButton(p, -margin - btnSizeSmall, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, light, pictoPaths[0], "Save settings and start render process", mainActivity.getRenderOverview().getCancelImageButton());
             onceOnStartup++;
         }
-        if (allFiles_HorizontalList.getList().length > 0) {
 
-            // render all ----------------------------------------
-            int fillUpBarW = allFiles_HorizontalList.getW() - (stillFrame_counterArea.getX() + stillFrame_counterArea.getW() / 2);
-            int fillUpBarX = (stillFrame_counterArea.getX() + stillFrame_counterArea.getW() / 2) + margin + fillUpBarW / 2;
-            p.fill(light);
-            p.stroke(light);
-            p.rect(fillUpBarX, settings_checkboxes[0].getBoxY(), fillUpBarW, settings_checkboxes[0].getH(), edgeRad);
-            p.fill(textCol);
-            p.textFont(stdFont);
-            p.textSize(stdTs);
-            p.textAlign(p.CENTER, p.CENTER);
-            String textToSplit = allFiles_HorizontalList.getList()[allFiles_HorizontalList.getSelectedInd()];
-            String[] splitStr = p.split(textToSplit, "\\");
-            String displT = "";
-            if (splitStr.length > 0) {
-                displT = splitStr[splitStr.length - 1];
-            } else {
-                displT = textToSplit;
-            }
-            p.text("Render settings for: " + displT, fillUpBarX, settings_checkboxes[0].getBoxY());
+        if (saveResults_PathSelector.getFileExplorerIsOpen() == false) {
+            if (allFiles_HorizontalList.getList().length > 0) {
 
-           
-            stillFrame_counterArea.render();
-            allFiles_HorizontalList.render();
-            startRendering_imageButon.render();
-            for (int i = 0; i < settings_checkboxes.length; i++) {
-                settings_checkboxes[i].render();
-            }
-            endFrame_counterArea.render();
-            startFrame_counterArea.render();
-
-            // render toasts -----------------------------------
-            for (int i = 0; i < makeToasts.size(); i++) {
-                MakeToast m = makeToasts.get(i);
-                if (m.remove) {
-                    makeToasts.remove(i);
+                // render all ----------------------------------------
+                int fillUpBarW = allFiles_HorizontalList.getW() - (saveResults_PathSelector.getX() + saveResults_PathSelector.getW() / 2);
+                int fillUpBarX = (saveResults_PathSelector.getX() + saveResults_PathSelector.getW() / 2) + margin + fillUpBarW / 2;
+                p.fill(light);
+                p.stroke(light);
+                p.rect(fillUpBarX, settings_checkboxes[0].getBoxY(), fillUpBarW, settings_checkboxes[0].getH(), edgeRad);
+                p.fill(textCol);
+                p.textFont(stdFont);
+                p.textSize(stdTs);
+                p.textAlign(p.CENTER, p.CENTER);
+                String textToSplit = allFiles_HorizontalList.getList()[allFiles_HorizontalList.getSelectedInd()];
+                String[] splitStr = p.split(textToSplit, "\\");
+                String displT = "";
+                if (splitStr.length > 0) {
+                    displT = splitStr[splitStr.length - 1];
                 } else {
-                    m.render();
+                    displT = textToSplit;
+                }
+                p.text("Render settings for: " + displT, fillUpBarX, settings_checkboxes[0].getBoxY());
+
+                stillFrame_counterArea.render();
+                allFiles_HorizontalList.render();
+                startRendering_imageButon.render();
+                for (int i = 0; i < settings_checkboxes.length; i++) {
+                    settings_checkboxes[i].render();
+                }
+                endFrame_counterArea.render();
+                startFrame_counterArea.render();
+
+                // render toasts -----------------------------------
+                for (int i = 0; i < makeToasts.size(); i++) {
+                    MakeToast m = makeToasts.get(i);
+                    if (m.remove) {
+                        makeToasts.remove(i);
+                    } else {
+                        m.render();
+                    }
+                }
+                // render toasts -----------------------------------
+                // render all ----------------------------------------
+
+                // calculate all ----------------------------------------
+                if (allFiles_HorizontalList.getSelectedInd() != prevSelectedListInd) {
+
+                    writeToArray();
+                    updateWidgets();
+
                 }
             }
-            // render toasts -----------------------------------
-            // render all ----------------------------------------
-
-            // calculate all ----------------------------------------
-            if (allFiles_HorizontalList.getSelectedInd() != prevSelectedListInd) {
-
+            if (startRendering_imageButon.getIsClicked()) {
                 writeToArray();
-                updateWidgets();
-              
 
-            }
-        }
-        if (startRendering_imageButon.getIsClicked()) {
-            writeToArray();
+                Boolean isRenderable = true;
+                String errorMessage = "";
 
-            Boolean isRenderable = true;
-            String errorMessage = "";
+                for (int i = 0; i < renderAnimation.length; i++) {
 
-            for (int i = 0; i < renderAnimation.length; i++) {
-
-                if (renderAnimation[i] == true && renderStillFrame[i] == true) {
-                    if (errorMessage.length() > 0) {
-                        errorMessage += " | ";
-                    }
-                    errorMessage += "Can't render still frame AND animation";
-
-                    isRenderable = false;
-                }
-
-                if (renderAnimation[i] == false && renderStillFrame[i] == false) {
-                    if (errorMessage.length() > 0) {
-                        errorMessage += " | ";
-                    }
-                    errorMessage += "Select either animation or still frame";
-
-                    isRenderable = false;
-                }
-                if (renderAnimation[i] == true) {
-                    if (endFrame[i] < startFrame[i]) {
+                    if (renderAnimation[i] == true && renderStillFrame[i] == true) {
                         if (errorMessage.length() > 0) {
                             errorMessage += " | ";
                         }
+                        errorMessage += "Can't render still frame AND animation";
+
                         isRenderable = false;
-                        errorMessage += "Can't render negative frame range";
+                    }
+
+                    if (renderAnimation[i] == false && renderStillFrame[i] == false) {
+                        if (errorMessage.length() > 0) {
+                            errorMessage += " | ";
+                        }
+                        errorMessage += "Select either animation or still frame";
+
+                        isRenderable = false;
+                    }
+                    if (renderAnimation[i] == true) {
+                        if (endFrame[i] < startFrame[i]) {
+                            if (errorMessage.length() > 0) {
+                                errorMessage += " | ";
+                            }
+                            isRenderable = false;
+                            errorMessage += "Can't render negative frame range";
+                        }
                     }
                 }
+
+                if (isRenderable) {
+                    mainActivity.getRenderOverview().setRenderMode(0);
+                    mainActivity.getRenderOverview().getFilesRenderingScreen().setStartupVals();
+                } else {
+                    makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, errorMessage.length() * 2, light, textCol, textYShift, false, errorMessage, stdFont, null));
+                }
+                startRendering_imageButon.setIsClicked(false);
+
             }
 
-            if (isRenderable) {
-                mainActivity.getRenderOverview().setRenderMode(0);
-                mainActivity.getRenderOverview().getFilesRenderingScreen().setStartupVals();
-            } else {
-                makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, errorMessage.length() * 2, light, textCol, textYShift, false, errorMessage, stdFont, null));
-            }
-            startRendering_imageButon.setIsClicked(false);
-
+            prevSelectedListInd = allFiles_HorizontalList.getSelectedInd();
+            // calculate all ----------------------------------------
         }
-
-        prevSelectedListInd = allFiles_HorizontalList.getSelectedInd();
-        // calculate all ----------------------------------------
-
+        saveResults_PathSelector.render();
     }
 
     private void writeToArray() {
@@ -179,7 +184,7 @@ public class FilesSettingsScreen {
             e.printStackTrace();
         }
     }
-    
+
     private void updateWidgets() {
         int curInd = allFiles_HorizontalList.getSelectedInd();
         settings_checkboxes[0].setIsChecked(renderAnimation[curInd]);
@@ -191,79 +196,91 @@ public class FilesSettingsScreen {
     }
 
     public void onMousePressed(int mouseButton) {
-        allFiles_HorizontalList.onMousePressed();
-        startRendering_imageButon.onMousePressed();
-        startFrame_counterArea.onMousePressed();
-        endFrame_counterArea.onMousePressed();
-        stillFrame_counterArea.onMousePressed();
+        saveResults_PathSelector.onMousePressed(mouseButton);
+        if (saveResults_PathSelector.getFileExplorerIsOpen() == false) {
+            allFiles_HorizontalList.onMousePressed();
+            startRendering_imageButon.onMousePressed();
+            startFrame_counterArea.onMousePressed();
+            endFrame_counterArea.onMousePressed();
+            stillFrame_counterArea.onMousePressed();
+        }
     }
 
     public void onMouseReleased(int mouseButton) {
-        allFiles_HorizontalList.onMouseReleased(mouseButton);
-        startRendering_imageButon.onMouseReleased();
-        startFrame_counterArea.onMouseReleased();
-        endFrame_counterArea.onMouseReleased();
-        stillFrame_counterArea.onMouseReleased();
-        for (int i = 0; i < settings_checkboxes.length; i++) {
-            settings_checkboxes[i].onMouseReleased();
+        saveResults_PathSelector.onMouseReleased(mouseButton);
+        if (saveResults_PathSelector.getFileExplorerIsOpen() == false) {
+            allFiles_HorizontalList.onMouseReleased(mouseButton);
+            startRendering_imageButon.onMouseReleased();
+            startFrame_counterArea.onMouseReleased();
+            endFrame_counterArea.onMouseReleased();
+            stillFrame_counterArea.onMouseReleased();
+            for (int i = 0; i < settings_checkboxes.length; i++) {
+                settings_checkboxes[i].onMouseReleased();
+            }
         }
     }
 
     public void onKeyPressed(char key) {
-
+        saveResults_PathSelector.onKeyPressed(key);
     }
 
     public void onKeyReleased(char key) {
-        if (key == p.DELETE) {
-            String[] hoLi1 = allFiles_HorizontalList.getList();
-            String[] newHoLi1 = new String[hoLi1.length - 1];
-            Boolean[] newRenderAnimation = new Boolean[renderAnimation.length-1];
-            Boolean[] newRenderStillFrame = new Boolean[renderStillFrame.length-1];
-            int[] newStartFrame = new int[startFrame.length-1];
-            int[] newEndFrame = new int[endFrame.length-1];
-            int[] newStillFrame = new int[stillFrame.length-1];
+        saveResults_PathSelector.onKeyReleased(key);
+        if (saveResults_PathSelector.getFileExplorerIsOpen() == false) {
+            if (key == p.DELETE) {
+                String[] hoLi1 = allFiles_HorizontalList.getList();
+                String[] newHoLi1 = new String[hoLi1.length - 1];
+                Boolean[] newRenderAnimation = new Boolean[renderAnimation.length - 1];
+                Boolean[] newRenderStillFrame = new Boolean[renderStillFrame.length - 1];
+                int[] newStartFrame = new int[startFrame.length - 1];
+                int[] newEndFrame = new int[endFrame.length - 1];
+                int[] newStillFrame = new int[stillFrame.length - 1];
 
-            for (int i = 0; i < hoLi1.length; i++) {
-                if (i < allFiles_HorizontalList.getMarkedInd()) {
-                    newHoLi1[i] = hoLi1[i];
-                    newRenderAnimation[i] = renderAnimation[i];
-                    newRenderStillFrame[i] = renderStillFrame[i];
-                    newStartFrame[i] = startFrame[i];
-                    newEndFrame[i] = endFrame[i];
-                    newStillFrame[i] = stillFrame[i];
+                for (int i = 0; i < hoLi1.length; i++) {
+                    if (i < allFiles_HorizontalList.getMarkedInd()) {
+                        newHoLi1[i] = hoLi1[i];
+                        newRenderAnimation[i] = renderAnimation[i];
+                        newRenderStillFrame[i] = renderStillFrame[i];
+                        newStartFrame[i] = startFrame[i];
+                        newEndFrame[i] = endFrame[i];
+                        newStillFrame[i] = stillFrame[i];
 
+                    }
+                    if (i > allFiles_HorizontalList.getMarkedInd()) {
+                        newHoLi1[i - 1] = hoLi1[i];
+                        newRenderAnimation[i - 1] = renderAnimation[i];
+                        newRenderStillFrame[i - 1] = renderStillFrame[i];
+                        newStartFrame[i - 1] = startFrame[i];
+                        newEndFrame[i - 1] = endFrame[i];
+                        newStillFrame[i - 1] = stillFrame[i];
+                    }
                 }
-                if (i > allFiles_HorizontalList.getMarkedInd()) {
-                    newHoLi1[i - 1] = hoLi1[i];
-                    newRenderAnimation[i - 1] = renderAnimation[i];
-                    newRenderStillFrame[i - 1] = renderStillFrame[i];
-                    newStartFrame[i - 1] = startFrame[i];
-                    newEndFrame[i - 1] = endFrame[i];
-                    newStillFrame[i - 1] = stillFrame[i];
-                }
+                renderAnimation = new Boolean[renderAnimation.length - 1];
+                renderStillFrame = new Boolean[renderStillFrame.length - 1];
+                startFrame = new int[startFrame.length - 1];
+                endFrame = new int[endFrame.length];
+                stillFrame = new int[stillFrame.length];
+
+                renderAnimation = newRenderAnimation;
+                renderStillFrame = newRenderStillFrame;
+                startFrame = newStartFrame;
+                endFrame = newEndFrame;
+                stillFrame = newStillFrame;
+
+                allFiles_HorizontalList.setList(newHoLi1);
+                updateWidgets();
             }
-            renderAnimation=new Boolean[renderAnimation.length-1];
-            renderStillFrame=new Boolean[renderStillFrame.length-1];
-            startFrame=new int[startFrame.length-1];
-            endFrame=new int[endFrame.length];
-            stillFrame=new int[stillFrame.length];
-            
-            renderAnimation=newRenderAnimation;
-            renderStillFrame=newRenderStillFrame;
-            startFrame=newStartFrame;
-            endFrame=newEndFrame;
-            stillFrame=newStillFrame;
-            
-            allFiles_HorizontalList.setList(newHoLi1);
-            updateWidgets();
         }
     }
 
     public void onScroll(float e) {
-        allFiles_HorizontalList.onScroll(e);
-        startFrame_counterArea.onScroll(e);
-        endFrame_counterArea.onScroll(e);
-        stillFrame_counterArea.onScroll(e);
+        saveResults_PathSelector.onScroll(e);
+        if (saveResults_PathSelector.getFileExplorerIsOpen() == false) {
+            allFiles_HorizontalList.onScroll(e);
+            startFrame_counterArea.onScroll(e);
+            endFrame_counterArea.onScroll(e);
+            stillFrame_counterArea.onScroll(e);
+        }
 
     }
 
@@ -290,7 +307,9 @@ public class FilesSettingsScreen {
     public HorizontalList getHorizontalList() {
         return allFiles_HorizontalList;
     }
-
+    public PathSelector getSaveResults_PathSelector() {
+        return saveResults_PathSelector;
+    }
     public void setFileList(String[] l) {
         allFiles_HorizontalList.setList(l);
     }

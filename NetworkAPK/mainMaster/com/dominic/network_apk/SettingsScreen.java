@@ -222,7 +222,7 @@ public class SettingsScreen {
                     if (ps.getPath().length() < 1) {
                         allSet = false;
                     } else {
-                        settingsDetails.put("pathSelector" + i, ps.getPath());
+                        settingsDetails.put("pathSelector" + i, fileInteractionHelper.cleanupPath(ps.getPath()));
                     }
 
                 }
@@ -293,7 +293,7 @@ public class SettingsScreen {
             for (int i = pathSelectors.length - 1; i >= 0; i--) {
                 PathSelector ps = pathSelectors[i];
                 String t = jsonObject.getAsJsonObject("Settings").get("pathSelector" + i).getAsString();
-                ps.setText(t);
+                ps.setPath(t);
             }
             aliasOnStartup = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
             personalData_et.setText(aliasOnStartup);

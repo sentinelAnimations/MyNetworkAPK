@@ -1,8 +1,8 @@
 [
   {
     "Node0": {
-      "posX": 266,
-      "posY": 170,
+      "posX": 261,
+      "posY": 65,
       "connectorPointId": "3732f0c0-acf5-4d5b-9aab-7371b71e0910",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
@@ -16,18 +16,18 @@
   },
   {
     "Node1": {
-      "posX": 613,
+      "posX": 608,
       "connectorPointIsConnectedArray": [
         true,
         true,
-        true,
         false,
+        true,
         true,
         false,
         false,
         false
       ],
-      "posY": 203,
+      "posY": 98,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -41,8 +41,8 @@
       "connectorPointConnectedIds": [
         "3732f0c0-acf5-4d5b-9aab-7371b71e0910",
         "c2480680-06c5-48b2-9402-8f1fe16cacc6",
-        "050c7e66-be09-4c99-9431-ebc25598833c",
         null,
+        "050c7e66-be09-4c99-9431-ebc25598833c",
         "69749ba8-f384-4ece-b035-3dc929326041",
         null,
         null,
@@ -56,8 +56,8 @@
   },
   {
     "Node2": {
-      "posX": 823,
-      "posY": 198,
+      "posX": 818,
+      "posY": 93,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -67,8 +67,8 @@
   },
   {
     "Node3": {
-      "posX": 271,
-      "posY": 323,
+      "posX": 266,
+      "posY": 218,
       "connectorPointId": "c2480680-06c5-48b2-9402-8f1fe16cacc6",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -82,11 +82,11 @@
   },
   {
     "Node4": {
-      "posX": 261,
-      "posY": 473,
+      "posX": 256,
+      "posY": 368,
       "connectorPointId": "050c7e66-be09-4c99-9431-ebc25598833c",
       "useGpu_checkbox": false,
-      "connectorPointConnectedId": "2e9dc605-e6dd-440e-a96a-afe838a7d123",
+      "connectorPointConnectedId": "85900ff0-1c66-443f-bc8e-74478e58fdba",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
       "selectPc_dropdownItem": "testFolder2k",

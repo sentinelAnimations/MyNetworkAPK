@@ -51,7 +51,7 @@ public class ImageViewScreen {
 
 		if (fileExplorerIsOpen != prevFileExplorerIsOpen) {
 			if (fileExplorerIsOpen == false) {
-				allImgs_ImageView.setFolder(imageFolder_pathSelector.getPath());
+				allImgs_ImageView.setPath(imageFolder_pathSelector.getPath());
 				startedSearching=false;
 				foundSearchResults=0;
 			}
@@ -148,6 +148,11 @@ public class ImageViewScreen {
 
 	public PathSelector getImageView_PathSelector() {
 		return imageFolder_pathSelector;
+	}
+	
+	public void setPath(String setPath) {
+	    allImgs_ImageView.setPath(setPath);
+	    imageFolder_pathSelector.setPath(setPath);
 	}
 
 }

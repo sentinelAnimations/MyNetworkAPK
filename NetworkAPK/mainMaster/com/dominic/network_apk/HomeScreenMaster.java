@@ -232,12 +232,13 @@ public class HomeScreenMaster {
                     mainActivity.setMode(101);
                     mainActivity.getRenderOverview().getFilesRenderingScreen().setupAll();
                     
-                    if (homeSettings_checkboxes[2].getIsChecked()) {
+                    if (homeSettings_checkboxes[2].getIsChecked()) { //renderFile
                         mainActivity.getRenderOverview().setRenderMode(0.1f);
                         mainActivity.getRenderOverview().setFileList(fileSelector_HorizontalList.getList());
                         mainActivity.getRenderOverview().getRenderFilesSettings().setStartupVals();
+                        mainActivity.getRenderOverview().getRenderFilesSettings().getSaveResults_PathSelector().setPath(mainActivity.getPathToImageFolder());
                     }
-                    if (homeSettings_checkboxes[3].getIsChecked()) {
+                    if (homeSettings_checkboxes[3].getIsChecked()) { //render on sheepit
                         mainActivity.getRenderOverview().setRenderMode(1);
                     }
 

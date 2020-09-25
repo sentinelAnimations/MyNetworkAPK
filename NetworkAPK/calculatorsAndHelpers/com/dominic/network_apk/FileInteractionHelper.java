@@ -156,6 +156,17 @@ public class FileInteractionHelper {
 		} else {
 			return null;
 		}
-
+	}
+	
+	public String cleanupPath(String pathToClean) {
+	    String cleanPath="";
+	    for(int i=0;i<pathToClean.length();i++) {
+	        if(p.str(cleanPath.charAt(cleanPath.length()-1))=="\\" && p.str(pathToClean.charAt(i))=="\\") {
+	        }else {
+	            cleanPath+=pathToClean.charAt(i);
+            }
+	        
+	    }
+	    return cleanPath;
 	}
 }

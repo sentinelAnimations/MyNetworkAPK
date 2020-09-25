@@ -227,7 +227,7 @@ public class ImageView<T> implements Widgets {
         }
     }
 
-    public void setFolder(String path) {
+    public void setPath(String path) {
 
         loadingThread = new Thread(new Runnable() {
             @Override
