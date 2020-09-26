@@ -294,7 +294,13 @@ public class SettingsScreen {
                 PathSelector ps = pathSelectors[i];
                 String t = jsonObject.getAsJsonObject("Settings").get("pathSelector" + i).getAsString();
                 ps.setPath(t);
+                p.println("---",ps.getPath());
+                if(ps.getPath().length()>0==false) {
+                	mainActivity.getLoadingScreen().setIsFirstSetup(true);
+                	mainActivity.setMode(3);
+                }
             }
+            
             aliasOnStartup = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
             personalData_et.setText(aliasOnStartup);
         }

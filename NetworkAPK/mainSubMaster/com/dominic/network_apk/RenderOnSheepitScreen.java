@@ -42,7 +42,7 @@ public class RenderOnSheepitScreen {
 
 	public void render() {
 	    if(onceOnStartup==0) {
-	        timeField = new TimeField(p, margin, mainActivity.getRenderOverview().getCancelImageButton().getY(), stdTs, margin, edgeRad, textCol, light, false, false,"Timestamp: ","", stdFont, null);
+	        timeField = new TimeField(p, margin, mainActivity.getRenderOverview().getCancelImageButton().getY(),btnSizeLarge*3,stdTs+margin*2, stdTs, margin, edgeRad, textCol, light, false, false,true,"Timestamp: ","", stdFont, null);
 	        timeField.setPos(timeField.getW()/2+margin, timeField.getY());
 	        onceOnStartup++;
 	    }

@@ -24,18 +24,24 @@ public class JsonHelper {
 	private PApplet p;
 	private JSONArray myArray = new JSONArray();
 	private JSONArray loadedData = new JSONArray();
+	private FileInteractionHelper fileInteractionHelper;
 
 	public JsonHelper(PApplet p) {
 		this.p = p;
+		fileInteractionHelper=new FileInteractionHelper(p);
 	}
 
-	public void writeData(String path) {
+	public Boolean writeData(String path) {
 		// Write JSON file
-		String[] splitPath = p.split(path, "/");
-		File f = new File(splitPath[0]);
-		f.mkdir();
-		f = new File(path);
-		f.getParentFile().mkdir();
+		//String[] splitPath = p.split(path, "/");
+		//File f = new File(splitPath[0]);
+		//f.mkdir();
+		Boolean isSaved=false;
+		File f = new File(path);
+		if(!f.exists()) {
+			//f.getParentFile().mkdirs();
+			fileInteractionHelper.createParentFolders(f.getAbsolutePath());
+		}
 
 		try (FileWriter file = new FileWriter(path)) {
 
@@ -44,9 +50,11 @@ public class JsonHelper {
 
 			file.write(jsonOutput);
 			file.flush();
+			isSaved=true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return isSaved;
 	}
 
 	private void readData(String path) throws Exception {

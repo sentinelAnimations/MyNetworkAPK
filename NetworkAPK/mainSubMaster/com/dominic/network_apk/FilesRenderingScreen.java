@@ -1,5 +1,6 @@
 package com.dominic.network_apk;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
@@ -11,7 +12,7 @@ public class FilesRenderingScreen {
     private float textYShift, alpha;
     private float[] listX, listW, allFiles_listX, allFiles_listW;
     private Boolean isFreezed = false;
-    private Boolean[] renderAnimation, renderStillFrame, startedRenderingTiles;
+    private Boolean[] renderAnimation, renderStillFrame, startedRenderingTiles,allFilesCopyStatus;
     private long curTime, prevTime;
     private int[] startFrame, endFrame, stillFrame, allPCStatus; // allPCStatus: 0=prog responding,1=prog is rendering, 2=prog not responding
     private String[] pictoPaths, hoLiPictoPaths;
@@ -25,6 +26,7 @@ public class FilesRenderingScreen {
     private HorizontalList allFiles_HorizontalList, allPCs_HorizontalList;
     private LogBar logBar;
     private ImageButton freeze_imageButton;
+    private FileInteractionHelper fileInteractionHelper;
 
     public FilesRenderingScreen(PApplet p, int stdTs, int edgeRad, int margin, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int green, int red, int blue, float textYShift, String[] pictoPaths, String[] hoLiPictoPaths, PFont stdFont) {
         this.p = p;
@@ -48,7 +50,7 @@ public class FilesRenderingScreen {
         this.hoLiPictoPaths = hoLiPictoPaths;
         this.stdFont = stdFont;
         mainActivity = (MainActivity) p;
-
+        fileInteractionHelper=new FileInteractionHelper(p);
         setupAll();
     }
 
@@ -78,9 +80,13 @@ public class FilesRenderingScreen {
                         p.stroke(red);
                     }
                 }
+                if(allFilesCopyStatus[i]==false) {
+                	p.stroke(3, 252, 244);
+                }
                 if (allFiles_HorizontalList.getSelectedInd() == i) {
                     p.stroke(255);
                 }
+                
                 p.rect(allFiles_listX[i], allFiles_HorizontalList.getY(), allFiles_listW[i], allFiles_HorizontalList.getH() - margin * 2, edgeRad);
             }
         }
@@ -157,6 +163,17 @@ public class FilesRenderingScreen {
 
         prevPCListSelectedInd = allPCs_HorizontalList.getSelectedInd();
     }
+    
+    public void startFileRendering() {
+    	String[] fileList=getHorizontalList().getList();
+    	allFilesCopyStatus=new Boolean[fileList.length];
+    	for(int i=0;i<fileList.length;i++) {
+    		File f=new File(fileList[i]);
+    		fileInteractionHelper.createParentFolders(mainActivity.getPathToBlenderRenderFolder()+"\\"+f.getName());
+    		allFilesCopyStatus[i]=fileInteractionHelper.copyFile(f.getAbsolutePath(),mainActivity.getPathToBlenderRenderFolder()+"\\"+f.getName());
+    	}
+    	p.println("copied files");
+    }
 
     private void updateLists() {
         for (int i = 0; i < allPCs_HorizontalList.getList().length; i++) {
@@ -175,7 +192,6 @@ public class FilesRenderingScreen {
             // prepare infoString and so on-----------------------------------
             String[] splitStr = p.split(allLastLogLines[i], "|");
             String renderInfoString = "PC name: " + allPCNames[i];
-            p.println(allPCStatus[i],"stat");
             switch(allPCStatus[i]) {
             case 0:
                 renderInfoString+=" -Responding";

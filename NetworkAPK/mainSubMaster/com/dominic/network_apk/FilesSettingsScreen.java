@@ -160,6 +160,7 @@ public class FilesSettingsScreen {
                 if (isRenderable) {
                     mainActivity.getRenderOverview().setRenderMode(0);
                     mainActivity.getRenderOverview().getFilesRenderingScreen().setStartupVals();
+                    mainActivity.getRenderOverview().getFilesRenderingScreen().startFileRendering();
                 } else {
                     makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, errorMessage.length() * 2, light, textCol, textYShift, false, errorMessage, stdFont, null));
                 }

@@ -76,7 +76,7 @@ public class Node<T> {
             useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", "", pictoPaths[anzTypes + 6], stdFont, this);
             useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", "", pictoPaths[anzTypes + 6], stdFont, this);
 
-            String[] pcList = new FileInteractionHelper(p).getFoldersAndFiles(mainActivity.getPathToCloud(), true);
+            String[] pcList = new FileInteractionHelper(p).getFoldersAndFiles(mainActivity.getPathToCloud()+"\\"+mainActivity.getPCFolderName(), true);
             String[] ddPaths = { pictoPaths[anzTypes + 5], pictoPaths[anzTypes + 4] };
             pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, pcList, stdFont, true, this);
 
@@ -192,7 +192,7 @@ public class Node<T> {
         Boolean pcIsAlive = true;
         String pcAlias = pcSelection_DropdownMenu.getSelectedItem();
         if (pcAlias.length() > 0) {
-            JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToCloud() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName());
+            JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToCloud() + "\\"+mainActivity.getPCFolderName()+"\\" + pcAlias + "\\" + mainActivity.getLogFileName());
             if (loadedSettingsData.isEmpty()) {
                 pcIsAlive = false;
                 calculatedPcStatus=2;
@@ -207,7 +207,6 @@ public class Node<T> {
                 if (pcIsAlive) {
                     calculatedPcStatus = 0;
                     int renderStatus = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("renderMode").getAsString());
-                    p.println("renStat",renderStatus);
                     if (renderStatus==1) {
                         calculatedPcStatus = 1;
                     }

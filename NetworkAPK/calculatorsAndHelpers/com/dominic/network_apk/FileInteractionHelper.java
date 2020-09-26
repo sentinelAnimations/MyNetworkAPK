@@ -11,22 +11,53 @@ import processing.core.PApplet;
 import processing.data.StringList;
 
 public class FileInteractionHelper {
-	private StringList allInPathsDeleteFolder=new StringList();
+	private StringList allInPathsDeleteFolder = new StringList();
 	private PApplet p;
+
 	public FileInteractionHelper(PApplet p) {
-		this.p=p;
+		this.p = p;
 	}
-	
+
+	public Boolean createParentFolders(String pathToFile) {
+		Boolean parentFoldersCreated = false;
+		File targetFile = new File(pathToFile);
+		File parent;
+		if (targetFile.isDirectory()) {
+			parent = targetFile;
+		} else {
+			parent = targetFile.getParentFile();
+		}
+		p.println(parent.getAbsolutePath());
+		if (!parent.exists() && !parent.mkdirs()) {
+			throw new IllegalStateException("Couldn't create dir: " + parent);
+		} else {
+			p.println(parent.getAbsolutePath(),"----");
+			parent.mkdirs();
+			parentFoldersCreated = true;
+		}
+		return parentFoldersCreated;
+	}
+
+	public Boolean copyFile(String copyFolderPath, String destination) {
+		Boolean isCopied = false;
+		try {
+			Files.copy(new File(copyFolderPath).toPath(), new File(destination).toPath());
+			isCopied = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return isCopied;
+	}
 
 	public void copyFolder(String copyFolderPath, String destination) {
 		if (copyFolderPath.equals(destination) == false) {
 			File f;
 			String[] splitStr1 = p.split(copyFolderPath, "\\");
 			String[] basePath0 = p.split(copyFolderPath, "\\");
-			
-			ArrayList<String> basePath=new ArrayList<>();
-			for(int i=0;i<basePath0.length;i++) {
-				if(basePath0[i].length()>0) {
+
+			ArrayList<String> basePath = new ArrayList<>();
+			for (int i = 0; i < basePath0.length; i++) {
+				if (basePath0[i].length() > 0) {
 					basePath.add(basePath0[i]);
 				}
 			}
@@ -94,11 +125,13 @@ public class FileInteractionHelper {
 			p.println("Cant delete path");
 		}
 	}
+
 	ArrayList<File> listFilesRecursive(String dir) {
 		ArrayList<File> fileList = new ArrayList<File>();
 		recurseDir(fileList, dir);
 		return fileList;
 	}
+
 	// Recursive function to traverse subdirectories
 	void recurseDir(ArrayList<File> a, String dir) {
 		File file = new File(dir);
@@ -157,16 +190,10 @@ public class FileInteractionHelper {
 			return null;
 		}
 	}
-	
+
 	public String cleanupPath(String pathToClean) {
-	    String cleanPath="";
-	    for(int i=0;i<pathToClean.length();i++) {
-	        if(p.str(cleanPath.charAt(cleanPath.length()-1))=="\\" && p.str(pathToClean.charAt(i))=="\\") {
-	        }else {
-	            cleanPath+=pathToClean.charAt(i);
-            }
-	        
-	    }
-	    return cleanPath;
+		String cleanPath = pathToClean.replace("\\\\", "\\");
+
+		return cleanPath;
 	}
 }

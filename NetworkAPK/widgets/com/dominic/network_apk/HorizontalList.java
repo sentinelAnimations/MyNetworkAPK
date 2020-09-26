@@ -281,8 +281,6 @@ public class HorizontalList<T> implements Widgets {
                 shiftListX = 0;
                 isShifted = true;
 
-                p.println("listSet");
-                p.println(list);
             } else {
                 list = new String[0];
                 displayList = new String[0];

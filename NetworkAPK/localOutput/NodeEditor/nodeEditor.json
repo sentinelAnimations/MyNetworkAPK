@@ -1,14 +1,14 @@
 [
   {
     "Node0": {
-      "posX": 261,
-      "posY": 65,
+      "posX": 264,
+      "posY": 117,
       "connectorPointId": "3732f0c0-acf5-4d5b-9aab-7371b71e0910",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "myLaptop001",
+      "selectPc_dropdownItem": "myMasterPC",
       "selectPc_dropdown": 0,
       "nodeType": 0,
       "nodeId": "6d78ea1a-e697-43b2-9da0-d442645caade"
@@ -16,7 +16,7 @@
   },
   {
     "Node1": {
-      "posX": 608,
+      "posX": 611,
       "connectorPointIsConnectedArray": [
         true,
         true,
@@ -27,7 +27,7 @@
         false,
         false
       ],
-      "posY": 98,
+      "posY": 150,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -56,8 +56,8 @@
   },
   {
     "Node2": {
-      "posX": 818,
-      "posY": 93,
+      "posX": 821,
+      "posY": 145,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -67,30 +67,30 @@
   },
   {
     "Node3": {
-      "posX": 266,
-      "posY": 218,
+      "posX": 269,
+      "posY": 270,
       "connectorPointId": "c2480680-06c5-48b2-9402-8f1fe16cacc6",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "testFolder",
-      "selectPc_dropdown": 1,
+      "selectPc_dropdownItem": "",
+      "selectPc_dropdown": -1,
       "nodeType": 0,
       "nodeId": "160e244c-3804-453a-9f00-8f5f5488b5c8"
     }
   },
   {
     "Node4": {
-      "posX": 256,
-      "posY": 368,
+      "posX": 259,
+      "posY": 420,
       "connectorPointId": "050c7e66-be09-4c99-9431-ebc25598833c",
       "useGpu_checkbox": false,
       "connectorPointConnectedId": "85900ff0-1c66-443f-bc8e-74478e58fdba",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "testFolder2k",
-      "selectPc_dropdown": 2,
+      "selectPc_dropdownItem": "",
+      "selectPc_dropdown": -1,
       "nodeType": 2,
       "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214"
     }

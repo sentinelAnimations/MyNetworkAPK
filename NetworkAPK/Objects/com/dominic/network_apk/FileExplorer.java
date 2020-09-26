@@ -57,7 +57,6 @@ public class FileExplorer {
         File desctop = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory();
         File documents = FileSystemView.getFileSystemView().getDefaultDirectory();
 
-        // p.println(home, downloads, desctop.getAbsolutePath(), documents.getPath());
 
         fileInteractionHelper = new FileInteractionHelper(p);
 
@@ -139,9 +138,6 @@ public class FileExplorer {
 
         handleButtons();
         handleLists();
-
-        // p.println(p.frameCount);
-
     }
 
     private void handleLists() {
@@ -152,7 +148,6 @@ public class FileExplorer {
             horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(l1[0], true));
             horizontalLists[3].setList(fileInteractionHelper.getFoldersAndFiles(l1[0], false));
             horizontalLists[0].isNewSelected = false;
-            p.println("now");
         }
 
         if (horizontalLists[2].isNewSelected == true) {
@@ -284,7 +279,6 @@ public class FileExplorer {
         }
 
         if (finishedListing == true) {
-            // p.println(allDirsAndFiles);
             String[] allDirsAndFilesStr = new String[allDirsAndFiles.size()];
             for (int i = 0; i < allDirsAndFiles.size(); i++) {
                 allDirsAndFilesStr[i] = allDirsAndFiles.get(i).toString();
@@ -304,7 +298,6 @@ public class FileExplorer {
             if (finishedSearching == true) {
                 if (searchedStr != null) {
                     horizontalLists[4].setList(searchedStr);
-                    PApplet.println("set list");
                 }
                 isSearching = false;
                 isListing = false;
@@ -312,7 +305,6 @@ public class FileExplorer {
         }
 
         if (isListing == true || isSearching == true) {
-            // p.println("searching");
             p.stroke(lighter);
             p.fill(lighter);
             p.rect(searchBar.getButton().getX(), searchBar.getButton().getY(), searchBar.getButton().getW(), searchBar.getButton().getH(), edgeRad);
@@ -348,7 +340,6 @@ public class FileExplorer {
                         String[] hl0 = horizontalLists[0].getList();
                         for (int i2 = 0; i2 < hl0.length; i2++) {
                             String[] splitString2 = p.split(hl0[i2], "\\");
-                            p.println(hl0[i2], splitString2[0], splitStr[0]);
                             if (splitString2[0].equals(splitStr[0])) {
                                 horizontalLists[0].setSelectedInd(i);
                                 break;
@@ -398,7 +389,6 @@ public class FileExplorer {
                         fileInteractionHelper.copyFolder(pathToCopy, destination);
                         isCopied = true;
                         if (btnMode == 1 && isCopied) {
-                            p.println(pathToCopy, "----");
                             fileInteractionHelper.deleteFolder(pathToCopy);
                         }
                         pathToCopy = "";
@@ -520,7 +510,6 @@ public class FileExplorer {
         for (int i = 0; i < searchArray.length; i++) {
             String[] splitStr = PApplet.split(searchArray[i], "\\");
             String[] splitStr2 = PApplet.split(splitStr[splitStr.length - 1], ".");
-            // p.println(searchArray[i]);
             if (splitStr2.length > 1) {
                 String[] m1 = PApplet.match(splitStr[splitStr.length - 1].toUpperCase(), searchStr.toUpperCase());
                 if (m1 != null) {
@@ -529,7 +518,6 @@ public class FileExplorer {
             } else {
                 for (int i2 = splitStr.length - 1; i2 >= 0; i2--) {
                     String[] m1 = PApplet.match(splitStr[i2].toUpperCase(), searchStr.toUpperCase());
-                    PApplet.println(splitStr[i2].toUpperCase(), searchStr.toUpperCase());
                     if (m1 != null) {
                         Boolean noOtherMatch = true;
                         for (int i3 = 0; i3 < resultsFolders.size(); i3++) {
@@ -548,7 +536,6 @@ public class FileExplorer {
                         // noOtherMatch = true;
                         if (noOtherMatch == true) {
                             resultsFolders.add(searchArray[i]);
-                            PApplet.println("match found ---------------------");
                             count++;
                             break;
                         }
@@ -672,7 +659,6 @@ public class FileExplorer {
     }
 
     public void setPath(String setPath) {
-        p.println("setPath fileExplorer", setPath);
         String path = "";
         String[] splitStr = p.split(setPath, "\\");
         String[] handOverStr = new String[splitStr.length];

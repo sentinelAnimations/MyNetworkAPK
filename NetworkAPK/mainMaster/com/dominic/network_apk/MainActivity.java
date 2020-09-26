@@ -76,7 +76,7 @@ public class MainActivity extends PApplet {
     private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", masterCommandSavePath = "";
     // Local -----------
     // File names -------
-    private String logFileName = "logFile.json";
+    private String logFileName = "logFile.json",blenderRenderFilesFolderName="blenderRenderFiles",pcFolderName="networkPCs";
     // File names -------
 
     // shared ----------
@@ -288,7 +288,7 @@ public class MainActivity extends PApplet {
         // initialize mode 0 --> homeScreenSlaves-----------------
         loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[0]);
         String[] hSSpp = { absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "renderFile.png" };
-        homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, hSSpp, stdFont);
+        homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border,red,green, textYShift, hSSpp, stdFont);
         // initialize mode 0 --> homeScreenSlaves-----------------
 
     }
@@ -739,7 +739,9 @@ public class MainActivity extends PApplet {
     public String getPCName() {
         return settingsScreen.getEditText().getStrList().get(0);
     }
-
+    public String getPCFolderName() {
+    	return pcFolderName;
+    }
     public String getPathToCloud() {
         return settingsScreen.getPathSelectors()[2].getPath();
     }
@@ -750,6 +752,9 @@ public class MainActivity extends PApplet {
 
     public String getPathToBlender() {
         return settingsScreen.getPathSelectors()[0].getPath();
+    }
+    public String getPathToBlenderRenderFolder() {
+    	return getPathToCloud()+"\\"+blenderRenderFilesFolderName;
     }
 
     public void setMode(int setMode) {

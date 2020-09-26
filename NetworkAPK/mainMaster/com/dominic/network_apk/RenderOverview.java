@@ -63,8 +63,11 @@ public class RenderOverview {
         }
 
         // render all ---------------------------------------
+        if (anyFileExplorerIsOpen == false) {
+            cancelRendering_ImageButton.render();
+        }
+        
         if (renderMode == 0.1f) {
-            uploadBlenderFiles();
             filesSettingsScreen.render();
         }
         if (renderMode == 0) {
@@ -78,9 +81,7 @@ public class RenderOverview {
         if (renderMode == 2) {
             imageViewScreen.render();
         }
-        if (anyFileExplorerIsOpen == false) {
-            cancelRendering_ImageButton.render();
-        }
+      
         // render all ---------------------------------------
 
         // button handling -------------------------
@@ -120,11 +121,9 @@ public class RenderOverview {
         // button handling -------------------------
     }
 
-    private void uploadBlenderFiles() {
+   
 
-    }
-
-    private void startSheepit() {
+    public void startSheepit() {
 
     }
 
