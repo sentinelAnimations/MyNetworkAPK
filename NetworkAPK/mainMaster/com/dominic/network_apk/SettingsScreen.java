@@ -65,7 +65,7 @@ public class SettingsScreen {
         Boolean[] selectFolder = { false, true, true };
         String[] description = { "Setup this Pc as Slave or Master", "Select Blender.exe Folder", "Select image output Folder", "Select Path to Cloud", "Enter desired Name of PC", "Save Settings and move on | shortcut: ctrl+s" };
         String[] pathSelectorHints = { "...\\\\Blender.exe", "...\\\\images", "...\\\\Cloud" };
-
+        
         int widthScale = 5;
         int spacing = p.width / 16;
         int widgetW = (p.width - spacing * 2) / widthScale;
