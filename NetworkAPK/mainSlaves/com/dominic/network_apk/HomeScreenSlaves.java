@@ -126,7 +126,7 @@ public class HomeScreenSlaves {
 		settingsDetails.put("renderMode", renderMode);
 		settingsObject.put("SystemLog", settingsDetails);
 
-		String jsonPath = pathToCloud + "\\" + pcFolderName + "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
+		String jsonPath = mainActivity.getPathToPCFolder()+ "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
 		if (fileInteractionHelper.createParentFolders(jsonPath)) {
 			jsonHelper.appendObjectToArray(settingsObject);
 			allWorking = jsonHelper.writeData(jsonPath);

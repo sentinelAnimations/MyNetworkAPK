@@ -343,4 +343,7 @@ public class HomeScreenMaster {
     public CounterArea getStillFrame_counterArea() {
     	return stillFrame_counterArea;
     }
+    public PathSelector getFileToRender_pathSelector() {
+    	return fileToRender_pathSelector;
+    }
 }

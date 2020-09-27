@@ -16,7 +16,7 @@ public class Node<T> {
     private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus;
     private float textYShift;
     private Boolean isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false, isReady = true;
-    private String id, cpuText = "CPU threads: 0", gpuText = "GPUs: 0", pathToCloud;
+    private String id, cpuText = "CPU threads: 0", gpuText = "GPUs: 0";
     private String[] pictoPaths;
     private long curTime, lastLogTime;
     private PFont stdFont;
@@ -64,7 +64,6 @@ public class Node<T> {
         cpuCores = (int) (p.random(24));
 
         mainActivity = (MainActivity) p;
-        pathToCloud = mainActivity.getPathToCloud();
         conS = btnSizeSmall - margin;
         headH = btnSizeSmall + margin * 2;
         bodyH = h - headH - margin;
@@ -76,7 +75,7 @@ public class Node<T> {
             useCpu_checkbox = new Checkbox(p, -btnSizeSmall - btnSizeSmall / 2 - margin * 2, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", "", pictoPaths[anzTypes + 6], stdFont, this);
             useGpu_checkbox = new Checkbox(p, +btnSizeSmall / 2 + margin, bodyY - y - bodyH / 2 + margin + btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, btnSizeSmall - margin, edgeRad, margin, stdTs, lighter, lighter, border, textCol, textYShift, true, false, "", "", pictoPaths[anzTypes + 6], stdFont, this);
 
-            String[] pcList = new FileInteractionHelper(p).getFoldersAndFiles(mainActivity.getPathToCloud()+"\\"+mainActivity.getPCFolderName(), true);
+            String[] pcList = new FileInteractionHelper(p).getFoldersAndFiles(mainActivity.getPathToPCFolder(), true);
             String[] ddPaths = { pictoPaths[anzTypes + 5], pictoPaths[anzTypes + 4] };
             pcSelection_DropdownMenu = new DropdownMenu(p, -btnSizeSmall / 2 - margin, headY - y, w - margin * 3 - btnSizeSmall, btnSizeSmall, h + btnSizeSmall + margin * 2, edgeRad, margin, stdTs, lighter, lightest, textCol, textDark, textYShift, "PC", ddPaths, pcList, stdFont, true, this);
 
@@ -192,7 +191,7 @@ public class Node<T> {
         Boolean pcIsAlive = true;
         String pcAlias = pcSelection_DropdownMenu.getSelectedItem();
         if (pcAlias.length() > 0) {
-            JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToCloud() + "\\"+mainActivity.getPCFolderName()+"\\" + pcAlias + "\\" + mainActivity.getLogFileName());
+            JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToPCFolder()+"\\" + pcAlias + "\\" + mainActivity.getLogFileName());
             if (loadedSettingsData.isEmpty()) {
                 pcIsAlive = false;
                 calculatedPcStatus=2;

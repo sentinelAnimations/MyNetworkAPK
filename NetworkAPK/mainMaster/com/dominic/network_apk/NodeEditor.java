@@ -501,10 +501,10 @@ public class NodeEditor<T> {
 					n.getCheckoxes()[0].setIsChecked(useCpuCheckbox);
 					n.getCheckoxes()[1].setIsChecked(useGpuCheckbox);
 
-					String[] allFoldersInCloud = fileInteractionHelper.getFoldersAndFiles(mainActivity.getPathToCloud(), true);
+					String[] allFoldersInPcFolder = fileInteractionHelper.getFoldersAndFiles(mainActivity.getPathToPCFolder(), true);
 					if (selectPc_dropdown >= 0) {
 						if (selectPc_dropdown < n.getPcSelection_DropdownMenu().getList().length) {
-							if (allFoldersInCloud[selectPc_dropdown].toUpperCase().equals(selectPc_dropdownItem.toUpperCase())) {
+							if (allFoldersInPcFolder[selectPc_dropdown].toUpperCase().equals(selectPc_dropdownItem.toUpperCase())) {
 								n.getPcSelection_DropdownMenu().setIsSelected(selectPc_dropdown);
 							}else {
 								n.setIsReady(false);
@@ -516,8 +516,8 @@ public class NodeEditor<T> {
 
 					// check if pc is ready (apk running + ready)----------------------
 					Boolean FolderFound = false;
-					for (int i2 = 0; i2 < allFoldersInCloud.length; i2++) {
-						if (selectPc_dropdownItem.toUpperCase().equals(allFoldersInCloud[i2].toUpperCase())) {
+					for (int i2 = 0; i2 < allFoldersInPcFolder.length; i2++) {
+						if (selectPc_dropdownItem.toUpperCase().equals(allFoldersInPcFolder[i2].toUpperCase())) {
 							FolderFound = true;
 							break;
 						}
