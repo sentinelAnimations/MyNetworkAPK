@@ -14,8 +14,8 @@ import processing.core.PFont;
 import processing.core.PImage;
 
 public class SettingsScreen {
-	private int btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, mode = 0, doOnce = 0;
-	private Boolean successfullySaved = false;
+	private int mode,btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, doOnce = 0, openFileExplorerInd = 0;
+	private Boolean successfullySaved = false, fileExplorerIsOpen = false;
 	private float textYShift;
 	private String mySavePath, savePathPrefix = "", aliasOnStartup;
 	private String[] imgPaths;
@@ -35,8 +35,9 @@ public class SettingsScreen {
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 	private FileInteractionHelper fileInteractionHelper;
 
-	public SettingsScreen(PApplet p, int btnSize, int btnSizeSmall, int stdTs, int subtitleTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySavePath, String[] imgPaths, String[] HorizontalListPictoPaths, String[] fileExplorerPaths, String[] firstSetupPictos, PFont stdFont) {
+	public SettingsScreen(PApplet p, int mode, int btnSize, int btnSizeSmall, int stdTs, int subtitleTs, int margin, int edgeRad, int textCol, int textDark, int dark, int light, int lighter, int border, float textYShift, String mySavePath, String[] imgPaths, String[] HorizontalListPictoPaths, String[] fileExplorerPaths, String[] firstSetupPictos, PFont stdFont) {
 		this.p = p;
+		this.mode=mode;
 		this.btnSize = btnSize;
 		this.btnSizeSmall = btnSizeSmall;
 		this.stdTs = stdTs;
@@ -106,91 +107,69 @@ public class SettingsScreen {
 	public void render() {
 
 		// check if some fileexplorer is open -------------------------
-
+		fileExplorerIsOpen = false;
 		for (int i = 0; i < pathSelectors.length; i++) {
 			if (pathSelectors[i].getFileExplorerIsOpen()) {
-				mode = 1;
-				doOnce = 0;
+				fileExplorerIsOpen = true;
+				openFileExplorerInd = i;
 				break;
 			}
-			if (i == pathSelectors.length - 1) {
-				mode = 0;
-				doOnce = 1;
-			}
+
 		}
 
-		if (doOnce == 0) {
-			for (int i = 0; i < pathSelectors.length; i++) {
-				pathSelectors[i].setRenderPathSelector(false);
-			}
-			doOnce++;
-		} else {
-			if (doOnce > 0) {
-				for (int i = 0; i < pathSelectors.length; i++) {
-					pathSelectors[i].setRenderPathSelector(true);
-				}
-				doOnce++;
-			}
-		}
 		// check if some fileexplorer is open -------------------------
 
 		// render firstSetup and !firstSetup ------------------------
-		if (mainActivity.getLoadingScreen().getIsFirstSetup() == true && mode == 0) {
-			p.fill(light);
-			p.stroke(light);
-			p.rect(p.width / 2, btnSize / 2 + margin, p.width, btnSize + margin * 2);
-			firstSetupPicto.render();
-			firstSetupHelp_btn.render();
-			p.fill(textDark);
-			p.textAlign(p.LEFT, p.CENTER);
-			p.textSize(subtitleTs);
-			p.text("First setup", firstSetupPicto.getX() + btnSize + margin * 2, firstSetupPicto.getY());
-		} else {
-			if (mainActivity.getIsMaster()) {
-				mainActivity.renderMainButtonsMaster();
+		if (fileExplorerIsOpen == false) {
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
+				p.fill(light);
+				p.stroke(light);
+				p.rect(p.width / 2, btnSize / 2 + margin, p.width, btnSize + margin * 2);
+				firstSetupPicto.render();
+				firstSetupHelp_btn.render();
+				p.fill(textDark);
+				p.textAlign(p.LEFT, p.CENTER);
+				p.textSize(subtitleTs);
+				p.text("First setup", firstSetupPicto.getX() + btnSize + margin * 2, firstSetupPicto.getY());
 			} else {
-				mainActivity.renderMainButtonsSlave();
+				if (mainActivity.getIsMaster()) {
+					mainActivity.renderMainButtonsMaster();
+				} else {
+					mainActivity.renderMainButtonsSlave();
+				}
 			}
-		}
-		// render firstSetup and !firstSetup ------------------------
+			// render firstSetup and !firstSetup ------------------------
 
-		// render toasts----------------------------------------------
-		for (int i = 0; i < personalData_et.getToastList().size(); i++) {
-			MakeToast m = (MakeToast) personalData_et.getToastList().get(i);
-			if (m.remove) {
-				personalData_et.removeToast(i);
-			} else {
-				m.render();
+			// render toasts----------------------------------------------
+			for (int i = 0; i < personalData_et.getToastList().size(); i++) {
+				MakeToast m = (MakeToast) personalData_et.getToastList().get(i);
+				if (m.remove) {
+					personalData_et.removeToast(i);
+				} else {
+					m.render();
+				}
 			}
-		}
 
-		for (int i = 0; i < getToastList().size(); i++) {
-			MakeToast m = (MakeToast) getToastList().get(i);
-			if (m.remove) {
-				removeToast(i);
-			} else {
-				m.render();
+			for (int i = 0; i < getToastList().size(); i++) {
+				MakeToast m = (MakeToast) getToastList().get(i);
+				if (m.remove) {
+					removeToast(i);
+				} else {
+					m.render();
+				}
 			}
-		}
-		// render toasts----------------------------------------------
+			// render toasts----------------------------------------------
 
-		// render edittext before path selectors
-		if (mode == 0) {
+			// render edittext before path selectors
 			personalData_et.render();
-		}
-		// render edittext before path selectors
 
-		// render pathselector --------------------------------------
-		for (int i = pathSelectors.length - 1; i >= 0; i--) {
-			PathSelector ps = pathSelectors[i];
-			ps.render();
-			if (ps.getOpenFileExplorer_btn().getIsClicked()) {
-				mode = 1;
-			}
-		}
-		// render pathselector --------------------------------------
+			// render edittext before path selectors
 
-		if (mode == 0) { // normal mode
+			// render pathselector --------------------------------------
+
+			// render pathselector --------------------------------------
+
+			// normal mode
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
 				if (mainActivity.getIsMaster()) {
 					mainActivity.renderMainButtonsMaster();
@@ -278,8 +257,21 @@ public class SettingsScreen {
 			}
 			// handle save button ------------------------------------
 
-		}
+		} else {
 
+		}
+		for (int i = pathSelectors.length - 1; i >= 0; i--) {
+			PathSelector ps = pathSelectors[i];
+			if (fileExplorerIsOpen) {
+				if (i != openFileExplorerInd) {
+					ps.setRenderPathSelector(false);
+				}
+			} else {
+				ps.setRenderPathSelector(true);
+			}
+			ps.render();
+		}
+		masterOrSlave_dropdown.getHoverText().render();
 	}
 
 	private void setData() {
@@ -311,10 +303,11 @@ public class SettingsScreen {
 	}
 
 	public void onMousePressed(int mouseButton) {
-		if (mainActivity.getLoadingScreen().getIsFirstSetup() == true && mode == 0) {
-			firstSetupHelp_btn.onMousePressed();
-		}
-		if (mode == 0) {
+		if (fileExplorerIsOpen == false) {
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
+				firstSetupHelp_btn.onMousePressed();
+			}
+
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
 				if (mainActivity.getIsMaster()) {
 					for (int i = 0; i < mainButtons.length; i++) {
@@ -338,12 +331,12 @@ public class SettingsScreen {
 	}
 
 	public void onMouseReleased(int mouseButton) {
-		if (mode == 0) {
+		if (fileExplorerIsOpen == false) {
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
 				firstSetupHelp_btn.onMouseReleased();
 			}
-
-			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false && mode == 0) {
+			p.println(fileExplorerIsOpen);
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
 				if (mainActivity.getIsMaster()) {
 					for (int i = 0; i < mainButtons.length; i++) {
 						if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
@@ -368,7 +361,7 @@ public class SettingsScreen {
 	}
 
 	public void onKeyPressed(char key) {
-		if (mode == 0) {
+		if (fileExplorerIsOpen == false) {
 			personalData_et.onKeyPressed(key);
 		}
 		for (int i = 0; i < pathSelectors.length; i++) {
@@ -377,7 +370,7 @@ public class SettingsScreen {
 	}
 
 	public void onKeyReleased(char key) {
-		if (mode == 0) {
+		if (fileExplorerIsOpen == false) {
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
 				firstSetupHelp_btn.onKeyReleased(key);
 			}

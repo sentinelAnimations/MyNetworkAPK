@@ -168,11 +168,13 @@ public class Node<T> {
         p.textAlign(p.LEFT, p.CENTER);
         p.text("CPU name x " + cpuCores, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift);
         p.text("GPU name", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs);
+        p.textAlign(p.LEFT,p.TOP);
         String statusString = "";
         if (pcStatus >= 0) {
             statusString = pcStatusStrings[pcStatus];
         }
-        p.text("Status: " + statusString + "\nStrength: " + pcStrength, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2);
+        p.text("Status: " + statusString, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs*1.5f);
+        p.text("Strength: "+pcStrength, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2.5f);
 
         renderConnector(x + w / 2, bodyY, false, "");
         output_connectorPoint.render();
@@ -181,7 +183,6 @@ public class Node<T> {
         curTime = System.nanoTime() / 1000000000;
         if (curTime - lastLogTime > mainActivity.getShortTimeIntervall()) {
             checkForSignsOfLife();
-            checkPCStrength();
             p.println("checked");
             lastLogTime = curTime;
         }
@@ -191,6 +192,8 @@ public class Node<T> {
     public void checkForSignsOfLife() {
         pcStatus = getPCStatus();
         setIsReady(pcStatus < 2);
+        
+        checkPCStrength();
     }
 
     private int getPCStatus() {
@@ -237,14 +240,16 @@ public class Node<T> {
         String pcAlias = pcSelection_DropdownMenu.getSelectedItem();
         try {
             if (pcAlias.length() > 0) {
-                JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName());
+                JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getMyStrengthTestPath());
                 if (loadedSettingsData.isEmpty()) {
 
                 } else {
                     JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
                     try{
-                    int loadedPcStrength = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("pcStrength").getAsString());
+                    int loadedPcStrength = Integer.parseInt(jsonObject.getAsJsonObject("Strength").get(pcAlias).getAsString());
+                    if(loadedPcStrength>=0) {
                     pcStrength=loadedPcStrength;
+                    }
                     }catch (Exception e) {
                         e.printStackTrace();
                     }   

@@ -1,10 +1,10 @@
 [
   {
     "Settings": {
-      "masterOrSlave_dropdown_selectedInd": 0,
-      "pathSelector0": "C:\\Users\\domin\\git\\MyNetworkAPK\\NetworkAPK",
-      "pathSelector1": "C:\\bilder",
-      "pathSelector2": "C:\\Users\\domin\\OneDrive\\NetworkAPK",
+      "masterOrSlave_dropdown_selectedInd": 1,
+      "pathSelector0": "C:",
+      "pathSelector1": "D:\\algemeine Bilder\\ImageFolderFor_NetworkAPK",
+      "pathSelector2": "C:\\Users\\Dominic\\OneDrive\\NetworkAPK",
       "pathSelector3": "C:\\blenderFiles",
       "personalData_et": "myLaptop001"
     }

@@ -5,7 +5,7 @@ import processing.core.PFont;
 
 public class RenderOverview {
 
-    private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border;
+    private int	mode, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border;
     private float renderMode; // rendermode --> 0=render files, 0.1=files render settings, 1=render on sheepit
                               // 2=imageView
     private float textYShift;
@@ -21,8 +21,9 @@ public class RenderOverview {
     private RenderOnSheepitScreen renderOnSheepitScreen;
     private ImageViewScreen imageViewScreen;
 
-    public RenderOverview(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int lightest, int textCol, int textDark, int border, int green, int red, int blue, float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths, String[] fileExplorerPaths, PFont stdFont) {
-        this.p = p;
+    public RenderOverview(PApplet p,int mode, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int lightest, int textCol, int textDark, int border, int green, int red, int blue, float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths, String[] fileExplorerPaths, PFont stdFont) {
+        this.mode=mode;
+    	this.p = p;
         this.stdTs = stdTs;
         this.edgeRad = edgeRad;
         this.margin = margin;
@@ -219,7 +220,9 @@ public class RenderOverview {
             imageViewScreen.onScroll(e);
         }
     }
-
+    public int getMode() {
+    	return mode;
+    }
     public ImageButton getCancelImageButton() {
         return cancelRendering_ImageButton;
     }

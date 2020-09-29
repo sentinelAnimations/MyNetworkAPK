@@ -17,7 +17,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 public class NodeEditor<T> {
-    private int nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH, screenX, screenY, prevScreenX, prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, red, doOnceOnPressed = 0, doOnceOnStart = 0;
+    private int mode,nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH, screenX, screenY, prevScreenX, prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, red, doOnceOnPressed = 0, doOnceOnStart = 0;
     private float textYShift;
     private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false, isSetup = false;
     private String mySavePath;
@@ -39,8 +39,9 @@ public class NodeEditor<T> {
     private JSONArray loadedData = new JSONArray();
     private FileInteractionHelper fileInteractionHelper;
 
-    public NodeEditor(PApplet p, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int red, float textYShift, String mySavePath, String[] buttonPaths, String[] nodePaths1, String[] nodePaths2, PFont stdFont) {
-        this.btnSize = btnSize;
+    public NodeEditor(PApplet p,int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int red, float textYShift, String mySavePath, String[] buttonPaths, String[] nodePaths1, String[] nodePaths2, PFont stdFont) {
+    	this.mode=mode;
+    	this.btnSize = btnSize;
         this.btnSizeSmall = btnSizeSmall;
         this.margin = margin;
         this.stdTs = stdTs;
@@ -61,8 +62,8 @@ public class NodeEditor<T> {
         this.mySavePath = mySavePath;
         this.p = p;
 
-        nodeW = (int) (btnSize * 2.5f);
-        nodeH = (int) (btnSize * 2.5f);
+        nodeW = (int) (btnSize * 3f);
+        nodeH = (int) (btnSize * 2.7f);
         mainActivity = (MainActivity) p;
         gridSize = btnSizeSmall / 2;
         if (mainActivity.getIsMaster()) {
@@ -761,7 +762,9 @@ public class NodeEditor<T> {
     public void addConnectorPoint(PApplet _p, int _type, int _x, int _y, int _r, int _strWeight, int _col, Boolean _isParented, int[] _connectableTypes, String _id, String _parentId, T _parent) {
         connectorPoints.add(new ConnectorPoint(_p, _type, _x, _y, _r, _strWeight, _col, _isParented, _connectableTypes, _id, _parentId, _parent));
     }
-
+    public int getMode() {
+    	return mode;
+    }
     public ArrayList getNodes() {
         return nodes;
     }

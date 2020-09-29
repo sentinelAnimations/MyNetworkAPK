@@ -322,6 +322,9 @@ public class DropdownMenu<T> implements Widgets {
             return "";
         }
     }
+    public HoverText getHoverText() {
+    	return hoverText;
+    }
 
     public void setList(String[] l) {
         list = l;

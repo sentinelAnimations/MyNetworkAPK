@@ -7,7 +7,7 @@ import processing.core.PFont;
 import processing.core.PImage;
 
 public class QuestionScreen {
-    private int btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, markerCol;
+    private int mode,btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, markerCol;
     private float textYShift;
     private Boolean isSearching = false;
     private String[] pictoPaths;
@@ -20,8 +20,9 @@ public class QuestionScreen {
     private SearchBar searchBar;
     private TextField answers_TextField;
 
-    public QuestionScreen(PApplet p, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int markerCol, float textYShift, String[] pictoPaths, String[] fileExplorerPictoPaths, PFont stdFont) {
-        this.btnSize = btnSize;
+    public QuestionScreen(PApplet p,int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int markerCol, float textYShift, String[] pictoPaths, String[] fileExplorerPictoPaths, PFont stdFont) {
+    	this.mode=mode;
+    	this.btnSize = btnSize;
         this.btnSizeSmall = btnSizeSmall;
         this.margin = margin;
         this.stdTs = stdTs;
@@ -163,5 +164,7 @@ public class QuestionScreen {
     public void onScroll(float e) {
         answers_TextField.onScroll(e);
     }
-
+    public int getMode() {
+    	return mode;
+    }
 }

@@ -12,7 +12,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 public class LoadingScreen {
-    private int btnSize, margin, stdTs, btnSizeSmall, edgeRad, titleTs, subtitleTs, dark, light, lighter, textCol, textDark,once=0;
+    private int btnSize, margin, stdTs, btnSizeSmall, edgeRad, titleTs, subtitleTs, dark, light, lighter, textCol, textDark,once=0,mode;
     private float textYShift;
     private boolean firstSetup = true;
     private String APKDescription, APKName, loadingStatus = "Loading Data", mySavePath;
@@ -26,8 +26,9 @@ public class LoadingScreen {
     private MainActivity mainActivity;
     private Thread loadDataThread,initializeThread;
 
-    public LoadingScreen(PApplet p, int btnSize, int margin, int stdTs, int titleTs, int subtitleTs, int btnSizeSmall, int edgeRad, int dark, int textCol, int textDark, int light, int lighter, float textYShift, String APKName, String APKDescription, String imgPath, String mySavePath, PFont stdFont) {
+    public LoadingScreen(PApplet p,int mode, int btnSize, int margin, int stdTs, int titleTs, int subtitleTs, int btnSizeSmall, int edgeRad, int dark, int textCol, int textDark, int light, int lighter, float textYShift, String APKName, String APKDescription, String imgPath, String mySavePath, PFont stdFont) {
         this.p = p;
+        this.mode=mode;
         this.btnSize = btnSize;
         this.margin = margin;
         this.stdTs = stdTs;
@@ -67,15 +68,12 @@ public class LoadingScreen {
              initializeThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONArray loadedSettingsData = jHelper.getData(mySavePath);
+                    JSONArray loadedCommandFileData = jHelper.getData(mySavePath);
                     int selectedInd=0;
-                    if (loadedSettingsData.isEmpty()) {
+                    if (loadedCommandFileData.isEmpty()) {
                     } else {
-                        JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
-                        selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
-                        String comPath =jsonObject.getAsJsonObject("Settings").get("pathSelector2").getAsString();
-
-                        mainActivity.setMasterComandPath(comPath);
+                        JsonObject strengthTestCommands = new JsonParser().parse(loadedCommandFileData.get(0).toString()).getAsJsonObject();
+                        //selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
                     }
                    
                     switch (selectedInd) {
@@ -144,7 +142,9 @@ public class LoadingScreen {
         // load settings info, if not available, goto settingsPage----------------------
 
     }
-
+    public int getMode() {
+    	return mode;
+    }
     public Boolean getIsFirstSetup() {
         return firstSetup;
     }

@@ -6,7 +6,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 public class HomeScreenMaster {
-    private int btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark;
+    private int mode,btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark;
     private float textYShift;
     private Boolean fileExplorerIsOpen = false, prevFileExplorerIsOpen = false;
     private PFont stdFont;
@@ -20,8 +20,9 @@ public class HomeScreenMaster {
     private Checkbox[] homeSettings_checkboxes = new Checkbox[8];
     private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 
-    public HomeScreenMaster(PApplet p, int btnSize, int btnSizeSmall, int edgeRad, int margin, int stdTs, int dark, int light, int lighter, int border, int textCol, int textDark, float textYShift, String[] homeScreenPictoPaths, String[] arrowPaths, String[] hoLiPictoPaths, String[] fileExplorerPaths, PFont stdFont) {
+    public HomeScreenMaster(PApplet p,int mode, int btnSize, int btnSizeSmall, int edgeRad, int margin, int stdTs, int dark, int light, int lighter, int border, int textCol, int textDark, float textYShift, String[] homeScreenPictoPaths, String[] arrowPaths, String[] hoLiPictoPaths, String[] fileExplorerPaths, PFont stdFont) {
         this.p = p;
+        this.mode=mode;
         this.btnSize = btnSize;
         this.btnSizeSmall = btnSizeSmall;
         this.edgeRad = edgeRad;
@@ -330,6 +331,9 @@ public class HomeScreenMaster {
             stillFrame_counterArea.onScroll(e);
             fileSelector_HorizontalList.onScroll(e);
         }
+    }
+    public int getMode() {
+    	return mode;
     }
     
     public Checkbox[] getCheckboxes() {
