@@ -9,7 +9,7 @@
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
       "selectPc_dropdownItem": "myMasterPC",
-      "selectPc_dropdown": 0,
+      "selectPc_dropdown": 1,
       "nodeType": 0,
       "nodeId": "6d78ea1a-e697-43b2-9da0-d442645caade"
     }
