@@ -240,6 +240,7 @@ public class HomeScreenMaster {
                     }
                     if (homeSettings_checkboxes[3].getIsChecked()) { //render on sheepit
                         mainActivity.getRenderOverview().setRenderMode(1);
+                        //mainActivity.getRenderOverview().getRenderOnSheepitScreen().setupAll();
                     }
 
                 } else {

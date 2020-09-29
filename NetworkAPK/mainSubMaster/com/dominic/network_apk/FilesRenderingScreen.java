@@ -12,7 +12,7 @@ public class FilesRenderingScreen {
     private float textYShift, alpha;
     private float[] listX, listW, allFiles_listX, allFiles_listW;
     private Boolean isFreezed = false;
-    private Boolean[] renderAnimation, renderStillFrame, startedRenderingTiles,allFilesCopyStatus;
+    private Boolean[] renderAnimation, renderStillFrame, startedRenderingTiles, allFilesCopyStatus;
     private long curTime, prevTime;
     private int[] startFrame, endFrame, stillFrame, allPCStatus; // allPCStatus: 0=prog responding,1=prog is rendering, 2=prog not responding
     private String[] pictoPaths, hoLiPictoPaths;
@@ -50,7 +50,7 @@ public class FilesRenderingScreen {
         this.hoLiPictoPaths = hoLiPictoPaths;
         this.stdFont = stdFont;
         mainActivity = (MainActivity) p;
-        fileInteractionHelper=new FileInteractionHelper(p);
+        fileInteractionHelper = new FileInteractionHelper(p);
         setupAll();
     }
 
@@ -77,16 +77,16 @@ public class FilesRenderingScreen {
                     if (i == curRenderingFile) {
                         p.stroke(blue);
                     } else {
-                        p.stroke(red);
+                        p.stroke(lighter);
                     }
                 }
-                if(allFilesCopyStatus[i]==false) {
-                	p.stroke(3, 252, 244);
+                if (allFilesCopyStatus[i] == false) {
+                    p.stroke(red);
                 }
                 if (allFiles_HorizontalList.getSelectedInd() == i) {
                     p.stroke(255);
                 }
-                
+
                 p.rect(allFiles_listX[i], allFiles_HorizontalList.getY(), allFiles_listW[i], allFiles_HorizontalList.getH() - margin * 2, edgeRad);
             }
         }
@@ -127,7 +127,7 @@ public class FilesRenderingScreen {
                 p.textSize(stdTs);
                 p.textAlign(p.CENTER, p.CENTER);
                 try {
-                    p.text(allRenderInfos[i], listX[i], allPCPictos[i].getY() + allPCPictos[i].getH() / 2 +margin+stdTs + ((allPCLoadingbars[i].getY()-allPCLoadingbars[i].getH()/2)-(allPCPictos[i].getY() + allPCPictos[i].getH()))/2);
+                    p.text(allRenderInfos[i], listX[i], allPCPictos[i].getY() + allPCPictos[i].getH() / 2 + margin + stdTs + ((allPCLoadingbars[i].getY() - allPCLoadingbars[i].getH() / 2) - (allPCPictos[i].getY() + allPCPictos[i].getH())) / 2);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -163,16 +163,16 @@ public class FilesRenderingScreen {
 
         prevPCListSelectedInd = allPCs_HorizontalList.getSelectedInd();
     }
-    
+
     public void startFileRendering() {
-    	String[] fileList=getHorizontalList().getList();
-    	allFilesCopyStatus=new Boolean[fileList.length];
-    	for(int i=0;i<fileList.length;i++) {
-    		File f=new File(fileList[i]);
-    		fileInteractionHelper.createParentFolders(mainActivity.getPathToBlenderRenderFolder()+"\\"+f.getName());
-    		allFilesCopyStatus[i]=fileInteractionHelper.copyFile(f.getAbsolutePath(),mainActivity.getPathToBlenderRenderFolder()+"\\"+f.getName());
-    	}
-    	p.println("copied files");
+        String[] fileList = getHorizontalList().getList();
+        allFilesCopyStatus = new Boolean[fileList.length];
+        for (int i = 0; i < fileList.length; i++) {
+            File f = new File(fileList[i]);
+            fileInteractionHelper.createParentFolders(mainActivity.getPathToBlenderRenderFolder() + "\\" + f.getName());
+            allFilesCopyStatus[i] = fileInteractionHelper.copyFile(f.getAbsolutePath(), mainActivity.getPathToBlenderRenderFolder() + "\\" + f.getName());
+        }
+        p.println("copied files");
     }
 
     private void updateLists() {
@@ -192,17 +192,10 @@ public class FilesRenderingScreen {
             // prepare infoString and so on-----------------------------------
             String[] splitStr = p.split(allLastLogLines[i], "|");
             String renderInfoString = "PC name: " + allPCNames[i];
-            switch(allPCStatus[i]) {
-            case 0:
-                renderInfoString+=" -Responding";
-                break;
-            case 1:
-                renderInfoString+=" -Rendering";
-                break;
-            case 2:
-                renderInfoString+=" -Not responding";
+            if (allPCStatus[i] > 0) {
+                renderInfoString += n.getPCStatusStrings()[allPCStatus[i]];
             }
-            renderInfoString+="\n";
+            renderInfoString += "\n";
             for (int i2 = 0; i2 < splitStr.length; i2++) {
                 if (i2 == 0) {
                     String[] splStr = p.split(splitStr[i2], " ");
@@ -317,7 +310,7 @@ public class FilesRenderingScreen {
     }
 
     public void setupAll() {
-        int listH = (int)(btnSize * 4.5f);
+        int listH = (int) (btnSize * 4.5f);
         String listW = "";
         while (p.textWidth(listW) < listH) {
             listW += ".";
@@ -325,17 +318,15 @@ public class FilesRenderingScreen {
         if (!mainActivity.getNodeEditor().getIsSetup()) {
             mainActivity.getNodeEditor().setupAll();
             // mainActivity.getNodeEditor().handleNodes();
-            for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
-                Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i);
-                if (n.getType() == 3) {
-                    n.updateSwitchConnectorPoints(false, null, true);
-                }
-            }
-
-            mainActivity.getNodeEditor().calcConnectedNodes();
-        } else {
-            allConnectedNodes = mainActivity.getNodeEditor().getAllConnectedNodes();
+            /*
+             * for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
+             * Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i); if
+             * (n.getType() == 3) { n.updateSwitchConnectorPoints(false, null, true); } }
+             * 
+             * mainActivity.getNodeEditor().calcConnectedNodes();
+             */
         }
+        allConnectedNodes = mainActivity.getNodeEditor().getAllConnectedNodes();
 
         String[] startList = {};
         allFiles_HorizontalList = new HorizontalList(p, p.width / 2, (p.height - btnSizeSmall * 2 - listH - margin * 2) / 2 + btnSizeSmall / 2, p.width - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, true, false, "Files to render", hoLiPictoPaths, startList, stdFont, null);

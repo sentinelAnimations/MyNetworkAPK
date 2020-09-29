@@ -13,11 +13,12 @@ import processing.core.PFont;
 
 public class Node<T> {
 
-    private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus;
+    private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus = 2, pcStrength = 100;
     private float textYShift;
     private Boolean isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false, isReady = true;
     private String id, cpuText = "CPU threads: 0", gpuText = "GPUs: 0";
     private String[] pictoPaths;
+    private String[] pcStatusStrings = { "Alive", "Rendering", "Not responding" };
     private long curTime, lastLogTime;
     private PFont stdFont;
     private PApplet p;
@@ -167,58 +168,91 @@ public class Node<T> {
         p.textAlign(p.LEFT, p.CENTER);
         p.text("CPU name x " + cpuCores, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift);
         p.text("GPU name", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs);
-        p.text("Status: ok", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2);
+        String statusString = "";
+        if (pcStatus >= 0) {
+            statusString = pcStatusStrings[pcStatus];
+        }
+        p.text("Status: " + statusString + "\nStrength: " + pcStrength, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2);
 
         renderConnector(x + w / 2, bodyY, false, "");
         output_connectorPoint.render();
         pcSelection_DropdownMenu.render();
-        
+
         curTime = System.nanoTime() / 1000000000;
         if (curTime - lastLogTime > mainActivity.getShortTimeIntervall()) {
             checkForSignsOfLife();
+            checkPCStrength();
+            p.println("checked");
             lastLogTime = curTime;
         }
 
     }
 
-    public void checkForSignsOfLife() {  
-            pcStatus = getPCStatus();
-            setIsReady(pcStatus < 2);
+    public void checkForSignsOfLife() {
+        pcStatus = getPCStatus();
+        setIsReady(pcStatus < 2);
     }
 
     private int getPCStatus() {
-        int calculatedPcStatus = 0;
+        int calculatedPcStatus = -1;
         Boolean pcIsAlive = true;
         String pcAlias = pcSelection_DropdownMenu.getSelectedItem();
-        if (pcAlias.length() > 0) {
-            JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToPCFolder()+"\\" + pcAlias + "\\" + mainActivity.getLogFileName());
-            if (loadedSettingsData.isEmpty()) {
-                pcIsAlive = false;
-                calculatedPcStatus=2;
-            } else {
-                JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
-                long logTime = Long.parseLong(jsonObject.getAsJsonObject("SystemLog").get("logTime").getAsString());
-                // Atention for condition (1!=1 only for testing)
-                if (curTime - logTime > mainActivity.getStdTimeIntervall() && 1!=1) {
+        try {
+            if (pcAlias.length() > 0) {
+                JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName());
+                if (loadedSettingsData.isEmpty()) {
                     pcIsAlive = false;
-                }
-
-                if (pcIsAlive) {
-                    calculatedPcStatus = 0;
-                    int renderStatus = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("renderMode").getAsString());
-                    if (renderStatus==1) {
-                        calculatedPcStatus = 1;
-                    }
-                } else {
                     calculatedPcStatus = 2;
+                } else {
+                    JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
+                    long logTime = Long.parseLong(jsonObject.getAsJsonObject("SystemLog").get("logTime").getAsString());
+                    // Atention for condition (1!=1 only for testing)
+                    if (curTime - logTime > mainActivity.getStdTimeIntervall() && 1 != 1) {
+                        pcIsAlive = false;
+                    }
+
+                    if (pcIsAlive) {
+                        calculatedPcStatus = 0;
+                        int renderStatus = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("renderMode").getAsString());
+                        if (renderStatus == 1) {
+                            calculatedPcStatus = 1;
+                        }
+                    } else {
+                        calculatedPcStatus = 2;
+                    }
+                }
+            } else {
+                pcIsAlive = false;
+                calculatedPcStatus = 2;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return calculatedPcStatus;
+    }
+
+    private void checkPCStrength() {
+        int calculatedPcStatus = -1;
+        Boolean pcIsAlive = true;
+        String pcAlias = pcSelection_DropdownMenu.getSelectedItem();
+        try {
+            if (pcAlias.length() > 0) {
+                JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName());
+                if (loadedSettingsData.isEmpty()) {
+
+                } else {
+                    JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
+                    try{
+                    int loadedPcStrength = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("pcStrength").getAsString());
+                    pcStrength=loadedPcStrength;
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }   
                 }
             }
-        } else {
-            pcIsAlive = false;
-            calculatedPcStatus = 2;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return calculatedPcStatus;
     }
 
     private void renderTypeSwitch() {
@@ -686,6 +720,14 @@ public class Node<T> {
         } else {
             return -1;
         }
+    }
+
+    public int getPCStrength() {
+        return pcStrength;
+    }
+
+    public String[] getPCStatusStrings() {
+        return pcStatusStrings;
     }
 
     public Checkbox[] getCheckoxes() {

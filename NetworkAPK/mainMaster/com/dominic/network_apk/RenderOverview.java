@@ -48,7 +48,7 @@ public class RenderOverview {
         String[] fRSPictoPaths = { pictoPaths[4], pictoPaths[7] };
         filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, green, red, blue, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
         String[] rOSPictoPaths = { pictoPaths[1], pictoPaths[2] };
-        renderOnSheepitScreen = new RenderOnSheepitScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rOSPictoPaths, stdFont);
+        renderOnSheepitScreen = new RenderOnSheepitScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border,red,green, textYShift, rOSPictoPaths, hoLiPictoPaths,stdFont);
         String[] iVSPictoPaths = { pictoPaths[6], pictoPaths[8] };
         imageViewScreen = new ImageViewScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, textYShift, iVSPictoPaths, fileExplorerPaths, stdFont);
 
@@ -144,7 +144,7 @@ public class RenderOverview {
             viewImages_imageButton.onMousePressed();
         }
         if (renderMode == 1) {
-
+            renderOnSheepitScreen.onMousePressed(mouseButton);
         }
         if (renderMode == 2) {
             imageViewScreen.onMousePressed(mouseButton);
@@ -164,7 +164,7 @@ public class RenderOverview {
             viewImages_imageButton.onMouseReleased();
         }
         if (renderMode == 1) {
-
+            renderOnSheepitScreen.onMouseReleased(mouseButton);
         }
         if (renderMode == 2) {
             imageViewScreen.onMouseReleased(mouseButton);
@@ -182,7 +182,7 @@ public class RenderOverview {
             filesRenderingScreen.onKeyPressed(key);
         }
         if (renderMode == 1) {
-
+            renderOnSheepitScreen.onKeyPressed(key);
         }
         if (renderMode == 2) {
             imageViewScreen.onKeyPressed(key);
@@ -198,7 +198,7 @@ public class RenderOverview {
             filesRenderingScreen.onKeyReleased(key);
         }
         if (renderMode == 1) {
-
+            renderOnSheepitScreen.onKeyReleased(key);
         }
         if (renderMode == 2) {
             imageViewScreen.onKeyReleased(key);
@@ -213,7 +213,7 @@ public class RenderOverview {
             filesRenderingScreen.onScroll(e);
         }
         if (renderMode == 1) {
-
+            renderOnSheepitScreen.onScroll(e);
         }
         if (renderMode == 2) {
             imageViewScreen.onScroll(e);
@@ -227,11 +227,13 @@ public class RenderOverview {
     public FilesSettingsScreen getRenderFilesSettings() {
         return filesSettingsScreen;
     }
-
+    
     public FilesRenderingScreen getFilesRenderingScreen() {
         return filesRenderingScreen;
     }
-
+    public RenderOnSheepitScreen getRenderOnSheepitScreen() {
+        return renderOnSheepitScreen;
+    }
     public void setRenderMode(float setM) {
         renderMode = setM;
     }
