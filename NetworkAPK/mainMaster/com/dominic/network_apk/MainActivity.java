@@ -260,8 +260,8 @@ public class MainActivity extends PApplet {
                     // masterOrSlave_dropdown.getSelectedInd());
                     JSONObject settingsObject = new JSONObject();
                     JSONObject settingsDetails = new JSONObject();
-                    //settingsDetails.put("value1", 10);
-                    //settingsDetails.put("value2", 20);
+                    // settingsDetails.put("value1", 10);
+                    // settingsDetails.put("value2", 20);
 
                     settingsObject.put(modeNamesMaster[i], settingsDetails);
                     jHelper.appendObjectToArray(settingsObject);
@@ -294,9 +294,9 @@ public class MainActivity extends PApplet {
         String[] p2 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
         String[] fsetupPictos = { absPathPictos + "settings.png", absPathPictos + "questions.png" };
         settingsScreen = new SettingsScreen(this, 3, btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, border, textYShift, mySettingsPath, p1, p2, fileExplorerPaths, fsetupPictos, stdFont);
-       if(isMaster) {
-        homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles());
-       }
+        if (isMaster) {
+            homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles());
+        }
     }
 
     private void initializeQuestionScreen() {
@@ -444,7 +444,7 @@ public class MainActivity extends PApplet {
                     if (mode == 2) {
                         getSurface().setResizable(true);
                     }
-                    if(mode==6) {
+                    if (mode == 6) {
                         strengthTestScreen.setupAll();
                     }
 
@@ -847,8 +847,8 @@ public class MainActivity extends PApplet {
     }
 
     public void setIsMaster(Boolean state) {
-       isMaster = state;
-   }
+        isMaster = state;
+    }
 
     public String getMasterCommandFilePath() {
         return getPathToCloud() + "\\" + relativeMasterCommandFilePath;

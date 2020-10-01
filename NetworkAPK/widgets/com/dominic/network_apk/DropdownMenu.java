@@ -70,11 +70,10 @@ public class DropdownMenu<T> implements Widgets {
         p.textAlign(p.LEFT, p.CENTER);
         p.textFont(stdFont);
         p.textSize(stdTs);
-        if (isSelected) {
+        if (isSelected && !selectedIndIsOutOfBounds()) {
             p.fill(textCol);
-            if(!selectedIndIsOutOfBounds()) {
             p.text(displList[selectedInd], x - w / 2 + margin, y - stdTs * textYShift);
-            }
+            
         } else {
             p.fill(textDark);
             p.text(title, x - w / 2 + margin, y - stdTs * textYShift);

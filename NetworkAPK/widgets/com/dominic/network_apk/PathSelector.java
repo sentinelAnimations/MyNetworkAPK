@@ -295,12 +295,12 @@ public class PathSelector<T> implements Widgets {
     public void setPath(String setPath) {
         File f = new File(setPath);
         if (f.exists()) {
-            if (f.isDirectory() == false) {
-                File parentFile = f.getParentFile();
-                if (parentFile != null) {
-                    f = parentFile;
-                }
-            }
+           // if (f.isDirectory() == false) {
+               // File parentFile = f.getParentFile();
+               // if (parentFile != null) {
+                    //f = parentFile;
+                //}
+            //}
             fileExplorer.setPath(setPath);
             setText(f.getAbsolutePath());
         }

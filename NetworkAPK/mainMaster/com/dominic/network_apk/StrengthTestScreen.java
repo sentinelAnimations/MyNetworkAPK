@@ -130,7 +130,6 @@ public class StrengthTestScreen {
             strengthTestThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    p.println(startTest_ImageButton.getClickCount() % 2 != 0, "--");
                     controllStrengthTest(startTest_ImageButton.getClickCount() % 2 != 0);
                 }
             });

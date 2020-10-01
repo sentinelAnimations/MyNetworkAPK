@@ -228,6 +228,7 @@ public class Node<T> {
                 calculatedPcStatus = 2;
             }
         } catch (Exception e) {
+            calculatedPcStatus = 2;
             e.printStackTrace();
         }
         return calculatedPcStatus;
