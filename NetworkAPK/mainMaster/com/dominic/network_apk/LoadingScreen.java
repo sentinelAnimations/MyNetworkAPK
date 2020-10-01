@@ -68,12 +68,14 @@ public class LoadingScreen {
              initializeThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONArray loadedCommandFileData = jHelper.getData(mySavePath);
+                    JSONArray loadedSettingsData = jHelper.getData(mySavePath);
                     int selectedInd=0;
-                    if (loadedCommandFileData.isEmpty()) {
+                    if (loadedSettingsData.isEmpty()) {
                     } else {
-                        JsonObject strengthTestCommands = new JsonParser().parse(loadedCommandFileData.get(0).toString()).getAsJsonObject();
-                        //selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
+                        JsonObject strengthTestCommands = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
+                        //selectedInd = Integer.parseInt(JsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
+                        JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
+                       selectedInd = Integer.parseInt(jsonObject.getAsJsonObject("Settings").get("masterOrSlave_dropdown_selectedInd").getAsString());
                     }
                    
                     switch (selectedInd) {

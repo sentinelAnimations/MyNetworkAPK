@@ -168,13 +168,13 @@ public class Node<T> {
         p.textAlign(p.LEFT, p.CENTER);
         p.text("CPU name x " + cpuCores, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift);
         p.text("GPU name", x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs);
-        p.textAlign(p.LEFT,p.TOP);
+        p.textAlign(p.LEFT, p.TOP);
         String statusString = "";
         if (pcStatus >= 0) {
             statusString = pcStatusStrings[pcStatus];
         }
-        p.text("Status: " + statusString, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs*1.5f);
-        p.text("Strength: "+pcStrength, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2.5f);
+        p.text("Status: " + statusString, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 1.5f);
+        p.text("Strength: " + pcStrength, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2.5f);
 
         renderConnector(x + w / 2, bodyY, false, "");
         output_connectorPoint.render();
@@ -183,7 +183,6 @@ public class Node<T> {
         curTime = System.nanoTime() / 1000000000;
         if (curTime - lastLogTime > mainActivity.getShortTimeIntervall()) {
             checkForSignsOfLife();
-            p.println("checked");
             lastLogTime = curTime;
         }
 
@@ -192,7 +191,7 @@ public class Node<T> {
     public void checkForSignsOfLife() {
         pcStatus = getPCStatus();
         setIsReady(pcStatus < 2);
-        
+
         checkPCStrength();
     }
 
@@ -245,14 +244,15 @@ public class Node<T> {
 
                 } else {
                     JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
-                    try{
-                    int loadedPcStrength = Integer.parseInt(jsonObject.getAsJsonObject("Strength").get(pcAlias).getAsString());
-                    if(loadedPcStrength>=0) {
-                    pcStrength=loadedPcStrength;
-                    }
-                    }catch (Exception e) {
+                    try {
+                        int loadedPcStrength = Integer.parseInt(jsonObject.getAsJsonObject("Strength").get(pcAlias).getAsString());
+                        if (loadedPcStrength >= 0) {
+                            pcStrength = loadedPcStrength;
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
-                    }   
+                        p.println(id);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -754,6 +754,10 @@ public class Node<T> {
 
     public PictogramImage getTypePicto() {
         return type_picto;
+    }
+
+    public void setPCStrength(int setStrength) {
+        pcStrength = setStrength;
     }
 
     public void setPos(int xp, int yp) {

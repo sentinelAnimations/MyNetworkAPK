@@ -27,11 +27,9 @@ public class FileInteractionHelper {
 		} else {
 			parent = targetFile.getParentFile();
 		}
-		p.println(parent.getAbsolutePath());
 		if (!parent.exists() && !parent.mkdirs()) {
 			throw new IllegalStateException("Couldn't create dir: " + parent);
 		} else {
-			p.println(parent.getAbsolutePath(),"----");
 			parent.mkdirs();
 			parentFoldersCreated = true;
 		}
@@ -86,7 +84,7 @@ public class FileInteractionHelper {
 					try {
 						Files.copy(oldFile, newFile);
 					} catch (IOException e) {
-						p.println(e);
+					    e.printStackTrace();
 					}
 				}
 			}
@@ -103,7 +101,6 @@ public class FileInteractionHelper {
 		if (allInPathsDeleteFolder.size() > 1) {
 			PApplet.println("data in folder");
 		}
-		p.println(allInPathsDeleteFolder);
 		for (int i = allInPathsDeleteFolder.size() - 1; i >= 0; i--) {
 			File curFile = new File(allInPathsDeleteFolder.get(i));
 			curFile.delete();

@@ -17,7 +17,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 public class NodeEditor<T> {
-    private int mode,nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH, screenX, screenY, prevScreenX, prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, red, doOnceOnPressed = 0, doOnceOnStart = 0;
+    private int mode, nodeW, nodeH, panViewStartX, panViewStartY, nodeAdderBoxW, nodeAdderBoxH, screenX, screenY, prevScreenX, prevScreenY, btnSize, btnSizeSmall, gridSize, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, red, doOnceOnPressed = 0, doOnceOnStart = 0;
     private float textYShift;
     private Boolean renderNodeMenu = false, mouseIsPressed = false, middleMouseWasPressed = false, isSetup = false;
     private String mySavePath;
@@ -39,9 +39,9 @@ public class NodeEditor<T> {
     private JSONArray loadedData = new JSONArray();
     private FileInteractionHelper fileInteractionHelper;
 
-    public NodeEditor(PApplet p,int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int red, float textYShift, String mySavePath, String[] buttonPaths, String[] nodePaths1, String[] nodePaths2, PFont stdFont) {
-    	this.mode=mode;
-    	this.btnSize = btnSize;
+    public NodeEditor(PApplet p, int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int red, float textYShift, String mySavePath, String[] buttonPaths, String[] nodePaths1, String[] nodePaths2, PFont stdFont) {
+        this.mode = mode;
+        this.btnSize = btnSize;
         this.btnSizeSmall = btnSizeSmall;
         this.margin = margin;
         this.stdTs = stdTs;
@@ -414,6 +414,7 @@ public class NodeEditor<T> {
                     nodeDetails.put("selectPc_dropdownItem", n.getPcSelection_DropdownMenu().getSelectedItem());
                     nodeDetails.put("useCpu_checkbox", n.getCheckoxes()[0].getIsChecked());
                     nodeDetails.put("useGpu_checkbox", n.getCheckoxes()[1].getIsChecked());
+                    nodeDetails.put("pcStrength", n.getPCStrength());
                 }
 
                 if (n.getType() == 3) {
@@ -487,6 +488,7 @@ public class NodeEditor<T> {
                     int xp = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("posX").getAsString()));
                     int yp = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("posY").getAsString()));
                     int selectPc_dropdown = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("selectPc_dropdown").getAsString()));
+                    int pcStrength = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("pcStrength").getAsString()));
                     Boolean isConnectorPointConnected = Boolean.parseBoolean((jsonObject.getAsJsonObject("Node" + i).get("connectorPointIsConnected").getAsString()));
                     Boolean useCpuCheckbox = Boolean.parseBoolean((jsonObject.getAsJsonObject("Node" + i).get("useCpu_checkbox").getAsString()));
                     Boolean useGpuCheckbox = Boolean.parseBoolean((jsonObject.getAsJsonObject("Node" + i).get("useGpu_checkbox").getAsString()));
@@ -494,6 +496,8 @@ public class NodeEditor<T> {
 
                     nodes.add(new Node(p, xp, yp, nodeW, nh, nodeType, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, light, textCol, textDark, lighter, lightest, border, red, textYShift, nodeId, connectorPointId, nodePaths2, stdFont, this));
                     Node<T> n = nodes.get(nodes.size() - 1);
+
+                    n.setPCStrength(pcStrength);
                     n.setIsGrabbed(false);
                     n.getOutputConnectorPoint().setIsConnected(isConnectorPointConnected);
                     if (isConnectorPointConnected) {
@@ -504,14 +508,17 @@ public class NodeEditor<T> {
 
                     String[] allFoldersInPcFolder = fileInteractionHelper.getFoldersAndFiles(mainActivity.getPathToPCFolder(), true);
                     if (selectPc_dropdown >= 0) {
-                        if (selectPc_dropdown < n.getPcSelection_DropdownMenu().getList().length) {
-                            if (allFoldersInPcFolder[selectPc_dropdown].toUpperCase().equals(selectPc_dropdownItem.toUpperCase())) {
-                                n.getPcSelection_DropdownMenu().setIsSelected(selectPc_dropdown);
+                        for (int i2 = 0; i2 < allFoldersInPcFolder.length; i2++) {
+                            if (allFoldersInPcFolder[i2].toUpperCase().equals(selectPc_dropdownItem.toUpperCase())) {
+                                n.getPcSelection_DropdownMenu().setSelectedInd(i2);
+                                break;
                             } else {
-                                n.setIsReady(false);
+                                if (i2 == allFoldersInPcFolder.length - 1) {
+                                    n.setIsReady(false);
+                                    n.getPcSelection_DropdownMenu().setSelectedInd(-1);
+                                }
                             }
-                        } else {
-                            n.setIsReady(false);
+
                         }
                     }
 
@@ -762,9 +769,11 @@ public class NodeEditor<T> {
     public void addConnectorPoint(PApplet _p, int _type, int _x, int _y, int _r, int _strWeight, int _col, Boolean _isParented, int[] _connectableTypes, String _id, String _parentId, T _parent) {
         connectorPoints.add(new ConnectorPoint(_p, _type, _x, _y, _r, _strWeight, _col, _isParented, _connectableTypes, _id, _parentId, _parent));
     }
+
     public int getMode() {
-    	return mode;
+        return mode;
     }
+
     public ArrayList getNodes() {
         return nodes;
     }

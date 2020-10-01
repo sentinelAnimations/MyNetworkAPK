@@ -72,7 +72,9 @@ public class DropdownMenu<T> implements Widgets {
         p.textSize(stdTs);
         if (isSelected) {
             p.fill(textCol);
+            if(!selectedIndIsOutOfBounds()) {
             p.text(displList[selectedInd], x - w / 2 + margin, y - stdTs * textYShift);
+            }
         } else {
             p.fill(textDark);
             p.text(title, x - w / 2 + margin, y - stdTs * textYShift);
@@ -165,7 +167,11 @@ public class DropdownMenu<T> implements Widgets {
                         isUnfolded = false;
                         unfold = false;
                         dropdown_btn.setPicto(pictoPaths[0]);
+                        if(!selectedIndIsOutOfBounds()) {
                         hoverText.setInfoText(list[selectedInd]);
+                        }else {
+                            hoverText.setInfoText("");
+                        }
                     }
                 }
             }
@@ -291,7 +297,7 @@ public class DropdownMenu<T> implements Widgets {
     }
 
     public int getSelectedInd() {
-        if (isSelected) {
+        if (isSelected && !selectedIndIsOutOfBounds()) {
             return selectedInd;
         } else {
             return -1;
@@ -306,17 +312,24 @@ public class DropdownMenu<T> implements Widgets {
         return isSelected;
     }
 
-    public void setIsSelected(int selInd) {
+    public void setSelectedInd(int selInd) {
         isSelected = true;
         selectedInd = selInd;
     }
-
+    private Boolean selectedIndIsOutOfBounds() {
+        if(selectedInd<0 || selectedInd>=list.length) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     public Boolean getIsUnfolded() {
         return isUnfolded;
     }
 
     public String getSelectedItem() {
-        if (isSelected) {
+        if (isSelected && !selectedIndIsOutOfBounds()) {
             return list[selectedInd];
         } else {
             return "";
