@@ -2,9 +2,9 @@ package com.dominic.network_apk;
 
 import processing.core.PApplet;
 
-public class TxtStringLoader {
+public class TxtStringHelper {
 	PApplet p;
-	public TxtStringLoader(PApplet p) {
+	public TxtStringHelper(PApplet p) {
 		this.p=p;
 	}
 	

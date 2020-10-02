@@ -50,7 +50,7 @@ public class QuestionScreen {
         
         searchBar = new SearchBar(p, p.width / 2, mainButtons[0].getY() + mainButtons[0].getH() / 2 + margin + btnSizeSmall / 2 + btnSize, p.width - btnSize * 2, btnSizeSmall, edgeRad, margin, stdTs, textCol, textDark, light, textYShift, false, "Search", pictoPaths[0], stdFont, null);
 
-        String s = new TxtStringLoader(p).getStringFromFile("textSources/questionsScreen_Answers.txt");
+        String s = new TxtStringHelper(p).getStringFromFile("textSources/questionsScreen_Answers.txt");
 
         answers_TextField = new TextField(p, p.width / 2, searchBar.getY() + (p.height - (searchBar.getY() + searchBar.getH() / 2 + margin)) / 2, searchBar.getW(), p.height - (searchBar.getY() + searchBar.getH() / 2 + margin) - btnSize, stdTs, margin, btnSizeSmall, edgeRad, dark, light, lighter, textCol, textYShift, true, false, true, s, stdFont, null);
         

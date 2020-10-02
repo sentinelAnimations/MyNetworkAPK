@@ -1,7 +1,12 @@
 package com.dominic.network_apk;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,12 +21,12 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 public class HomeScreenSlaves {
-    private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, pcStrength = -1, strengthTestStatus = -1;
+    private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, pcStrength = -1, strengthTestStatus = -1, cpuCores;
     private int renderMode; // rendermode --> 0=render files, 1=render on
                             // sheepit,2=sleeping
     private float textYShift;
-    private Boolean allWorking = true, startStrengthTest = false,finishedTesting=false;
-    private String pathToCloud, pcAlias, pcFolderName;
+    private Boolean allWorking = true, startStrengthTest = false, finishedTesting = false;
+    private String pathToCloud, pcAlias, pcFolderName, cpuName, gpuName;
     private String[] pictoPaths;
     private long curTime, lastLogTime, lastLogTime2;
     private PFont stdFont;
@@ -83,6 +88,10 @@ public class HomeScreenSlaves {
             pcAlias = "";
         }
 
+        cpuName = getCPUName();
+        gpuName = getGPUName();
+        cpuCores = Runtime.getRuntime().availableProcessors();
+
         jsonHelper = new JsonHelper(p);
     }
 
@@ -124,9 +133,9 @@ public class HomeScreenSlaves {
             if (startStrengthTest) {
                 checkIfStrengthTestIsFinished();
             }
-            lastLogTime2=curTime;
+            lastLogTime2 = curTime;
         }
-        
+
         if (startStrengthTest) {
             if (strengthTestStatus != 0) {
                 startStrengthTest();
@@ -145,14 +154,14 @@ public class HomeScreenSlaves {
         settingsDetails.put("readableTime", timeField.getTimeString());
         settingsDetails.put("renderMode", renderMode);
         settingsDetails.put("strengthTestStatus", strengthTestStatus);
-        settingsDetails.put("cpuCores", Runtime.getRuntime().availableProcessors());
-        settingsDetails.put("cpuName", getCPUName());
-        settingsDetails.put("gpuName", getGPUName());
+        settingsDetails.put("cpuCores", cpuCores);
+        settingsDetails.put("cpuName", cpuName);
+        settingsDetails.put("gpuName", gpuName);
         p.println(finishedTesting);
         if (finishedTesting) {
             settingsDetails.put("pcStrength", pcStrength);
             finishedTesting = false;
-            startStrengthTest=false;
+            startStrengthTest = false;
         }
         settingsObject.put("SystemLog", settingsDetails);
 
@@ -196,14 +205,14 @@ public class HomeScreenSlaves {
 
     private void startStrengthTest() {
         p.println("started strengthTestStatus");
-        String message="Strength test started";
-        makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, message.length() * 3, light, textCol, textYShift, false,message, stdFont, null));
+        String message = "Strength test started";
+        makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, message.length() * 3, light, textCol, textYShift, false, message, stdFont, null));
 
     }
 
     private void checkIfStrengthTestIsFinished() {
         finishedTesting = false;
-        finishedTesting=true;
+        finishedTesting = true;
     }
 
     public void onMousePressed(int mouseButton) {
@@ -233,18 +242,76 @@ public class HomeScreenSlaves {
     }
 
     private String getCPUName() {
-        String cpuName = "cpuName";
-        try {
+        String cpuName = "";
+        String[][] commands = new String[][] { { "CMD", "/C", "WMIC cpu get Name" } };
 
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        for (int i = 0; i < commands.length; i++) {
+            try {
+                String[] com = commands[i];
+                Process process = Runtime.getRuntime().exec(com);
+                process.getOutputStream().close();
+                // Closing output stream of the process
+                System.out.println();
+                String s = null;
+                // Reading sucessful output of the command
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                while ((s = reader.readLine()) != null) {
+                    String[] m1 = p.match(s.toUpperCase(), "NAME");
+                    if (s.length() > 0 && m1 == null) {
+                        p.println(s, "--");
+                        cpuName = s;
+                    }
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                cpuName = "";
+            }
         }
         return cpuName;
     }
 
     private String getGPUName() {
-        String gpuName = "gpuName";
+        String gpuName = "";
+
+        try {
+
+            // String filePath =
+            // mainActivity.getHomeScreenSlavePath()+"\\SystemInformations.txt";
+            // String
+            // filePath="C:\\Users\\domin\\Documents\\Processing\\SystemInformations.txt";
+
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+           // InputStream is = classloader.getResourceAsStream(mainActivity.getHomeScreenSlavePath() + "\\SystemInformations.txt");
+            InputStream is = classloader.getResourceAsStream("C:\\Users\\domin\\Documents\\Processing"+ "\\SystemInformations.txt");
+            String filePath = new java.io.BufferedInputStream(is).toString();
+            //filePath=new java.io.BufferedInputStream(is);
+            // new
+            // FileInteractionHelper(p).createParentFolders(mainActivity.getHomeScreenSlavePath());
+            // String filePath =
+            // getClass().getResource(mainActivity.getHomeScreenSlavePath() +
+            // "\\SystemInformations.txt").getPath();
+            
+            FileWriter file = new FileWriter("C:\\Users\\domin\\Documents\\Processing"+ "\\SystemInformations.txt");
+
+            p.println(filePath, is, "--", new java.io.BufferedInputStream(is));
+            // Use "dxdiag /t" variant to redirect output to a given file
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "dxdiag", "/t", filePath);
+            Process proc = pb.start();
+            proc.waitFor();
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line;
+            p.println(String.format("-- Printing %1$1s info --", filePath));
+            while ((line = br.readLine()) != null) {
+                if (line.trim().startsWith("Card name:")) {
+                    System.out.println(line.trim());
+                    gpuName = line.trim();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         return gpuName;
     }
 }
