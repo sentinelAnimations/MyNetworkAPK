@@ -104,7 +104,7 @@ public class StrengthTestScreen {
             }
         }
 
-        // update PCList---------------------------------------------
+        // update PCList & check for finished---------------------------------------------
         if (allConnectedNodes.size() > 0) {
             curTime = System.nanoTime() / 1000000000;
             if (curTime - prevTime > mainActivity.getSuperShortTimeIntervall()) {
@@ -123,7 +123,7 @@ public class StrengthTestScreen {
                 prevTime = curTime;
             }
         }
-        // update PCList---------------------------------------------
+        // update PCList & check for finished---------------------------------------------
 
         // handle buttons---------------------------------------------
         if (startTest_ImageButton.getIsClicked()) {
@@ -165,7 +165,7 @@ public class StrengthTestScreen {
         }
         // give command to all pcs to do test -----------------------------
     }
-
+    
     private void checkForFinished() {
         ArrayList<Node> respondingPCs = new ArrayList<>();
         ArrayList<Node> finishedPCs = new ArrayList<>();

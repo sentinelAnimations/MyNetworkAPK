@@ -2,6 +2,7 @@ package com.dominic.network_apk;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,6 +17,15 @@ public class FileInteractionHelper {
 
 	public FileInteractionHelper(PApplet p) {
 		this.p = p;
+	}
+
+	public String getAbsolutePath(String relativeFilePath) {
+		try {
+			return FileSystems.getDefault().getPath(relativeFilePath).normalize().toAbsolutePath().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
 
 	public Boolean createParentFolders(String pathToFile) {
@@ -39,6 +49,7 @@ public class FileInteractionHelper {
 	public Boolean copyFile(String copyFolderPath, String destination) {
 		Boolean isCopied = false;
 		try {
+			createParentFolders(destination);
 			Files.copy(new File(copyFolderPath).toPath(), new File(destination).toPath());
 			isCopied = true;
 		} catch (Exception e) {
@@ -84,7 +95,7 @@ public class FileInteractionHelper {
 					try {
 						Files.copy(oldFile, newFile);
 					} catch (IOException e) {
-					    e.printStackTrace();
+						e.printStackTrace();
 					}
 				}
 			}
@@ -193,4 +204,5 @@ public class FileInteractionHelper {
 
 		return cleanPath;
 	}
+
 }
