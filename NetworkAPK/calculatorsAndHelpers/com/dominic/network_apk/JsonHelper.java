@@ -60,7 +60,7 @@ public class JsonHelper {
 	private void readData(String path) throws Exception {
 		JSONParser jsonParser = new JSONParser();
 		isFlawlessLoaded = false;
-		
+		loadedData=new JSONArray();
 		try (FileReader reader = new FileReader(path)) {
 			isFlawlessLoaded = true;
 			Object obj = jsonParser.parse(reader); 

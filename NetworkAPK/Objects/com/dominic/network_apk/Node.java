@@ -13,7 +13,7 @@ import processing.core.PFont;
 
 public class Node<T> {
 
-    private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus = 2, pcStrength = 100;
+    private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus = 2, pcStrengthCPU = 100,pcStrengthGPU=100;
     private float textYShift;
     private Boolean isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false, isReady = true;
     private String id, cpuText = "CPU threads: 0", gpuText = "GPUs: 0";
@@ -174,7 +174,8 @@ public class Node<T> {
             statusString = pcStatusStrings[pcStatus];
         }
         p.text("Status: " + statusString, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 1.5f);
-        p.text("Strength: " + pcStrength, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2.5f);
+        p.text("Strength CPU: " + pcStrengthCPU, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2.5f);
+        p.text("Strength GPU: " + pcStrengthGPU, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 3.5f);
 
         renderConnector(x + w / 2, bodyY, false, "");
         output_connectorPoint.render();
@@ -191,12 +192,10 @@ public class Node<T> {
     public void checkForSignsOfLife() {
         pcStatus = getPCStatus();
         setIsReady(pcStatus < 2);
-
-        checkPCStrength();
     }
 
     private int getPCStatus() {
-        int calculatedPcStatus = -1;
+        int calculatedPcStatus = 2;
         Boolean pcIsAlive = true;
         String pcAlias = pcSelection_DropdownMenu.getSelectedItem();
         try {
@@ -232,33 +231,6 @@ public class Node<T> {
             e.printStackTrace();
         }
         return calculatedPcStatus;
-    }
-
-    private void checkPCStrength() {
-        int calculatedPcStatus = -1;
-        Boolean pcIsAlive = true;
-        String pcAlias = pcSelection_DropdownMenu.getSelectedItem();
-        try {
-            if (pcAlias.length() > 0) {
-                JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getMyStrengthTestPath());
-                if (loadedSettingsData.isEmpty()) {
-
-                } else {
-                    JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
-                    try {
-                        int loadedPcStrength = Integer.parseInt(jsonObject.getAsJsonObject("Strength").get(pcAlias).getAsString());
-                        if (loadedPcStrength >= 0) {
-                            pcStrength = loadedPcStrength;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        p.println(id);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void renderTypeSwitch() {
@@ -728,8 +700,12 @@ public class Node<T> {
         }
     }
 
-    public int getPCStrength() {
-        return pcStrength;
+    public int getPCStrengthCPU() {
+        return pcStrengthCPU;
+    }
+    
+    public int getPCStrengthGPU() {
+        return pcStrengthGPU;
     }
 
     public String[] getPCStatusStrings() {
@@ -757,8 +733,12 @@ public class Node<T> {
         return type_picto;
     }
 
-    public void setPCStrength(int setStrength) {
-        pcStrength = setStrength;
+    public void setPCStrengthCPU(int setStrengthCPU) {
+        pcStrengthCPU = setStrengthCPU;
+    }
+    
+    public void setPCStrengthGPU(int setStrengthGPU) {
+        pcStrengthGPU = setStrengthGPU;
     }
 
     public void setPos(int xp, int yp) {
@@ -775,6 +755,8 @@ public class Node<T> {
             type_picto.setCol(textCol);
         } else {
             type_picto.setCol(red);
+            pcStrengthCPU=-1;
+            pcStrengthGPU=-1;
         }
     }
 

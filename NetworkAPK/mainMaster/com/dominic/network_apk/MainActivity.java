@@ -73,7 +73,7 @@ public class MainActivity extends PApplet {
 
     // Save paths ----------------------
     // Local -----------
-    private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json",homeScreenSlavePath="localOutput/homeScreenSlave",strengthTestBlendfilePath="localOutput/homeScreenSlave/blendFiles";
+    private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles";
     // Local -----------
     // File names -------
     private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
@@ -813,13 +813,15 @@ public class MainActivity extends PApplet {
     public String getPathToBlenderRenderFolder() {
         return getPathToCloud() + "\\" + blenderRenderFilesFolderName;
     }
-    
+
     public String getHomeScreenSlavePath() {
         return homeScreenSlavePath;
     }
+
     public String getStrengthTestBlendfilePath() {
-    	return strengthTestBlendfilePath;
+        return strengthTestBlendfilePath;
     }
+
     public String[] getModeNamesMaster() {
         return modeNamesMaster;
     }

@@ -287,7 +287,11 @@ public class SettingsScreen {
                     ps.setPath(t);
                     if (ps.getPath().length() > 0 == false) {
                         mainActivity.getLoadingScreen().setIsFirstSetup(true);
+                        if(mainActivity.getIsMaster()) {
                         mainActivity.setMode(3);
+                        }else {
+                            mainActivity.setMode(2);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

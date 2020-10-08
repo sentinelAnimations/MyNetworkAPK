@@ -15,10 +15,10 @@ public class StrengthTestScreen {
     private float textYShift;
     private Boolean fileExplorerIsOpen = false, startedTest = false;
     private String mySavePath;
-    private String[] pictoPaths, hoLiPictoPaths, startList = {}, allPCNames;
+    private String[] pictoPaths, hoLiPictoPaths, startList = {}, allPCNames, pcListTexts;
     private float[] listX, listW;
-    private int[] allPCStatus, allPCStrengths;
-    private long curTime, prevTime;
+    private int[] allPCStatus, allPCStrengthsCPU, allPCStrengthsGPU;
+    private long curTime, prevTime, prevTime2;
     private PFont stdFont;
     private PApplet p;
     private HorizontalList strengthTest_HorizontalList;
@@ -27,6 +27,7 @@ public class StrengthTestScreen {
     private ImageButton[] mainButtons;
     private ArrayList<Node> allConnectedNodes = new ArrayList<>();
     private JsonHelper jsonHelper;
+    private FileInteractionHelper fileInteractionHelper;
     private Thread strengthTestThread, checkForFinishedThread;
 
     public StrengthTestScreen(PApplet p, int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int red, int green, float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, PFont stdFont) {
@@ -60,6 +61,7 @@ public class StrengthTestScreen {
             mainButtons = mainActivity.getMainButtonsSlave();
         }
         jsonHelper = new JsonHelper(p);
+        fileInteractionHelper = new FileInteractionHelper(p);
         setupAll();
         controllStrengthTest(false);
 
@@ -95,8 +97,16 @@ public class StrengthTestScreen {
                     } else {
                         p.stroke(red);
                     }
-                    p.noFill();
+
+                    p.fill(lighter);
                     p.rect(listX[i], strengthTest_HorizontalList.getY(), listW[i], strengthTest_HorizontalList.getH() - margin * 2, edgeRad);
+                    if (pcListTexts != null) {
+                        p.fill(textCol);
+                        p.textFont(stdFont);
+                        p.textSize(stdTs);
+                        p.textAlign(p.CENTER,p.CENTER);
+                            p.text(pcListTexts[i], listX[i], strengthTest_HorizontalList.getY());
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -104,7 +114,8 @@ public class StrengthTestScreen {
             }
         }
 
-        // update PCList & check for finished---------------------------------------------
+        // update PCList & check for
+        // finished---------------------------------------------
         if (allConnectedNodes.size() > 0) {
             curTime = System.nanoTime() / 1000000000;
             if (curTime - prevTime > mainActivity.getSuperShortTimeIntervall()) {
@@ -123,8 +134,13 @@ public class StrengthTestScreen {
                 prevTime = curTime;
             }
         }
-        // update PCList & check for finished---------------------------------------------
-
+        // update PCList & check for
+        // finished---------------------------------------------
+        // log data---------------------------------
+        if (curTime - prevTime2 > mainActivity.getShortTimeIntervall()) {
+            prevTime2 = curTime;
+        }
+        // log data---------------------------------
         // handle buttons---------------------------------------------
         if (startTest_ImageButton.getIsClicked()) {
             strengthTestThread = new Thread(new Runnable() {
@@ -165,7 +181,7 @@ public class StrengthTestScreen {
         }
         // give command to all pcs to do test -----------------------------
     }
-    
+
     private void checkForFinished() {
         ArrayList<Node> respondingPCs = new ArrayList<>();
         ArrayList<Node> finishedPCs = new ArrayList<>();
@@ -174,24 +190,27 @@ public class StrengthTestScreen {
             Node n = allConnectedNodes.get(i);
             if (allPCStatus[i] < 2) {
                 respondingPCs.add(n);
-                JSONArray loadedData = jsonHelper.getData(mainActivity.getPathToCloud() + "\\"+mainActivity.getPCFolderName()+"\\" + n.getPcSelection_DropdownMenu().getSelectedItem() + "\\" + mainActivity.getLogFileName());
+                String jsonPath = mainActivity.getPathToCloud() + "\\" + mainActivity.getPCFolderName() + "\\" + n.getPcSelection_DropdownMenu().getSelectedItem() + "\\" + mainActivity.getLogFileName();
+                p.println(jsonPath);
+                JSONArray loadedData = jsonHelper.getData(jsonPath);
                 if (loadedData.isEmpty()) {
                 } else {
                     try {
-                        String modeName = mainActivity.getModeNamesMaster()[0];
                         JSONObject loadedObject = (JSONObject) (loadedData.get(0));
-                        loadedObject = (JSONObject) loadedObject.get(modeName);
+                        loadedObject = (JSONObject) loadedObject.get("SystemLog");
 
                         int strengthTestStatus = Integer.parseInt(loadedObject.get("strengthTestStatus").toString());
-                        int pcStrength = Integer.parseInt(loadedObject.get("pcStrength").toString());
-                        p.println(n.getPcSelection_DropdownMenu().getSelectedItem(), strengthTestStatus);
+                        int pcStrengthCPU = Integer.parseInt(loadedObject.get("pcStrengthCPU").toString());
+                        int pcStrengthGPU = Integer.parseInt(loadedObject.get("pcStrengthGPU").toString());
+
                         if (strengthTestStatus == 0) {
                             p.println("started");
-                            allPCStrengths[i] = -1;
+                            allPCStrengthsCPU[i] = -1;
+                            allPCStrengthsGPU[i] = -1;
                         }
                         if (strengthTestStatus == 1) {
-                            p.println("finished sucessfull");
-                            allPCStrengths[i] = pcStrength;
+                            allPCStrengthsCPU[i] = pcStrengthCPU;
+                            allPCStrengthsGPU[i] = pcStrengthGPU;
                             finishedPCs.add(n);
                         }
                         if (strengthTestStatus == 2) {
@@ -200,39 +219,53 @@ public class StrengthTestScreen {
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        allPCStrengths[i]=-1;
+                        allPCStrengthsCPU[i] = -1;
+                        allPCStrengthsGPU[i] = -1;
+
                     }
                 }
             } else {
-                allPCStrengths[i] = -1;
+                allPCStrengthsCPU[i] = -1;
+                allPCStrengthsGPU[i] = -1;
             }
         }
 
         if (respondingPCs.size() == finishedPCs.size()) {
             for (int i = 0; i < allConnectedNodes.size(); i++) {
                 Node n = allConnectedNodes.get(i);
-                n.setPCStrength(allPCStrengths[i]);
+                n.setPCStrengthCPU(allPCStrengthsCPU[i]);
+                n.setPCStrengthGPU(allPCStrengthsGPU[i]);
+                p.println(allPCStrengthsCPU[i], allPCStrengthsGPU[i], "strength");
             }
+            controllStrengthTest(false);
+            mainActivity.getNodeEditor().saveNodeEditor();
         }
     }
 
     private void updateLists() {
+        p.println("update list");
         if (allConnectedNodes.size() > 0) {
-            String[] pcList=new String[allConnectedNodes.size()];
+            pcListTexts = new String[allConnectedNodes.size()];
             for (int i = 0; i < strengthTest_HorizontalList.getList().length; i++) {
                 Node n = allConnectedNodes.get(i);
                 n.checkForSignsOfLife();
 
-                    allPCStatus[i] = n.getPcStatus();
-                    allPCNames[i] = n.getPcSelection_DropdownMenu().getSelectedItem();
-                    allPCStrengths[i] = n.getPCStrength();
-                    String pcStrengthStr="";
-                    if(allPCStrengths[i]<0) {
-                        pcStrengthStr= "Untested";
-                    }else {
-                        pcStrengthStr=p.str(allPCStrengths[i])+"%";
-                    }
-                    pcList[i]="Strength of "+allPCNames[i]+": ";
+                allPCStatus[i] = n.getPcStatus();
+                allPCNames[i] = n.getPcSelection_DropdownMenu().getSelectedItem();
+                allPCStrengthsCPU[i] = n.getPCStrengthCPU();
+                allPCStrengthsGPU[i] = n.getPCStrengthGPU();
+                if(allPCNames[i].length()>0==false) {
+                    allPCNames[i]="Name unknown";
+                }
+                String pcStrengthStrCPU = "", pcStrengthStrGPU = "";
+                if (allPCStrengthsCPU[i] < 0) {
+                    pcStrengthStrCPU = "Untested";
+                    pcStrengthStrGPU = "Untested";
+                } else {
+                    pcStrengthStrCPU = p.str(allPCStrengthsCPU[i]) + "%";
+                    pcStrengthStrGPU = p.str(allPCStrengthsGPU[i]) + "%";
+                }
+                pcListTexts[i] = allPCNames[i] + "\nCPU: " + pcStrengthStrCPU + "  |  GPU: " + pcStrengthStrGPU;
             }
         }
     }
@@ -274,12 +307,13 @@ public class StrengthTestScreen {
         if (allConnectedNodes.size() > 0) {
             startList = new String[allConnectedNodes.size()];
             for (int i = 0; i < startList.length; i++) {
-                startList[i] = "Strength of PC: untested!";
+                startList[i] = "------------------------------------";
             }
         }
         allPCStatus = new int[allConnectedNodes.size()];
         allPCNames = new String[allConnectedNodes.size()];
-        allPCStrengths = new int[allConnectedNodes.size()];
+        allPCStrengthsCPU = new int[allConnectedNodes.size()];
+        allPCStrengthsGPU = new int[allConnectedNodes.size()];
 
         String descriptionText = "Connected computers";
         strengthTest_HorizontalList = new HorizontalList(p, p.width / 2 - btnSize / 2 - margin / 2, p.height / 2, p.width - margin * 3 - btnSize, btnSize, margin, edgeRad, stdTs, (int) p.textWidth(descriptionText) + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, false, false, descriptionText, hoLiPictoPaths, startList, stdFont, null);

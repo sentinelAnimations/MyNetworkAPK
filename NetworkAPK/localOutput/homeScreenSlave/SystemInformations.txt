@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 10/6/2020, 16:42:19
+      Time of this report: 10/8/2020, 12:01:57
              Machine name: SLAVE003
                Machine Id: {50D328C5-3D2F-42B2-BEB5-414423A55AEF}
          Operating System: Windows 10 Home 64-bit (10.0, Build 18363) (18362.19h1_release.190318-1202)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz (4 CPUs), ~2.4GHz
                    Memory: 8192MB RAM
       Available OS Memory: 8056MB RAM
-                Page File: 4353MB used, 4983MB available
+                Page File: 9376MB used, 1831MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -260,6 +260,27 @@ Poll w/ Interrupt: No
 -----------
 USB Devices
 -----------
++ USB-Root-Hub (USB 3.0)
+| Vendor/Product ID: 0x8086, 0x9D2F
+| Matching Device ID: USB\ROOT_HUB30
+| Service: USBHUB3
+| Driver: USBHUB3.SYS, 5/26/2020 21:06:06, 634680 bytes
+| 
++-+ USB-Eingabegerät
+| | Vendor/Product ID: 0x05AC, 0x0304
+| | Location: Port_#0002.Hub_#0001
+| | Matching Device ID: USB\Class_03&SubClass_01
+| | Service: HidUsb
+| | Driver: hidusb.sys, 10/7/2019 04:55:39, 45568 bytes
+| | Driver: hidclass.sys, 10/7/2019 04:55:39, 211968 bytes
+| | Driver: hidparse.sys, 10/7/2019 04:55:39, 46080 bytes
+| | 
+| +-+ Apple Mighty Mouse
+| | | Vendor/Product ID: 0x05AC, 0x0304
+| | | Matching Device ID: HID\VID_05AC&PID_0304
+| | | Service: mouhid
+| | | Driver: mouhid.sys, 3/19/2019 06:43:43, 35840 bytes
+| | | Driver: mouclass.sys, 3/19/2019 06:43:43, 66872 bytes
 
 ----------------
 Gameport Devices
@@ -285,7 +306,7 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 88.0 GB
+ Free Space: 80.0 GB
 Total Space: 243.4 GB
 File System: NTFS
       Model: SanDisk SD8SNAT256G1002
@@ -1014,7 +1035,7 @@ Disabled Media Sources
 ---------------
 EVR Power Information
 ---------------
-Current Setting: {651288E5-A7ED-4076-A96B-6CC62D848FE1} (Balanced)
+Current Setting: {5C67A112-A4C9-483F-B4A7-1D473BECAFDC} (Quality) 
   Quality Flags: 2576
     Enabled:
     Force throttling
@@ -1042,6 +1063,74 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
+Fehlerbucket 1886328981458994930, Typ 5
+Ereignisname: RADAR_PRE_LEAK_64
+Antwort: Nicht verfügbar
+CAB-Datei-ID: 0
+
+Problemsignatur:
+P1: Unity.exe
+P2: 2019.4.11.38916
+P3: 10.0.18363.2.0.0
+P4: 
+P5: 
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+Angefügte Dateien:
+\\?\C:\Users\domin\AppData\Local\Temp\RDRA55A.tmp\empty.txt
+\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WERA56B.tmp.WERInternalMetadata.xml
+\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WERA57B.tmp.xml
+\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WERA5B8.tmp.csv
+\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WERA5F7.tmp.txt
+
+Diese Dateien befinden sich möglicherweise hier:
+
+
+Analysesymbol: 
+Es wird erneut nach einer Lösung gesucht: 0
+Berichts-ID: 30166a63-2282-4d21-907e-25a17699ff7c
+Berichtstatus: 268435456
+Bucket mit Hash: 51c625b4ade3377d7a2d9636e56346f2
+CAB-Datei-Guid: 0
++++ WER1 +++:
+Fehlerbucket 2007701873591096091, Typ 5
+Ereignisname: RADAR_PRE_LEAK_64
+Antwort: Nicht verfügbar
+CAB-Datei-ID: 0
+
+Problemsignatur:
+P1: GameMakerStudio.exe
+P2: 2.3.0.529
+P3: 10.0.18363.2.0.0
+P4: 
+P5: 
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+Angefügte Dateien:
+\\?\C:\Users\domin\AppData\Local\Temp\RDRCF23.tmp\empty.txt
+\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WERCF24.tmp.WERInternalMetadata.xml
+\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WERCF44.tmp.xml
+\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WERCF71.tmp.csv
+\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WERCFA1.tmp.txt
+
+Diese Dateien befinden sich möglicherweise hier:
+
+
+Analysesymbol: 
+Es wird erneut nach einer Lösung gesucht: 0
+Berichts-ID: 07a6e74e-aae8-48aa-b632-9d5794b3fed5
+Berichtstatus: 268435456
+Bucket mit Hash: 874283952a22f2e83bdcca377e48931b
+CAB-Datei-Guid: 0
++++ WER2 +++:
 Fehlerbucket 1386459204212999413, Typ 5
 Ereignisname: MoAppCrash
 Antwort: Nicht verfügbar
@@ -1077,7 +1166,7 @@ Berichts-ID: 4f27055f-45af-4c4e-97e6-2e160aafe1a4
 Berichtstatus: 268435456
 Bucket mit Hash: b9660041219de3bd333db14ceaafc4f5
 CAB-Datei-Guid: 0
-+++ WER1 +++:
++++ WER3 +++:
 Fehlerbucket , Typ 0
 Ereignisname: MoAppCrash
 Antwort: Nicht verfügbar
@@ -1113,7 +1202,7 @@ Berichts-ID: 4f27055f-45af-4c4e-97e6-2e160aafe1a4
 Berichtstatus: 4
 Bucket mit Hash: 
 CAB-Datei-Guid: 0
-+++ WER2 +++:
++++ WER4 +++:
 Fehlerbucket 1286383523507871388, Typ 5
 Ereignisname: RADAR_PRE_LEAK_64
 Antwort: Nicht verfügbar
@@ -1147,7 +1236,7 @@ Berichts-ID: 0f9972f0-4f78-4d30-bfd7-ffb2f0b289bf
 Berichtstatus: 268435456
 Bucket mit Hash: b656ec73dfca863bb1da26ffc39a1e9c
 CAB-Datei-Guid: 0
-+++ WER3 +++:
++++ WER5 +++:
 Fehlerbucket 1386459204212999413, Typ 5
 Ereignisname: MoAppCrash
 Antwort: Nicht verfügbar
@@ -1183,7 +1272,7 @@ Berichts-ID: 3776065c-69df-4ef4-8572-b223725468a9
 Berichtstatus: 268435462
 Bucket mit Hash: b9660041219de3bd333db14ceaafc4f5
 CAB-Datei-Guid: 0
-+++ WER4 +++:
++++ WER6 +++:
 Fehlerbucket , Typ 0
 Ereignisname: MoAppCrash
 Antwort: Nicht verfügbar
@@ -1219,7 +1308,7 @@ Berichts-ID: 3776065c-69df-4ef4-8572-b223725468a9
 Berichtstatus: 6
 Bucket mit Hash: 
 CAB-Datei-Guid: 0
-+++ WER5 +++:
++++ WER7 +++:
 Fehlerbucket , Typ 0
 Ereignisname: MoAppCrash
 Antwort: Nicht verfügbar
@@ -1255,7 +1344,7 @@ Berichts-ID: 3776065c-69df-4ef4-8572-b223725468a9
 Berichtstatus: 4
 Bucket mit Hash: 
 CAB-Datei-Guid: 0
-+++ WER6 +++:
++++ WER8 +++:
 Fehlerbucket 1755459182421342013, Typ 5
 Ereignisname: RADAR_PRE_LEAK_64
 Antwort: Nicht verfügbar
@@ -1289,7 +1378,7 @@ Berichts-ID: c3a477da-8641-42f3-8a5e-64825ec01fbb
 Berichtstatus: 268435456
 Bucket mit Hash: e114bab9b67b9c83385ca4d359ebf73d
 CAB-Datei-Guid: 0
-+++ WER7 +++:
++++ WER9 +++:
 Fehlerbucket , Typ 0
 Ereignisname: VisualStudioNonFatalErrors2
 Antwort: Nicht verfügbar
@@ -1318,71 +1407,4 @@ Es wird erneut nach einer Lösung gesucht: 0
 Berichts-ID: b6eb8a32-0a80-46b6-ae59-3be02622f5e7
 Berichtstatus: 268697600
 Bucket mit Hash: 
-CAB-Datei-Guid: 0
-+++ WER8 +++:
-Fehlerbucket 2223686785705839402, Typ 5
-Ereignisname: VisualStudioNonFatalErrors2
-Antwort: Nicht verfügbar
-CAB-Datei-ID: 0
-
-Problemsignatur:
-P1: devenv.exe
-P2: 16.7.30523.141
-P3: vs.extensionmanager.duplicateassetsinaddnewassetdata
-P4: _
-P5: Microsoft.VisualStudio.ExtensionManager.Implementation
-P6: Microsoft.VisualStudio.ExtensionManager.Shared.TelemetryLogger.PostFault
-P7: _
-P8: _
-P9: _
-P10: _
-
-Angefügte Dateien:
-\\?\C:\Users\domin\AppData\Local\Temp\VSFaultInfo\201005_105704_1269547\ErrorInformation.txt
-\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER4CA6.tmp.WERInternalMetadata.xml
-\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER4CD6.tmp.xml
-\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER4D04.tmp.csv
-\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER4D24.tmp.txt
-
-Diese Dateien befinden sich möglicherweise hier:
-\\?\C:\ProgramData\Microsoft\Windows\WER\ReportArchive\NonCritical_devenv.exe_3462fa17cfcfde95e6a2d241c9fa87539f33d_00000000_b6eb8a32-0a80-46b6-ae59-3be02622f5e7
-
-Analysesymbol: 
-Es wird erneut nach einer Lösung gesucht: 0
-Berichts-ID: b6eb8a32-0a80-46b6-ae59-3be02622f5e7
-Berichtstatus: 268435456
-Bucket mit Hash: 8d2b15df5b051c4b6edc1f5999ba0b2a
-CAB-Datei-Guid: 0
-+++ WER9 +++:
-Fehlerbucket 1878258632852508872, Typ 5
-Ereignisname: StoreAgentScanForUpdatesFailure0
-Antwort: Nicht verfügbar
-CAB-Datei-ID: 0
-
-Problemsignatur:
-P1: Update;
-P2: 8024402c
-P3: 18363
-P4: 1082
-P5: Windows.Desktop
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-Angefügte Dateien:
-\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER2D4D.tmp.WERInternalMetadata.xml
-\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER2D5D.tmp.xml
-\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER2D81.tmp.csv
-\\?\C:\ProgramData\Microsoft\Windows\WER\Temp\WER2DA1.tmp.txt
-
-Diese Dateien befinden sich möglicherweise hier:
-\\?\C:\ProgramData\Microsoft\Windows\WER\ReportArchive\NonCritical_Update;_d89f6c6899cefbfe6ee57ff0e77df71c7e26e20_00000000_9d53a943-a07a-4eda-b8f7-e4e1c00db35a
-
-Analysesymbol: 
-Es wird erneut nach einer Lösung gesucht: 0
-Berichts-ID: 9d53a943-a07a-4eda-b8f7-e4e1c00db35a
-Berichtstatus: 268435556
-Bucket mit Hash: c0f947abcf0f38d8ea10ea466f7c10c8
 CAB-Datei-Guid: 0
