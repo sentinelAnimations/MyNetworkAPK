@@ -30,7 +30,7 @@ public class HomeScreenSlaves {
                             // sheepit,2=sleeping
     private float textYShift;
     private Boolean allWorking = true, finishedTestingCPU = false, finishedTestingGPU = false, startStrengthTest = false, prevStartTesting = false;
-    private String pathToCloud, pcAlias, pcFolderName, cpuName="", gpuName="", strengthTestTerminalWindowName = "strengthTestTerminal", pathToStrengthTestResult = "";
+    private String pathToCloud, pcAlias, pcFolderName, cpuName = "", gpuName = "", strengthTestTerminalWindowName = "strengthTestTerminal", pathToStrengthTestResult = "";
     private String[] pictoPaths;
     private long curTime, lastLogTime, lastLogTime2, startTimeCPUTest, startTimeGPUTest, cpuTestDuration, gpuTestDuration, prevLastModified;
     private PFont stdFont;
@@ -146,7 +146,6 @@ public class HomeScreenSlaves {
         curTime = System.nanoTime() / 1000000000;
         if (curTime - lastLogTime > mainActivity.getStdTimeIntervall()) {
             logData();
-            // checkForCommands();
             lastLogTime = curTime;
         }
 
@@ -159,7 +158,7 @@ public class HomeScreenSlaves {
             if (strengthTestStatus == 0) {
                 checkIfStrengthTestCPUIsFinished();
                 checkIfStrengthTestGPUIsFinished();
-}
+            }
             lastLogTime2 = curTime;
         }
 
@@ -170,6 +169,9 @@ public class HomeScreenSlaves {
         }
         // p.println("infoThreadAlive",getSpecInfoThread.isAlive());
         p.println(strengthTestStatus);
+        if(startTestOnGPUThread!=null) {
+            p.println(startTestOnGPUThread.isAlive());
+        }
     }
 
     private void logData() {
@@ -186,10 +188,13 @@ public class HomeScreenSlaves {
         settingsDetails.put("pcStrengthCPU", pcStrengthCPU);
         settingsDetails.put("pcStrengthGPU", pcStrengthGPU);
         if (finishedTestingCPU && finishedTestingGPU) {
-            p.println("pcStrength: ",pcStrengthCPU,pcStrengthGPU);
+            p.println("pcStrength: ", pcStrengthCPU, pcStrengthGPU);
             finishedTestingCPU = false;
             finishedTestingGPU = false;
             strengthTestStatus = 1;
+            p.println("now deleting ---------------------");
+            fileInteractionHelper.deleteFolder(blendFile.getParentFile().getAbsolutePath());
+
         }
         settingsDetails.put("strengthTestStatus", strengthTestStatus);
 
@@ -262,7 +267,9 @@ public class HomeScreenSlaves {
                         }
                     }
                     if (startTesting != prevStartTesting) {
-                        strengthTestStatus = -1;
+                        if (!startTesting) {
+                            strengthTestStatus = -1;
+                        }
                         startStrengthTest = startTesting;
                     }
                     prevStartTesting = startTesting;
@@ -275,6 +282,8 @@ public class HomeScreenSlaves {
     }
 
     private void startStrengthTest() {
+        copyStrengthTestResources(true);
+
         if (cpuName.length() > 0) {
             startTestOnCPU();
             String message = "Strength test started on CPU";
@@ -286,6 +295,7 @@ public class HomeScreenSlaves {
             startTestOnGPUThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    if(!Thread.currentThread().isInterrupted()) {
                     while (getSpecInfoThread.isAlive()) {
                         p.delay(1000);
                     }
@@ -297,16 +307,19 @@ public class HomeScreenSlaves {
 
                         cpuTestDuration = curTime - startTimeCPUTest;
                         pcStrengthCPU = calcStrength((int) cpuTestDuration);
-                        p.println("strTestStat: ",strengthTestStatus);
+                        p.println("strTestStat: ", strengthTestStatus);
                         if (strengthTestStatus != -1) {
                             startTestOnGPU();
                             String message = "Strength test started on GPU";
                             makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, message.length() * 3, light, textCol, textYShift, false, message, stdFont, null));
-
+                            while (strengthTestStatus == 0) {
+                                p.delay(1000);
+                            }
                         }
                     } else {
                         finishedTestingGPU = true;
                     }
+                }
                 }
             });
             startTestOnGPUThread.start();
@@ -315,7 +328,6 @@ public class HomeScreenSlaves {
 
     private void startTestOnCPU() {
         startTimeCPUTest = System.nanoTime() / 1000000000;
-        copyStrengthTestResources(true);
         if (blendFile.exists() && randomSeedFile.exists() && forceGPURenderingFile.exists()) {
             // create starter .bat ---------------------------
             String pathToRenderLog = blendFile.getParentFile().getAbsolutePath() + "\\log\\logfileRendering.txt";
@@ -327,6 +339,7 @@ public class HomeScreenSlaves {
             Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, strengthTestTerminalWindowName);
             if (isExecuted) {
             } else {
+                strengthTestStatus = -1;
                 p.println("failed to start on CPU");
             }
         }
@@ -334,8 +347,6 @@ public class HomeScreenSlaves {
 
     private void startTestOnGPU() {
         startTimeGPUTest = System.nanoTime() / 1000000000;
-        copyStrengthTestResources(cpuName.length() > 0 == false);
-
         if (blendFile.exists() && randomSeedFile.exists() && forceGPURenderingFile.exists()) {
             p.println("started on gpu");
             // create starter .bat ---------------------------
@@ -348,6 +359,7 @@ public class HomeScreenSlaves {
             Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, strengthTestTerminalWindowName);
             if (isExecuted) {
             } else {
+                strengthTestStatus = -1;
                 p.println("failed to start on GPU");
             }
         }
@@ -357,6 +369,8 @@ public class HomeScreenSlaves {
         p.println("stoping sterngtht test");
         commandExecutionHelper.killTaskByWindowtitle(strengthTestTerminalWindowName);
         strengthTestStatus = -1;
+        startTestOnGPUThread.interrupt();
+        p.println("interupt: ", startTestOnGPUThread.isAlive());
     }
 
     private Boolean checkIfStrengthTestCPUIsFinished() {
@@ -387,6 +401,7 @@ public class HomeScreenSlaves {
         }
         if (finishedTestingCPU) {
             if (!startTestOnGPUThread.isAlive()) {
+                p.println("loging from cpuCheck");
                 logData();
             }
         }
@@ -423,9 +438,9 @@ public class HomeScreenSlaves {
             gpuTestDuration = curTime - startTimeGPUTest;
             pcStrengthGPU = calcStrength((int) gpuTestDuration);
             if (strengthTestStatus != -1) {
+                p.println("log data from gpu");
                 logData();
             }
-            fileInteractionHelper.deleteFolder(blendFile.getParentFile().getAbsolutePath());
         }
         return finishedTestingGPU;
     }

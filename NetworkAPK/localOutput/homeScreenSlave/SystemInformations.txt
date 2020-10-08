@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 10/8/2020, 12:01:57
+      Time of this report: 10/8/2020, 14:10:35
              Machine name: SLAVE003
                Machine Id: {50D328C5-3D2F-42B2-BEB5-414423A55AEF}
          Operating System: Windows 10 Home 64-bit (10.0, Build 18363) (18362.19h1_release.190318-1202)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz (4 CPUs), ~2.4GHz
                    Memory: 8192MB RAM
       Available OS Memory: 8056MB RAM
-                Page File: 9376MB used, 1831MB available
+                Page File: 10219MB used, 2330MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -260,27 +260,6 @@ Poll w/ Interrupt: No
 -----------
 USB Devices
 -----------
-+ USB-Root-Hub (USB 3.0)
-| Vendor/Product ID: 0x8086, 0x9D2F
-| Matching Device ID: USB\ROOT_HUB30
-| Service: USBHUB3
-| Driver: USBHUB3.SYS, 5/26/2020 21:06:06, 634680 bytes
-| 
-+-+ USB-Eingabegerät
-| | Vendor/Product ID: 0x05AC, 0x0304
-| | Location: Port_#0002.Hub_#0001
-| | Matching Device ID: USB\Class_03&SubClass_01
-| | Service: HidUsb
-| | Driver: hidusb.sys, 10/7/2019 04:55:39, 45568 bytes
-| | Driver: hidclass.sys, 10/7/2019 04:55:39, 211968 bytes
-| | Driver: hidparse.sys, 10/7/2019 04:55:39, 46080 bytes
-| | 
-| +-+ Apple Mighty Mouse
-| | | Vendor/Product ID: 0x05AC, 0x0304
-| | | Matching Device ID: HID\VID_05AC&PID_0304
-| | | Service: mouhid
-| | | Driver: mouhid.sys, 3/19/2019 06:43:43, 35840 bytes
-| | | Driver: mouclass.sys, 3/19/2019 06:43:43, 66872 bytes
 
 ----------------
 Gameport Devices
@@ -306,7 +285,7 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 80.0 GB
+ Free Space: 80.1 GB
 Total Space: 243.4 GB
 File System: NTFS
       Model: SanDisk SD8SNAT256G1002
@@ -1035,7 +1014,7 @@ Disabled Media Sources
 ---------------
 EVR Power Information
 ---------------
-Current Setting: {5C67A112-A4C9-483F-B4A7-1D473BECAFDC} (Quality) 
+Current Setting: {651288E5-A7ED-4076-A96B-6CC62D848FE1} (Balanced)
   Quality Flags: 2576
     Enabled:
     Force throttling
