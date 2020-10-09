@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 10/8/2020, 14:10:35
+      Time of this report: 10/8/2020, 18:06:56
              Machine name: SLAVE003
                Machine Id: {50D328C5-3D2F-42B2-BEB5-414423A55AEF}
          Operating System: Windows 10 Home 64-bit (10.0, Build 18363) (18362.19h1_release.190318-1202)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz (4 CPUs), ~2.4GHz
                    Memory: 8192MB RAM
       Available OS Memory: 8056MB RAM
-                Page File: 10219MB used, 2330MB available
+                Page File: 7021MB used, 2947MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -285,7 +285,7 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 80.1 GB
+ Free Space: 82.9 GB
 Total Space: 243.4 GB
 File System: NTFS
       Model: SanDisk SD8SNAT256G1002

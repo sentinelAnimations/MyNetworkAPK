@@ -15,7 +15,7 @@ import processing.core.PImage;
 
 public class SettingsScreen {
     private int mode, btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, doOnce = 0, openFileExplorerInd = 0;
-    private Boolean successfullySaved = false, fileExplorerIsOpen = false;
+    private Boolean fileExplorerIsOpen = false;
     private float textYShift;
     private String mySavePath, savePathPrefix = "", aliasOnStartup;
     private String[] imgPaths;
@@ -242,7 +242,14 @@ public class SettingsScreen {
                     jHelper.appendObjectToArray(settingsObject);
                     jHelper.writeData(mySavePath);
 
-                    successfullySaved = true;
+                   // successfullySaved = true;
+                    if(!mainActivity.getIsMaster()) {
+                        try {
+                          mainActivity.getHomeScreenSlaves().getStartTestOnGPUThread().interrupt();  
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                     mainActivity.initializeLoadingScreen();
 
                     mainActivity.getLoadingScreen().setIsFirstSetup(false);

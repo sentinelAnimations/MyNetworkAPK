@@ -256,16 +256,10 @@ public class MainActivity extends PApplet {
                 jHelper.clearArray();
 
                 for (int i = 0; i < modeNamesMaster.length; i++) {
-                    // settingsDetails.put("masterOrSlave_dropdown_selectedInd",
-                    // masterOrSlave_dropdown.getSelectedInd());
                     JSONObject settingsObject = new JSONObject();
                     JSONObject settingsDetails = new JSONObject();
-                    // settingsDetails.put("value1", 10);
-                    // settingsDetails.put("value2", 20);
-
                     settingsObject.put(modeNamesMaster[i], settingsDetails);
                     jHelper.appendObjectToArray(settingsObject);
-
                 }
 
                 jHelper.writeData(getMasterCommandFilePath());
@@ -821,7 +815,9 @@ public class MainActivity extends PApplet {
     public String getStrengthTestBlendfilePath() {
         return strengthTestBlendfilePath;
     }
-
+    public String getRenderOverviewName() {
+        return "RenderOverview";
+    }
     public String[] getModeNamesMaster() {
         return modeNamesMaster;
     }
@@ -848,6 +844,9 @@ public class MainActivity extends PApplet {
 
     public RenderOverview getRenderOverview() {
         return renderOverview;
+    }
+    public HomeScreenSlaves getHomeScreenSlaves() {
+        return homeScreenSlaves;
     }
 
     public void setMode(int setMode) {

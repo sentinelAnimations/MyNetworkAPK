@@ -143,6 +143,7 @@ public class StrengthTestScreen {
         // log data---------------------------------
         // handle buttons---------------------------------------------
         if (startTest_ImageButton.getIsClicked()) {
+          if(allConnectedNodes!=null && allConnectedNodes.size()>0) {
             strengthTestThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -151,6 +152,7 @@ public class StrengthTestScreen {
             });
             strengthTestThread.start();
             startTest_ImageButton.setIsClicked(false);
+        }
         }
     }
 
@@ -237,6 +239,7 @@ public class StrengthTestScreen {
                 n.setPCStrengthGPU(allPCStrengthsGPU[i]);
                 p.println(allPCStrengthsCPU[i], allPCStrengthsGPU[i], "strength");
             }
+            p.delay(3000);
             controllStrengthTest(false);
             mainActivity.getNodeEditor().saveNodeEditor();
         }

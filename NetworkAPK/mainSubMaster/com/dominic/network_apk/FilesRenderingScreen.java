@@ -3,6 +3,9 @@ package com.dominic.network_apk;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -27,6 +30,7 @@ public class FilesRenderingScreen {
     private LogBar logBar;
     private ImageButton freeze_imageButton;
     private FileInteractionHelper fileInteractionHelper;
+    private JsonHelper jsonHelper;
 
     public FilesRenderingScreen(PApplet p, int stdTs, int edgeRad, int margin, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int green, int red, int blue, float textYShift, String[] pictoPaths, String[] hoLiPictoPaths, PFont stdFont) {
         this.p = p;
@@ -51,6 +55,7 @@ public class FilesRenderingScreen {
         this.stdFont = stdFont;
         mainActivity = (MainActivity) p;
         fileInteractionHelper = new FileInteractionHelper(p);
+        jsonHelper = new JsonHelper(p);
         setupAll();
     }
 
@@ -173,6 +178,8 @@ public class FilesRenderingScreen {
             allFilesCopyStatus[i] = fileInteractionHelper.copyFile(f.getAbsolutePath(), mainActivity.getPathToBlenderRenderFolder() + "\\" + f.getName());
         }
         p.println("copied files");
+        prepareRenderProcess();
+
     }
 
     private void updateLists() {
@@ -221,9 +228,111 @@ public class FilesRenderingScreen {
 
             }
             // prepare infoString and so on-----------------------------------
+        }
 
+    }
+
+    private void prepareRenderProcess() {
+        p.println(allConnectedNodes.size(),"acNodes size");
+        if (allConnectedNodes.size() > 0) {
+            for (int i = 0; i < allFiles_HorizontalList.getList().length; i++) {
+                if (allFilesCopyStatus[i] == true) {
+                    int pcInd = 0;
+                    Boolean workingPCFound = true;
+                    while (allPCStatus[pcInd] == 2) {
+                        pcInd++;
+                        if (pcInd >= allConnectedNodes.size() - 1) {
+                            workingPCFound = false;
+                            break;
+                        }
+                    }
+                    if (workingPCFound) {
+                        String[] keys = { "renderAnimation", "renderStillFrame", "startFrame", "endFrame", "stillFrame" };
+                        String[] values = {p.str(renderAnimation[pcInd]),p.str(renderStillFrame[pcInd]),p.str(startFrame[pcInd]),p.str(endFrame[pcInd]),p.str(stillFrame[pcInd])};
+                        setupRenderCommands(keys, values, allPCNames[pcInd]);
+                    }else {
+                        break;
+                    }
+                }
+            }
         }
     }
+
+    private void setupRenderCommands(String[] keys, String[] values, String cmdObjName) {
+        p.println(cmdObjName);
+        p.println(keys);
+        p.println(values);
+        JSONArray loadedData = new JSONArray();
+        JSONObject pcCmdObject = new JSONObject();
+        JSONObject pcCmdDetails = new JSONObject();
+        JSONObject[] jsonLayers = new JSONObject[3];
+        // give command to all pcs to do test -----------------------------
+
+        loadedData = jsonHelper.getData(mainActivity.getMasterCommandFilePath());
+        p.println(loadedData);
+        if (loadedData.isEmpty()) {
+        } else {
+            try {
+
+                int homeScreenMode = mainActivity.getHomeScreenMaster().getMode();
+                String modeName = mainActivity.getModeNamesMaster()[homeScreenMode - 1];
+                JSONObject homeScreenObj = (JSONObject) (loadedData.get(homeScreenMode - 1));
+                jsonLayers[0] = (JSONObject) homeScreenObj.get(modeName);
+                try {
+                    jsonLayers[1] = (JSONObject) jsonLayers[0].get(mainActivity.getRenderOverviewName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    jsonLayers[1] = new JSONObject();
+                }
+
+                try {
+                    jsonLayers[2] = (JSONObject) jsonLayers[1].get(cmdObjName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    jsonLayers[2] = new JSONObject();
+                }
+
+                for (int i = 0; i < keys.length; i++) {
+                    p.println("-------");
+                    p.println(jsonLayers[i]);
+                    jsonLayers[2].put(keys[i], values[i]);
+                }
+                jsonLayers[1].put(cmdObjName, jsonLayers[2]);
+                jsonLayers[0].put(mainActivity.getRenderOverview(), jsonLayers[1]);
+                loadedData.set(homeScreenMode, jsonLayers[0]);
+                p.println(loadedData);
+                // jsonHelper.setArray(loadedData);
+                // jsonHelper.writeData(mainActivity.getMasterCommandFilePath());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        // give command to all pcs to do test -----------------------------
+    }
+
+    /*
+     * public void setupRenderCommands(String[] keys, String[] values) { Boolean
+     * allPCsAreDone = false; JSONArray loadedData = new JSONArray(); JSONObject
+     * settingsDetails = new JSONObject(),renderOverviewO; JSONObject settingsObject
+     * = new JSONObject(); JSONObject[] jsonLayers= new JSONObject[3]; // give
+     * command to all pcs to do test -----------------------------
+     * 
+     * loadedData = jsonHelper.getData(mainActivity.getMasterCommandFilePath()); if
+     * (loadedData.isEmpty()) { } else { try {
+     * 
+     * int renderOverviewMode=mainActivity.getRenderOverview().getMode(); String
+     * modeName = mainActivity.getModeNamesMaster()[renderOverviewMode - 1];
+     * JSONObject loadedObject = (JSONObject) (loadedData.get(renderOverviewMode -
+     * 1)); loadedObject = (JSONObject) loadedObject.get(modeName);
+     * 
+     * p.println(loadedObject); for(int i=0;i<keys.length;i++) {
+     * loadedObject.put(keys[i], values[i]); } settingsObject.put(modeName,
+     * loadedObject); loadedData.set(renderOverviewMode - 1, settingsObject);
+     * jsonHelper.setArray(loadedData);
+     * jsonHelper.writeData(mainActivity.getMasterCommandFilePath()); } catch
+     * (Exception e) { e.printStackTrace(); } } // give command to all pcs to do
+     * test ----------------------------- }
+     */
 
     public void onMousePressed(int mouseButton) {
         allFiles_HorizontalList.onMousePressed();
@@ -317,14 +426,6 @@ public class FilesRenderingScreen {
         }
         if (!mainActivity.getNodeEditor().getIsSetup()) {
             mainActivity.getNodeEditor().setupAll();
-            // mainActivity.getNodeEditor().handleNodes();
-            /*
-             * for (int i = 0; i < mainActivity.getNodeEditor().getNodes().size(); i++) {
-             * Node n = (Node) mainActivity.getNodeEditor().getNodes().get(i); if
-             * (n.getType() == 3) { n.updateSwitchConnectorPoints(false, null, true); } }
-             * 
-             * mainActivity.getNodeEditor().calcConnectedNodes();
-             */
         }
         allConnectedNodes = mainActivity.getNodeEditor().getAllConnectedNodes();
 

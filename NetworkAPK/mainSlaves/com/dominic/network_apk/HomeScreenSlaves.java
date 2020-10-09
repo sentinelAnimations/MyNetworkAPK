@@ -566,4 +566,9 @@ public class HomeScreenSlaves {
         }
         return gpuName;
     }
+    
+    public Thread getStartTestOnGPUThread() {
+        return startTestOnGPUThread;
+    }
+   
 }
