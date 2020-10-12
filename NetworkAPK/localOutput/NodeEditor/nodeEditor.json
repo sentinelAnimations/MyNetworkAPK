@@ -1,22 +1,24 @@
 [
   {
     "Node0": {
-      "posX": 245,
-      "posY": 164,
       "connectorPointId": "3732f0c0-acf5-4d5b-9aab-7371b71e0910",
       "useGpu_checkbox": false,
+      "nodeType": 0,
+      "posX": 253,
+      "posY": 151,
+      "pcStrengthCPU": 750,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "myMasterPC",
-      "selectPc_dropdown": 1,
-      "nodeType": 0,
-      "nodeId": "6d78ea1a-e697-43b2-9da0-d442645caade"
+      "selectPc_dropdownItem": "myMasterPC - Kopie1",
+      "selectPc_dropdown": 0,
+      "nodeId": "6d78ea1a-e697-43b2-9da0-d442645caade",
+      "pcStrengthGPU": 428
     }
   },
   {
     "Node1": {
-      "posX": 592,
+      "posX": 602,
       "connectorPointIsConnectedArray": [
         true,
         true,
@@ -27,7 +29,7 @@
         false,
         false
       ],
-      "posY": 197,
+      "posY": 224,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -56,8 +58,8 @@
   },
   {
     "Node2": {
-      "posX": 802,
-      "posY": 192,
+      "posX": 812,
+      "posY": 219,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -67,32 +69,36 @@
   },
   {
     "Node3": {
-      "posX": 250,
-      "posY": 317,
       "connectorPointId": "c2480680-06c5-48b2-9402-8f1fe16cacc6",
       "useGpu_checkbox": false,
+      "nodeType": 0,
+      "posX": 255,
+      "posY": 320,
+      "pcStrengthCPU": 750,
       "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "",
-      "selectPc_dropdown": -1,
-      "nodeType": 0,
-      "nodeId": "160e244c-3804-453a-9f00-8f5f5488b5c8"
+      "selectPc_dropdownItem": "myMasterPC - Kopie2",
+      "selectPc_dropdown": 1,
+      "nodeId": "160e244c-3804-453a-9f00-8f5f5488b5c8",
+      "pcStrengthGPU": 428
     }
   },
   {
     "Node4": {
-      "posX": 240,
-      "posY": 467,
       "connectorPointId": "050c7e66-be09-4c99-9431-ebc25598833c",
       "useGpu_checkbox": false,
+      "nodeType": 2,
+      "posX": 250,
+      "posY": 494,
+      "pcStrengthCPU": -1,
       "connectorPointConnectedId": "85900ff0-1c66-443f-bc8e-74478e58fdba",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
       "selectPc_dropdownItem": "",
       "selectPc_dropdown": -1,
-      "nodeType": 2,
-      "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214"
+      "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214",
+      "pcStrengthGPU": -1
     }
   }
 ]
