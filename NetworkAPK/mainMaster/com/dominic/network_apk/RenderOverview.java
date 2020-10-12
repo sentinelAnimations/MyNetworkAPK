@@ -64,9 +64,7 @@ public class RenderOverview {
         }
 
         // render all ---------------------------------------
-        if (anyFileExplorerIsOpen == false) {
-            cancelRendering_ImageButton.render();
-        }
+       
         
         if (renderMode == 0.1f) {
             filesSettingsScreen.render();
@@ -82,7 +80,10 @@ public class RenderOverview {
         if (renderMode == 2) {
             imageViewScreen.render();
         }
-      
+        
+        if (anyFileExplorerIsOpen == false) {
+            cancelRendering_ImageButton.render();
+        }
         // render all ---------------------------------------
 
         // button handling -------------------------

@@ -213,6 +213,10 @@ public class Node<T> {
                     }
 
                     if (pcIsAlive) {
+                    	
+                        pcStrengthCPU = Integer.parseInt((jsonObject.getAsJsonObject("SystemLog").get("pcStrengthCPU").getAsString()));  
+                        pcStrengthGPU = Integer.parseInt((jsonObject.getAsJsonObject("SystemLog").get("pcStrengthGPU").getAsString()));                    	
+
                         calculatedPcStatus = 0;
                         int renderStatus = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("renderMode").getAsString());
                         if (renderStatus == 1) {
