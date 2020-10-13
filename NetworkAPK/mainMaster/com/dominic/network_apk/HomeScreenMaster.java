@@ -6,13 +6,13 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 public class HomeScreenMaster {
-    private int mode,btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark;
+    private int mode, btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark;
     private float textYShift;
     private Boolean fileExplorerIsOpen = false, prevFileExplorerIsOpen = false;
     private PFont stdFont;
     private PApplet p;
-    private PathSelector fileToRender_pathSelector;
-    private CounterArea startFrame_counterArea, endFrame_counterArea, stillFrame_counterArea;
+    private PathSelector fileToRender_pathSelector, imageSavePath_PathSelector;
+    private CounterArea startFrame_counterArea, endFrame_counterArea, stillFrame_counterArea, resX_counterArea, resY_counterArea, samples_counterArea;
     private ImageButton startRendering_btn;
     private HorizontalList fileSelector_HorizontalList;
     private MainActivity mainActivity;
@@ -20,9 +20,9 @@ public class HomeScreenMaster {
     private Checkbox[] homeSettings_checkboxes = new Checkbox[8];
     private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 
-    public HomeScreenMaster(PApplet p,int mode, int btnSize, int btnSizeSmall, int edgeRad, int margin, int stdTs, int dark, int light, int lighter, int border, int textCol, int textDark, float textYShift, String[] homeScreenPictoPaths, String[] arrowPaths, String[] hoLiPictoPaths, String[] fileExplorerPaths, PFont stdFont) {
+    public HomeScreenMaster(PApplet p, int mode, int btnSize, int btnSizeSmall, int edgeRad, int margin, int stdTs, int dark, int light, int lighter, int border, int textCol, int textDark, float textYShift, String[] homeScreenPictoPaths, String[] arrowPaths, String[] hoLiPictoPaths, String[] fileExplorerPaths, PFont stdFont) {
         this.p = p;
-        this.mode=mode;
+        this.mode = mode;
         this.btnSize = btnSize;
         this.btnSizeSmall = btnSizeSmall;
         this.edgeRad = edgeRad;
@@ -42,9 +42,10 @@ public class HomeScreenMaster {
         } else {
             mainButtons = mainActivity.getMainButtonsSlave();
         }
-        int rowDist = btnSize;
-        int startY = mainButtons[0].getH() + (p.height - mainButtons[0].getH() - rowDist * 3 - btnSizeSmall) / 2;
-
+        int rowDist = btnSize, colDist = (p.width / 9 * 2);
+        int startY = mainButtons[0].getH() + (p.height - mainButtons[0].getH() - rowDist * 4 - btnSizeSmall) / 2;
+        int startX = colDist / 2 + (p.width - homeSettings_checkboxes.length / 2 * colDist) / 2;
+        p.println("startX", startX);
         String[] checkBoxTexts = { "Render with full force", "Render only with slaves", "", "Render on Sheepit", "Use CPU", "Use GPU", "", "" };
         String[] checkBoxHoverTexts = { "", "", "Render listed .blend files", "", "", "", "", "" };
         for (int i = 0; i < homeSettings_checkboxes.length; i++) {
@@ -54,32 +55,53 @@ public class HomeScreenMaster {
                 ys = rowDist * 2;
                 is = 4;
             }
-            homeSettings_checkboxes[i] = new Checkbox(p, (int) (p.width / 9 * 1.5f + (p.width / 9 * 2) * (i - is)), startY + ys, p.width / 9, btnSizeSmall, btnSizeSmall, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, false, false, checkBoxTexts[i], checkBoxHoverTexts[i], homeScreenPictoPaths[0], stdFont, null);
+            homeSettings_checkboxes[i] = new Checkbox(p, (int) (startX + colDist * (i - is)), startY + ys, (int) (colDist / 1.5f), btnSizeSmall, btnSizeSmall, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, false, false, checkBoxTexts[i], checkBoxHoverTexts[i], homeScreenPictoPaths[0], stdFont, null);
         }
-
-        fileToRender_pathSelector = new PathSelector(p, btnSizeSmall + margin * 3, 0, p.width / 8 - margin, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, false, true, "...\\\\File.blend", homeScreenPictoPaths[1], fileExplorerPaths, stdFont, homeSettings_checkboxes[2]);
+        int psW = homeSettings_checkboxes[2].getW() - homeSettings_checkboxes[2].getBoxDim() - margin;
+        fileToRender_pathSelector = new PathSelector(p, -homeSettings_checkboxes[2].getW() / 2 + homeSettings_checkboxes[2].getBoxDim() + margin * 2 + psW / 2, 0, psW, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, false, true, "...\\\\File.blend", homeScreenPictoPaths[1], fileExplorerPaths, stdFont, homeSettings_checkboxes[2]);
 
         int sfW = (int) (p.width / 16 - margin);
         int sfX = (int) ((homeSettings_checkboxes[6].getX() - homeSettings_checkboxes[6].getW() / 2 + homeSettings_checkboxes[6].getBoxDim() + margin * 2)) - homeSettings_checkboxes[6].getX() + sfW / 2;
         startFrame_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Startframe", arrowPaths, stdFont, homeSettings_checkboxes[6]);
         endFrame_counterArea = new CounterArea(p, sfX + sfW + margin, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Endframe", arrowPaths, stdFont, homeSettings_checkboxes[6]);
-        sfW = (int) p.textWidth(checkBoxTexts[3]);
+        // sfW = (int) p.textWidth(checkBoxTexts[3]);
+        sfW = fileToRender_pathSelector.getW();
         sfX = (int) ((homeSettings_checkboxes[7].getX() - homeSettings_checkboxes[7].getW() / 2 + homeSettings_checkboxes[7].getBoxDim() + margin * 2)) - homeSettings_checkboxes[7].getX() + sfW / 2;
         stillFrame_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Still frame", arrowPaths, stdFont, homeSettings_checkboxes[7]);
 
-        startRendering_btn = new ImageButton(p, p.width / 2, startY + rowDist * 3, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, homeScreenPictoPaths[2], "Start rendering", null);
+        sfW = homeSettings_checkboxes[0].getBoxDim() + margin + fileToRender_pathSelector.getW();
+        sfX = (homeSettings_checkboxes[0].getBoxX() - homeSettings_checkboxes[0].getX()) - homeSettings_checkboxes[0].getBoxDim() / 2 + sfW / 2;
+        resX_counterArea = new CounterArea(p, sfX, rowDist, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Resolution X", arrowPaths, stdFont, homeSettings_checkboxes[4]);
+
+        sfW = homeSettings_checkboxes[1].getBoxDim() + margin + fileToRender_pathSelector.getW();
+        sfX = (homeSettings_checkboxes[1].getBoxX() - homeSettings_checkboxes[1].getX()) - homeSettings_checkboxes[1].getBoxDim() / 2 + sfW / 2;
+        resY_counterArea = new CounterArea(p, sfX, rowDist, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Resolution Y", arrowPaths, stdFont, homeSettings_checkboxes[5]);
+
+        sfW = homeSettings_checkboxes[2].getBoxDim() + margin + fileToRender_pathSelector.getW();
+        sfX = (homeSettings_checkboxes[2].getBoxX() - homeSettings_checkboxes[2].getX()) - homeSettings_checkboxes[2].getBoxDim() / 2 + sfW / 2;
+        samples_counterArea = new CounterArea(p, sfX, rowDist, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Sampling", arrowPaths, stdFont, homeSettings_checkboxes[6]);
+
+        sfW = homeSettings_checkboxes[3].getBoxDim() + margin + fileToRender_pathSelector.getW();
+        sfX = (homeSettings_checkboxes[3].getBoxX() - homeSettings_checkboxes[3].getX()) - homeSettings_checkboxes[3].getBoxDim() / 2 + sfW / 2;
+        imageSavePath_PathSelector = new PathSelector(p, sfX, rowDist, sfW, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, false, true, "...\\\\File.blend", homeScreenPictoPaths[1], fileExplorerPaths, stdFont, homeSettings_checkboxes[7]);
+
+        startRendering_btn = new ImageButton(p, p.width / 2, startY + rowDist * 4 + btnSize / 2, btnSize, btnSize, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, homeScreenPictoPaths[2], "Start rendering", homeSettings_checkboxes[7]);
 
         String[] startList = {};
 
-        int p1 = homeSettings_checkboxes[4].getBoxX() - homeSettings_checkboxes[4].getBoxDim() / 2;
+        int p1 = homeSettings_checkboxes[4].getBoxX() - homeSettings_checkboxes[4].getBoxDim() / 2 - margin / 2;
         int p2 = stillFrame_counterArea.getX() + stillFrame_counterArea.getW() / 2;
         int hlH = p2 - p1;
         int hlX = p1 + hlH / 2;
         fileSelector_HorizontalList = new HorizontalList(p, hlX, startY, hlH, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, false, true, "Files to render", hoLiPictoPaths, startList, stdFont, null);
+
     }
 
     public void render() {
-        fileExplorerIsOpen = fileToRender_pathSelector.getFileExplorerIsOpen();
+        fileExplorerIsOpen = false;
+        if (fileToRender_pathSelector.getFileExplorerIsOpen() || imageSavePath_PathSelector.getFileExplorerIsOpen()) {
+            fileExplorerIsOpen = true;
+        }
         // add to list --------------------------------------------------
         /*
          * String[] m2 =
@@ -126,6 +148,11 @@ public class HomeScreenMaster {
             p.line(startRendering_btn.getX() + startRendering_btn.getW() / 2 + margin * 2, startRendering_btn.getY(), stillFrame_counterArea.getX() + stillFrame_counterArea.getW() / 2, startRendering_btn.getY());
 
             fileSelector_HorizontalList.render();
+            resX_counterArea.render();
+            resY_counterArea.render();
+            samples_counterArea.render();
+            imageSavePath_PathSelector.render();
+
             // render toasts -----------------------------------
             for (int i = 0; i < makeToasts.size(); i++) {
                 MakeToast m = makeToasts.get(i);
@@ -232,16 +259,16 @@ public class HomeScreenMaster {
                 if (correctlySelected) {
                     mainActivity.setMode(101);
                     mainActivity.getRenderOverview().getFilesRenderingScreen().setupAll();
-                    
-                    if (homeSettings_checkboxes[2].getIsChecked()) { //renderFile
+
+                    if (homeSettings_checkboxes[2].getIsChecked()) { // renderFile
                         mainActivity.getRenderOverview().setRenderMode(0.1f);
                         mainActivity.getRenderOverview().setFileList(fileSelector_HorizontalList.getList());
                         mainActivity.getRenderOverview().getRenderFilesSettings().setStartupVals();
                         mainActivity.getRenderOverview().getRenderFilesSettings().getSaveResults_PathSelector().setPath(mainActivity.getPathToImageFolder());
                     }
-                    if (homeSettings_checkboxes[3].getIsChecked()) { //render on sheepit
+                    if (homeSettings_checkboxes[3].getIsChecked()) { // render on sheepit
                         mainActivity.getRenderOverview().setRenderMode(1);
-                        //mainActivity.getRenderOverview().getRenderOnSheepitScreen().setupAll();
+                        // mainActivity.getRenderOverview().getRenderOnSheepitScreen().setupAll();
                     }
 
                 } else {
@@ -266,6 +293,12 @@ public class HomeScreenMaster {
             stillFrame_counterArea.onMousePressed();
             startRendering_btn.onMousePressed();
 
+            resX_counterArea.onMousePressed();
+            ;
+            resY_counterArea.onMousePressed();
+            ;
+            samples_counterArea.onMousePressed();
+
             if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
                 for (int i = 0; i < mainButtons.length; i++) {
                     if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
@@ -276,6 +309,7 @@ public class HomeScreenMaster {
             fileSelector_HorizontalList.onMousePressed();
         }
         fileToRender_pathSelector.onMousePressed(mouseButton);
+        imageSavePath_PathSelector.onMousePressed(mouseButton);
     }
 
     public void onMouseReleased(int mouseButton) {
@@ -289,6 +323,10 @@ public class HomeScreenMaster {
             stillFrame_counterArea.onMouseReleased();
             startRendering_btn.onMouseReleased();
 
+            resX_counterArea.onMouseReleased();
+            resY_counterArea.onMouseReleased();
+            samples_counterArea.onMouseReleased();
+
             if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
                 for (int i = 0; i < mainButtons.length; i++) {
                     if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
@@ -299,15 +337,18 @@ public class HomeScreenMaster {
             fileSelector_HorizontalList.onMouseReleased(mouseButton);
         }
         fileToRender_pathSelector.onMouseReleased(mouseButton);
+        imageSavePath_PathSelector.onMouseReleased(mouseButton);
 
     }
 
     public void onKeyPressed(char key) {
         fileToRender_pathSelector.onKeyPressed(key);
+        imageSavePath_PathSelector.onKeyReleased(key);
     }
 
     public void onKeyReleased(char key) {
         fileToRender_pathSelector.onKeyReleased(key);
+        imageSavePath_PathSelector.onKeyReleased(key);
         if (key == p.DELETE) {
             String[] hoLi1 = fileSelector_HorizontalList.getList();
             String[] newHoLi1 = new String[hoLi1.length - 1];
@@ -325,30 +366,40 @@ public class HomeScreenMaster {
 
     public void onScroll(float e) {
         fileToRender_pathSelector.onScroll(e);
+        imageSavePath_PathSelector.onScroll(e);
         if (fileExplorerIsOpen == false) {
             startFrame_counterArea.onScroll(e);
             endFrame_counterArea.onScroll(e);
             stillFrame_counterArea.onScroll(e);
             fileSelector_HorizontalList.onScroll(e);
+
+            resX_counterArea.onScroll(e);
+            resY_counterArea.onScroll(e);
+            samples_counterArea.onScroll(e);
         }
     }
+
     public int getMode() {
-    	return mode;
+        return mode;
     }
-    
+
     public Checkbox[] getCheckboxes() {
-    	return homeSettings_checkboxes;
+        return homeSettings_checkboxes;
     }
+
     public CounterArea getStartFrame_CounterArea() {
-    	return startFrame_counterArea;
+        return startFrame_counterArea;
     }
+
     public CounterArea getEndFrame_CounterArea() {
-    	return endFrame_counterArea;
+        return endFrame_counterArea;
     }
+
     public CounterArea getStillFrame_counterArea() {
-    	return stillFrame_counterArea;
+        return stillFrame_counterArea;
     }
+
     public PathSelector getFileToRender_pathSelector() {
-    	return fileToRender_pathSelector;
+        return fileToRender_pathSelector;
     }
 }

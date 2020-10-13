@@ -56,6 +56,8 @@ public class Checkbox<T> implements Widgets {
 			p.stroke(bgCol);
 			p.fill(bgCol);
 			p.rect(x, y, w, h, edgeRad);
+			//p.fill(255,0,0);
+			//p.rect(x,y,10,10);
 		}
 		p.stroke(boxCol);
 		p.fill(boxCol);
