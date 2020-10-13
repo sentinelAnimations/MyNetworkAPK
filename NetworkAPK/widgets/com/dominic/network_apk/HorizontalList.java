@@ -268,15 +268,19 @@ public class HorizontalList<T> implements Widgets {
                         displayList[i] = l[i];
                     } else {
                         String elem = "";
-                        String[] splitStr = PApplet.split(l[i], splitChar);
-                        for (int i2 = splitStr.length - 1; i2 >= 0; i2--) {
-                            if (p.textWidth(elem + splitStr[i2] + "\\") < (endListX - startListX) / 3) {
-                                elem = splitStr[i2] + "\\" + elem;
-                            }
+                        for (int i2 = l[i].length() - 1; i2 >= 0; i2--) {
+                            if (p.textWidth(elem+ l[i].charAt(i2) +"...") < (endListX - startListX) / 3) {
+                                elem=l[i].charAt(i2)+elem;
+                            }else {
+								elem="..."+elem;
+								break;
+							}
                         }
                         displayList[i] = elem;
                     }
                 }
+             
+
                 firstDisplayedInd = 0;
                 shiftListX = 0;
                 isShifted = true;
@@ -293,6 +297,9 @@ public class HorizontalList<T> implements Widgets {
 
     public String[] getList() {
         return list;
+    }
+    public String[] getDisplayList() {
+    	return displayList;
     }
 
     public int getSelectedInd() {

@@ -170,7 +170,6 @@ public class StrengthTestScreen {
                 String modeName = mainActivity.getModeNamesMaster()[mode - 1];
                 JSONObject loadedObject = (JSONObject) (loadedData.get(mode - 1));
                 loadedObject = (JSONObject) loadedObject.get(modeName);
-                p.println(loadedObject);
                 loadedObject.put("startTesting", startTest);
                 settingsObject.put(modeName, loadedObject);
                 loadedData.set(mode - 1, settingsObject);
@@ -193,7 +192,6 @@ public class StrengthTestScreen {
             if (allPCStatus[i] < 2) {
                 respondingPCs.add(n);
                 String jsonPath = mainActivity.getPathToCloud() + "\\" + mainActivity.getPCFolderName() + "\\" + n.getPcSelection_DropdownMenu().getSelectedItem() + "\\" + mainActivity.getLogFileName();
-                p.println(jsonPath);
                 JSONArray loadedData = jsonHelper.getData(jsonPath);
                 if (loadedData.isEmpty()) {
                 } else {
@@ -237,7 +235,6 @@ public class StrengthTestScreen {
                 Node n = allConnectedNodes.get(i);
                 n.setPCStrengthCPU(allPCStrengthsCPU[i]);
                 n.setPCStrengthGPU(allPCStrengthsGPU[i]);
-                p.println(allPCStrengthsCPU[i], allPCStrengthsGPU[i], "strength");
             }
             p.delay(3000);
             controllStrengthTest(false);
@@ -246,7 +243,6 @@ public class StrengthTestScreen {
     }
 
     private void updateLists() {
-        p.println("update list");
         if (allConnectedNodes.size() > 0) {
             pcListTexts = new String[allConnectedNodes.size()];
             for (int i = 0; i < strengthTest_HorizontalList.getList().length; i++) {

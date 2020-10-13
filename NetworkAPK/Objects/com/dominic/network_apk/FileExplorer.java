@@ -72,6 +72,7 @@ public class FileExplorer {
         editBarX = margin * 2 + editBarW / 2;
 
         for (int i = 0; i < horizontalLists.length - 1; i++) {
+        	p.textSize(stdTs);
             String[] hoLiPictoPaths = new String[3];
             hoLiPictoPaths[0] = PictoPaths[i];
             hoLiPictoPaths[1] = PictoPaths[4];
@@ -316,7 +317,7 @@ public class FileExplorer {
         for (int i = 0; i < fileExplorer_btns.length; i++) {
             if (fileExplorer_btns[i].getIsClicked() == true) {
                 switch (i) {
-                case 0:
+                case 0: //set path to user home
                     String home = System.getProperty("user.home");
                     String path = "";
                     String[] splitStr = PApplet.split(home, "\\");
@@ -413,7 +414,9 @@ public class FileExplorer {
                     c3curPath2 = c3curPath;
 
                     String[] c3List2 = horizontalLists[2].getList();
+                    
                     String newFolderName = "";
+                    if(c3List2.length>0) {
                     int folderInd = 0;
                     Boolean searchNewName = true;
                     while (searchNewName == true) {
@@ -434,10 +437,14 @@ public class FileExplorer {
                             folderInd++;
                         }
                     }
-
+                    }else {
+						newFolderName="New folder";
+					}
                     c3curPath += "\\" + newFolderName;
                     File f = new File(c3curPath);
                     f.mkdir();
+                    p.println(c3List2);
+                    p.println("new folder",newFolderName);
                     horizontalLists[2].setList(fileInteractionHelper.getFoldersAndFiles(c3curPath2, true));
                     break;
 

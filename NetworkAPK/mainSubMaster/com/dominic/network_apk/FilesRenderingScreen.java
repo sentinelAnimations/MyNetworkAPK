@@ -15,9 +15,9 @@ public class FilesRenderingScreen {
 	private float textYShift, alpha;
 	private float[] listX, listW, allFiles_listX, allFiles_listW;
 	private Boolean isFreezed = false;
-	private Boolean[] renderAnimation, renderStillFrame, startedRenderingTiles, allFilesCopyStatus, fileIsFinished;
+	private Boolean[] renderAnimation, renderStillFrame, useNewResolution, startedRenderingTiles, allFilesCopyStatus, fileIsFinished;
 	private long curTime, prevTime, prevLastModified;
-	private int[] startFrame, endFrame, stillFrame, allPCStatus; // allPCStatus: 0=prog responding,1=prog is rendering, 2=prog not responding
+	private int[] startFrame, endFrame, stillFrame, resX, resY, samples, allPCStatus; // allPCStatus: 0=prog responding,1=prog is rendering, 2=prog not responding
 	private String[] pictoPaths, hoLiPictoPaths;
 	private String[] allPCNames, allLastLogLines, allRenderInfos;
 	private PFont stdFont;
@@ -349,8 +349,8 @@ public class FilesRenderingScreen {
 					}
 					p.println(allPCNames[pcInd], i, pcInd);
 					if (workingPCFound) {
-						String[] keys = { "pcAlias", "blendfile", "renderAnimation", "renderStillFrame", "startFrame", "endFrame", "stillFrame", "isDone" };
-						String[] values = { allPCNames[pcInd], allFiles_HorizontalList.getList()[i], p.str(renderAnimation[pcInd]), p.str(renderStillFrame[pcInd]), p.str(startFrame[pcInd]), p.str(endFrame[pcInd]), p.str(stillFrame[pcInd]), p.str(false) };
+						String[] keys = { "pcAlias", "blendfile", "renderAnimation", "renderStillFrame", "useNewResolution", "startFrame", "endFrame", "stillFrame", "resX", "resY", "samples", "isDone" };
+						String[] values = { allPCNames[pcInd], allFiles_HorizontalList.getList()[i], p.str(renderAnimation[pcInd]), p.str(renderStillFrame[pcInd]), p.str(useNewResolution[pcInd]), p.str(startFrame[pcInd]), p.str(endFrame[pcInd]), p.str(stillFrame[pcInd]), p.str(resX[pcInd]), p.str(resY[pcInd]), p.str(samples[pcInd]), p.str(false) };
 						JSONObject pcCmdDetails = new JSONObject();
 						for (int i2 = 0; i2 < keys.length; i2++) {
 							pcCmdDetails.put(keys[i2], values[i2]);
@@ -479,7 +479,11 @@ public class FilesRenderingScreen {
 		renderStillFrame = mainActivity.getRenderOverview().getRenderFilesSettings().getRenderStillFrame();
 		startFrame = mainActivity.getRenderOverview().getRenderFilesSettings().getStartFrames();
 		endFrame = mainActivity.getRenderOverview().getRenderFilesSettings().getEndFrames();
-		stillFrame = mainActivity.getRenderOverview().getRenderFilesSettings().getStilFrames();
+		stillFrame = mainActivity.getRenderOverview().getRenderFilesSettings().getStillFrames();
+		resX = mainActivity.getRenderOverview().getRenderFilesSettings().getResX();
+		resY = mainActivity.getRenderOverview().getRenderFilesSettings().getResY();
+		samples = mainActivity.getRenderOverview().getRenderFilesSettings().getSamples();
+		useNewResolution = mainActivity.getRenderOverview().getRenderFilesSettings().getUseNewResolution();
 	}
 
 	public void setupAll() {
@@ -500,7 +504,8 @@ public class FilesRenderingScreen {
 		for (int i = 0; i < startList.length; i++) {
 			startList[i] = listW;
 		}
-		allPCs_HorizontalList = new HorizontalList(p, 0, allFiles_HorizontalList.getH() / 2 + margin + listH / 2, p.width - margin * 2, listH, margin, edgeRad, stdTs, (int) p.textWidth("Rendering PCs") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', true, false, true, "Rendering PCs", hoLiPictoPaths, startList, stdFont, allFiles_HorizontalList);
+		String[] allPCListPictos = { pictoPaths[2], hoLiPictoPaths[1], hoLiPictoPaths[2] };
+		allPCs_HorizontalList = new HorizontalList(p, 0, allFiles_HorizontalList.getH() / 2 + margin + listH / 2, p.width - margin * 2, listH, margin, edgeRad, stdTs, (int) p.textWidth("Rendering PCs") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', true, false, true, "Rendering PCs", allPCListPictos, startList, stdFont, allFiles_HorizontalList);
 		logBar = new LogBar(p, 0, allPCs_HorizontalList.getH() / 2 + margin * 2 + btnSizeSmall / 2, allFiles_HorizontalList.getW(), btnSizeSmall + margin * 2, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, pictoPaths[0], stdFont, allPCs_HorizontalList);
 		logBar.setText("Render Log of selected PC");
 		freeze_imageButton = new ImageButton(p, logBar.getW() / 2 - btnSizeSmall / 2 - margin, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, lighter, pictoPaths[1], "Start rendering", logBar);
