@@ -1,12 +1,15 @@
 [
   {
     "Node0": {
+      "gpuName": "Intel(R) HD Graphics 520",
       "connectorPointId": "3732f0c0-acf5-4d5b-9aab-7371b71e0910",
       "useGpu_checkbox": false,
       "nodeType": 0,
-      "posX": 253,
-      "posY": 151,
+      "cpuName": "Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz",
+      "posX": 261,
+      "posY": 103,
       "pcStrengthCPU": 750,
+      "cpuCores": 4,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
@@ -18,7 +21,7 @@
   },
   {
     "Node1": {
-      "posX": 602,
+      "posX": 588,
       "connectorPointIsConnectedArray": [
         true,
         true,
@@ -29,7 +32,7 @@
         false,
         false
       ],
-      "posY": 224,
+      "posY": 184,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -58,8 +61,8 @@
   },
   {
     "Node2": {
-      "posX": 812,
-      "posY": 219,
+      "posX": 863,
+      "posY": 171,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -69,12 +72,15 @@
   },
   {
     "Node3": {
+      "gpuName": "Intel(R) HD Graphics 520",
       "connectorPointId": "c2480680-06c5-48b2-9402-8f1fe16cacc6",
       "useGpu_checkbox": false,
       "nodeType": 0,
-      "posX": 255,
-      "posY": 320,
+      "cpuName": "Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz",
+      "posX": 263,
+      "posY": 275,
       "pcStrengthCPU": 750,
+      "cpuCores": 4,
       "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
@@ -86,12 +92,15 @@
   },
   {
     "Node4": {
+      "gpuName": "No GPU",
       "connectorPointId": "050c7e66-be09-4c99-9431-ebc25598833c",
       "useGpu_checkbox": false,
       "nodeType": 2,
-      "posX": 250,
-      "posY": 494,
+      "cpuName": "No CPU",
+      "posX": 258,
+      "posY": 449,
       "pcStrengthCPU": -1,
+      "cpuCores": 21,
       "connectorPointConnectedId": "85900ff0-1c66-443f-bc8e-74478e58fdba",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
