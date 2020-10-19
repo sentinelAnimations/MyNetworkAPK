@@ -13,6 +13,7 @@ public class TimeField<T> implements Widgets {
 	private T parent;
 	private PApplet p;
 	private MainActivity mainActivity;
+	private PCInfoHelper pcInfoHelper;
 
 	public TimeField(PApplet p, int x, int y, int w, int h, int stdTs, int margin, int edgeRad, int textCol, int bgCol, Boolean isParented, Boolean renderBg, Boolean isDynamical, String prefix, String postfix, PFont stdFont, T parent) {
 		this.p = p;
@@ -35,7 +36,7 @@ public class TimeField<T> implements Widgets {
 		mainActivity = (MainActivity) p;
 		xShift = x;
 		yShift = y;
-
+		pcInfoHelper = new PCInfoHelper(p);
 		calcTime();
 	}
 
@@ -60,7 +61,7 @@ public class TimeField<T> implements Widgets {
 
 	private void calcTime() {
 		int prevLeftBorder = x - w / 2;
-		time = p.str(p.hour()) + " : " + p.str(p.minute()) + " : " + p.str(p.second());
+		time = pcInfoHelper.getReadableTime();
 		displT = prefix + time + postfix;
 
 		if (!isDynamical) {
@@ -123,10 +124,6 @@ public class TimeField<T> implements Widgets {
 		} else {
 			return false;
 		}
-	}
-
-	public String getTimeString() {
-		return time;
 	}
 
 	public void setPrefix(String setPrefix) {

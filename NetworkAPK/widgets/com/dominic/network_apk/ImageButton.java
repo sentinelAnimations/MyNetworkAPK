@@ -173,7 +173,9 @@ public class ImageButton<T> implements Widgets {
 	public void setIsClicked(Boolean state) {
 		isClicked = state;
 	}
-
+	public void setClickCount(int setClickCount) {
+	    clickCount=setClickCount;
+	}
 	public void setPos(int xp, int yp) {
 		if (isParented) {
 			xShift = xp;
@@ -189,6 +191,7 @@ public class ImageButton<T> implements Widgets {
 		imgPath = path;
 		loadPicto();
 	}
+	
 	
 	
 	

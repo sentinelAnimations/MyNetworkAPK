@@ -38,6 +38,7 @@ public class NodeEditor<T> {
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
 	private JSONArray loadedData = new JSONArray();
 	private FileInteractionHelper fileInteractionHelper;
+	private PCInfoHelper pcInfoHelper;
 
 	public NodeEditor(PApplet p, int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int red, float textYShift, String mySavePath, String[] buttonPaths, String[] nodePaths1, String[] nodePaths2, PFont stdFont) {
 		this.mode = mode;
@@ -91,6 +92,7 @@ public class NodeEditor<T> {
 		jHelper = new JsonHelper(p);
 
 		fileInteractionHelper = new FileInteractionHelper(p);
+		pcInfoHelper = new PCInfoHelper(p);
 
 	}
 
@@ -166,11 +168,11 @@ public class NodeEditor<T> {
 		// render toasts ---------------
 
 		handleButtons();
-		curTime = System.nanoTime() / 1000000000;
+		curTime = pcInfoHelper.getCurTime();
 		if (curTime - prevTime > mainActivity.getSuperShortTimeIntervall()) {
 			// node cpu/gpu checkboxes have to be checked for output count
 			calcConnectedNodes();
-			prevTime = System.nanoTime() / 1000000000;
+			prevTime = curTime;
 
 		}
 	}

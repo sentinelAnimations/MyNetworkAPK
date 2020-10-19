@@ -104,8 +104,8 @@ public class StrengthTestScreen {
                         p.fill(textCol);
                         p.textFont(stdFont);
                         p.textSize(stdTs);
-                        p.textAlign(p.CENTER,p.CENTER);
-                            p.text(pcListTexts[i], listX[i], strengthTest_HorizontalList.getY());
+                        p.textAlign(p.CENTER, p.CENTER);
+                        p.text(pcListTexts[i], listX[i], strengthTest_HorizontalList.getY());
                     }
 
                 } catch (Exception e) {
@@ -143,16 +143,16 @@ public class StrengthTestScreen {
         // log data---------------------------------
         // handle buttons---------------------------------------------
         if (startTest_ImageButton.getIsClicked()) {
-          if(allConnectedNodes!=null && allConnectedNodes.size()>0) {
-            strengthTestThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    controllStrengthTest(startTest_ImageButton.getClickCount() % 2 != 0);
-                }
-            });
-            strengthTestThread.start();
-            startTest_ImageButton.setIsClicked(false);
-        }
+            if (allConnectedNodes != null && allConnectedNodes.size() > 0) {
+                strengthTestThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        controllStrengthTest(startTest_ImageButton.getClickCount() % 2 != 0);
+                    }
+                });
+                strengthTestThread.start();
+                startTest_ImageButton.setIsClicked(false);
+            }
         }
     }
 
@@ -211,6 +211,7 @@ public class StrengthTestScreen {
                         if (strengthTestStatus == 1) {
                             allPCStrengthsCPU[i] = pcStrengthCPU;
                             allPCStrengthsGPU[i] = pcStrengthGPU;
+                            p.println("finished");
                             finishedPCs.add(n);
                         }
                         if (strengthTestStatus == 2) {
@@ -236,10 +237,12 @@ public class StrengthTestScreen {
                 n.setPCStrengthCPU(allPCStrengthsCPU[i]);
                 n.setPCStrengthGPU(allPCStrengthsGPU[i]);
             }
-            p.delay(3000);
+            p.delay(mainActivity.getSuperShortTimeIntervall());
             controllStrengthTest(false);
+            startTest_ImageButton.setClickCount(startTest_ImageButton.getClickCount() + 1);
             mainActivity.getNodeEditor().saveNodeEditor();
         }
+
     }
 
     private void updateLists() {
@@ -253,8 +256,8 @@ public class StrengthTestScreen {
                 allPCNames[i] = n.getPcSelection_DropdownMenu().getSelectedItem();
                 allPCStrengthsCPU[i] = n.getPCStrengthCPU();
                 allPCStrengthsGPU[i] = n.getPCStrengthGPU();
-                if(allPCNames[i].length()>0==false) {
-                    allPCNames[i]="Name unknown";
+                if (allPCNames[i].length() > 0 == false) {
+                    allPCNames[i] = "Name unknown";
                 }
                 String pcStrengthStrCPU = "", pcStrengthStrGPU = "";
                 if (allPCStrengthsCPU[i] < 0) {
@@ -328,7 +331,12 @@ public class StrengthTestScreen {
         allConnectedNodes = mainActivity.getNodeEditor().getAllConnectedNodes();
     }
 
+    public Boolean getStartedTest() {
+        return startedTest;
+    }
+
     public int getMode() {
         return mode;
     }
+
 }

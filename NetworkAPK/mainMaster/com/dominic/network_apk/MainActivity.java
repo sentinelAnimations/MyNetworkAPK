@@ -50,9 +50,11 @@ public class MainActivity extends PApplet {
     int mode = 0;
 
     // integers-------------------------------------------------
-    int windowTopBarHeight, stdTimeIntervall = 60, shortTimeIntervall = 10, superShortTimeIntervall = 1, longTimeIntervall = 5 * 60;
+    int windowTopBarHeight, stdTimeIntervall = 60, shortTimeIntervall = 10, superShortTimeIntervall = 1, longTimeIntervall = 5 * 60, cpuCoresMaster = 0;
     // integers-------------------------------------------------
 
+    // long-----------------------------------------------------
+    private long curTime = 0, lastLogTime = 0, prevLastModified = 0;
     // Booleans-------------------------------------------------
     private Boolean isMaster = true;
     // Booleans-------------------------------------------------
@@ -67,7 +69,7 @@ public class MainActivity extends PApplet {
     // Dimens--------------------------------------------------
 
     // Strings--------------------------------------------------
-    private String APKName = "InSevenDays© 1.0", APKDescription = "A network solution";
+    private String APKName = "InSevenDays© 1.0", APKDescription = "A network solution", cpuNameMaster = "", gpuNameMaster = "";
     private String[] modeNamesMaster = { "Home", "Node Editor", "Settings", "Share", "Theme", "Strength test", "Questions" };
     private String[] modeNamesSlaves = { modeNamesMaster[0], modeNamesMaster[2], modeNamesMaster[4], modeNamesMaster[5] };
 
@@ -109,6 +111,10 @@ public class MainActivity extends PApplet {
     // string arrays -------------------
     // images--------------------------------------------------
 
+    // Threads--------------------------
+    private Thread getSpecInfoThread;
+    // Threads--------------------------
+
     // Classes--------------------------------------------------
     // Main classes-------------------------------
     // Master ------------------------
@@ -131,6 +137,13 @@ public class MainActivity extends PApplet {
     private ImageButton[] mainButtonsMaster = new ImageButton[8];
     private ImageButton[] mainButtonsSlave = new ImageButton[4];
     // widgets -----------------------------------
+
+    // Helpers -----------------------------------
+    private JsonHelper jsonHelper;
+    private FileInteractionHelper fileInteractionHelper;
+    private PCInfoHelper pcInfoHelper;
+    private StrengthTestHelper strengthTestHelper;
+    // Helpers -----------------------------------
     // Classes--------------------------------------------------
     // Global variables
     // -----------------------------------------------------------------------
@@ -184,8 +197,24 @@ public class MainActivity extends PApplet {
     }
 
     public void initializeClassInstancesMaster() {
-
+        jsonHelper = new JsonHelper(this);
+        fileInteractionHelper = new FileInteractionHelper(this);
+        pcInfoHelper = new PCInfoHelper(this);
+        strengthTestHelper = new StrengthTestHelper(this, "logDataMaster", this);
         loadingScreen.setLoadingStatus("Init MainButtons");
+
+        // pc specs ----------------------------------------
+        cpuNameMaster = pcInfoHelper.getCPUName();
+        getSpecInfoThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                gpuNameMaster = pcInfoHelper.getGPUName();
+            }
+        });
+        getSpecInfoThread.start();
+        cpuCoresMaster = pcInfoHelper.getAvailableProcessors();
+        // pc specs ----------------------------------------
+
         String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "share.png", absPathPictos + "themeSettings.png", absPathPictos + "strength.png", absPathPictos + "questions.png" };
         for (int i = 0; i < mainButtonsMaster.length; i++) {
             String s = "";
@@ -240,7 +269,7 @@ public class MainActivity extends PApplet {
 
         // variableInitialisation for mode 101 --> RenderOverview -------------
         loadingScreen.setLoadingStatus("Init RenderOverview");
-        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png",absPathPictos+"masterPC.png"};
+        String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png", absPathPictos + "masterPC.png" };
         String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
         renderOverview = new RenderOverview(this, 101, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red, blue, textYShift, getMasterCommandFilePath(), rOpp, hoLiPictoPathsRenderOverview, arrowPaths, fileExplorerPaths, stdFont);
         // variableInitialisation for mode 101 --> RenderOverview -------------
@@ -328,7 +357,7 @@ public class MainActivity extends PApplet {
 
     @Override
     public void draw() {
-
+        // render all ----------------------------------------
         background(dark);
 
         if (mode == 0) {
@@ -371,6 +400,20 @@ public class MainActivity extends PApplet {
                 if (mode == 101) {
                     renderOverview.render();
                 }
+                // log ---------------------
+
+                File cmdFile = new File(getMasterCommandFilePath());
+                if (strengthTestScreen.getStartedTest() || cmdFile.lastModified() != prevLastModified) {
+                    strengthTestHelper.checkForStrengthTestCommands(cpuNameMaster, gpuNameMaster, getSpecInfoThread);
+                    prevLastModified = cmdFile.lastModified();
+                }
+
+                curTime = pcInfoHelper.getCurTime();
+                if (curTime - lastLogTime > getStdTimeIntervall()) {
+                    logDataMaster();
+                    lastLogTime = curTime;
+                }
+                // log ---------------------
             }
         } else {
             if (loadingScreen.getInstanciatedClasses()) {
@@ -387,8 +430,14 @@ public class MainActivity extends PApplet {
                 if (mode == 4) {
                     questionScreen.render();
                 }
+
+                // log ---------------------
+                homeScreenSlaves.calcBackgroundTasks();
+                // log ---------------------
             }
         }
+        // render all ----------------------------------------
+
     }
 
     public void renderMainButtonsMaster() {
@@ -474,6 +523,47 @@ public class MainActivity extends PApplet {
                 mainButtonsSlave[i].setIsClicked(false);
             }
         }
+    }
+
+    public void logDataMaster() {
+        println("logged data from master");
+        int renderMode = 0;
+        if (mode == 101) {
+            renderMode = 1;
+        }
+        jsonHelper.clearArray();
+        JSONObject settingsDetails = new JSONObject();
+        JSONObject settingsObject = new JSONObject();
+
+        settingsDetails.put("logTime", curTime);
+        settingsDetails.put("readableTime", pcInfoHelper.getReadableTime());
+        settingsDetails.put("renderMode", renderMode);
+        settingsDetails.put("cpuCores", cpuCoresMaster);
+        settingsDetails.put("cpuName", cpuNameMaster);
+        settingsDetails.put("gpuName", gpuNameMaster);
+        settingsDetails.put("pcStrengthCPU", strengthTestHelper.getStrengthCPU());
+        settingsDetails.put("pcStrengthGPU", strengthTestHelper.getStrengthGPU());
+        if (strengthTestHelper.getFinishedTestingCPU() && strengthTestHelper.getFinishedTestingGPU()) {
+            println("pcStrength: ", strengthTestHelper.getStrengthCPU(), strengthTestHelper.getStrengthGPU());
+            strengthTestHelper.setFinishedTestingCPU(false);
+            strengthTestHelper.setFinishedTestingGPU(false);
+            strengthTestHelper.setStrengthTestStatus(1);
+            println("now deleting ---------------------");
+            fileInteractionHelper.deleteFolder(strengthTestHelper.getBlendFile().getParentFile().getAbsolutePath());
+        }
+        settingsDetails.put("strengthTestStatus", strengthTestHelper.getStrengthTestStatus());
+
+        settingsObject.put("SystemLog", settingsDetails);
+
+        String jsonPath = getPathToPCFolder() + "\\" + getPCName() + "\\" + getLogFileName();
+        if (fileInteractionHelper.createParentFolders(jsonPath)) {
+            jsonHelper.appendObjectToArray(settingsObject);
+            Boolean allWorking = jsonHelper.writeData(jsonPath);
+        }
+    }
+
+    public void startStrengthTestMaster() {
+        strengthTestHelper.startStrengthTest();
     }
 
     @Override
@@ -815,9 +905,11 @@ public class MainActivity extends PApplet {
     public String getStrengthTestBlendfilePath() {
         return strengthTestBlendfilePath;
     }
+
     public String getRenderOverviewName() {
         return "RenderOverview";
     }
+
     public String[] getModeNamesMaster() {
         return modeNamesMaster;
     }
@@ -845,6 +937,7 @@ public class MainActivity extends PApplet {
     public RenderOverview getRenderOverview() {
         return renderOverview;
     }
+
     public HomeScreenSlaves getHomeScreenSlaves() {
         return homeScreenSlaves;
     }
