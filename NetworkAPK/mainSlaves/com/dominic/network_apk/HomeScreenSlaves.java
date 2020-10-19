@@ -45,10 +45,8 @@ public class HomeScreenSlaves {
     private PCInfoHelper pcInfoHelper;
     private FileInteractionHelper fileInteractionHelper;
     private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
-    private Thread getSpecInfoThread, startTestOnGPUThread;
-    // StrengthTest files --------------------------------------------------
-    private File blendFile, ressourceBlendFile, ressourceRandomSeed, ressourceForceGPURendering, randomSeedFile, forceGPURenderingFile;
-    // StrengthTest files --------------------------------------------------
+    private Thread getSpecInfoThread;
+ 
 
     private CommandExecutionHelper commandExecutionHelper;
 
@@ -161,30 +159,9 @@ public class HomeScreenSlaves {
             strengthTestHelper.checkForStrengthTestCommands(cpuName, gpuName, getSpecInfoThread);
             prevLastModified = cmdFile.lastModified();
         }
-      
-        /*
-        if (curTime - lastLogTime2 > mainActivity.getSuperShortTimeIntervall()) {
-            if (strengthTestStatus == 0) {
-                p.println("check", cpuName, gpuName);
-                //checkIfStrengthTestCPUIsFinished();
-                //checkIfStrengthTestGPUIsFinished();
-            }
-            lastLogTime2 = curTime;
-        }
-
-        if (startStrengthTest && strengthTestStatus < 0) {
-            //startStrengthTest();
-            strengthTestStatus = 0;
-            startStrengthTest = false;
-        }*/
-        // p.println("infoThreadAlive",getSpecInfoThread.isAlive());
-        // p.println(strengthTestStatus);
-        if (startTestOnGPUThread != null) {
-            // p.println(startTestOnGPUThread.isAlive());
-        }
     }
 
-    private void logData() {
+    public void logData() {
         jsonHelper.clearArray();
         JSONObject settingsDetails = new JSONObject();
         JSONObject settingsObject = new JSONObject();
@@ -203,9 +180,8 @@ public class HomeScreenSlaves {
             strengthTestHelper.setFinishedTestingCPU(false);
             strengthTestHelper.setFinishedTestingGPU(false);
             strengthTestHelper.setStrengthTestStatus(1);
-            p.println("now deleting ---------------------");
-            fileInteractionHelper.deleteFolder(blendFile.getParentFile().getAbsolutePath());
-
+            p.println("now deleting files ---------------------");
+            fileInteractionHelper.deleteFolder(strengthTestHelper.getBlendFile().getParentFile().getAbsolutePath());
         }
         settingsDetails.put("strengthTestStatus", strengthTestHelper.getStrengthTestStatus());
 
@@ -257,250 +233,7 @@ public class HomeScreenSlaves {
             e.printStackTrace();
         }
     }
-/*
-    private void checkForCommands() {
-        JSONArray loadedData = jsonHelper.getData(mainActivity.getMasterCommandFilePath());
-        if (loadedData.isEmpty()) {
-        } else {
-            try {
-                String modeName = mainActivity.getModeNamesMaster()[5];
-                JSONObject loadedObject = (JSONObject) (loadedData.get(5));
-                loadedObject = (JSONObject) loadedObject.get(modeName);
-                Boolean startTesting = Boolean.parseBoolean(loadedObject.get("startTesting").toString());
-                if (startTesting != null) {
-                    if (startTesting == false) {
-                        startStrengthTest = false;
-                        p.println("stop from check for commands");
-                        stopStrengthTest();
-                        if (strengthTestStatus == 0) {
-                            strengthTestStatus = -1;
-                            p.println("set to -1");
-                        }
-                    }
-                    if (startTesting != prevStartTesting) {
-                        if (!startTesting) {
-                            p.println("set to -1 2");
-                            strengthTestStatus = -1;
-                        }
-                        startStrengthTest = startTesting;
-                    }
-                    prevStartTesting = startTesting;
 
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // strengthtTest ---------------------------------
-    private void startStrengthTest() {
-        copyStrengthTestResources(true);
-
-        if (cpuName.length() > 0) {
-            startTestOnCPU();
-            String message = "Strength test started on CPU";
-            makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, message.length() * 3, light, textCol, textYShift, false, message, stdFont, null));
-        } else {
-            finishedTestingCPU = true;
-        }
-        if ((getSpecInfoThread.isAlive() || gpuName.length() > 0) && (startTestOnGPUThread == null || !startTestOnGPUThread.isAlive())) {
-            startTestOnGPUThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!Thread.currentThread().isInterrupted()) {
-                        while (getSpecInfoThread.isAlive()) {
-                            startTimeGPUTest = curTime;
-                            p.delay(1000);
-                            p.println("get gpu name");
-                        }
-                        if (gpuName.length() > 0) {
-                            while (!checkIfStrengthTestCPUIsFinished()) {
-                                startTimeGPUTest = curTime;
-                                p.delay(1000);
-                                p.println("while check cpuForFinished()");
-                            }
-
-                            cpuTestDuration = curTime - startTimeCPUTest;
-                            pcStrengthCPU = calcStrength((int) cpuTestDuration);
-                            p.println("strTestStat: ", strengthTestStatus);
-                            if (strengthTestStatus != -1) {
-                                startTestOnGPU();
-                                String message = "Strength test started on GPU";
-                                makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, message.length() * 3, light, textCol, textYShift, false, message, stdFont, null));
-                                while (strengthTestStatus == 0) {
-                                    p.delay(1000);
-                                }
-                            }
-                        } else {
-                            finishedTestingGPU = true;
-                        }
-                    }
-                }
-
-            });
-            startTestOnGPUThread.start();
-        }
-    }
-
-    private void startTestOnCPU() {
-        startTimeCPUTest = System.nanoTime() / 1000000000;
-        if (blendFile.exists() && randomSeedFile.exists() && forceGPURenderingFile.exists()) {
-            // create starter .bat ---------------------------
-            String pathToRenderLog = blendFile.getParentFile().getAbsolutePath() + "\\log\\logfileRendering.txt";
-            pathToStrengthTestResult = blendFile.getParentFile().getAbsolutePath() + "\\results\\strengthTestRenderResultCPU";
-            fileInteractionHelper.createParentFolders(pathToRenderLog);
-            fileInteractionHelper.createParentFolders(pathToStrengthTestResult);
-            p.println();
-            String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on CPU", "ECHO -----------------------------", "blender -b \"" + blendFile.getAbsolutePath() + "\" -P \"" + randomSeedFile.getAbsolutePath() + "\" -o \"" + pathToStrengthTestResult + "\" -F PNG -f 2 >>" + pathToRenderLog, "EXIT" };
-
-            Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, strengthTestTerminalWindowName);
-            if (isExecuted) {
-            } else {
-                strengthTestStatus = -1;
-                p.println("failed to start on CPU");
-            }
-        }
-    }
-
-    private void startTestOnGPU() {
-        startTimeGPUTest = System.nanoTime() / 1000000000;
-        if (blendFile.exists() && randomSeedFile.exists() && forceGPURenderingFile.exists()) {
-            p.println("started on gpu");
-            // create starter .bat ---------------------------
-            String pathToRenderLog = blendFile.getParentFile().getAbsolutePath() + "\\log\\logfileRendering.txt";
-            pathToStrengthTestResult = blendFile.getParentFile().getAbsolutePath() + "\\results\\strengthTestRenderResultGPU";
-            fileInteractionHelper.createParentFolders(pathToRenderLog);
-            fileInteractionHelper.createParentFolders(pathToStrengthTestResult);
-            String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on GPU", "ECHO -----------------------------", "blender -b \"" + blendFile.getAbsolutePath() + "\" -P \"" + randomSeedFile.getAbsolutePath() + "\" -P \"" + forceGPURenderingFile.getAbsolutePath() + "\" -o \"" + pathToStrengthTestResult + "\" -F PNG -f 2 >>" + pathToRenderLog, "EXIT" };
-
-            Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, strengthTestTerminalWindowName);
-            if (isExecuted) {
-            } else {
-                strengthTestStatus = -1;
-                p.println("failed to start on GPU");
-            }
-        }
-    }
-
-    private void stopStrengthTest() {
-        p.println("stoping sterngtht test");
-        commandExecutionHelper.killTaskByWindowtitle(strengthTestTerminalWindowName);
-        strengthTestStatus = -1;
-        startTestOnGPUThread.interrupt();
-        p.println("interupt: ", startTestOnGPUThread.isAlive());
-    }
-
-    private Boolean checkIfStrengthTestCPUIsFinished() {
-        finishedTestingCPU = false;
-        if (cpuName.length() > 0 == false) {
-            finishedTestingCPU = true;
-        } else {
-            File strengthTestResultFile = new File(pathToStrengthTestResult);
-            String[] strengthTestResults = fileInteractionHelper.getFoldersAndFiles(strengthTestResultFile.getParentFile().getAbsolutePath(), false);
-            // finishedTestingCPU = strengthTestResults.length > 0 == true;
-            if (strengthTestResults != null && strengthTestResults.length > 0) {
-                for (int i = 0; i < strengthTestResults.length; i++) {
-                    String[] m1 = p.match(strengthTestResults[i].toUpperCase(), "CPU");
-                    if (m1 != null) {
-                        finishedTestingCPU = true;
-                        break;
-                    }
-                }
-            }
-            if (curTime - startTimeCPUTest > maxTestTime) {
-                finishedTestingCPU = true;
-                p.println("stop from checkCPUFinished");
-                stopStrengthTest();
-            }
-        }
-        if (strengthTestStatus != 0) {
-            finishedTestingCPU = true;
-        }
-        if (finishedTestingCPU) {
-            if (!startTestOnGPUThread.isAlive()) {
-                p.println("loging from cpuCheck");
-                logData();
-            }
-        }
-        return finishedTestingCPU;
-    }
-
-    private Boolean checkIfStrengthTestGPUIsFinished() {
-        finishedTestingGPU = false;
-        if (gpuName.length() > 0 == false && !getSpecInfoThread.isAlive()) {
-            finishedTestingGPU = true;
-        } else {
-            File strengthTestResultFile = new File(pathToStrengthTestResult);
-            String[] strengthTestResults = fileInteractionHelper.getFoldersAndFiles(strengthTestResultFile.getParentFile().getAbsolutePath(), false);
-            if (strengthTestResults != null && strengthTestResults.length > 0) {
-                for (int i = 0; i < strengthTestResults.length; i++) {
-                    String[] m1 = p.match(strengthTestResults[i].toUpperCase(), "GPU");
-                    if (m1 != null) {
-                        finishedTestingGPU = true;
-                        break;
-                    }
-                }
-            }
-            if (curTime - startTimeGPUTest > maxTestTime) {
-                finishedTestingGPU = true;
-                p.println("stop from checkGPUFinished");
-
-                stopStrengthTest();
-            }
-        }
-        if (strengthTestStatus != 0) {
-            finishedTestingGPU = true;
-        }
-        if (finishedTestingGPU) {
-            gpuTestDuration = curTime - startTimeGPUTest;
-            pcStrengthGPU = calcStrength((int) gpuTestDuration);
-            if (strengthTestStatus != -1) {
-                p.println("log data from gpu");
-                logData();
-            }
-        }
-        return finishedTestingGPU;
-    }
-
-    private Boolean copyStrengthTestResources(Boolean deleteResultsFolder) {
-        Boolean copiedFiles = true, blendFileCopied = false, randomSeedCopied = false, forceGPURenderingCopied = false;
-
-        String relativeFilePathBlendfile = "/blendFiles/strengthTest.blend";
-        String copyFromPathBlendfile = getClass().getResource(relativeFilePathBlendfile).getPath().toString();
-        ressourceBlendFile = new File(copyFromPathBlendfile);
-        String destinationBlendfile = fileInteractionHelper.getAbsolutePath(mainActivity.getStrengthTestBlendfilePath()) + "\\" + ressourceBlendFile.getName();
-        if (deleteResultsFolder) {
-            fileInteractionHelper.deleteFolder(new File(destinationBlendfile).getParentFile().getAbsolutePath());
-        }
-        blendFileCopied = fileInteractionHelper.copyFile(copyFromPathBlendfile, destinationBlendfile);
-        blendFile = new File(destinationBlendfile);
-
-        String relativeFilePathRandomSeed = "/pythonScripts/randomSeed.py";
-        String copyFromPathRandomSeed = getClass().getResource(relativeFilePathRandomSeed).getPath().toString();
-        ressourceRandomSeed = new File(copyFromPathRandomSeed);
-        String destinationRandomSeed = fileInteractionHelper.getAbsolutePath(mainActivity.getStrengthTestBlendfilePath()) + "\\" + ressourceRandomSeed.getName();
-        randomSeedCopied = fileInteractionHelper.copyFile(copyFromPathRandomSeed, destinationRandomSeed);
-        randomSeedFile = new File(destinationRandomSeed);
-
-        String relativeFileForceGPURendering = "/pythonScripts/forceGPURendering.py";
-        String copyFromPathForceGPURendering = getClass().getResource(relativeFileForceGPURendering).getPath().toString();
-        ressourceForceGPURendering = new File(copyFromPathForceGPURendering);
-        String destinationForceGPURendering = fileInteractionHelper.getAbsolutePath(mainActivity.getStrengthTestBlendfilePath()) + "\\" + ressourceForceGPURendering.getName();
-        forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, destinationForceGPURendering);
-        forceGPURenderingFile = new File(destinationForceGPURendering);
-
-        p.println(blendFile.getAbsolutePath(), "\n", randomSeedFile.getAbsolutePath(), "\n", forceGPURenderingFile.getAbsolutePath());
-
-        return (blendFileCopied && randomSeedCopied && forceGPURenderingCopied) == true;
-    }
-
-    private int calcStrength(int duration) {
-        return (int) (100.0 / (duration / (referenceRendertime / 100.0)) * 100.0);
-    }
-
-    // strengthTest --------------------------------------------
-     */
     public void onMousePressed(int mouseButton) {
         for (int i = 0; i < mainButtons.length; i++) {
             mainButtons[i].onMousePressed();
@@ -527,7 +260,7 @@ public class HomeScreenSlaves {
     }
 
     public Thread getStartTestOnGPUThread() {
-        return startTestOnGPUThread;
+        return strengthTestHelper.getStartTestOnGPUThread();
     }
 
 }

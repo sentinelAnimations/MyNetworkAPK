@@ -39,8 +39,6 @@ public class StrengthTestHelper<T> {
 
         File cmdFile = new File(mainActivity.getMasterCommandFilePath());
         if (cmdFile.lastModified() != prevLastModifiedCmdFile) {
-            
-            p.println("datafile changed");
             this.cpuName = cpuName;
             this.gpuName = gpuName;
             this.getSpecInfoThread = getSpecInfoThread;
@@ -58,10 +56,10 @@ public class StrengthTestHelper<T> {
                             startStrengthTest = false;
                             p.println("stop from check for commands");
                             stopStrengthTest();
-                            if (strengthTestStatus == 0) {
+                           // if (strengthTestStatus == 0) {
                                 strengthTestStatus = -1;
                                 p.println("set to -1");
-                            }
+                            //}
                         }
                         if (startTesting != prevStartTesting) {
                             if (!startTesting) {
@@ -84,18 +82,13 @@ public class StrengthTestHelper<T> {
 
     private void calcBackgroundTasks() {
         curTime = pcInfoHelper.getCurTime();
-
-        p.println(startStrengthTest, strengthTestStatus);
         if (startStrengthTest && (strengthTestStatus < 0 || strengthTestStatus == 1)) {
             startStrengthTest();
             strengthTestStatus = 0;
             startStrengthTest = false;
-            p.println("----------------------------------------------");
         }
         if (curTime - lastLogTime > mainActivity.getSuperShortTimeIntervall()) {
-            p.println("strTStat: ", strengthTestStatus);
             if (strengthTestStatus == 0) {
-                p.println("check", cpuName, gpuName);
                 checkIfStrengthTestCPUIsFinished();
                 checkIfStrengthTestGPUIsFinished();
             }
@@ -236,9 +229,9 @@ public class StrengthTestHelper<T> {
         }
 
         if (finishedTestingCPU) {
-            if (!startTestOnGPUThread.isAlive()) {
+            if (startTestOnGPUThread!=null && !startTestOnGPUThread.isAlive()) {
                 p.println("loging from cpuCheck");
-                // logData();
+                logData();
             }
         }
         return finishedTestingCPU;
@@ -347,6 +340,9 @@ public class StrengthTestHelper<T> {
 
     public int getStrengthGPU() {
         return pcStrengthGPU;
+    }
+    public Thread getStartTestOnGPUThread() {
+    	return startTestOnGPUThread;
     }
     
     public void setFinishedTestingCPU(Boolean state) {

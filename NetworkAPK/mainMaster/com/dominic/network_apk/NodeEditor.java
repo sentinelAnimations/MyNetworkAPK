@@ -490,7 +490,7 @@ public class NodeEditor<T> {
 				// -----------------------------------------------------
 				if (nodeType < 3) {
 					String cpuName = "No CPU", gpuName = "No GPU";
-					int pcStrengthCPU = -1, pcStrengthGPU = -1,cpuCores=0;
+					int pcStrengthCPU = -1, pcStrengthGPU = -1, cpuCores = 0;
 
 					String connectorPointConnectedId = jsonObject.getAsJsonObject("Node" + i).get("connectorPointConnectedId").getAsString();
 					String connectorPointId = jsonObject.getAsJsonObject("Node" + i).get("connectorPointId").getAsString();
@@ -526,7 +526,7 @@ public class NodeEditor<T> {
 					n.setPCStrengthGPU(pcStrengthGPU);
 					n.setCPUName(cpuName);
 					n.setGPUName(gpuName);
-					
+
 					n.setIsGrabbed(false);
 					n.getOutputConnectorPoint().setIsConnected(isConnectorPointConnected);
 					if (isConnectorPointConnected) {
@@ -805,6 +805,23 @@ public class NodeEditor<T> {
 
 	public ArrayList getNodes() {
 		return nodes;
+	}
+
+	public Node getMasterNode() {
+		Node masterNode = null;
+		calcConnectedNodes();
+
+		if (allConnectedNodes.size() > 0) {
+			for (int i = 0; i < allConnectedNodes.size(); i++) {
+				Node n = allConnectedNodes.get(i);
+				if (n.getPcSelection_DropdownMenu().getSelectedItem().toUpperCase().equals(mainActivity.getPCName().toUpperCase())) {
+					masterNode = n;
+					break;
+				}
+			}
+		}
+		//p.println(masterNode.getPcSelection_DropdownMenu().getSelectedItem(),"--");
+		return masterNode;
 	}
 
 	public ArrayList<ConnectorPoint> getConnectorPoints() {
