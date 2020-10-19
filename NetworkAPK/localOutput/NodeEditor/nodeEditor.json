@@ -6,33 +6,33 @@
       "useGpu_checkbox": false,
       "nodeType": 0,
       "cpuName": "Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz",
-      "posX": 261,
-      "posY": 103,
+      "posX": 218,
+      "posY": 14,
       "pcStrengthCPU": 750,
       "cpuCores": 4,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
       "selectPc_dropdownItem": "myMasterPC - Kopie1",
-      "selectPc_dropdown": 0,
+      "selectPc_dropdown": 1,
       "nodeId": "6d78ea1a-e697-43b2-9da0-d442645caade",
       "pcStrengthGPU": 428
     }
   },
   {
     "Node1": {
-      "posX": 588,
+      "posX": 545,
       "connectorPointIsConnectedArray": [
         true,
         true,
-        false,
+        true,
         true,
         true,
         false,
         false,
         false
       ],
-      "posY": 184,
+      "posY": 95,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -46,8 +46,8 @@
       "connectorPointConnectedIds": [
         "3732f0c0-acf5-4d5b-9aab-7371b71e0910",
         "c2480680-06c5-48b2-9402-8f1fe16cacc6",
-        null,
         "050c7e66-be09-4c99-9431-ebc25598833c",
+        "4b6db0a4-75a5-4d15-b8d1-d8723cbd7a39",
         "69749ba8-f384-4ece-b035-3dc929326041",
         null,
         null,
@@ -61,8 +61,8 @@
   },
   {
     "Node2": {
-      "posX": 863,
-      "posY": 171,
+      "posX": 820,
+      "posY": 82,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -77,37 +77,57 @@
       "useGpu_checkbox": false,
       "nodeType": 0,
       "cpuName": "Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz",
-      "posX": 263,
-      "posY": 275,
-      "pcStrengthCPU": 750,
+      "posX": 220,
+      "posY": 186,
+      "pcStrengthCPU": 150,
       "cpuCores": 4,
       "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
       "selectPc_dropdownItem": "myMasterPC - Kopie2",
-      "selectPc_dropdown": 1,
+      "selectPc_dropdown": 2,
       "nodeId": "160e244c-3804-453a-9f00-8f5f5488b5c8",
-      "pcStrengthGPU": 428
+      "pcStrengthGPU": 100
     }
   },
   {
     "Node4": {
-      "gpuName": "No GPU",
+      "gpuName": "Intel(R) HD Graphics 520",
       "connectorPointId": "050c7e66-be09-4c99-9431-ebc25598833c",
       "useGpu_checkbox": false,
       "nodeType": 2,
-      "cpuName": "No CPU",
-      "posX": 258,
-      "posY": 449,
-      "pcStrengthCPU": -1,
-      "cpuCores": 21,
+      "cpuName": "Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz",
+      "posX": 215,
+      "posY": 360,
+      "pcStrengthCPU": 1750,
+      "cpuCores": 4,
+      "connectorPointConnectedId": "2e9dc605-e6dd-440e-a96a-afe838a7d123",
+      "useCpu_checkbox": false,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdownItem": "myMasterPC - Kopie3",
+      "selectPc_dropdown": 3,
+      "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214",
+      "pcStrengthGPU": 628
+    }
+  },
+  {
+    "Node5": {
+      "gpuName": "Intel(R) HD Graphics 520",
+      "connectorPointId": "4b6db0a4-75a5-4d15-b8d1-d8723cbd7a39",
+      "useGpu_checkbox": false,
+      "nodeType": 2,
+      "cpuName": "Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz",
+      "posX": 222,
+      "posY": 539,
+      "pcStrengthCPU": 857,
+      "cpuCores": 4,
       "connectorPointConnectedId": "85900ff0-1c66-443f-bc8e-74478e58fdba",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "",
-      "selectPc_dropdown": -1,
-      "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214",
-      "pcStrengthGPU": -1
+      "selectPc_dropdownItem": "myMasterPC",
+      "selectPc_dropdown": 0,
+      "nodeId": "77c611b7-511e-4916-8060-850d8e8037dc",
+      "pcStrengthGPU": 545
     }
   }
 ]
