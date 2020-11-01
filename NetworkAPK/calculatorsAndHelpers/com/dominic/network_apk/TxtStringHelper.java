@@ -1,9 +1,13 @@
 package com.dominic.network_apk;
 
+import java.io.PrintWriter;
+
 import processing.core.PApplet;
 
 public class TxtStringHelper {
 	PApplet p;
+	PrintWriter output;
+
 	public TxtStringHelper(PApplet p) {
 		this.p=p;
 	}
@@ -37,5 +41,12 @@ public class TxtStringHelper {
 			}
 		}
 		return s;
+	}
+	
+	public void writeToFile(String text,String path) {
+		  output = p.createWriter(path); 
+		  output.println(text);
+		  output.flush(); 
+		  output.close();
 	}
 }

@@ -78,7 +78,7 @@ public class MainActivity extends PApplet {
 	private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles";
 	// Local -----------
 	// File names -------
-	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
+	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json",relativeMasterRenderCommandFilePath="MasterCommands\\MasterRenderJobs.json",relativePathRenderPythonScrips="renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
 	// File names -------
 
 	// shared ----------
@@ -546,8 +546,8 @@ public class MainActivity extends PApplet {
 		settingsDetails.put("cpuCores", cpuCoresMaster);
 		settingsDetails.put("cpuName", cpuNameMaster);
 		settingsDetails.put("gpuName", gpuNameMaster);
-		settingsDetails.put("pcStrengthCPU",1000);
-		settingsDetails.put("pcStrengthGPU",2000);
+		settingsDetails.put("pcStrengthCPU", 1000);
+		settingsDetails.put("pcStrengthGPU", 2000);
 		settingsDetails.put("pcStrengthCPU", strengthTestHelper.getStrengthCPU());
 		settingsDetails.put("pcStrengthGPU", strengthTestHelper.getStrengthGPU());
 		if (strengthTestHelper.getFinishedTestingCPU() && strengthTestHelper.getFinishedTestingGPU()) {
@@ -959,6 +959,38 @@ public class MainActivity extends PApplet {
 	public String getMasterCommandFilePath() {
 		return getPathToCloud() + "\\" + relativeMasterCommandFilePath;
 	}
+	
+	public String getMasterRenderJobsFilePath() {
+		return getPathToCloud() + "\\" + relativeMasterRenderCommandFilePath;
+	}
+	public String getRenderPythonScriptsPath() {
+		return getPathToCloud()+"\\"+blenderRenderFilesFolderName+"\\"+relativePathRenderPythonScrips;
+	}
+	
+	public String getRenderLogPath() {
+		return getPathToBlenderRenderFolder()+"\\"+getPCName()+"\\renderLog.txt";
+	}
+	
+	public Boolean[] getHardwareToRenderWith(String pcNameStr) {
+		Boolean[] renderHardware=new Boolean[2]; //0=useCpu?, 1=useGpu?
+		Node foundNode=null;
+		for(int i=0;i<nodeEditor.getAllConnectedNodes().size();i++) {
+			Node n=(Node) nodeEditor.getAllConnectedNodes().get(i);
+			if(n.getPcSelection_DropdownMenu().getSelectedItem().toUpperCase().equals(pcNameStr.toUpperCase())) {
+				foundNode=n;
+				break;
+			}
+		}
+		if(foundNode!=null) {
+			renderHardware[0]=foundNode.getCheckoxes()[0].getIsChecked();
+			renderHardware[1]=foundNode.getCheckoxes()[1].getIsChecked();
+
+		}else {
+			renderHardware[0]=false;
+			renderHardware[1]=false;
+		}
+		return renderHardware;
+	}
 
 	public void setColorTheme() {
 		JsonHelper jHelper = new JsonHelper(this);
@@ -993,7 +1025,7 @@ public class MainActivity extends PApplet {
 					break;
 				case 6:
 					textDark = pickedCol;
-					break; 
+					break;
 				default:
 					throw new IllegalArgumentException("Unexpected value: " + i);
 				}
