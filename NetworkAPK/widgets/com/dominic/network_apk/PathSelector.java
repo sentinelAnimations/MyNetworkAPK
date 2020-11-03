@@ -13,7 +13,7 @@ public class PathSelector<T> implements Widgets {
 
     private int x, y, xShift, yShift, w, h, stdTs, edgeRad, margin, bgCol, textCol, textDark, btnSize, hoverTime = 0, textStartX = 0;
     private float textYShift;
-    private Boolean isParented, selectFolder, isHovering = false, fileExplorerIsOpen = false, renderPathSelector = true;
+    private Boolean isParented, selectFolder, isHovering = false, fileExplorerIsOpen = false, renderPathSelector = true,isCanceled=false;
     private String t = "", displayText = "", hint, imgPath;
     private String[] fileExplorerPictoPaths;
     private PFont stdFont;
@@ -98,6 +98,7 @@ public class PathSelector<T> implements Widgets {
             }
 
             if (fileExplorer.getIsClosed()) {
+            	isCanceled=fileExplorer.getIsCanceled();
                 if (fileExplorer.getIsCanceled()) {
                 } else {
                     String[] splitStr = p.split(fileExplorer.getPath(), "\\");
@@ -260,7 +261,9 @@ public class PathSelector<T> implements Widgets {
     public Boolean getFileExplorerIsOpen() {
         return fileExplorerIsOpen;
     }
-
+    public Boolean getIsCanceled() {
+    	return isCanceled;
+    }
     public String getPath() {
         return t;
     }

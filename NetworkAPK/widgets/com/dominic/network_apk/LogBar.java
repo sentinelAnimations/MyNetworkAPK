@@ -105,11 +105,9 @@ public class LogBar<T> implements Widgets{
     }
     
     public void setText(String setText) {
-        String prefix="Render log: ";
-        logText=prefix+setText;
+        logText=setText;
         if(p.textWidth(logText)>w-picto.getW()-margin*2) {
             hoverText.setInfoText(logText);
-            logText=prefix;
             for(int i=0;i<setText.length();i++) {
                 if(p.textWidth(logText+setText.charAt(i)+"...")>w-picto.getW()-margin*2) {
                     logText+=setText.charAt(i);

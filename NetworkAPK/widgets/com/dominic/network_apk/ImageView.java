@@ -81,7 +81,7 @@ public class ImageView<T> implements Widgets {
 						p.stroke(border);
 					} else {
 						p.stroke(lighter);
-						if (i < borderCols.length) {
+						if (borderCols!=null && i < borderCols.length) {
 							p.stroke(borderCols[i]);
 						}
 					}

@@ -105,6 +105,7 @@ public class ImageViewScreen {
 				borderCols[i] = lighter;
 			}
 		}
+		p.println(borderCols);
 		allImgs_ImageView.setBorderCols(borderCols);
 	}
 

@@ -107,7 +107,7 @@ public class HomeScreenMaster {
 		}
 		// add to list --------------------------------------------------
 		if (fileExplorerIsOpen == false) {
-			if (fileExplorerIsOpen != prevFileExplorerIsOpen) {
+			if (fileExplorerIsOpen != prevFileExplorerIsOpen && !fileToRender_pathSelector.getIsCanceled()) {
 				String newBlendFile = fileToRender_pathSelector.getPath();
 				String[] splitStr = p.split(newBlendFile, "\\");
 				String[] m1 = p.match(splitStr[splitStr.length - 1], ".blend");
@@ -253,7 +253,7 @@ public class HomeScreenMaster {
 				}
 
 				// Atention --------------------------------------------
-				correctlySelected = true;
+				//correctlySelected = true;
 				// Atention --------------------------------------------
 
 				if (correctlySelected) {

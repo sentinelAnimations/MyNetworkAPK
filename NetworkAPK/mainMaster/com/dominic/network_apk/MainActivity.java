@@ -50,7 +50,7 @@ public class MainActivity extends PApplet {
 	int mode = 0;
 
 	// integers-------------------------------------------------
-	int windowTopBarHeight, stdTimeIntervall = 60, shortTimeIntervall = 10, superShortTimeIntervall = 1, longTimeIntervall = 5 * 60, cpuCoresMaster = 0;
+	int windowTopBarHeight, stdTimeIntervall = 60, shortTimeIntervall = 10, superShortTimeIntervall = 1, longTimeIntervall = 5 * 60, superLongTimeIntervall = 60 * 60, cpuCoresMaster = 0;
 	// integers-------------------------------------------------
 
 	// long-----------------------------------------------------
@@ -75,10 +75,10 @@ public class MainActivity extends PApplet {
 
 	// Save paths ----------------------
 	// Local -----------
-	private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles";
+	private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles", localBlendfilePath = "localOutput/renderBlendfiles";
 	// Local -----------
 	// File names -------
-	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json",relativeMasterRenderCommandFilePath="MasterCommands\\MasterRenderJobs.json",relativePathRenderPythonScrips="renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
+	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderCommandFilePath = "MasterCommands\\MasterRenderJobs.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
 	// File names -------
 
 	// shared ----------
@@ -269,7 +269,7 @@ public class MainActivity extends PApplet {
 
 		// variableInitialisation for mode 101 --> RenderOverview -------------
 		loadingScreen.setLoadingStatus("Init RenderOverview");
-		String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png", absPathPictos + "masterPC.png" };
+		String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png", absPathPictos + "masterPC.png",absPathPictos+"renderSettings.png",absPathPictos+"renderFile.png" };
 		String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
 		renderOverview = new RenderOverview(this, 101, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red, blue, textYShift, getMasterCommandFilePath(), rOpp, hoLiPictoPathsRenderOverview, arrowPaths, fileExplorerPaths, stdFont);
 		// variableInitialisation for mode 101 --> RenderOverview -------------
@@ -832,6 +832,10 @@ public class MainActivity extends PApplet {
 		return isMaster;
 	}
 
+	public int getSuperLongTimeIntervall() {
+		return superLongTimeIntervall; // maxRendertime (1h)
+	}
+
 	public int getStdTimeIntervall() {
 		return stdTimeIntervall;
 	}
@@ -948,48 +952,61 @@ public class MainActivity extends PApplet {
 		return homeScreenSlaves;
 	}
 
+	public String getMasterCommandFilePath() {
+		return getPathToCloud() + "\\" + relativeMasterCommandFilePath;
+	}
+
+	public String getMasterRenderJobsFilePath() {
+		return getPathToCloud() + "\\" + relativeMasterRenderCommandFilePath;
+	}
+
+	public String getRenderPythonScriptsPath() {
+		return getPathToCloud() + "\\" + blenderRenderFilesFolderName + "\\" + relativePathRenderPythonScrips;
+	}
+
+	public String getRenderLogPathCPU(String pcName) {
+		return getPathToPCFolder() + "\\" + pcName + "\\renderLogCPU.txt";
+	}
+
+	public String getRenderLogPathGPU(String pcName) {
+		return getPathToPCFolder() + "\\" + pcName + "\\renderLogGPU.txt";
+	}
+
+	public String getLocalRenderBlendfiles() {
+		return localBlendfilePath;
+	}
+
+	public String getAllRenderFilesJsonPath() {
+		return getPathToCloud()+"\\"+allRenderFilesRelativePath;
+	}
+
+	public Boolean[] getHardwareToRenderWith(String pcNameStr) {
+		Boolean[] renderHardware = new Boolean[2]; // 0=useCpu?, 1=useGpu?
+		Node foundNode = null;
+		for (int i = 0; i < nodeEditor.getAllConnectedNodes().size(); i++) {
+			Node n = (Node) nodeEditor.getAllConnectedNodes().get(i);
+			if (n.getPcSelection_DropdownMenu().getSelectedItem().toUpperCase().equals(pcNameStr.toUpperCase())) {
+				foundNode = n;
+				break;
+			}
+		}
+		if (foundNode != null) {
+			renderHardware[0] = foundNode.getCheckoxes()[0].getIsChecked();
+			renderHardware[1] = foundNode.getCheckoxes()[1].getIsChecked();
+
+		} else {
+			renderHardware[0] = false;
+			renderHardware[1] = false;
+		}
+		return renderHardware;
+	}
+
 	public void setMode(int setMode) {
 		mode = setMode;
 	}
 
 	public void setIsMaster(Boolean state) {
 		isMaster = state;
-	}
-
-	public String getMasterCommandFilePath() {
-		return getPathToCloud() + "\\" + relativeMasterCommandFilePath;
-	}
-	
-	public String getMasterRenderJobsFilePath() {
-		return getPathToCloud() + "\\" + relativeMasterRenderCommandFilePath;
-	}
-	public String getRenderPythonScriptsPath() {
-		return getPathToCloud()+"\\"+blenderRenderFilesFolderName+"\\"+relativePathRenderPythonScrips;
-	}
-	
-	public String getRenderLogPath() {
-		return getPathToBlenderRenderFolder()+"\\"+getPCName()+"\\renderLog.txt";
-	}
-	
-	public Boolean[] getHardwareToRenderWith(String pcNameStr) {
-		Boolean[] renderHardware=new Boolean[2]; //0=useCpu?, 1=useGpu?
-		Node foundNode=null;
-		for(int i=0;i<nodeEditor.getAllConnectedNodes().size();i++) {
-			Node n=(Node) nodeEditor.getAllConnectedNodes().get(i);
-			if(n.getPcSelection_DropdownMenu().getSelectedItem().toUpperCase().equals(pcNameStr.toUpperCase())) {
-				foundNode=n;
-				break;
-			}
-		}
-		if(foundNode!=null) {
-			renderHardware[0]=foundNode.getCheckoxes()[0].getIsChecked();
-			renderHardware[1]=foundNode.getCheckoxes()[1].getIsChecked();
-
-		}else {
-			renderHardware[0]=false;
-			renderHardware[1]=false;
-		}
-		return renderHardware;
 	}
 
 	public void setColorTheme() {

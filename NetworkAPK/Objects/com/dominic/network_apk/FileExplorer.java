@@ -70,9 +70,9 @@ public class FileExplorer {
         editBarY = y + 4 * btnSizeSmall - btnSizeSmall / 2 + margin * 2 + margin / 2;
         editBarW = (startXBtns - bs / 2 - margin * 3);
         editBarX = margin * 2 + editBarW / 2;
-
+        
+    	p.textSize(stdTs);
         for (int i = 0; i < horizontalLists.length - 1; i++) {
-        	p.textSize(stdTs);
             String[] hoLiPictoPaths = new String[3];
             hoLiPictoPaths[0] = PictoPaths[i];
             hoLiPictoPaths[1] = PictoPaths[4];
@@ -87,10 +87,6 @@ public class FileExplorer {
         horizontalLists[lastHListInd] = new HorizontalList(p, x, y - 3 * btnSizeSmall - btnSizeSmall / 2 - margin * 3 + margin / 2 + lastHListInd * btnSizeSmall + lastHListInd * (margin * 3), w - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Search Results") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, showSelected[lastHListInd], showMarked[lastHListInd], titles[lastHListInd], hoLiPictoPaths, l[lastHListInd], stdFont, null);
 
         horizontalLists[0].setList(fileInteractionHelper.getVolumes());
-       /* horizontalLists[0].isNewSelected = true;
-        horizontalLists[2].isNewSelected = false;
-        horizontalLists[3].isNewSelected = false;
-        horizontalLists[4].isNewSelected = false;*/
 
         String[] infoTexts = { "Home", "Copy", "Cut", "Paste", "New folder", "Delete folder", "Delete file", "Help", "", "" };
         for (int i = 0; i < fileExplorer_btns.length; i++) {

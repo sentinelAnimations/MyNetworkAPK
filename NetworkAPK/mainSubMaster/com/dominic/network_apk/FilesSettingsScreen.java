@@ -1,5 +1,6 @@
 package com.dominic.network_apk;
 
+import java.awt.print.Book;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.ForkJoinPool.ManagedBlocker;
@@ -13,7 +14,7 @@ public class FilesSettingsScreen {
 	private float textYShift;
 	private Boolean[] useNewResolution, renderAnimation, renderStillFrame;
 	private int[] startFrame, endFrame, stillFrame, resX, resY, samples;
-	private String[] pictoPaths, saveImagePaths;
+	private String[] pictoPaths, imageSavePaths;
 	private PFont stdFont;
 	private PApplet p;
 	private MainActivity mainActivity;
@@ -44,12 +45,12 @@ public class FilesSettingsScreen {
 		mainActivity = (MainActivity) p;
 		String[] startList = {};
 
-		int colW = p.width / 4*3;
+		int colW = p.width / 4 * 3;
 		int rowH = btnSizeSmall;
 		int rowDist = rowH + margin;
 		int startY = rowDist / 2 + ((p.height - (7 * rowDist)) / 2);
 
-		allFiles_HorizontalList = new HorizontalList(p, p.width / 2, startY-margin, colW, rowH+margin*2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, true, false, "Files to render", hoLiPictoPaths, startList, stdFont, null);
+		allFiles_HorizontalList = new HorizontalList(p, p.width / 2, startY - margin, colW, rowH + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, true, false, "Files to render", hoLiPictoPaths, startList, stdFont, null);
 		imageSavePath_pathSelector = new PathSelector(p, p.width / 2, startY + 2 * rowDist, colW, rowH, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, true, false, "select Folder to save Results", pictoPaths[1], fileExplorerPaths, stdFont, null);
 		sampling_counterArea = new CounterArea(p, p.width / 2, startY + 3 * rowDist, colW, rowH, edgeRad, margin, stdTs, 2, 1000000000, 0, light, lighter, textCol, textYShift, false, "Sampling", arrowPaths, stdFont, null);
 		String[] infoTexts = { "Use Resolution", "Render Animation", "renderStillFrame" };
@@ -79,9 +80,6 @@ public class FilesSettingsScreen {
 	}
 
 	public void render() {
-		p.fill(255, 0, 0);
-		p.ellipse(0, 0, 10, 10);
-		p.ellipse(0, p.height, 10, 10);
 
 		if (onceOnStartup == 0) {
 			startRendering_imageButon = new ImageButton(p, -margin - btnSizeSmall, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, light, pictoPaths[0], "Save settings and start render process", mainActivity.getRenderOverview().getCancelImageButton());
@@ -199,7 +197,7 @@ public class FilesSettingsScreen {
 
 	private void writeToArray() {
 		try {
-			saveImagePaths[prevSelectedListInd] = imageSavePath_pathSelector.getPath();
+			imageSavePaths[prevSelectedListInd] = imageSavePath_pathSelector.getPath();
 			renderAnimation[prevSelectedListInd] = settings_checkboxes[1].getIsChecked();
 			renderStillFrame[prevSelectedListInd] = settings_checkboxes[2].getIsChecked();
 			useNewResolution[prevSelectedListInd] = settings_checkboxes[0].getIsChecked();
@@ -216,7 +214,7 @@ public class FilesSettingsScreen {
 
 	private void updateWidgets() {
 		int curInd = allFiles_HorizontalList.getSelectedInd();
-		imageSavePath_pathSelector.setPath(saveImagePaths[curInd]);
+		imageSavePath_pathSelector.setPath(imageSavePaths[curInd]);
 		settings_checkboxes[0].setIsChecked(useNewResolution[curInd]);
 		settings_checkboxes[1].setIsChecked(renderAnimation[curInd]);
 		settings_checkboxes[2].setIsChecked(renderStillFrame[curInd]);
@@ -270,45 +268,75 @@ public class FilesSettingsScreen {
 			if (key == p.DELETE) {
 				String[] hoLi1 = allFiles_HorizontalList.getList();
 				String[] newHoLi1 = new String[hoLi1.length - 1];
+				String[] newImageSavePaths = new String[imageSavePaths.length - 1];
+				Boolean[] newUseNewResolution=new Boolean[useNewResolution.length-1]; 
 				Boolean[] newRenderAnimation = new Boolean[renderAnimation.length - 1];
 				Boolean[] newRenderStillFrame = new Boolean[renderStillFrame.length - 1];
 				int[] newStartFrame = new int[startFrame.length - 1];
 				int[] newEndFrame = new int[endFrame.length - 1];
 				int[] newStillFrame = new int[stillFrame.length - 1];
+				int[] newResX=new int[resX.length-1];
+				int[] newResY=new int[resY.length-1];
+				int[] newSamples= new int[samples.length-1];
 
 				for (int i = 0; i < hoLi1.length; i++) {
-					if (i < allFiles_HorizontalList.getMarkedInd()) {
+					if (i < allFiles_HorizontalList.getSelectedInd()) {
+						newImageSavePaths[i] = imageSavePaths[i];
 						newHoLi1[i] = hoLi1[i];
+						newUseNewResolution[i]=useNewResolution[i];
 						newRenderAnimation[i] = renderAnimation[i];
 						newRenderStillFrame[i] = renderStillFrame[i];
 						newStartFrame[i] = startFrame[i];
 						newEndFrame[i] = endFrame[i];
 						newStillFrame[i] = stillFrame[i];
+						newResX[i]=resX[i];
+						newResY[i]=resY[i];
+						newSamples[i]=samples[i];
 
 					}
-					if (i > allFiles_HorizontalList.getMarkedInd()) {
+					if (i > allFiles_HorizontalList.getSelectedInd()) {
+						newImageSavePaths[i - 1] = imageSavePaths[i];
 						newHoLi1[i - 1] = hoLi1[i];
+						newUseNewResolution[i-1]=useNewResolution[i];
 						newRenderAnimation[i - 1] = renderAnimation[i];
 						newRenderStillFrame[i - 1] = renderStillFrame[i];
 						newStartFrame[i - 1] = startFrame[i];
 						newEndFrame[i - 1] = endFrame[i];
 						newStillFrame[i - 1] = stillFrame[i];
+						newResX[i-1]=resX[i];
+						newResY[i-1]=resY[i];
+						newSamples[i-1]=samples[i];
 					}
 				}
+				imageSavePaths = new String[imageSavePaths.length - 1];
+				useNewResolution=new Boolean[useNewResolution.length-1];
 				renderAnimation = new Boolean[renderAnimation.length - 1];
 				renderStillFrame = new Boolean[renderStillFrame.length - 1];
 				startFrame = new int[startFrame.length - 1];
 				endFrame = new int[endFrame.length];
 				stillFrame = new int[stillFrame.length];
-
+				resX=new int[resX.length-1];
+				resY=new int[resY.length-1];
+				samples=new int[samples.length-1];
+				
+				imageSavePaths=newImageSavePaths;
+				useNewResolution=newUseNewResolution;
 				renderAnimation = newRenderAnimation;
 				renderStillFrame = newRenderStillFrame;
 				startFrame = newStartFrame;
 				endFrame = newEndFrame;
 				stillFrame = newStillFrame;
-
-				allFiles_HorizontalList.setList(newHoLi1);
-				updateWidgets();
+				resX=newResX;
+				resY=newResY;
+				samples=newSamples;
+				
+				if (newHoLi1.length > 0) {
+					allFiles_HorizontalList.setList(newHoLi1);
+					prevSelectedListInd = allFiles_HorizontalList.getSelectedInd();
+					updateWidgets();
+				} else {
+					mainActivity.setMode(mainActivity.getHomeScreenMaster().getMode());
+				}
 			}
 		}
 	}
@@ -326,7 +354,7 @@ public class FilesSettingsScreen {
 		}
 
 	}
-
+	
 	public Boolean[] getRenderAnimation() {
 		return renderAnimation;
 	}
@@ -334,10 +362,11 @@ public class FilesSettingsScreen {
 	public Boolean[] getRenderStillFrame() {
 		return renderStillFrame;
 	}
-	
+
 	public Boolean[] getUseNewResolution() {
 		return useNewResolution;
 	}
+
 	public int[] getStartFrames() {
 		return startFrame;
 	}
@@ -361,7 +390,9 @@ public class FilesSettingsScreen {
 	public int[] getSamples() {
 		return samples;
 	}
-	
+	public String[] getImageSavePaths() {
+		return imageSavePaths;
+	}
 	public HorizontalList getHorizontalList() {
 		return allFiles_HorizontalList;
 	}
@@ -387,7 +418,7 @@ public class FilesSettingsScreen {
 		resY_counterArea.setCount(mainActivity.getHomeScreenMaster().getResY_counterArea().getCount());
 		sampling_counterArea.setCount(mainActivity.getHomeScreenMaster().getSamples_counterArea().getCount());
 
-		saveImagePaths = new String[allFiles_HorizontalList.getList().length];
+		imageSavePaths = new String[allFiles_HorizontalList.getList().length];
 		useNewResolution = new Boolean[allFiles_HorizontalList.getList().length];
 		renderAnimation = new Boolean[allFiles_HorizontalList.getList().length];
 		renderStillFrame = new Boolean[allFiles_HorizontalList.getList().length];
@@ -399,7 +430,7 @@ public class FilesSettingsScreen {
 		samples = new int[allFiles_HorizontalList.getList().length];
 
 		for (int i = 0; i < renderAnimation.length; i++) {
-			saveImagePaths[i] = mainActivity.getHomeScreenMaster().getImageSavePath_pathSelector().getPath(); // to do for update & write
+			imageSavePaths[i] = mainActivity.getHomeScreenMaster().getImageSavePath_pathSelector().getPath(); // to do for update & write
 			useNewResolution[i] = mainActivity.getHomeScreenMaster().getCheckboxes()[8].getIsChecked();
 			renderAnimation[i] = mainActivity.getHomeScreenMaster().getCheckboxes()[6].getIsChecked();
 			renderStillFrame[i] = mainActivity.getHomeScreenMaster().getCheckboxes()[7].getIsChecked();

@@ -14,7 +14,7 @@ public class RenderOverview {
 	private String[] pictoPaths;
 	private PFont stdFont;
 	private PApplet p;
-	private ImageButton cancelRendering_ImageButton, viewImages_imageButton;
+	private ImageButton cancelRendering_ImageButton, imageView_imageButton;
 	private MainActivity mainActivity;
 	private FilesSettingsScreen filesSettingsScreen;
 	private FilesRenderingScreen filesRenderingScreen;
@@ -42,12 +42,12 @@ public class RenderOverview {
 		this.stdFont = stdFont;
 		mainActivity = (MainActivity) p;
 		cancelRendering_ImageButton = new ImageButton(p, p.width - margin - btnSizeSmall / 2, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[0], "Quit render process", null);
-		viewImages_imageButton = new ImageButton(p, p.width - margin * 2 - btnSizeSmall / 2 - btnSizeSmall, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[5], "Image view", null);
+		imageView_imageButton = new ImageButton(p, p.width - margin * 2 - btnSizeSmall / 2 - btnSizeSmall, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[5], "Image view", null);
 
 		String[] rFSPictoPaths = { pictoPaths[3], pictoPaths[6] };
 		filesSettingsScreen = new FilesSettingsScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rFSPictoPaths, hoLiPictoPaths, arrowPaths, fileExplorerPaths, stdFont);
-		String[] fRSPictoPaths = { pictoPaths[4], pictoPaths[7], pictoPaths[9] };
-		filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, green, red, blue, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
+		String[] fRSPictoPaths = { pictoPaths[4], pictoPaths[7], pictoPaths[9],pictoPaths[10],pictoPaths[11] };
+		filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin,btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter,lightest, textCol, textDark, border, green, red, blue, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
 		String[] rOSPictoPaths = { pictoPaths[1], pictoPaths[2] };
 		renderOnSheepitScreen = new RenderOnSheepitScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, red, green, textYShift, rOSPictoPaths, hoLiPictoPaths, stdFont);
 		String[] iVSPictoPaths = { pictoPaths[6], pictoPaths[8] };
@@ -70,7 +70,7 @@ public class RenderOverview {
 		}
 		if (renderMode == 0) {
 			filesRenderingScreen.render();
-			viewImages_imageButton.render();
+			imageView_imageButton.render();
 		}
 		if (renderMode == 1) {
 			renderOnSheepitScreen.render();
@@ -105,7 +105,7 @@ public class RenderOverview {
 		}
 
 		if (renderMode == 0) {
-			if (viewImages_imageButton.getIsClicked()) {
+			if (imageView_imageButton.getIsClicked()) {
 				renderMode = 2;
 				String setPath = "";
 				if (filesSettingsScreen.getImageSavePath_pathSelector().getPath().length() > 0) {
@@ -116,7 +116,7 @@ public class RenderOverview {
 				if (setPath.length() > 0) {
 					imageViewScreen.setPath(setPath);
 				}
-				viewImages_imageButton.setIsClicked(false);
+				imageView_imageButton.setIsClicked(false);
 			}
 		}
 		// button handling -------------------------
@@ -140,7 +140,7 @@ public class RenderOverview {
 		}
 		if (renderMode == 0) {
 			filesRenderingScreen.onMousePressed(mouseButton);
-			viewImages_imageButton.onMousePressed();
+			imageView_imageButton.onMousePressed();
 		}
 		if (renderMode == 1) {
 			renderOnSheepitScreen.onMousePressed(mouseButton);
@@ -160,7 +160,7 @@ public class RenderOverview {
 		}
 		if (renderMode == 0) {
 			filesRenderingScreen.onMouseReleased(mouseButton);
-			viewImages_imageButton.onMouseReleased();
+			imageView_imageButton.onMouseReleased();
 		}
 		if (renderMode == 1) {
 			renderOnSheepitScreen.onMouseReleased(mouseButton);
@@ -225,6 +225,9 @@ public class RenderOverview {
 
 	public ImageButton getCancelImageButton() {
 		return cancelRendering_ImageButton;
+	}
+	public ImageButton getImageViewImageButton() {
+		return imageView_imageButton;
 	}
 
 	public FilesSettingsScreen getRenderFilesSettings() {

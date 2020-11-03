@@ -132,9 +132,7 @@ public class StrengthTestHelper<T> {
                             if (strengthTestStatus != -1) {
                                 startTestOnGPU();
                                 String message = "Strength test started on GPU";
-                                // makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin,
-                                // edgeRad, message.length() * 3, light, textCol, textYShift, false, message,
-                                // stdFont, null));
+
                                 while (strengthTestStatus == 0) {
                                     p.delay(1000);
                                 }
@@ -267,6 +265,7 @@ public class StrengthTestHelper<T> {
         if (finishedTestingGPU) {
             gpuTestDuration = curTime - startTimeGPUTest;
             pcStrengthGPU = calcStrength((int) gpuTestDuration);
+            p.println("---------------------------------------------------------");
             if (strengthTestStatus != -1) {
                 p.println("log data from gpu");
                 logData();
