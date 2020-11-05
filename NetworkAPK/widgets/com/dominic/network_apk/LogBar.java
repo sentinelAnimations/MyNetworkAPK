@@ -7,17 +7,17 @@ import processing.core.PFont;
 
 public class LogBar<T> implements Widgets{
     private int x,y,xShift,yShift,w,h,stdTs, edgeRad, margin, dark, light, lighter, lightest, textCol, textDark, border;
+    private char splitChar;
     private Boolean isParented;
     private String logText="";
     private float textYShift;
     private PFont stdFont;
     private PApplet p;
-    private HoverText hoverText;
     private PictogramImage picto;
     private T parent;
     
 
-    public LogBar(PApplet p,int x,int y,int w,int h, int stdTs, int edgeRad, int margin,int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border,Boolean isParented, float textYShift, String pictoPath, PFont stdFont,T parent) {
+    public LogBar(PApplet p,int x,int y,int w,int h, int stdTs, int edgeRad, int margin,int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border,Boolean isParented, float textYShift,char splitChar, String pictoPath, PFont stdFont,T parent) {
         this.p = p;
         this.x=x;
         this.y=y;
@@ -35,11 +35,11 @@ public class LogBar<T> implements Widgets{
         this.border = border;
         this.isParented=isParented;
         this.textYShift = textYShift;
+        this.splitChar=splitChar;
         this.stdFont = stdFont;
         this.parent=parent;
         xShift=x;
         yShift=y;
-        hoverText = new HoverText(p, stdTs, margin, edgeRad, 150, textCol, textYShift, "","getX","getY","getW","getH", stdFont, this);
         picto = new PictogramImage(p, -w/2+btnSizeSmall/2+margin,0, btnSizeSmall,btnSizeSmall, margin, stdTs, edgeRad, textCol, textYShift, true, false,pictoPath, "", this);
     }
     
@@ -55,12 +55,11 @@ public class LogBar<T> implements Widgets{
         p.textAlign(p.LEFT,p.CENTER);
         p.textFont(stdFont);
         p.textSize(stdTs);
+        p.textLeading(stdTs);
         p.fill(textCol);
         p.text(logText, picto.getX()+picto.getW()/2+margin, y);
         
         picto.render();
-        hoverText.render();
-        
     }
     
     @Override
@@ -105,20 +104,27 @@ public class LogBar<T> implements Widgets{
     }
     
     public void setText(String setText) {
-        logText=setText;
-        if(p.textWidth(logText)>w-picto.getW()-margin*2) {
-            hoverText.setInfoText(logText);
-            for(int i=0;i<setText.length();i++) {
-                if(p.textWidth(logText+setText.charAt(i)+"...")>w-picto.getW()-margin*2) {
-                    logText+=setText.charAt(i);
-                }else {
-                    logText+="...";
-                    break;
-                }
-            }
-        }else {
-            hoverText.setInfoText("");
+        String[] splitStr= p.split(setText,splitChar);
+        if(splitStr.length>1) {
+        String tempStr="";
+        String thisLine="";
+        for(int i=0;i<splitStr.length;i++) {
+        	if(p.textWidth(thisLine+splitStr[i]+ " | ")<w/5*4) {
+        		tempStr+=splitStr[i] +" | ";
+        		thisLine+=splitStr[i]+ " | ";
+        		if(i==splitStr.length-1) {
+            		tempStr=tempStr.substring(0,tempStr.length()-2);
+        		}
+        	}else {
+        		tempStr=tempStr.substring(0,tempStr.length()-2);
+        		tempStr+="\n"+splitStr[i].trim();
+        		thisLine=splitStr[i].trim();
+			}
         }
+        logText=tempStr;
+        }else {
+			logText=setText;
+		}
     }
     
 }

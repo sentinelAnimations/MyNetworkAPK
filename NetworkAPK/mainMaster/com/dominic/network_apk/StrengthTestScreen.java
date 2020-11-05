@@ -160,9 +160,7 @@ public class StrengthTestScreen {
 	}
 
 	private void controllStrengthTest(Boolean startTest) {
-		Boolean allPCsAreDone = false;
 		JSONArray loadedData = new JSONArray();
-		JSONObject settingsDetails = new JSONObject();
 		JSONObject settingsObject = new JSONObject();
 		// give command to all pcs to do test -----------------------------
 

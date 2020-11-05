@@ -1,0 +1,23 @@
+[
+  {
+    "checkbox0": true,
+    "checkbox1": false,
+    "checkbox2": true,
+    "endFrame": 250,
+    "resY": 1080,
+    "resX": 2520,
+    "samples": 2,
+    "startFrame": 0,
+    "stillFrame": 0,
+    "checkbox3": false,
+    "checkbox4": true,
+    "imageSavePath": "D:\\algemeine Bilder\\ImageFolderFor_NetworkAPK",
+    "checkbox5": true,
+    "checkbox6": true,
+    "checkbox7": false,
+    "checkbox8": false,
+    "fileList": [
+      "C:\\blenderFiles\\bakeTest.blend"
+    ]
+  }
+]

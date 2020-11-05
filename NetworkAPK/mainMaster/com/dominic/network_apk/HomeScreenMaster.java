@@ -1,6 +1,10 @@
 package com.dominic.network_apk;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -13,12 +17,13 @@ public class HomeScreenMaster {
 	private PApplet p;
 	private PathSelector fileToRender_pathSelector, imageSavePath_PathSelector;
 	private CounterArea startFrame_counterArea, endFrame_counterArea, stillFrame_counterArea, resX_counterArea, resY_counterArea, samples_counterArea;
-	private ImageButton startRendering_btn;
+	private ImageButton startRendering_btn, saveHome_ImageButton;
 	private HorizontalList fileSelector_HorizontalList;
 	private MainActivity mainActivity;
 	private ImageButton[] mainButtons;
 	private Checkbox[] homeSettings_checkboxes = new Checkbox[9];
 	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
+	private JsonHelper jsonHelper;
 
 	public HomeScreenMaster(PApplet p, int mode, int btnSize, int btnSizeSmall, int edgeRad, int margin, int stdTs, int dark, int light, int lighter, int border, int textCol, int textDark, float textYShift, String[] homeScreenPictoPaths, String[] arrowPaths, String[] hoLiPictoPaths, String[] fileExplorerPaths, PFont stdFont) {
 		this.p = p;
@@ -37,6 +42,7 @@ public class HomeScreenMaster {
 		this.textYShift = textYShift;
 		this.stdFont = stdFont;
 		mainActivity = (MainActivity) p;
+		jsonHelper = new JsonHelper(p);
 		if (mainActivity.getIsMaster()) {
 			mainButtons = mainActivity.getMainButtonsMaster();
 		} else {
@@ -70,16 +76,16 @@ public class HomeScreenMaster {
 		sfX = (int) ((homeSettings_checkboxes[7].getX() - homeSettings_checkboxes[7].getW() / 2 + homeSettings_checkboxes[7].getBoxDim() + margin * 2)) - homeSettings_checkboxes[7].getX() + sfW / 2;
 		stillFrame_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Still frame", arrowPaths, stdFont, homeSettings_checkboxes[7]);
 
-		sfW = rowDist*4-homeSettings_checkboxes[8].getBoxDim()+margin;
-		sfX = (-(homeSettings_checkboxes[8].getX()-homeSettings_checkboxes[8].getBoxX())+homeSettings_checkboxes[8].getBoxDim()/2+margin+sfW/2);
-		resX_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 2520, light, lighter, textCol, textYShift, true, "Resolution X", arrowPaths, stdFont, homeSettings_checkboxes[8]);
+		sfW = rowDist * 4 - homeSettings_checkboxes[8].getBoxDim() + margin;
+		sfX = (-(homeSettings_checkboxes[8].getX() - homeSettings_checkboxes[8].getBoxX()) + homeSettings_checkboxes[8].getBoxDim() / 2 + margin + sfW / 2);
+		resX_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 4, 1000000000, 2520, light, lighter, textCol, textYShift, true, "Resolution X", arrowPaths, stdFont, homeSettings_checkboxes[8]);
 
-		sfX = sfW+margin;
-		resY_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 1080, light, lighter, textCol, textYShift, true, "Resolution Y", arrowPaths, stdFont, resX_counterArea);
+		sfX = sfW + margin;
+		resY_counterArea = new CounterArea(p, sfX, 0, sfW, btnSizeSmall, edgeRad, margin, stdTs, 4, 1000000000, 1080, light, lighter, textCol, textYShift, true, "Resolution Y", arrowPaths, stdFont, resX_counterArea);
 
 		sfW = homeSettings_checkboxes[2].getBoxDim() + margin + fileToRender_pathSelector.getW();
 		sfX = (homeSettings_checkboxes[2].getBoxX() - homeSettings_checkboxes[2].getX()) - homeSettings_checkboxes[2].getBoxDim() / 2 + sfW / 2;
-		samples_counterArea = new CounterArea(p, sfX, rowDist, sfW, btnSizeSmall, edgeRad, margin, stdTs, 0, 1000000000, 128, light, lighter, textCol, textYShift, true, "Sampling", arrowPaths, stdFont, homeSettings_checkboxes[6]);
+		samples_counterArea = new CounterArea(p, sfX, rowDist, sfW, btnSizeSmall, edgeRad, margin, stdTs, 2, 1000000000, 128, light, lighter, textCol, textYShift, true, "Sampling", arrowPaths, stdFont, homeSettings_checkboxes[6]);
 
 		sfW = homeSettings_checkboxes[3].getBoxDim() + margin + fileToRender_pathSelector.getW();
 		sfX = (homeSettings_checkboxes[3].getBoxX() - homeSettings_checkboxes[3].getX()) - homeSettings_checkboxes[3].getBoxDim() / 2 + sfW / 2;
@@ -94,6 +100,9 @@ public class HomeScreenMaster {
 		int hlX = p1 + hlH / 2;
 		fileSelector_HorizontalList = new HorizontalList(p, hlX, startY, hlH, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, true, false, "Files to render", hoLiPictoPaths, startList, stdFont, null);
 
+		saveHome_ImageButton = new ImageButton(p, p.width - margin - btnSizeSmall / 2, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, 19, textYShift, true, false, textCol, light, homeScreenPictoPaths[3], "Save home settings", null);
+
+		setData();
 	}
 
 	public void render() {
@@ -124,21 +133,21 @@ public class HomeScreenMaster {
 					p.println("no blendfile");
 				}
 			}
-		}
-		// add to list --------------------------------------------------
+			// }
+			// add to list --------------------------------------------------
 
-		// render all ---------------------------------------------------------------
-		if (fileExplorerIsOpen == false) {
+			// render all ---------------------------------------------------------------
+			// if (fileExplorerIsOpen == false) {
 			if (mainActivity.getIsMaster()) {
 				mainActivity.renderMainButtonsMaster();
 			} else {
 				mainActivity.renderMainButtonsSlave();
 			}
-			
+
 			resX_counterArea.render();
 			resY_counterArea.render();
 			samples_counterArea.render();
-			
+
 			for (int i = 0; i < homeSettings_checkboxes.length; i++) {
 				homeSettings_checkboxes[i].render();
 			}
@@ -151,7 +160,7 @@ public class HomeScreenMaster {
 			p.line(startRendering_btn.getX() + startRendering_btn.getW() / 2 + margin * 2, startRendering_btn.getY(), stillFrame_counterArea.getX() + stillFrame_counterArea.getW() / 2, startRendering_btn.getY());
 
 			fileSelector_HorizontalList.render();
-			
+			saveHome_ImageButton.render();
 
 			// render toasts -----------------------------------
 			for (int i = 0; i < makeToasts.size(); i++) {
@@ -253,7 +262,7 @@ public class HomeScreenMaster {
 				}
 
 				// Atention --------------------------------------------
-				//correctlySelected = true;
+				// correctlySelected = true;
 				// Atention --------------------------------------------
 
 				if (correctlySelected) {
@@ -277,7 +286,13 @@ public class HomeScreenMaster {
 
 				startRendering_btn.setIsClicked(false);
 			}
+
+			if (saveHome_ImageButton.getIsClicked()) {
+				saveData();
+				saveHome_ImageButton.setIsClicked(false);
+			}
 		}
+
 		if (imageSavePath_PathSelector.getFileExplorerIsOpen() == false) {
 			fileToRender_pathSelector.render();
 		}
@@ -288,6 +303,77 @@ public class HomeScreenMaster {
 		prevFileExplorerIsOpen = fileExplorerIsOpen;
 		// handle checkboxes ------------------------------------------------------
 
+	}
+
+	private void saveData() {
+		jsonHelper.clearArray();
+		JSONArray homeScreenSettings = new JSONArray();
+		JSONObject settingsObj = new JSONObject();
+
+		for (int i = 0; i < homeSettings_checkboxes.length; i++) {
+			settingsObj.put("checkbox" + i, homeSettings_checkboxes[i].getIsChecked());
+		}
+		settingsObj.put("resX", resX_counterArea.getCount());
+		settingsObj.put("resY", resY_counterArea.getCount());
+		settingsObj.put("samples", samples_counterArea.getCount());
+		settingsObj.put("stillFrame", stillFrame_counterArea.getCount());
+		settingsObj.put("startFrame", startFrame_counterArea.getCount());
+		settingsObj.put("endFrame", endFrame_counterArea.getCount());
+		settingsObj.put("imageSavePath", imageSavePath_PathSelector.getPath());
+
+		JSONArray fileArray = new JSONArray();
+		for (int i = 0; i < fileSelector_HorizontalList.getList().length; i++) {
+			fileArray.add(fileSelector_HorizontalList.getList()[i]);
+		}
+		settingsObj.put("fileList", fileArray);
+		homeScreenSettings.add(settingsObj);
+		p.println(homeScreenSettings);
+		String jsonPath = mainActivity.getHomeScreenMasterSettingsPath();
+		p.println(jsonPath);
+		jsonHelper.setArray(homeScreenSettings);
+		jsonHelper.writeData(jsonPath);
+	}
+
+	private void setData() {
+		JSONArray loadedData = new JSONArray();
+		JSONObject settingsObject = new JSONObject();
+		// give command to all pcs to do test -----------------------------
+
+		loadedData = jsonHelper.getData(mainActivity.getHomeScreenMasterSettingsPath());
+		if (loadedData.isEmpty()) {
+		} else {
+			try {
+				settingsObject = (JSONObject) loadedData.get(0);
+				for (int i = 0; i < homeSettings_checkboxes.length; i++) {
+					homeSettings_checkboxes[i].setIsChecked(Boolean.parseBoolean(settingsObject.get("checkbox" + i).toString()));
+				}
+				resX_counterArea.setCount(Integer.parseInt(settingsObject.get("resX").toString()));
+				resY_counterArea.setCount(Integer.parseInt(settingsObject.get("resY").toString()));
+				samples_counterArea.setCount(Integer.parseInt(settingsObject.get("samples").toString()));
+				stillFrame_counterArea.setCount(Integer.parseInt(settingsObject.get("stillFrame").toString()));
+				startFrame_counterArea.setCount(Integer.parseInt(settingsObject.get("startFrame").toString()));
+				endFrame_counterArea.setCount(Integer.parseInt(settingsObject.get("endFrame").toString()));
+				imageSavePath_PathSelector.setPath(settingsObject.get("imageSavePath").toString());
+
+				JSONArray fileArray = (JSONArray) settingsObject.get("fileList");
+				String[] fileArrayStr;
+				ArrayList<String> fileList = new ArrayList<>();
+				for (int i = 0; i < fileArray.size(); i++) {
+					File curBlendFile = new File(fileArray.get(i).toString());
+					if (curBlendFile.exists()) {
+						fileList.add(curBlendFile.getAbsolutePath());
+					}
+				}
+				fileArrayStr = new String[fileList.size()];
+				for (int i = 0; i < fileList.size(); i++) {
+					fileArrayStr[i] = fileList.get(i);
+				}
+				fileSelector_HorizontalList.setList(fileArrayStr);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void onMousePressed(int mouseButton) {
@@ -301,7 +387,7 @@ public class HomeScreenMaster {
 			resX_counterArea.onMousePressed();
 			resY_counterArea.onMousePressed();
 			samples_counterArea.onMousePressed();
-
+			saveHome_ImageButton.onMousePressed();
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
 				for (int i = 0; i < mainButtons.length; i++) {
 					if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
@@ -329,14 +415,14 @@ public class HomeScreenMaster {
 			resX_counterArea.onMouseReleased();
 			resY_counterArea.onMouseReleased();
 			samples_counterArea.onMouseReleased();
-
-			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
-				for (int i = 0; i < mainButtons.length; i++) {
-					if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
-						mainButtons[i].onMouseReleased();
-					}
+			saveHome_ImageButton.onMouseReleased();
+			// if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
+			for (int i = 0; i < mainButtons.length; i++) {
+				if (mainButtons[0].getClickCount() % 2 == 0 || i == 0) {
+					mainButtons[i].onMouseReleased();
 				}
 			}
+			// }
 			fileSelector_HorizontalList.onMouseReleased(mouseButton);
 		}
 		fileToRender_pathSelector.onMouseReleased(mouseButton);
@@ -352,18 +438,20 @@ public class HomeScreenMaster {
 	public void onKeyReleased(char key) {
 		fileToRender_pathSelector.onKeyReleased(key);
 		imageSavePath_PathSelector.onKeyReleased(key);
-		if (key == p.DELETE) {
-			String[] hoLi1 = fileSelector_HorizontalList.getList();
-			String[] newHoLi1 = new String[hoLi1.length - 1];
-			for (int i = 0; i < hoLi1.length; i++) {
-				if (i < fileSelector_HorizontalList.getSelectedInd()) {
-					newHoLi1[i] = hoLi1[i];
+		if (fileExplorerIsOpen == false) {
+			if (key == p.DELETE) {
+				String[] hoLi1 = fileSelector_HorizontalList.getList();
+				String[] newHoLi1 = new String[hoLi1.length - 1];
+				for (int i = 0; i < hoLi1.length; i++) {
+					if (i < fileSelector_HorizontalList.getSelectedInd()) {
+						newHoLi1[i] = hoLi1[i];
+					}
+					if (i > fileSelector_HorizontalList.getSelectedInd()) {
+						newHoLi1[i - 1] = hoLi1[i];
+					}
 				}
-				if (i > fileSelector_HorizontalList.getSelectedInd()) {
-					newHoLi1[i - 1] = hoLi1[i];
-				}
+				fileSelector_HorizontalList.setList(newHoLi1);
 			}
-			fileSelector_HorizontalList.setList(newHoLi1);
 		}
 	}
 
@@ -401,18 +489,23 @@ public class HomeScreenMaster {
 	public CounterArea getStillFrame_counterArea() {
 		return stillFrame_counterArea;
 	}
+
 	public CounterArea getResX_counterArea() {
 		return resX_counterArea;
 	}
+
 	public CounterArea getResY_counterArea() {
 		return resY_counterArea;
 	}
+
 	public CounterArea getSamples_counterArea() {
 		return samples_counterArea;
 	}
+
 	public PathSelector getFileToRender_pathSelector() {
 		return fileToRender_pathSelector;
 	}
+
 	public PathSelector getImageSavePath_pathSelector() {
 		return imageSavePath_PathSelector;
 	}

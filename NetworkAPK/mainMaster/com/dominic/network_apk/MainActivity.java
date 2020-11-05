@@ -75,10 +75,10 @@ public class MainActivity extends PApplet {
 
 	// Save paths ----------------------
 	// Local -----------
-	private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles", localBlendfilePath = "localOutput/renderBlendfiles";
+	private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json",homeScreenMasterSettingsPath="localOutput/HomeScreenMaster/settingsMaster.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles", localBlendfilePath = "localOutput/renderBlendfiles";
 	// Local -----------
 	// File names -------
-	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderCommandFilePath = "MasterCommands\\MasterRenderJobs.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
+	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json",relativeMasterRenderJobsStatusFilePath = "MasterCommands\\MasterRenderJobsStatus.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
 	// File names -------
 
 	// shared ----------
@@ -228,7 +228,7 @@ public class MainActivity extends PApplet {
 		loadingScreen.setLoadingStatus("Init " + modeNamesMaster[0]);
 		String[] arrowPaths = { absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
 		String[] hoLiPictoPathsHome = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-		String[] homeScreenPictoPaths = { absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png", absPathPictos + "startEngine.png" };
+		String[] homeScreenPictoPaths = { absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png", absPathPictos + "startEngine.png",absPathPictos+"save.png" };
 		homeScreen = new HomeScreenMaster(this, 1, btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark, textYShift, homeScreenPictoPaths, arrowPaths, hoLiPictoPathsHome, fileExplorerPaths, stdFont);
 		// variableInitialisation for mode 1 --> home screen-------------------
 
@@ -957,7 +957,10 @@ public class MainActivity extends PApplet {
 	}
 
 	public String getMasterRenderJobsFilePath() {
-		return getPathToCloud() + "\\" + relativeMasterRenderCommandFilePath;
+		return getPathToCloud() + "\\" + relativeMasterRenderJobsFilePath;
+	}
+	public String getMasterRenderJobsStatusFilePath() {
+		return getPathToCloud() + "\\"+ relativeMasterRenderJobsStatusFilePath;
 	}
 
 	public String getRenderPythonScriptsPath() {
@@ -978,6 +981,9 @@ public class MainActivity extends PApplet {
 
 	public String getAllRenderFilesJsonPath() {
 		return getPathToCloud()+"\\"+allRenderFilesRelativePath;
+	}
+	public String getHomeScreenMasterSettingsPath() {
+		return homeScreenMasterSettingsPath;
 	}
 
 	public Boolean[] getHardwareToRenderWith(String pcNameStr) {

@@ -145,6 +145,7 @@ public class FilesRenderingScreen {
 						p.textFont(stdFont);
 						p.textSize(stdTs);
 						p.textAlign(p.CENTER, p.CENTER);
+						p.textLeading(stdTs * 1.5f);
 						p.text(allRenderInfos[i], listX[i], allPCPictos[i].getY() + allPCPictos[i].getH() / 2 + margin + stdTs + ((allPCLoadingbars[i].getY() - allPCLoadingbars[i].getH() / 2) - (allPCPictos[i].getY() + allPCPictos[i].getH())) / 2);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -167,11 +168,14 @@ public class FilesRenderingScreen {
 		// update PCView---------------------------------------------
 		if (allConnectedNodes.size() > 0) {
 
+			
+			
+			/*
 			File renderCmds = new File(mainActivity.getMasterRenderJobsFilePath());
 			if (renderCmds.lastModified() != prevLastModified) {
 				checkForFinished();
 				prevLastModified = renderCmds.lastModified();
-			}
+			}*/
 
 			if (allFiles_HorizontalList.getSelectedInd() != prevSelectedFileListInd) {
 				fileInfo_LogBar.setText(getFileInfoOfSelected(allFiles_HorizontalList.getSelectedInd()));
@@ -184,6 +188,7 @@ public class FilesRenderingScreen {
 			if (pcInfoHelper.getCurTime() - prevTime > mainActivity.getSuperShortTimeIntervall()) {
 				updateLists();
 				p.println(renderHelper.getCpuFinished(), renderHelper.getGpuFinished(), "-----------");
+				renderFiles();
 				prevTime = pcInfoHelper.getCurTime();
 			}
 		}
@@ -191,7 +196,6 @@ public class FilesRenderingScreen {
 
 		prevPCListSelectedInd = allPCs_HorizontalList.getSelectedInd();
 		prevSelectedFileListInd = allFiles_HorizontalList.getSelectedInd();
-
 	}
 
 	private void updateLists() {
@@ -212,13 +216,14 @@ public class FilesRenderingScreen {
 				if (curRenderLogFile.exists()) {
 					try {
 						String[] lines = p.loadStrings(curRenderLogFile.getAbsolutePath());
-						String lastLine = lines[lines.length - 1];
-						allLastLogLines[i] = lastLine;
-						if (allPCs_HorizontalList.getSelectedInd() == i) {
-							p.println("selectedInd: "+allPCs_HorizontalList.getSelectedInd());
-							logBar.setText(lastLine);
+						if (lines.length > 0) {
+							String lastLine = lines[lines.length - 1];
+							allLastLogLines[i] = lastLine;
+							if (allPCs_HorizontalList.getSelectedInd() == i) {
+								logBar.setText(lastLine);
+							}
+							foundLogLine = true;
 						}
-						foundLogLine = true;
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -226,43 +231,56 @@ public class FilesRenderingScreen {
 			} else {
 				allPCPictos[i].setCol(red);
 			}
-			// cmd delete system32
 			// check render status if ok, update last log line -------------------
 
 			// prepare infoString and so on-----------------------------------
 			Boolean jobIsFinished = false;
 			String[] splitStr = p.split(allLastLogLines[i], "|");
 			String renderInfoString = allPCNames[i];
-			if (allLastLogLines[i].equals("Job finished") == false) {
-				if (allPCStatus[i] > 0) {
-					renderInfoString += n.getPCStatusStrings()[allPCStatus[i]];
-				}
-				renderInfoString += "\n";
-				for (int i2 = 0; i2 < splitStr.length; i2++) {
-					if (i2 == 0) {
-						String[] splStr = p.split(splitStr[i2], " ");
 
-						renderInfoString += splStr[0] + "\n";
-					} else {
-						renderInfoString += splitStr[i2] + "\n";
+			if (p.match(allLastLogLines[i], "finished") == null) {
+
+				if (allPCStatus[i] > 0) {
+					renderInfoString += " " + n.getPCStatusStrings()[allPCStatus[i]];
+				}
+
+				renderInfoString += "\n";
+				String curLine = "";
+				for (int i2 = 0; i2 < splitStr.length; i2++) {
+					String[] splitStr2 = p.split(splitStr[i2], ",");
+					for (int i3 = 0; i3 < splitStr2.length; i3++) {
+						if (p.textWidth(curLine + splitStr2[i3] + " | ") < allPCLoadingbars[i].getW()) {
+							renderInfoString += splitStr2[i3] + " | ";
+							curLine += splitStr2[i3] + " | ";
+
+						} else {
+							renderInfoString = renderInfoString.substring(0, renderInfoString.length() - 2);
+							curLine = curLine.substring(0, curLine.length() - 2);
+							renderInfoString += "\n" + splitStr2[i3] + " | ";
+							curLine = splitStr2[i3] + " | ";
+
+						}
 					}
 				}
+				renderInfoString = renderInfoString.substring(0, renderInfoString.length() - 2);
 			} else {
 				renderInfoString = "Job finished";
+				allLastLogLines[i] = renderInfoString;
 				jobIsFinished = true;
 			}
+
 			if (!foundLogLine) {
 				renderInfoString = "File not found!";
-				if (allPCs_HorizontalList.getSelectedInd() == i) {
-					logBar.setText(renderInfoString);
-				}
+				allLastLogLines[i] = renderInfoString;
 			}
-			p.println(jobIsFinished);
-			allRenderInfos[i] = renderInfoString;
+			// prepare infoString and so on-----------------------------------
 
+			// prepare renderStatus for loadingbar --------------------------
+			allRenderInfos[i] = renderInfoString;
 			if (jobIsFinished) {
-				allPCLoadingbars[i].setMax((int) p.pow(10, 100));
+				allPCLoadingbars[i].setValue(allPCLoadingbars[i].getMax());
 			} else {
+				Boolean curTilesFound = false;
 				String[] m1 = p.match(splitStr[splitStr.length - 1], "Tiles");
 				if (m1 != null) {
 					String[] splitStr2 = p.split(splitStr[splitStr.length - 1], " ");
@@ -274,36 +292,64 @@ public class FilesRenderingScreen {
 						}
 						allPCLoadingbars[i].setValue(Integer.parseInt(splitStr3[0]));
 						startedRenderingTiles[i] = true;
+						curTilesFound = true;
 					}
 
 				}
+				if (!foundLogLine || (!curTilesFound && !jobIsFinished)) {
+					allPCLoadingbars[i].setValue(allPCLoadingbars[i].getMin());
+				}
 			}
-			// prepare infoString and so on-----------------------------------
+			// prepare renderStatus for loadingbar --------------------------
+
+			if (allPCs_HorizontalList.getSelectedInd() == i) {
+				logBar.setText(allLastLogLines[i]);
+			}
 		}
 
 	}
 
 	private String getFileInfoOfSelected(int selectedInd) {
 		String infoStr = "";
-		if (renderAnimation[selectedInd]) {
-			infoStr += "Rendering Frame " + startFrame[selectedInd] + " - " + endFrame[selectedInd] + " | ";
+		String[] strArr = getFileInfoArray(selectedInd);
+		if (strArr != null) {
+			p.println(strArr);
+			for (int i = 0; i < strArr.length; i++) {
+				infoStr += strArr[i];
+				if (i < strArr.length - 1) {
+					infoStr += " | ";
+				}
+			}
+			return infoStr;
 		} else {
-			infoStr += "Rendering Frame " + stillFrame[selectedInd] + " | ";
+			return "no string found";
 		}
-		if (useNewResolution[selectedInd]) {
-			infoStr += "Resolution: " + resX[selectedInd] + " x " + resY[selectedInd] + " | ";
-		} else {
-			infoStr += "Resolution: Filesettings | ";
-		}
-		infoStr += "Rendersamples: " + samples[selectedInd] + " | Save folder: " + imageSavePaths[selectedInd];
-
-		return infoStr;
 	}
 
-	private Boolean checkForFinished() {
-		Boolean isFinished = false;
-		// to do ------------------------
-		return isFinished;
+	private String[] getFileInfoArray(int ind) {
+		try {
+			p.println(ind, "---", renderAnimation.length);
+			ArrayList<String> infosJob = new ArrayList<>();
+			if (renderAnimation[ind]) {
+				infosJob.add("Rendering Frame " + startFrame[ind] + " - " + endFrame[ind]);
+			} else {
+				infosJob.add("Rendering Frame " + stillFrame[ind]);
+			}
+			if (useNewResolution[ind]) {
+				infosJob.add("Resolution: " + resX[ind] + " x " + resY[ind]);
+			} else {
+				infosJob.add("Resolution: Filesettings");
+			}
+			infosJob.add("Rendersamples: " + samples[ind] + " | Save folder: " + imageSavePaths[ind]);
+			String[] infosJobStrArr = new String[infosJob.size()];
+			for (int i = 0; i < infosJob.size(); i++) {
+				infosJobStrArr[i] = infosJob.get(i);
+			}
+			return infosJobStrArr;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public void startFileRendering() {
@@ -319,20 +365,16 @@ public class FilesRenderingScreen {
 				for (int i2 = 0; i2 < fileList.length; i2++) {
 					if (i != i2) {
 						if (fileList[i].equals(fileList[i2])) {
-							p.println("now", fileList[i2]);
 							allIndsToCheck.add(i2);
 						}
 					}
 				}
 				for (int i2 = 0; i2 < allIndsToCheck.size(); i2++) {
 					if (renderAnimation[i] && renderAnimation[allIndsToCheck.get(i2)]) {
-						p.println("now1");
 						if (startFrame[i] != startFrame[allIndsToCheck.get(i2)] || endFrame[i] != endFrame[allIndsToCheck.get(i2)]) {
-							p.println("now2");
 							allFilesCopyStatus[i] = true;
 						} else {
 							if (allFilesCopyStatus[allIndsToCheck.get(i2)] != null && allFilesCopyStatus[allIndsToCheck.get(i2)] != false) {
-								p.println("now3");
 								allFilesCopyStatus[i] = false;
 								break;
 							}
@@ -341,13 +383,10 @@ public class FilesRenderingScreen {
 						allFilesCopyStatus[i] = true;
 
 						if (renderStillFrame[i] && renderStillFrame[allIndsToCheck.get(i2)]) {
-							p.println("now4");
 							if (stillFrame[i] != stillFrame[allIndsToCheck.get(i)]) {
-								p.println("now5");
 								allFilesCopyStatus[i] = true;
 							} else {
 								if (allFilesCopyStatus[allIndsToCheck.get(i2)] != null && allFilesCopyStatus[allIndsToCheck.get(i2)] != false) {
-									p.println("now6");
 									allFilesCopyStatus[i] = false;
 									break;
 								}
@@ -369,14 +408,12 @@ public class FilesRenderingScreen {
 		Boolean forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
 
 		if (randomSeedCopied && forceGPURenderingCopied) {
-			p.println("copied files");
 			prepareRenderProcess();
 		}
 
 	}
 
 	private void prepareRenderProcess() {
-		p.println(allConnectedNodes.size(), "acNodes size");
 		if (allConnectedNodes.size() > 0) {
 			JSONArray renderJobsArray = new JSONArray();
 			ArrayList<Integer> workingPCInds = new ArrayList<>();
@@ -427,26 +464,49 @@ public class FilesRenderingScreen {
 					}
 				}
 			}
+
 			// save renderJobsArray------------------------------------------
 			jsonHelper.clearArray();
 			jsonHelper.setArray(renderJobsArray);
 			jsonHelper.writeData(mainActivity.getMasterRenderJobsFilePath());
 			// save renderJobsArray------------------------------------------
 
-			if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) {
-				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName());
-				p.println(hwToUse);
-				if (mainActivity.getHardwareToRenderWith(mainActivity.getPCName())[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked()) {
-					renderHelper.setupRenderJob(mainActivity.getMasterRenderJobsFilePath(), 0, true);
-				}
-				if (mainActivity.getHardwareToRenderWith(mainActivity.getPCName())[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked()) {
-					renderHelper.setupRenderJob(mainActivity.getMasterRenderJobsFilePath(), 1, false);
-				}
-				setIsRendering(true);
+			// save and create renderJobStatusArray--------------------------------------
+			JSONArray renderJobsStatusArray = new JSONArray();
+			for (int i = 0; i < renderJobsArray.size(); i++) {
+				JSONObject statusObject = new JSONObject();
+				statusObject.put("started", false);
+				statusObject.put("finished", false);
+				renderJobsStatusArray.add(statusObject);
 			}
+			jsonHelper.clearArray();
+			jsonHelper.setArray(renderJobsStatusArray);
+			jsonHelper.writeData(mainActivity.getMasterRenderJobsStatusFilePath());
+			// save and create renderJobStatusArray--------------------------------------
+
+		renderFiles();
 		}
 	}
 
+	private void renderFiles() {
+		
+		if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) {
+			Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName());
+
+			if(renderHelper.getAllJobsFinished()) {
+				setIsRendering(false);
+			}else {
+			if (hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked() && renderHelper.getCpuFinished()) {
+				renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
+			}
+			if (hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked() && renderHelper.getGpuFinished()) {
+				renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
+			}
+			setIsRendering(true);
+		}
+		}
+	}
+	
 	public void onMousePressed(int mouseButton) {
 		if (renderGraphics_switch.getIsChecked()) {
 			allFiles_HorizontalList.onMousePressed();
@@ -565,7 +625,6 @@ public class FilesRenderingScreen {
 		String jsonPath = mainActivity.getAllRenderFilesJsonPath();
 		jsonHelper.setArray(allRenderFiles);
 		jsonHelper.writeData(jsonPath);
-		p.println(l);
 	}
 
 	public HorizontalList getHorizontalList() {
@@ -609,10 +668,10 @@ public class FilesRenderingScreen {
 		}
 		String[] allPCListPictos = { pictoPaths[2], hoLiPictoPaths[1], hoLiPictoPaths[2] };
 		allPCs_HorizontalList = new HorizontalList(p, 0, allFiles_HorizontalList.getH() / 2 + margin + listH / 2, p.width - margin * 2, listH, margin, edgeRad, stdTs, (int) p.textWidth("Rendering PCs") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', true, false, true, "Rendering PCs", allPCListPictos, startList, stdFont, allFiles_HorizontalList);
-		logBar = new LogBar(p, 0, allPCs_HorizontalList.getH() / 2 + margin * 2 + btnSizeSmall / 2, allFiles_HorizontalList.getW(), btnSizeSmall + margin * 2, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, pictoPaths[0], stdFont, allPCs_HorizontalList);
+		logBar = new LogBar(p, 0, allPCs_HorizontalList.getH() / 2 + margin * 2 + btnSizeSmall / 2, allFiles_HorizontalList.getW(), btnSizeSmall + margin * 2, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, '|', pictoPaths[0], stdFont, allPCs_HorizontalList);
 		logBar.setText("Render Log of selected PC");
 
-		fileInfo_LogBar = new LogBar(p, 0, logBar.getH() + margin, allFiles_HorizontalList.getW(), logBar.getH(), stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, pictoPaths[3], stdFont, logBar);
+		fileInfo_LogBar = new LogBar(p, 0, logBar.getH() + margin, allFiles_HorizontalList.getW(), logBar.getH(), stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, '|', pictoPaths[3], stdFont, logBar);
 		fileInfo_LogBar.setText("File settings of selected file");
 
 		allPCNames = new String[allPCs_HorizontalList.getList().length];
@@ -657,7 +716,6 @@ public class FilesRenderingScreen {
 		} else {
 			try {
 				int mode = mainActivity.getHomeScreenMaster().getMode() - 1;
-				p.println("controllStrengthTest");
 				String modeName = mainActivity.getModeNamesMaster()[mode];
 				JSONObject loadedObject = (JSONObject) (loadedData.get(mode));
 				loadedObject = (JSONObject) loadedObject.get(modeName);

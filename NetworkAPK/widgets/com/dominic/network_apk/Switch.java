@@ -100,7 +100,9 @@ public class Switch<T> implements Widgets {
 			p.stroke(handleColUnchecked);
 			p.fill(handleColUnchecked);
 		}
-		p.ellipse(sliderX, y, sliderRad * 2, sliderRad * 2);
+		p.ellipse(sliderX, y, sliderRad * 2+margin/2, sliderRad * 2+margin/2);
+		
+		p.stroke(bgCol);
 		p.fill(bgCol);
 		p.ellipse(sliderX, y, sliderRad * 2 - margin, sliderRad * 2 - margin);
 

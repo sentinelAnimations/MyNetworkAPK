@@ -14,13 +14,13 @@ import processing.core.PFont;
 
 public class Node<T> {
 
-	private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, startW, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus = 2, pcStrengthCPU = 100, pcStrengthGPU = 100;
+	private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, startW, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus = 2, pcStrengthCPU = 100, pcStrengthGPU = 100,prevAllFilesInPCFolderSize=-1;
 	private float textYShift;
 	private Boolean isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false, isReady = true;
 	private String id, cpuText = "CPU cores: 0", gpuText = "GPUs: 0", cpuName = "", gpuName = "";
 	private String[] pictoPaths;
 	private String[] pcStatusStrings = { "Alive", "Rendering", "Not responding" };
-	private long curTime, lastLogTime, prevLastModified = 0;
+	private long lastLogTime, prevLastModified = 0;
 	private PFont stdFont;
 	private PApplet p;
 	private MainActivity mainActivity;
@@ -34,7 +34,8 @@ public class Node<T> {
 	private JsonHelper jsonHelper;
 	private ArrayList<String> switch_connectorPointIds = new ArrayList<String>();
 	private ArrayList<ConnectorPoint> switch_connectorPoints = new ArrayList<ConnectorPoint>();
-
+	private PCInfoHelper pcInfoHelper;
+	private FileInteractionHelper fileInteractionHelper;
 	public Node(PApplet p, int x, int y, int w, int h, int type, int edgeRad, int margin, int stdTs, int btnSizeSmall, int dark, int darkest, int bgCol, int textCol, int textDark, int lighter, int lightest, int border, int red, float textYShift, String id, String stdConnectorId, String[] pictoPaths, PFont stdFont, T parent) {
 		this.x = x;
 		this.y = y;
@@ -64,7 +65,8 @@ public class Node<T> {
 		startW = w;
 
 		jsonHelper = new JsonHelper(p);
-
+		pcInfoHelper=new PCInfoHelper(p);
+		fileInteractionHelper=new FileInteractionHelper(p);
 		// cpuCores = (int) (p.random(24));
 
 		mainActivity = (MainActivity) p;
@@ -185,14 +187,20 @@ public class Node<T> {
 		output_connectorPoint.render();
 		pcSelection_DropdownMenu.render();
 
-		curTime = System.nanoTime() / 1000000000;
 		File f = new File(mainActivity.getPathToPCFolder() + "\\" + pcSelection_DropdownMenu.getSelectedItem() + "\\" + mainActivity.getLogFileName());
-		if (curTime - lastLogTime > mainActivity.getShortTimeIntervall() || f.lastModified() != prevLastModified) {
+		if (pcInfoHelper.getCurTime() - lastLogTime > mainActivity.getShortTimeIntervall() || f.lastModified() != prevLastModified) {
 			checkForSignsOfLife();
 			prevLastModified = f.lastModified();
-			lastLogTime = curTime;
+			lastLogTime = pcInfoHelper.getCurTime();
 		}
-
+		
+		String[] allFoldersInPcFolder = fileInteractionHelper.getFoldersAndFiles(mainActivity.getPathToPCFolder(), true);
+			if(allFoldersInPcFolder.length!=prevAllFilesInPCFolderSize) {
+				p.println(allFoldersInPcFolder);
+				p.println("now setupDropdown node",pcSelection_DropdownMenu.getSelectedInd(),pcSelection_DropdownMenu.getSelectedItem());
+				setupDropdown(pcSelection_DropdownMenu.getSelectedInd(),pcSelection_DropdownMenu.getSelectedItem(), allFoldersInPcFolder);
+				prevAllFilesInPCFolderSize=allFoldersInPcFolder.length;
+			}
 	}
 
 	public void checkForSignsOfLife() {
@@ -214,7 +222,7 @@ public class Node<T> {
 					JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
 					long logTime = Long.parseLong(jsonObject.getAsJsonObject("SystemLog").get("logTime").getAsString());
 					// Atention for condition (1!=1 only for testing)
-					if (curTime - logTime > mainActivity.getStdTimeIntervall() && 1 != 1) {
+					if (pcInfoHelper.getCurTime() - logTime > mainActivity.getStdTimeIntervall() && 1 != 1) {
 						pcIsAlive = false;
 					}
 
@@ -854,5 +862,24 @@ public class Node<T> {
 
 	public void setPCList(String[] setPCList) {
 		pcSelection_DropdownMenu.setList(setPCList);
+	}
+	
+	public void setupDropdown(int selectedInd,String selectedItem,String[] newList) {
+		pcSelection_DropdownMenu.setList(newList);
+		if (selectedInd >= 0) {
+			for (int i2 = 0; i2 < newList.length; i2++) {
+				if (newList[i2].toUpperCase().equals(selectedItem.toUpperCase())) {
+					pcSelection_DropdownMenu.setSelectedInd(i2);
+					break;
+				} else {
+					if (i2 == newList.length - 1) {
+						setIsReady(false);
+					pcSelection_DropdownMenu.setSelectedInd(-1);
+					}
+				}
+
+			}
+		}
+		prevAllFilesInPCFolderSize=newList.length;
 	}
 }

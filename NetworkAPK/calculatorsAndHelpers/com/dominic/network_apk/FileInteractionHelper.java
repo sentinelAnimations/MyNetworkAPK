@@ -134,7 +134,7 @@ public class FileInteractionHelper {
 		}
 	}
 
-	ArrayList<File> listFilesRecursive(String dir) {
+	public ArrayList<File> listFilesRecursive(String dir) {
 		ArrayList<File> fileList = new ArrayList<File>();
 		recurseDir(fileList, dir);
 		return fileList;

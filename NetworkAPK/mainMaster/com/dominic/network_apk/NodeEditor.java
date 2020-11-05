@@ -247,10 +247,10 @@ public class NodeEditor<T> {
 				Node n = allConnectedNodes.get(i);
 
 				if (n.getIsTypePc()) {
-					if (n.getCheckoxes()[0].getIsChecked()) {
+					if (n.getCheckoxes()[0].getIsChecked() && n.getCPUName().length()>0) {
 						connectedCpus += n.getCpuCores();
 					}
-					if (n.getCheckoxes()[1].getIsChecked()) {
+					if (n.getCheckoxes()[1].getIsChecked() && n.getGPUName().length()>0) {
 						connectedGpus++;
 					}
 				}
@@ -536,20 +536,8 @@ public class NodeEditor<T> {
 					n.getCheckoxes()[1].setIsChecked(useGpuCheckbox);
 
 					String[] allFoldersInPcFolder = fileInteractionHelper.getFoldersAndFiles(mainActivity.getPathToPCFolder(), true);
-					if (selectPc_dropdown >= 0) {
-						for (int i2 = 0; i2 < allFoldersInPcFolder.length; i2++) {
-							if (allFoldersInPcFolder[i2].toUpperCase().equals(selectPc_dropdownItem.toUpperCase())) {
-								n.getPcSelection_DropdownMenu().setSelectedInd(i2);
-								break;
-							} else {
-								if (i2 == allFoldersInPcFolder.length - 1) {
-									n.setIsReady(false);
-									n.getPcSelection_DropdownMenu().setSelectedInd(-1);
-								}
-							}
-
-						}
-					}
+					n.setupDropdown(selectPc_dropdown,selectPc_dropdownItem, allFoldersInPcFolder);
+					p.println("now setupDropdown editor");
 
 					// check if pc is ready (apk running + ready)----------------------
 					Boolean FolderFound = false;
@@ -724,7 +712,8 @@ public class NodeEditor<T> {
 			}
 		}
 
-		if (key == 'm' || key == 'M') {
+	
+		if (key == 13) {
 
 			Boolean noEditTextAcitve = true;
 			for (int i = 0; i < nodes.size(); i++) {
@@ -749,6 +738,7 @@ public class NodeEditor<T> {
 			middleMouseWasPressed = false;
 			mouseIsPressed = false;
 		}
+	
 	}
 
 	public void onKeyReleased(char k) {

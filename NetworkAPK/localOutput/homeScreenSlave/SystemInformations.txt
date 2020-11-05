@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 11/4/2020, 00:08:32
+      Time of this report: 11/5/2020, 12:17:03
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 7996MB used, 10732MB available
+                Page File: 10107MB used, 8620MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -387,45 +387,6 @@ USB Devices
 | Driver: USBHUB3.SYS, 8/20/2020 18:10:14, 647992 bytes
 | 
 +-+ USB Composite Device
-| | Vendor/Product ID: 0x046D, 0xC534
-| | Location: Port_#0005.Hub_#0003
-| | Matching Device ID: USB\COMPOSITE
-| | Service: usbccgp
-| | Driver: usbccgp.sys, 9/10/2020 15:01:36, 185664 bytes
-| | 
-| +-+ USB Input Device
-| | | Vendor/Product ID: 0x046D, 0xC534
-| | | Location: 0000.0014.0000.005.000.000.000.000.000
-| | | Matching Device ID: USB\Class_03&SubClass_01
-| | | Service: HidUsb
-| | | Driver: hidusb.sys, 12/7/2019 10:07:56, 44032 bytes
-| | | Driver: hidclass.sys, 12/7/2019 10:07:56, 225792 bytes
-| | | Driver: hidparse.sys, 12/7/2019 10:07:56, 46080 bytes
-| | | 
-| | +-+ HID Keyboard Device
-| | | | Vendor/Product ID: 0x046D, 0xC534
-| | | | Matching Device ID: HID_DEVICE_SYSTEM_KEYBOARD
-| | | | Service: kbdhid
-| | | | Driver: kbdhid.sys, 12/7/2019 10:07:56, 46592 bytes
-| | | | Driver: kbdclass.sys, 12/7/2019 10:07:56, 71480 bytes
-| | | 
-| +-+ USB Input Device
-| | | Vendor/Product ID: 0x046D, 0xC534
-| | | Location: 0000.0014.0000.005.000.000.000.000.000
-| | | Matching Device ID: USB\Class_03&SubClass_01
-| | | Service: HidUsb
-| | | Driver: hidusb.sys, 12/7/2019 10:07:56, 44032 bytes
-| | | Driver: hidclass.sys, 12/7/2019 10:07:56, 225792 bytes
-| | | Driver: hidparse.sys, 12/7/2019 10:07:56, 46080 bytes
-| | | 
-| | +-+ HID-compliant mouse
-| | | | Vendor/Product ID: 0x046D, 0xC534
-| | | | Matching Device ID: HID_DEVICE_SYSTEM_MOUSE
-| | | | Service: mouhid
-| | | | Driver: mouhid.sys, 12/7/2019 10:07:56, 35328 bytes
-| | | | Driver: mouclass.sys, 12/7/2019 10:07:56, 67600 bytes
-| | 
-+-+ USB Composite Device
 | | Vendor/Product ID: 0x046D, 0xC52B
 | | Location: Port_#0011.Hub_#0003
 | | Matching Device ID: USB\COMPOSITE
@@ -507,6 +468,45 @@ USB Devices
 | | | | Service: mouhid
 | | | | Driver: mouhid.sys, 12/7/2019 10:07:56, 35328 bytes
 | | | | Driver: mouclass.sys, 12/7/2019 10:07:56, 67600 bytes
+| | 
++-+ USB Composite Device
+| | Vendor/Product ID: 0x046D, 0xC534
+| | Location: Port_#0005.Hub_#0003
+| | Matching Device ID: USB\COMPOSITE
+| | Service: usbccgp
+| | Driver: usbccgp.sys, 9/10/2020 15:01:36, 185664 bytes
+| | 
+| +-+ USB Input Device
+| | | Vendor/Product ID: 0x046D, 0xC534
+| | | Location: 0000.0014.0000.005.000.000.000.000.000
+| | | Matching Device ID: USB\Class_03&SubClass_01
+| | | Service: HidUsb
+| | | Driver: hidusb.sys, 12/7/2019 10:07:56, 44032 bytes
+| | | Driver: hidclass.sys, 12/7/2019 10:07:56, 225792 bytes
+| | | Driver: hidparse.sys, 12/7/2019 10:07:56, 46080 bytes
+| | | 
+| | +-+ HID Keyboard Device
+| | | | Vendor/Product ID: 0x046D, 0xC534
+| | | | Matching Device ID: HID_DEVICE_SYSTEM_KEYBOARD
+| | | | Service: kbdhid
+| | | | Driver: kbdhid.sys, 12/7/2019 10:07:56, 46592 bytes
+| | | | Driver: kbdclass.sys, 12/7/2019 10:07:56, 71480 bytes
+| | | 
+| +-+ USB Input Device
+| | | Vendor/Product ID: 0x046D, 0xC534
+| | | Location: 0000.0014.0000.005.000.000.000.000.000
+| | | Matching Device ID: USB\Class_03&SubClass_01
+| | | Service: HidUsb
+| | | Driver: hidusb.sys, 12/7/2019 10:07:56, 44032 bytes
+| | | Driver: hidclass.sys, 12/7/2019 10:07:56, 225792 bytes
+| | | Driver: hidparse.sys, 12/7/2019 10:07:56, 46080 bytes
+| | | 
+| | +-+ HID-compliant mouse
+| | | | Vendor/Product ID: 0x046D, 0xC534
+| | | | Matching Device ID: HID_DEVICE_SYSTEM_MOUSE
+| | | | Service: mouhid
+| | | | Driver: mouhid.sys, 12/7/2019 10:07:56, 35328 bytes
+| | | | Driver: mouclass.sys, 12/7/2019 10:07:56, 67600 bytes
 
 ----------------
 Gameport Devices
@@ -520,7 +520,7 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 67.2 GB
+ Free Space: 66.3 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB

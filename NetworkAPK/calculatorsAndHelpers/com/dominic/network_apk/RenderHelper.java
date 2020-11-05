@@ -1,6 +1,8 @@
 package com.dominic.network_apk;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,7 +13,7 @@ import com.google.gson.JsonParser;
 import processing.core.PApplet;
 
 public class RenderHelper {
-	private int renderJobIndex = 0;
+	private int renderJobIndex = 0, renderJobIndexCPU, renderJobIndexGPU;
 	private Boolean cpuFinished = false, gpuFinished = false, allJobsFinished = false;
 	private long prevCheckFinishedTime, startTimeCpu, startTimeGpu;
 	private String renderTerminalWindowNameCPU = "renderTerminalCPU", renderTerminalWindowNameGPU = "renderTerminalGPU", blendCommandCPU, blendCommandGPU;
@@ -37,12 +39,6 @@ public class RenderHelper {
 		txtStringHelper = new TxtStringHelper(p);
 	}
 
-	private Boolean[] checkIfFinished() {
-		Boolean[] jobsFinished = { false, false };
-		allJobsFinished = false;
-		return jobsFinished;
-	}
-
 	public Boolean getCpuFinished() {
 		if (cpuThread == null || !cpuThread.isAlive()) {
 			return true;
@@ -63,15 +59,30 @@ public class RenderHelper {
 		return allJobsFinished;
 	}
 
-	public void setupRenderJob(String pathToRenderJobs, int setJobIndex, Boolean useCPU) {
+	private int getNextJob(JSONArray allRenderJobsStatus, String pathToRenderJobsStatus) {
+		int nextInd = -1;
+		for (int i = 0; i < allRenderJobsStatus.size(); i++) {
+			JSONObject curObj = (JSONObject) allRenderJobsStatus.get(i);
+			if (!Boolean.parseBoolean(curObj.get("started").toString())) {
+				nextInd = i;
+				handleJson(i, "started", p.str(true), pathToRenderJobsStatus, curObj, allRenderJobsStatus);
+				break;
+			}
+			if(i==allRenderJobsStatus.size()-1) {
+				allJobsFinished=true;
+			}
+		}
+		return nextInd;
+	}
+
+	public void startRenderJob(String pathToRenderJobs, String pathToRenderJobsStatus, Boolean useCPU) {
 		try {
 			int startFrame, endFrame, stillFrame, resX, resY, samples, animationFrame;
 			Boolean renderAnimation, renderStillFrame, useNewResolution;
 			String filePath, imageSavePath, blendFileName;
 
-			renderJobIndex = setJobIndex;
 			allRenderJobs = jsonHelper.getData(pathToRenderJobs);
-			p.println(allRenderJobs);
+			renderJobIndex = getNextJob(jsonHelper.getData(pathToRenderJobsStatus), pathToRenderJobsStatus); // to do
 
 			renderJob = (JSONObject) allRenderJobs.get(renderJobIndex);
 			p.println(renderJob);
@@ -97,8 +108,8 @@ public class RenderHelper {
 			}
 			// copy blendfile to localfolder,if it doesnt already exist (one folder for CPU,
 			// one for GPU)
-			File logFileCPU=new File(mainActivity.getRenderLogPathCPU(mainActivity.getPCName()));
-			File logFileGPU=new File(mainActivity.getRenderLogPathGPU(mainActivity.getPCName()));
+			File logFileCPU = new File(mainActivity.getRenderLogPathCPU(mainActivity.getPCName()));
+			File logFileGPU = new File(mainActivity.getRenderLogPathGPU(mainActivity.getPCName()));
 
 			File blendFile = new File(mainActivity.getPathToBlenderRenderFolder() + "\\" + renderJob.get("blendfile").toString()); // to do: change to local blendfile path
 			blendFileName = blendFile.getName().replaceFirst("[.][^.]+$", "");
@@ -109,20 +120,20 @@ public class RenderHelper {
 			}
 			File randomSeedFile = new File(mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py");
 			File forceGPURenderingFile = new File(mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
+			resultFileCPU = new File(imageSavePath + "\\" + blendFileName + "\\######");
+			resultFileGPU = resultFileCPU;
 			if (useCPU) {
-				resultFileCPU = new File(mainActivity.getPathToImageFolder() + "\\" + blendFileName + "\\#####");
 				fileInteractionHelper.createParentFolders(resultFileCPU.getAbsolutePath());
 				if (resultFileCPU.exists()) {
 					resultFileCPU.delete();
 				}
 			} else {
-				resultFileGPU = new File(mainActivity.getPathToImageFolder() + "\\" + blendFileName + "\\#####");
 				fileInteractionHelper.createParentFolders(resultFileGPU.getAbsolutePath());
 				if (resultFileGPU.exists()) {
 					resultFileGPU.delete();
 				}
 			}
-			File resolutionAndSampling = new File(mainActivity.getPathToBlenderRenderFolder() + "\\" + blendFileName + "job_" + setJobIndex + "_resolutionAndSampling.py");
+			File resolutionAndSampling = new File(mainActivity.getPathToBlenderRenderFolder() + "\\" + blendFileName + "job_" + renderJobIndex + "_resolutionAndSampling.py");
 			fileInteractionHelper.createParentFolders(logFileCPU.getAbsolutePath());
 			fileInteractionHelper.createParentFolders(logFileGPU.getAbsolutePath());
 
@@ -151,27 +162,36 @@ public class RenderHelper {
 				blendCommandGPU += " -o \"" + resultFileGPU.getAbsolutePath() + "\" -F PNG -f " + frameToRender + " >>" + logFileGPU.getAbsolutePath();
 			}
 			if (localBlendfile.exists() && randomSeedFile.exists() && forceGPURenderingFile.exists() && ((useNewResolution && resolutionAndSampling.exists()) || (!useNewResolution))) {
-				
+
 				logFileCPU.delete();
 				logFileGPU.delete();
-				
+
+				// delete existing resultFile----------------------
+				File deleteFile = new File(resultFileCPU.getParentFile().getAbsolutePath() + "\\" + p.nf(frameToRender, 6) + ".png");
+				if (deleteFile.exists()) {
+					deleteFile.delete();
+				}
+				// delete existing resultFile----------------------
+
 				if (useCPU) {
-					p.println("started on cpu");
 					cpuThread = new Thread(new Runnable() {
 						@Override
 						public void run() {
-							String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on CPU", "ECHO -----------------------------", blendCommandCPU, "ECHO \"Job finished\" >> " + logFileCPU.getAbsolutePath(), "EXIT" };
+							renderJobIndexCPU = renderJobIndex;
+
+							String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on CPU", "ECHO -----------------------------", blendCommandCPU, "ECHO Job finished >> " + logFileCPU.getAbsolutePath(), "EXIT" };
 							Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, renderTerminalWindowNameCPU);
 							if (isExecuted) {
 								startTimeCpu = pcInfoHelper.getCurTime();
-								long prevCheckTime = 0;
-								while (!resultFileCPU.exists() && pcInfoHelper.getCurTime() - prevCheckTime > mainActivity.getStdTimeIntervall()) {
-									prevCheckTime = pcInfoHelper.getCurTime();
 
-									if (pcInfoHelper.getCurTime() - startTimeCpu > mainActivity.getSuperLongTimeIntervall()) {
-										break;
-									}
+								File checkFile = deleteFile;
+								while (!checkFile.exists()) {
+									waitOnFinish(startTimeCpu, 2000);
 								}
+								JSONArray allStat = jsonHelper.getData(pathToRenderJobsStatus);
+								JSONObject obj = (JSONObject) allStat.get(renderJobIndexCPU);
+								handleJson(renderJobIndexCPU, "finished", p.str(true), pathToRenderJobsStatus, obj, allStat);
+
 							} else {
 								p.println("failed to start rendering on cpu");
 							}
@@ -180,15 +200,22 @@ public class RenderHelper {
 					cpuThread.start();
 
 				} else {
-					p.println("started on gpu");
-
 					gpuThread = new Thread(new Runnable() {
 						@Override
 						public void run() {
-							String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on GPU", "ECHO -----------------------------", blendCommandGPU, "ECHO \"Job finished\" >> " + logFileGPU.getAbsolutePath(), "EXIT" };
+							renderJobIndexGPU = renderJobIndex;
+
+							String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on GPU", "ECHO -----------------------------", blendCommandGPU, "ECHO Job finished >> " + logFileGPU.getAbsolutePath(), "EXIT" };
 							Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, renderTerminalWindowNameGPU);
 							if (isExecuted) {
 								startTimeGpu = pcInfoHelper.getCurTime();
+								File checkFile = deleteFile;
+								while (!checkFile.exists()) {
+									waitOnFinish(startTimeGpu, 2000);
+								}
+								JSONArray allStat = jsonHelper.getData(pathToRenderJobsStatus);
+								JSONObject obj = (JSONObject) allStat.get(renderJobIndexGPU);
+								handleJson(renderJobIndexGPU, "finished", p.str(true), pathToRenderJobsStatus, obj, allStat);
 							} else {
 								p.println("failed to start rendering on gpu");
 							}
@@ -199,6 +226,38 @@ public class RenderHelper {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private Boolean waitOnFinish(long startTime, int timeToSleep) {
+		try {
+			Thread.sleep(timeToSleep - System.currentTimeMillis() % timeToSleep);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		p.println("whileloop");
+		if (pcInfoHelper.getCurTime() - startTime > mainActivity.getSuperLongTimeIntervall()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private void handleJson(int index, String key, String value, String path, JSONObject curObj, JSONArray array) {
+		Boolean valueSet = false;
+		while (!valueSet) {
+			try {
+				jsonHelper.clearArray();
+				p.println(array);
+				curObj.put(key, value);
+				p.println(curObj);
+				array.set(index, curObj);
+				jsonHelper.setArray(array);
+				jsonHelper.writeData(path);
+				valueSet = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

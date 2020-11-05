@@ -61,9 +61,9 @@ public class FilesSettingsScreen {
 
 		int sfW = (colW - rowH - margin * 2) / 2;
 		int sfX = (int) (settings_checkboxes[0].getBoxDim() / 2 + margin * 2.5f + sfW / 2);
-		resX_counterArea = new CounterArea(p, sfX, 0, sfW, rowH, edgeRad, margin, stdTs, 32, 1000000000, 0, light, lighter, textCol, textYShift, true, "Resoulution X", arrowPaths, stdFont, settings_checkboxes[0]);
+		resX_counterArea = new CounterArea(p, sfX, 0, sfW, rowH, edgeRad, margin, stdTs, 4, 1000000000, 0, light, lighter, textCol, textYShift, true, "Resoulution X", arrowPaths, stdFont, settings_checkboxes[0]);
 		sfX = (int) (settings_checkboxes[0].getBoxDim() / 2 + margin * 3.5f + sfW * 1.5f);
-		resY_counterArea = new CounterArea(p, sfX, 0, sfW, rowH, edgeRad, margin, stdTs, 32, 1000000000, 0, light, lighter, textCol, textYShift, true, "Resoulution X", arrowPaths, stdFont, settings_checkboxes[0]);
+		resY_counterArea = new CounterArea(p, sfX, 0, sfW, rowH, edgeRad, margin, stdTs, 4, 1000000000, 0, light, lighter, textCol, textYShift, true, "Resoulution X", arrowPaths, stdFont, settings_checkboxes[0]);
 
 		sfX = (int) (settings_checkboxes[0].getBoxDim() / 2 + margin * 2.5 + sfW / 2);
 		startFrame_counterArea = new CounterArea(p, sfX, 0, sfW, rowH, edgeRad, margin, stdTs, 0, 1000000000, 0, light, lighter, textCol, textYShift, true, "Startframe", arrowPaths, stdFont, settings_checkboxes[1]);

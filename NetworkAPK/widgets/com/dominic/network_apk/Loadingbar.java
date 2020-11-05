@@ -94,7 +94,12 @@ public class Loadingbar<T> implements Widgets {
 	public int getH() {
 		return h;
 	}
-
+	public int getMax() {
+		return max;
+	}
+	public int getMin() {
+		return min;
+	}
 	public Boolean mouseIsInArea() {
 		if (p.mouseX > x - w / 2 && p.mouseX < x + w / 2 && p.mouseY > y - h / 2 && p.mouseY < y + h / 2) {
 			return true;
@@ -102,7 +107,7 @@ public class Loadingbar<T> implements Widgets {
 			return false;
 		}
 	}
-
+	
 	public void setValue(int setVal) {
 		value = setVal;
 		percentage = (int) p.map(value, min, max, 0, 100);
