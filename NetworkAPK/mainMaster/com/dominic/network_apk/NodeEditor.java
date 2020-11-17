@@ -537,7 +537,6 @@ public class NodeEditor<T> {
 
 					String[] allFoldersInPcFolder = fileInteractionHelper.getFoldersAndFiles(mainActivity.getPathToPCFolder(), true);
 					n.setupDropdown(selectPc_dropdown,selectPc_dropdownItem, allFoldersInPcFolder);
-					p.println("now setupDropdown editor");
 
 					// check if pc is ready (apk running + ready)----------------------
 					Boolean FolderFound = false;

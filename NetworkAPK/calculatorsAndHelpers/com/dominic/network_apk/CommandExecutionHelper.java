@@ -1,22 +1,37 @@
 package com.dominic.network_apk;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.UUID;
+
+import org.json.simple.JSONArray;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import processing.core.PApplet;
 
 public class CommandExecutionHelper {
-	PApplet p;
+	private PApplet p;
+	private MainActivity mainActivity;
+	private TxtStringHelper txtStringHelper;
 
 	public CommandExecutionHelper(PApplet p) {
 		this.p = p;
+		mainActivity = (MainActivity) p;
+		txtStringHelper = new TxtStringHelper(p);
 	}
 
-	public Boolean executeMultipleCommands(String[] commands, String windowTitle) {
+	public Boolean executeMultipleCommands(String[] commands, String windowTitle, Boolean startMinimized) {
 		Boolean executed = false;
-		String commandStr = "cmd /c start \"" + windowTitle + "\" cmd.exe /K \"";
+		String commandStr = "cmd /c start ";
+		if (startMinimized) {
+			commandStr += "/min ";
+		}
+		commandStr += "\"" + windowTitle + "\" cmd.exe /K \"";
 		for (int i = 0; i < commands.length; i++) {
 			commandStr += commands[i];
 			if (i < commands.length - 1) {
@@ -58,12 +73,10 @@ public class CommandExecutionHelper {
 
 	public Boolean killTaskByWindowtitle(String windowtitle) {
 		Boolean taskIsKilled = false;
-		ArrayList<Integer> allPIDs = new ArrayList();
-
 		try {
 			Runtime rt = Runtime.getRuntime();
 			String[] commands = { "set windowtitle=" + windowtitle, "for /f \"tokens=2\" %a in ('tasklist /V /FI \"IMAGENAME eq cmd.exe\" ^| find /i \"%windowtitle%\"') do taskkill /pid %a" };
-			String commandStr = "cmd /c ";
+			String commandStr = "cmd /c "; // evtl "cmd /c \"";
 			for (int i = 0; i < commands.length; i++) {
 				commandStr += commands[i];
 				if (i < commands.length - 1) {
@@ -71,15 +84,52 @@ public class CommandExecutionHelper {
 				}
 			}
 			commandStr += "\"";
-			p.println(commandStr);
-			// String[] commands = { "cmd", "/c", "TASKLIST", "/FI", "\"WINDOWTITLE eq " +
-			// windowtitle + "*\"" };
 			Process proc = rt.exec(commandStr);
 			taskIsKilled = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return taskIsKilled;
+	}
+
+	public Boolean isWindowOpen(String windowtitle) {
+		Boolean isOpen = false;
+		String basePath = mainActivity.getOpenCheckPath();
+		File logFile = new File(basePath + "\\" + UUID.randomUUID().toString() + "openCheckLog.txt");
+		File batFile = new File(basePath + "\\" + UUID.randomUUID().toString() + "isOpenTest.bat");
+		String batCmd = "set windowtitle=" + windowtitle + "\nfor /f \"tokens=2\" %%a in ('tasklist /V /FI \"IMAGENAME eq cmd.exe\" ^| find /i \"%windowtitle%\"') do echo %%a >>" + logFile.getAbsolutePath();
+		txtStringHelper.writeToFile(batCmd, batFile.getAbsolutePath());
+		try {
+			Runtime rt = Runtime.getRuntime();
+			String[] commands = { batFile.getAbsolutePath() };
+			String commandStr = "cmd /c \""; // evtl "cmd /c \"";
+			for (int i = 0; i < commands.length; i++) {
+				commandStr += commands[i];
+				if (i < commands.length - 1) {
+					commandStr += " && ";
+				}
+			}
+			commandStr += "\"";
+			Process proc = rt.exec(commandStr);
+			proc.waitFor();
+			final int exitValue = proc.waitFor();
+			if (exitValue == 0) {
+				try {
+					String[] lines = p.loadStrings(logFile.getAbsolutePath());
+					if (lines != null && lines.length > 0) {
+						isOpen = true;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		logFile.delete();
+		batFile.delete();
+
+		return isOpen;
 	}
 }

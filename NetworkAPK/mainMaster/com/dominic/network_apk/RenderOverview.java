@@ -127,7 +127,7 @@ public class RenderOverview {
 	}
 
 	private void cancelFileRendering() {
-
+		filesRenderingScreen.setIsRendering(false);
 	}
 
 	private void cancelSheepitRendering() {

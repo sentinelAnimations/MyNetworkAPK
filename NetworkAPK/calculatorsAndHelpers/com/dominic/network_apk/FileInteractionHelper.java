@@ -8,15 +8,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FilenameUtils;
+
 import processing.core.PApplet;
 import processing.data.StringList;
 
 public class FileInteractionHelper {
 	private StringList allInPathsDeleteFolder = new StringList();
 	private PApplet p;
+	private PCInfoHelper pcInfoHelper;
+	private MainActivity mainActivity;
 
 	public FileInteractionHelper(PApplet p) {
 		this.p = p;
+		mainActivity = (MainActivity) p;
+		pcInfoHelper = mainActivity.getPcInfoHelper();
 	}
 
 	public String getAbsolutePath(String relativeFilePath) {
@@ -199,10 +205,43 @@ public class FileInteractionHelper {
 		}
 	}
 
+	public String[] getSpecificFileTypes(String[] list, String[] fileTypes) {
+		String[] newArray;
+		ArrayList<String> newList = new ArrayList<>();
+		for (int i = 0; i < list.length; i++) {
+			String extension = FilenameUtils.getExtension(list[i]);
+			p.println(extension);
+			for (int i2 = 0; i2 < fileTypes.length; i2++) {
+				if (extension.toUpperCase().equals(fileTypes[i2].toUpperCase())) {
+					newList.add(list[i]);
+				}
+			}
+		}
+		newArray = new String[newList.size()];
+
+		for (int i = 0; i < newArray.length; i++) {
+			newArray[i] = newList.get(i);
+		}
+		return newArray;
+	}
+
 	public String cleanupPath(String pathToClean) {
 		String cleanPath = pathToClean.replace("\\\\", "\\");
-
 		return cleanPath;
+	}
+
+	public Boolean fileLastModifiedInTimeRange(File fileToCheck, int maxTimeRange) {
+		p.println(fileToCheck.getAbsolutePath() + "----");
+		p.println(fileToCheck.lastModified(), System.currentTimeMillis(), System.currentTimeMillis() - fileToCheck.lastModified(), "++++");
+		if ((System.currentTimeMillis() - fileToCheck.lastModified()) / 1000 > maxTimeRange) {
+			if (fileToCheck.lastModified() != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 }

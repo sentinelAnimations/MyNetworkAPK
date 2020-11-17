@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 11/5/2020, 12:17:03
+      Time of this report: 11/17/2020, 23:43:08
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 10107MB used, 8620MB available
+                Page File: 8400MB used, 10328MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -387,6 +387,45 @@ USB Devices
 | Driver: USBHUB3.SYS, 8/20/2020 18:10:14, 647992 bytes
 | 
 +-+ USB Composite Device
+| | Vendor/Product ID: 0x046D, 0xC534
+| | Location: Port_#0005.Hub_#0003
+| | Matching Device ID: USB\COMPOSITE
+| | Service: usbccgp
+| | Driver: usbccgp.sys, 9/10/2020 15:01:36, 185664 bytes
+| | 
+| +-+ USB Input Device
+| | | Vendor/Product ID: 0x046D, 0xC534
+| | | Location: 0000.0014.0000.005.000.000.000.000.000
+| | | Matching Device ID: USB\Class_03&SubClass_01
+| | | Service: HidUsb
+| | | Driver: hidusb.sys, 12/7/2019 10:07:56, 44032 bytes
+| | | Driver: hidclass.sys, 12/7/2019 10:07:56, 225792 bytes
+| | | Driver: hidparse.sys, 12/7/2019 10:07:56, 46080 bytes
+| | | 
+| | +-+ HID Keyboard Device
+| | | | Vendor/Product ID: 0x046D, 0xC534
+| | | | Matching Device ID: HID_DEVICE_SYSTEM_KEYBOARD
+| | | | Service: kbdhid
+| | | | Driver: kbdhid.sys, 12/7/2019 10:07:56, 46592 bytes
+| | | | Driver: kbdclass.sys, 12/7/2019 10:07:56, 71480 bytes
+| | | 
+| +-+ USB Input Device
+| | | Vendor/Product ID: 0x046D, 0xC534
+| | | Location: 0000.0014.0000.005.000.000.000.000.000
+| | | Matching Device ID: USB\Class_03&SubClass_01
+| | | Service: HidUsb
+| | | Driver: hidusb.sys, 12/7/2019 10:07:56, 44032 bytes
+| | | Driver: hidclass.sys, 12/7/2019 10:07:56, 225792 bytes
+| | | Driver: hidparse.sys, 12/7/2019 10:07:56, 46080 bytes
+| | | 
+| | +-+ HID-compliant mouse
+| | | | Vendor/Product ID: 0x046D, 0xC534
+| | | | Matching Device ID: HID_DEVICE_SYSTEM_MOUSE
+| | | | Service: mouhid
+| | | | Driver: mouhid.sys, 12/7/2019 10:07:56, 35328 bytes
+| | | | Driver: mouclass.sys, 12/7/2019 10:07:56, 67600 bytes
+| | 
++-+ USB Composite Device
 | | Vendor/Product ID: 0x046D, 0xC52B
 | | Location: Port_#0011.Hub_#0003
 | | Matching Device ID: USB\COMPOSITE
@@ -468,45 +507,6 @@ USB Devices
 | | | | Service: mouhid
 | | | | Driver: mouhid.sys, 12/7/2019 10:07:56, 35328 bytes
 | | | | Driver: mouclass.sys, 12/7/2019 10:07:56, 67600 bytes
-| | 
-+-+ USB Composite Device
-| | Vendor/Product ID: 0x046D, 0xC534
-| | Location: Port_#0005.Hub_#0003
-| | Matching Device ID: USB\COMPOSITE
-| | Service: usbccgp
-| | Driver: usbccgp.sys, 9/10/2020 15:01:36, 185664 bytes
-| | 
-| +-+ USB Input Device
-| | | Vendor/Product ID: 0x046D, 0xC534
-| | | Location: 0000.0014.0000.005.000.000.000.000.000
-| | | Matching Device ID: USB\Class_03&SubClass_01
-| | | Service: HidUsb
-| | | Driver: hidusb.sys, 12/7/2019 10:07:56, 44032 bytes
-| | | Driver: hidclass.sys, 12/7/2019 10:07:56, 225792 bytes
-| | | Driver: hidparse.sys, 12/7/2019 10:07:56, 46080 bytes
-| | | 
-| | +-+ HID Keyboard Device
-| | | | Vendor/Product ID: 0x046D, 0xC534
-| | | | Matching Device ID: HID_DEVICE_SYSTEM_KEYBOARD
-| | | | Service: kbdhid
-| | | | Driver: kbdhid.sys, 12/7/2019 10:07:56, 46592 bytes
-| | | | Driver: kbdclass.sys, 12/7/2019 10:07:56, 71480 bytes
-| | | 
-| +-+ USB Input Device
-| | | Vendor/Product ID: 0x046D, 0xC534
-| | | Location: 0000.0014.0000.005.000.000.000.000.000
-| | | Matching Device ID: USB\Class_03&SubClass_01
-| | | Service: HidUsb
-| | | Driver: hidusb.sys, 12/7/2019 10:07:56, 44032 bytes
-| | | Driver: hidclass.sys, 12/7/2019 10:07:56, 225792 bytes
-| | | Driver: hidparse.sys, 12/7/2019 10:07:56, 46080 bytes
-| | | 
-| | +-+ HID-compliant mouse
-| | | | Vendor/Product ID: 0x046D, 0xC534
-| | | | Matching Device ID: HID_DEVICE_SYSTEM_MOUSE
-| | | | Service: mouhid
-| | | | Driver: mouhid.sys, 12/7/2019 10:07:56, 35328 bytes
-| | | | Driver: mouclass.sys, 12/7/2019 10:07:56, 67600 bytes
 
 ----------------
 Gameport Devices
@@ -520,13 +520,13 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 66.3 GB
+ Free Space: 125.9 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB
 
       Drive: D:
- Free Space: 1115.7 GB
+ Free Space: 1086.7 GB
 Total Space: 2861.5 GB
 File System: NTFS
       Model: WDC WD30EFRX-68EUZN0
@@ -929,8 +929,8 @@ Device ID: PCI\VEN_8086&DEV_6F76&SUBSYS_00000000&REV_01\3&103A9D54&0&5B
      Name: High Definition Audio Controller
 Device ID: PCI\VEN_10DE&DEV_10F0&SUBSYS_042619DA&REV_A1\4&FC7F53B&0&0118
    Driver: C:\WINDOWS\system32\DRIVERS\hdaudbus.sys, 10.00.19041.0001 (English), 12/7/2019 10:07:50, 132608 bytes
-   Driver: C:\WINDOWS\system32\DRIVERS\drmk.sys, 10.00.19041.0001 (English), 12/7/2019 10:07:50, 97792 bytes
-   Driver: C:\WINDOWS\system32\DRIVERS\portcls.sys, 10.00.19041.0001 (English), 12/7/2019 10:07:50, 389120 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\drmk.sys, 10.00.19041.0630 (English), 11/13/2020 00:30:22, 97792 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\portcls.sys, 10.00.19041.0630 (English), 11/13/2020 00:30:22, 388608 bytes
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D DDRIO Channel 0/1 Interface - 6FBE
 Device ID: PCI\VEN_8086&DEV_6FBE&SUBSYS_00000000&REV_01\3&103A9D54&0&A6
@@ -939,8 +939,8 @@ Device ID: PCI\VEN_8086&DEV_6FBE&SUBSYS_00000000&REV_01\3&103A9D54&0&A6
      Name: High Definition Audio Controller
 Device ID: PCI\VEN_8086&DEV_8D20&SUBSYS_86371043&REV_05\3&11583659&0&D8
    Driver: C:\WINDOWS\system32\DRIVERS\hdaudbus.sys, 10.00.19041.0001 (English), 12/7/2019 10:07:50, 132608 bytes
-   Driver: C:\WINDOWS\system32\DRIVERS\drmk.sys, 10.00.19041.0001 (English), 12/7/2019 10:07:50, 97792 bytes
-   Driver: C:\WINDOWS\system32\DRIVERS\portcls.sys, 10.00.19041.0001 (English), 12/7/2019 10:07:50, 389120 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\drmk.sys, 10.00.19041.0630 (English), 11/13/2020 00:30:22, 97792 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\portcls.sys, 10.00.19041.0630 (English), 11/13/2020 00:30:22, 388608 bytes
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D PCI Express Root Port 3 - 6F08
 Device ID: PCI\VEN_8086&DEV_6F08&SUBSYS_00008086&REV_01\3&11583659&0&18
@@ -982,7 +982,7 @@ WM ASF Reader,0x00400000,0,0,qasf.dll,12.00.19041.0001
 AVI Splitter,0x00600000,1,1,quartz.dll,10.00.19041.0329
 VGA 16 Color Ditherer,0x00400000,1,1,quartz.dll,10.00.19041.0329
 SBE2MediaTypeProfile,0x00200000,0,0,sbe.dll,10.00.19041.0001
-Microsoft DTV-DVD Video Decoder,0x005fffff,2,4,msmpeg2vdec.dll,10.00.19041.0572
+Microsoft DTV-DVD Video Decoder,0x005fffff,2,4,msmpeg2vdec.dll,10.00.19041.0610
 AC3 Parser Filter,0x00600000,1,1,mpg2splt.ax,10.00.19041.0329
 StreamBufferSink,0x00200000,0,0,sbe.dll,10.00.19041.0001
 MJPEG Decompressor,0x00600000,1,1,quartz.dll,10.00.19041.0329
@@ -1181,7 +1181,7 @@ WMMEDIASUBTYPE_WMSP1, WMSpeech Decoder DMO, CLSID_CWMSPDecMediaObject
 Media Foundation File Versions
 ---------------------------
 
-  mfcore.dll, 10.00.19041.0572
+  mfcore.dll, 10.00.19041.0630
   mfreadwrite.dll, 10.00.19041.0153
   mfcaptureengine.dll, 10.00.19041.0546
   mfsensorgroup.dll, 10.00.19041.0423
@@ -1201,10 +1201,10 @@ Media Foundation Transforms
 
 Video Decoders:
   NVIDIA MJPEG Video Decoder MFT, {70F36578-2741-454F-B494-E8563DDD1CB4}, 0x4, 8, nvDecMFTMjpegx.dll, 26.21.0014.3200
-  Microsoft MPEG Video Decoder MFT, {2D709E52-123F-49B5-9CBC-9AF5CDE28FB9}, 0x1, msmpeg2vdec.dll, 10.00.19041.0572
+  Microsoft MPEG Video Decoder MFT, {2D709E52-123F-49B5-9CBC-9AF5CDE28FB9}, 0x1, msmpeg2vdec.dll, 10.00.19041.0610
   DV Decoder MFT, {404A6DE5-D4D6-4260-9BC7-5A6CBD882432}, 0x1, mfdvdec.dll, 10.00.19041.0001
   Mpeg4s Decoder MFT, CLSID_CMpeg4sDecMFT, 0x1, mp4sdecd.dll, 10.00.19041.0450
-  Microsoft H264 Video Decoder MFT, CLSID_CMSH264DecoderMFT, 0x1, msmpeg2vdec.dll, 10.00.19041.0572
+  Microsoft H264 Video Decoder MFT, CLSID_CMSH264DecoderMFT, 0x1, msmpeg2vdec.dll, 10.00.19041.0610
   WMV Screen decoder MFT, CLSID_CMSSCDecMediaObject, 0x1, wmvsdecd.dll, 10.00.19041.0001
   WMVideo Decoder MFT, CLSID_CWMVDecMediaObject, 0x1, wmvdecod.dll, 10.00.19041.0450
   MJPEG Decoder MFT, {CB17E772-E1CC-4633-8450-5617AF577905}, 0x1, mfmjpegdec.dll, 10.00.19041.0329
@@ -1232,27 +1232,27 @@ Video Effects:
 Video Processor:
   Microsoft Video Processor MFT, {88753B26-5B24-49BD-B2E7-0C445C78C982}, 0x1, msvproc.dll, 10.00.19041.0488
 Audio Decoders:
-  Microsoft Dolby Digital Plus Decoder MFT, {177C0AFE-900B-48D4-9E4C-57ADD250B3D4}, 0x1, DolbyDecMFT.dll, 10.00.19041.0488
+  Microsoft Dolby Digital Plus Decoder MFT, {177C0AFE-900B-48D4-9E4C-57ADD250B3D4}, 0x1, DolbyDecMFT.dll, 10.00.19041.0610
   MS AMRNB Decoder MFT, {265011AE-5481-4F77-A295-ABB6FFE8D63E}, 0x1, MSAMRNBDecoder.dll, 10.00.19041.0001
   WMAudio Decoder MFT, CLSID_CWMADecMediaObject, 0x1, WMADMOD.DLL, 10.00.19041.0508
-  Microsoft AAC Audio Decoder MFT, CLSID_CMSAACDecMFT, 0x1, MSAudDecMFT.dll, 10.00.19041.0423
-  A-law Wrapper MFT, {36CB6E0C-78C1-42B2-9943-846262F31786}, 0x1, mfcore.dll, 10.00.19041.0572
-  GSM ACM Wrapper MFT, {4A76B469-7B66-4DD4-BA2D-DDF244C766DC}, 0x1, mfcore.dll, 10.00.19041.0572
+  Microsoft AAC Audio Decoder MFT, CLSID_CMSAACDecMFT, 0x1, MSAudDecMFT.dll, 10.00.19041.0630
+  A-law Wrapper MFT, {36CB6E0C-78C1-42B2-9943-846262F31786}, 0x1, mfcore.dll, 10.00.19041.0630
+  GSM ACM Wrapper MFT, {4A76B469-7B66-4DD4-BA2D-DDF244C766DC}, 0x1, mfcore.dll, 10.00.19041.0630
   WMAPro over S/PDIF MFT, CLSID_CWMAudioSpdTxDMO, 0x1, WMADMOD.DLL, 10.00.19041.0508
   Microsoft Opus Audio Decoder MFT, {63E17C10-2D43-4C42-8FE3-8D8B63E46A6A}, 0x1, MSOpusDecoder.dll, 10.00.19041.0001
   Microsoft FLAC Audio Decoder MFT, {6B0B3E6B-A2C5-4514-8055-AFE8A95242D9}, 0x1, MSFlacDecoder.dll, 10.00.19041.0207
-  Microsoft MPEG Audio Decoder MFT, {70707B39-B2CA-4015-ABEA-F8447D22D88B}, 0x1, MSAudDecMFT.dll, 10.00.19041.0423
+  Microsoft MPEG Audio Decoder MFT, {70707B39-B2CA-4015-ABEA-F8447D22D88B}, 0x1, MSAudDecMFT.dll, 10.00.19041.0630
   WMSpeech Decoder DMO, CLSID_CWMSPDecMediaObject, 0x1, WMSPDMOD.DLL, 10.00.19041.0001
-  G711 Wrapper MFT, {92B66080-5E2D-449E-90C4-C41F268E5514}, 0x1, mfcore.dll, 10.00.19041.0572
-  IMA ADPCM ACM Wrapper MFT, {A16E1BFF-A80D-48AD-AECD-A35C005685FE}, 0x1, mfcore.dll, 10.00.19041.0572
+  G711 Wrapper MFT, {92B66080-5E2D-449E-90C4-C41F268E5514}, 0x1, mfcore.dll, 10.00.19041.0630
+  IMA ADPCM ACM Wrapper MFT, {A16E1BFF-A80D-48AD-AECD-A35C005685FE}, 0x1, mfcore.dll, 10.00.19041.0630
   MP3 Decoder MFT, CLSID_CMP3DecMediaObject, 0x1, mp3dmod.dll, 10.00.19041.0001
   Microsoft ALAC Audio Decoder MFT, {C0CD7D12-31FC-4BBC-B363-7322EE3E1879}, 0x1, MSAlacDecoder.dll, 10.00.19041.0001
-  ADPCM ACM Wrapper MFT, {CA34FE0A-5722-43AD-AF23-05F7650257DD}, 0x1, mfcore.dll, 10.00.19041.0572
+  ADPCM ACM Wrapper MFT, {CA34FE0A-5722-43AD-AF23-05F7650257DD}, 0x1, mfcore.dll, 10.00.19041.0630
   Dolby TrueHD IEC-61937 converter MFT, {CF5EEEDF-0E92-4B3B-A161-BD0FFE545E4B}, 0x1, mfaudiocnv.dll, 10.00.19041.0001
   DTS IEC-61937 converter MFT, {D035E24C-C877-42D7-A795-2A8A339B472F}, 0x1, mfaudiocnv.dll, 10.00.19041.0001
 Audio Encoders:
   LPCM DVD-Audio MFT, {068A8476-9229-4CC0-9D49-2FC699DCD30A}, 0x1, mfaudiocnv.dll, 10.00.19041.0001
-  MP3 Encoder ACM Wrapper MFT, {11103421-354C-4CCA-A7A3-1AFF9A5B6701}, 0x1, mfcore.dll, 10.00.19041.0572
+  MP3 Encoder ACM Wrapper MFT, {11103421-354C-4CCA-A7A3-1AFF9A5B6701}, 0x1, mfcore.dll, 10.00.19041.0630
   Microsoft FLAC Audio Encoder MFT, {128509E9-C44E-45DC-95E9-C255B8F466A6}, 0x1, MSFlacEncoder.dll, 10.00.19041.0153
   WM Speech Encoder DMO, CLSID_CWMSPEncMediaObject2, 0x1, WMSPDMOE.DLL, 10.00.19041.0508
   MS AMRNB Encoder MFT, {2FAE8AFE-04A3-423A-A814-85DB454712B0}, 0x1, MSAMRNBEncoder.dll, 10.00.19041.0001
@@ -1265,9 +1265,9 @@ Audio Effects:
   AEC, CLSID_CWMAudioAEC, 0x1, mfwmaaec.dll, 10.00.19041.0001
   Resampler MFT, CLSID_CResamplerMediaObject, 0x1, resampledmo.dll, 10.00.19041.0001
 Multiplexers:
-  Microsoft MPEG2 Multiplexer MFT, {AB300F71-01AB-46D2-AB6C-64906CB03258}, 0x2, mfmpeg2srcsnk.dll, 10.00.19041.0572
+  Microsoft MPEG2 Multiplexer MFT, {AB300F71-01AB-46D2-AB6C-64906CB03258}, 0x2, mfmpeg2srcsnk.dll, 10.00.19041.0630
 Others:
-  Microsoft H264 Video Remux (MPEG2TSToMP4) MFT, {05A47EBB-8BF0-4CBF-AD2F-3B71D75866F5}, 0x1, msmpeg2vdec.dll, 10.00.19041.0572
+  Microsoft H264 Video Remux (MPEG2TSToMP4) MFT, {05A47EBB-8BF0-4CBF-AD2F-3B71D75866F5}, 0x1, msmpeg2vdec.dll, 10.00.19041.0610
 
 
 --------------------------------------------
@@ -1534,14 +1534,14 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
-Fault bucket 2205992626168674284, type 5
+Fault bucket 1280825500765404570, type 5
 Event Name: RADAR_PRE_LEAK_64
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: chrome.exe
-P2: 86.0.4240.111
+P1: eclipse.exe
+P2: 0.0.0.0
 P3: 10.0.19041.2.0.0
 P4: 
 P5: 
@@ -1553,93 +1553,93 @@ P10:
 
 
 +++ WER1 +++:
-Fault bucket 2130722187441110510, type 4
-Event Name: APPCRASH
+Fault bucket 1620990508230590550, type 5
+Event Name: AppHangB1
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: explorer.exe
-P2: 10.0.19041.546
-P3: 89ce2e55
-P4: KERNELBASE.dll
-P5: 10.0.19041.572
-P6: 1183946c
-P7: c0000602
-P8: 000000000010b65c
+P1: blender.exe
+P2: 2.9.0.0
+P3: 5f6b092e
+P4: a057
+P5: 134217728
+P6: 
+P7: 
+P8: 
 P9: 
 P10: 
 
 
 +++ WER2 +++:
-Fault bucket 1735121910066339398, type 4
-Event Name: APPCRASH
+Fault bucket , type 0
+Event Name: AppHangB1
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: Explorer.EXE
-P2: 10.0.19041.546
-P3: 89ce2e55
-P4: StackHash_1c3a
-P5: 10.0.19041.546
-P6: 5b56177b
-P7: c0000374
-P8: PCH_E6_FROM_ntdll+0x000000000009C8E4
+P1: blender.exe
+P2: 2.9.0.0
+P3: 5f6b092e
+P4: a057
+P5: 134217728
+P6: 
+P7: 
+P8: 
 P9: 
 P10: 
 
 
 +++ WER3 +++:
-Fault bucket , type 0
-Event Name: APPCRASH
+Fault bucket 1436477026018957989, type 5
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: explorer.exe
-P2: 10.0.19041.546
-P3: 89ce2e55
-P4: KERNELBASE.dll
-P5: 10.0.19041.572
-P6: 1183946c
-P7: c0000602
-P8: 000000000010b65c
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
+P6: 
+P7: 
+P8: 
 P9: 
 P10: 
 
 
 +++ WER4 +++:
 Fault bucket , type 0
-Event Name: APPCRASH
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: Explorer.EXE
-P2: 10.0.19041.546
-P3: 89ce2e55
-P4: StackHash_1c3a
-P5: 10.0.19041.546
-P6: 5b56177b
-P7: c0000374
-P8: PCH_E6_FROM_ntdll+0x000000000009C8E4
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
+P6: 
+P7: 
+P8: 
 P9: 
 P10: 
 
 
 +++ WER5 +++:
 Fault bucket , type 0
-Event Name: RADAR_PRE_LEAK_64
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: Cinema 4D.exe
-P2: 23.0.0.8
-P3: 10.0.19041.2.0.0
-P4: 
-P5: 
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
 P6: 
 P7: 
 P8: 
@@ -1649,76 +1649,76 @@ P10:
 
 +++ WER6 +++:
 Fault bucket , type 0
-Event Name: AppHangTransient
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: soffice.bin
-P2: 6.4.1.2
-P3: 5e4f5af3
-P4: unknown
-P5: unknown
-P6: unknown
-P7: unknown
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
+P6: 
+P7: 
 P8: 
 P9: 
 P10: 
 
 
 +++ WER7 +++:
-Fault bucket LKD_0x1cc_EXRESOURCE_TIMEOUT_OWNERTHREAD_mrxsmb!SmbCeWaitForCompletionAndFinalizeExchangeEx, type 0
-Event Name: LiveKernelEvent
+Fault bucket 0xCFFFFFFF_CANCELLATION_NOT_SUPPORTED_IMAGE_mrxsmb.sys, type 0
+Event Name: AppTermFailureEvent
 Response: Not available
-Cab Id: 781e7c74-6c54-45ec-8072-adab00f77992
+Cab Id: ec5e6a7f-9ffb-44c0-ade3-b09777dba439
 
 Problem signature:
-P1: 1cc
-P2: ffff8a0bf784d8e0
-P3: ffff8a0bfa4f9080
-P4: 4a
-P5: 96
-P6: 10_0_19041
-P7: 0_0
-P8: 768_1
+P1: 
+P2: 
+P3: 
+P4: 
+P5: 
+P6: 
+P7: 
+P8: 
 P9: 
 P10: 
 
 
 +++ WER8 +++:
-Fault bucket , type 0
-Event Name: LiveKernelEvent
+Fault bucket 1809745203583969667, type 5
+Event Name: AppHangB1
 Response: Not available
-Cab Id: 781e7c74-6c54-45ec-8072-adab00f77992
+Cab Id: 0
 
 Problem signature:
-P1: 1cc
-P2: ffff8a0bf784d8e0
-P3: ffff8a0bfa4f9080
-P4: 4a
-P5: 96
-P6: 10_0_19041
-P7: 0_0
-P8: 768_1
+P1: explorer.exe
+P2: 10.0.19041.610
+P3: ab30c679
+P4: cb4c
+P5: 134742016
+P6: 
+P7: 
+P8: 
 P9: 
 P10: 
 
 
 +++ WER9 +++:
 Fault bucket , type 0
-Event Name: LiveKernelEvent
+Event Name: AppTermFailureEvent
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: 1cc
-P2: ffff8a0bf784d8e0
-P3: ffff8a0bfa4f9080
-P4: 4a
-P5: 96
-P6: 10_0_19041
-P7: 0_0
-P8: 768_1
+P1: 
+P2: 
+P3: 
+P4: 
+P5: 
+P6: 
+P7: 
+P8: 
 P9: 
 P10: 
 

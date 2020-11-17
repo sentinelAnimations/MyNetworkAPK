@@ -45,10 +45,12 @@ public class Loadingbar<T> implements Widgets {
 		p.fill(colOk);
 		p.stroke(colOk);
 		if (percentage < 100) {
+			if(percentage>0) {
 			p.rect(x1, y, w1, h, edgeRad, 0, 0, edgeRad);
-
+			}
 			p.fill(colNok);
 			p.stroke(colNok);
+			
 			if (percentage > 0) {
 				p.rect(x2, y, w2, h, 0, edgeRad, edgeRad, 0);
 			} else {

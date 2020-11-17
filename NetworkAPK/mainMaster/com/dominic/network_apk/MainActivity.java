@@ -40,14 +40,8 @@ public class MainActivity extends PApplet {
 	}
 
 	// Global variables -----------------------------------------
-	// IsMaster==true:
-	// 0=loadingScreen, 1=home,2=node editor,3=settings,4=download
-	// blender,5=questions,101=renderMode
 
-	// IsMaster==false:
-	// 0=isSleeping, 1=isRendering
-
-	int mode = 0;
+	int mode = 0, prevMode = 0;
 
 	// integers-------------------------------------------------
 	int windowTopBarHeight, stdTimeIntervall = 60, shortTimeIntervall = 10, superShortTimeIntervall = 1, longTimeIntervall = 5 * 60, superLongTimeIntervall = 60 * 60, cpuCoresMaster = 0;
@@ -71,18 +65,18 @@ public class MainActivity extends PApplet {
 	// Strings--------------------------------------------------
 	private String APKName = "InSevenDays© 1.0", APKDescription = "A network solution", cpuNameMaster = "", gpuNameMaster = "";
 	private String[] modeNamesMaster = { "Home", "Node Editor", "Settings", "Share", "Theme", "Strength test", "Questions" };
-	private String[] modeNamesSlaves = { modeNamesMaster[0], modeNamesMaster[2], modeNamesMaster[4], modeNamesMaster[5] };
+	private String[] modeNamesSlaves = { modeNamesMaster[0], modeNamesMaster[2], modeNamesMaster[4], modeNamesMaster[6] };
 
 	// Save paths ----------------------
 	// Local -----------
-	private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json",homeScreenMasterSettingsPath="localOutput/HomeScreenMaster/settingsMaster.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles", localBlendfilePath = "localOutput/renderBlendfiles";
+	private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json", homeScreenMasterSettingsPath = "localOutput/HomeScreenMaster/settingsMaster.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles", localBlendfilePath = "localOutput/renderBlendfiles";
 	// Local -----------
 	// File names -------
-	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json",relativeMasterRenderJobsStatusFilePath = "MasterCommands\\MasterRenderJobsStatus.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
+	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json", relativeMasterRenderJobsStatusFilePath = "MasterCommands\\MasterRenderJobsStatus.json", hardwareToUseFilePath = "MasterCommands\\hardwareToUse.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
 	// File names -------
 
 	// shared ----------
-
+	private String cloudImageFolder = "renderedImages";
 	// shared ----------
 	// Save paths ----------------------
 	// Strings--------------------------------------------------
@@ -179,10 +173,14 @@ public class MainActivity extends PApplet {
 		imageMode(CENTER);
 
 		// variableInitialisation -----------------------------------------------
+		jsonHelper = new JsonHelper(this);
+		fileInteractionHelper = new FileInteractionHelper(this);
+		pcInfoHelper = new PCInfoHelper(this);
+		strengthTestHelper = new StrengthTestHelper(this, "logDataMaster", this);
+		
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
 
 		initializeLoadingScreen();
-
 	}
 
 	public void initializeLoadingScreen() {
@@ -197,10 +195,7 @@ public class MainActivity extends PApplet {
 	}
 
 	public void initializeClassInstancesMaster() {
-		jsonHelper = new JsonHelper(this);
-		fileInteractionHelper = new FileInteractionHelper(this);
-		pcInfoHelper = new PCInfoHelper(this);
-		strengthTestHelper = new StrengthTestHelper(this, "logDataMaster", this);
+		
 		loadingScreen.setLoadingStatus("Init MainButtons");
 
 		// pc specs ----------------------------------------
@@ -228,7 +223,7 @@ public class MainActivity extends PApplet {
 		loadingScreen.setLoadingStatus("Init " + modeNamesMaster[0]);
 		String[] arrowPaths = { absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
 		String[] hoLiPictoPathsHome = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-		String[] homeScreenPictoPaths = { absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png", absPathPictos + "startEngine.png",absPathPictos+"save.png" };
+		String[] homeScreenPictoPaths = { absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png", absPathPictos + "startEngine.png", absPathPictos + "save.png" };
 		homeScreen = new HomeScreenMaster(this, 1, btnSize, btnSizeSmall, edgeRad, margin, stdTs, dark, light, lighter, border, textCol, textDark, textYShift, homeScreenPictoPaths, arrowPaths, hoLiPictoPathsHome, fileExplorerPaths, stdFont);
 		// variableInitialisation for mode 1 --> home screen-------------------
 
@@ -269,7 +264,7 @@ public class MainActivity extends PApplet {
 
 		// variableInitialisation for mode 101 --> RenderOverview -------------
 		loadingScreen.setLoadingStatus("Init RenderOverview");
-		String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png", absPathPictos + "masterPC.png",absPathPictos+"renderSettings.png",absPathPictos+"renderFile.png" };
+		String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png", absPathPictos + "masterPC.png", absPathPictos + "renderSettings.png", absPathPictos + "renderFile.png" };
 		String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
 		renderOverview = new RenderOverview(this, 101, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red, blue, textYShift, getMasterCommandFilePath(), rOpp, hoLiPictoPathsRenderOverview, arrowPaths, fileExplorerPaths, stdFont);
 		// variableInitialisation for mode 101 --> RenderOverview -------------
@@ -355,7 +350,7 @@ public class MainActivity extends PApplet {
 		// initialize mode 0 --> homeScreenSlaves-----------------
 		loadingScreen.setLoadingStatus("Init " + modeNamesSlaves[0]);
 		String[] hSSpp = { absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "renderFile.png" };
-		homeScreenSlaves = new HomeScreenSlaves(this, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, red, green, textYShift, hSSpp, stdFont);
+		homeScreenSlaves = new HomeScreenSlaves(this, 1, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, red, green, textYShift, hSSpp, stdFont);
 		// initialize mode 0 --> homeScreenSlaves-----------------
 
 	}
@@ -398,6 +393,11 @@ public class MainActivity extends PApplet {
 				}
 				if (mode == 6) {
 					strengthTestScreen.render();
+					File cmdFile = new File(getMasterCommandFilePath());
+					if (strengthTestScreen.getStartedTest() || cmdFile.lastModified() != prevLastModified) {
+						strengthTestHelper.checkForStrengthTestCommands(cpuNameMaster, gpuNameMaster, getSpecInfoThread);
+						prevLastModified = cmdFile.lastModified();
+					}
 				}
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.render();
@@ -407,10 +407,11 @@ public class MainActivity extends PApplet {
 				}
 				// log ---------------------
 
-				File cmdFile = new File(getMasterCommandFilePath());
-				if (strengthTestScreen.getStartedTest() || cmdFile.lastModified() != prevLastModified) {
-					strengthTestHelper.checkForStrengthTestCommands(cpuNameMaster, gpuNameMaster, getSpecInfoThread);
-					prevLastModified = cmdFile.lastModified();
+				if (mode != prevMode && prevMode == getStrengthTestScreen().getMode()) {
+					// strengthTestHelper.checkForStrengthTestCommands(cpuNameMaster, gpuNameMaster,
+					// getSpecInfoThread);
+					strengthTestHelper.stopStrengthTest();
+					getStrengthTestScreen().controllStrengthTest(false);
 				}
 
 				curTime = pcInfoHelper.getCurTime();
@@ -441,6 +442,8 @@ public class MainActivity extends PApplet {
 				// log ---------------------
 			}
 		}
+
+		prevMode = mode;
 		// render all ----------------------------------------
 
 	}
@@ -543,6 +546,8 @@ public class MainActivity extends PApplet {
 		settingsDetails.put("logTime", curTime);
 		settingsDetails.put("readableTime", pcInfoHelper.getReadableTime());
 		settingsDetails.put("renderMode", renderMode);
+		settingsDetails.put("cpuIsRendering", renderOverview.getFilesRenderingScreen().getRenderHelper().getCPUThreadAlive());
+		settingsDetails.put("gpuIsRendering", renderOverview.getFilesRenderingScreen().getRenderHelper().getGPUThreadAlive());
 		settingsDetails.put("cpuCores", cpuCoresMaster);
 		settingsDetails.put("cpuName", cpuNameMaster);
 		settingsDetails.put("gpuName", gpuNameMaster);
@@ -868,14 +873,6 @@ public class MainActivity extends PApplet {
 		return stdScreenDimension;
 	}
 
-	public ImageButton[] getMainButtonsMaster() {
-		return mainButtonsMaster;
-	}
-
-	public ImageButton[] getMainButtonsSlave() {
-		return mainButtonsSlave;
-	}
-
 	public String getPCName() {
 		return settingsScreen.getEditText().getStrList().get(0);
 	}
@@ -924,8 +921,24 @@ public class MainActivity extends PApplet {
 		return modeNamesMaster;
 	}
 
+	public String[] getModeNamesSlaves() {
+		return modeNamesSlaves;
+	}
+
 	public LoadingScreen getLoadingScreen() {
 		return loadingScreen;
+	}
+
+	public ImageButton[] getMainButtonsMaster() {
+		return mainButtonsMaster;
+	}
+
+	public ImageButton[] getMainButtonsSlave() {
+		return mainButtonsSlave;
+	}
+
+	public PCInfoHelper getPcInfoHelper() {
+		return pcInfoHelper;
 	}
 
 	public HomeScreenMaster getHomeScreenMaster() {
@@ -952,6 +965,10 @@ public class MainActivity extends PApplet {
 		return homeScreenSlaves;
 	}
 
+	public StrengthTestHelper getStrengthTestHelper() {
+		return strengthTestHelper;
+	}
+
 	public String getMasterCommandFilePath() {
 		return getPathToCloud() + "\\" + relativeMasterCommandFilePath;
 	}
@@ -959,8 +976,9 @@ public class MainActivity extends PApplet {
 	public String getMasterRenderJobsFilePath() {
 		return getPathToCloud() + "\\" + relativeMasterRenderJobsFilePath;
 	}
+
 	public String getMasterRenderJobsStatusFilePath() {
-		return getPathToCloud() + "\\"+ relativeMasterRenderJobsStatusFilePath;
+		return getPathToCloud() + "\\" + relativeMasterRenderJobsStatusFilePath;
 	}
 
 	public String getRenderPythonScriptsPath() {
@@ -980,29 +998,66 @@ public class MainActivity extends PApplet {
 	}
 
 	public String getAllRenderFilesJsonPath() {
-		return getPathToCloud()+"\\"+allRenderFilesRelativePath;
+		return getPathToCloud() + "\\" + allRenderFilesRelativePath;
 	}
+
 	public String getHomeScreenMasterSettingsPath() {
 		return homeScreenMasterSettingsPath;
 	}
 
+	public String getCloudImageFolder() {
+		return getPathToCloud() + "\\" + cloudImageFolder;
+	}
+
+	public String getOpenCheckPath() {
+		return new File(getHomeScreenMasterSettingsPath()).getParentFile().getAbsolutePath() + "\\openCheck";
+	}
+
+	public String getHardwareToUseFilePath() {
+		return getPathToCloud() + "\\" + hardwareToUseFilePath;
+	}
+
 	public Boolean[] getHardwareToRenderWith(String pcNameStr) {
 		Boolean[] renderHardware = new Boolean[2]; // 0=useCpu?, 1=useGpu?
-		Node foundNode = null;
-		for (int i = 0; i < nodeEditor.getAllConnectedNodes().size(); i++) {
-			Node n = (Node) nodeEditor.getAllConnectedNodes().get(i);
-			if (n.getPcSelection_DropdownMenu().getSelectedItem().toUpperCase().equals(pcNameStr.toUpperCase())) {
-				foundNode = n;
-				break;
+		if (isMaster) {
+			Node foundNode = null;
+			for (int i = 0; i < nodeEditor.getAllConnectedNodes().size(); i++) {
+				Node n = (Node) nodeEditor.getAllConnectedNodes().get(i);
+				if (n.getPcSelection_DropdownMenu().getSelectedItem().toUpperCase().equals(pcNameStr.toUpperCase())) {
+					foundNode = n;
+					break;
+				}
 			}
-		}
-		if (foundNode != null) {
-			renderHardware[0] = foundNode.getCheckoxes()[0].getIsChecked();
-			renderHardware[1] = foundNode.getCheckoxes()[1].getIsChecked();
+			if (foundNode != null) {
+				renderHardware[0] = foundNode.getCheckoxes()[0].getIsChecked();
+				renderHardware[1] = foundNode.getCheckoxes()[1].getIsChecked();
 
+			} else {
+				renderHardware[0] = false;
+				renderHardware[1] = false;
+			}
 		} else {
-			renderHardware[0] = false;
-			renderHardware[1] = false;
+			println(getHardwareToUseFilePath());
+			println(getMasterCommandFilePath());
+			JSONArray loadedSettingsData = jsonHelper.getData(getHardwareToUseFilePath());
+			println(loadedSettingsData);
+			try {
+		
+				JSONArray hwToUseArray = jsonHelper.getData(getHardwareToUseFilePath());
+				for (int i = 0; i < hwToUseArray.size(); i++) {
+					JSONObject curObj = (JSONObject) hwToUseArray.get(i);
+					String curPcName = curObj.get("pcName").toString();
+					if (curPcName.equals(pcNameStr)) {
+						renderHardware[0] = Boolean.parseBoolean(curObj.get("useCPU").toString());
+						renderHardware[1] = Boolean.parseBoolean(curObj.get("useGPU").toString());
+						break;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				renderHardware[0] = false;
+				renderHardware[1] = false;
+			}
 		}
 		return renderHardware;
 	}

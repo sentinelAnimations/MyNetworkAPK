@@ -18,7 +18,7 @@ public class StrengthTestScreen {
 	private String[] pictoPaths, hoLiPictoPaths, startList = {}, allPCNames, pcListTexts;
 	private float[] listX, listW;
 	private int[] allPCStatus, allPCStrengthsCPU, allPCStrengthsGPU;
-	private long curTime, prevTime, prevTime2;
+	private long  prevTime, prevTime2;
 	private PFont stdFont;
 	private PApplet p;
 	private HorizontalList strengthTest_HorizontalList;
@@ -28,6 +28,8 @@ public class StrengthTestScreen {
 	private ArrayList<Node> allConnectedNodes = new ArrayList<>();
 	private JsonHelper jsonHelper;
 	private FileInteractionHelper fileInteractionHelper;
+	private PCInfoHelper pcInfoHelper;
+	private CommandExecutionHelper commandExecutionHelper;
 	private Thread strengthTestThread, checkForFinishedThread;
 
 	public StrengthTestScreen(PApplet p, int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, int red, int green, float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, PFont stdFont) {
@@ -62,6 +64,8 @@ public class StrengthTestScreen {
 		}
 		jsonHelper = new JsonHelper(p);
 		fileInteractionHelper = new FileInteractionHelper(p);
+		pcInfoHelper=new PCInfoHelper(p);
+		commandExecutionHelper=new CommandExecutionHelper(p);
 		setupAll();
 		controllStrengthTest(false);
 
@@ -117,8 +121,8 @@ public class StrengthTestScreen {
 		// update PCList & check for
 		// finished---------------------------------------------
 		if (allConnectedNodes.size() > 0) {
-			curTime = System.nanoTime() / 1000000000;
-			if (curTime - prevTime > mainActivity.getSuperShortTimeIntervall()) {
+			
+			if (pcInfoHelper.getCurTime() - prevTime > mainActivity.getSuperShortTimeIntervall()) {
 				updateLists();
 				if (startedTest) {
 					if (checkForFinishedThread == null || !checkForFinishedThread.isAlive()) {
@@ -131,14 +135,17 @@ public class StrengthTestScreen {
 						checkForFinishedThread.start();
 					}
 				}
-				prevTime = curTime;
+				prevTime = pcInfoHelper.getCurTime();
 			}
 		}
 		// update PCList & check for
 		// finished---------------------------------------------
 		// log data---------------------------------
-		if (curTime - prevTime2 > mainActivity.getShortTimeIntervall()) {
-			prevTime2 = curTime;
+		if (pcInfoHelper.getCurTime() - prevTime2 > mainActivity.getSuperShortTimeIntervall()) {
+			if(!commandExecutionHelper.isWindowOpen(mainActivity.getStrengthTestHelper().getStrengthTestTerminalWindowName())) {
+				controllStrengthTest(false);
+			}
+			prevTime2 = pcInfoHelper.getCurTime();
 		}
 		// log data---------------------------------
 		// handle buttons---------------------------------------------
@@ -159,7 +166,7 @@ public class StrengthTestScreen {
 		// p.println(startedTest);
 	}
 
-	private void controllStrengthTest(Boolean startTest) {
+	public void controllStrengthTest(Boolean startTest) {
 		JSONArray loadedData = new JSONArray();
 		JSONObject settingsObject = new JSONObject();
 		// give command to all pcs to do test -----------------------------
@@ -168,7 +175,6 @@ public class StrengthTestScreen {
 		if (loadedData.isEmpty()) {
 		} else {
 			try {
-				p.println("controllStrengthTest");
 				String modeName = mainActivity.getModeNamesMaster()[mode - 1];
 				JSONObject loadedObject = (JSONObject) (loadedData.get(mode - 1));
 				loadedObject = (JSONObject) loadedObject.get(modeName);

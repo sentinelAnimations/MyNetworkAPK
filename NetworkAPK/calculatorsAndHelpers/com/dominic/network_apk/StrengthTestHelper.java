@@ -159,7 +159,7 @@ public class StrengthTestHelper<T> {
             p.println();
             String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on CPU", "ECHO -----------------------------", "blender -b \"" + blendFile.getAbsolutePath() + "\" -P \"" + randomSeedFile.getAbsolutePath() + "\" -o \"" + pathToStrengthTestResult + "\" -F PNG -f 2 >>" + pathToRenderLog, "EXIT" };
 
-            Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, strengthTestTerminalWindowName);
+            Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, strengthTestTerminalWindowName,false);
             if (isExecuted) {
             } else {
                 strengthTestStatus = -1;
@@ -179,7 +179,7 @@ public class StrengthTestHelper<T> {
             fileInteractionHelper.createParentFolders(pathToStrengthTestResult);
             String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on GPU", "ECHO -----------------------------", "blender -b \"" + blendFile.getAbsolutePath() + "\" -P \"" + randomSeedFile.getAbsolutePath() + "\" -P \"" + forceGPURenderingFile.getAbsolutePath() + "\" -o \"" + pathToStrengthTestResult + "\" -F PNG -f 2 >>" + pathToRenderLog, "EXIT" };
 
-            Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, strengthTestTerminalWindowName);
+            Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, strengthTestTerminalWindowName,false);
             if (isExecuted) {
             } else {
                 strengthTestStatus = -1;
@@ -188,7 +188,7 @@ public class StrengthTestHelper<T> {
         }
     }
 
-    private void stopStrengthTest() {
+    public void stopStrengthTest() {
         p.println("stoping sterngtht test");
         commandExecutionHelper.killTaskByWindowtitle(strengthTestTerminalWindowName);
         strengthTestStatus = -1;
@@ -196,6 +196,7 @@ public class StrengthTestHelper<T> {
             startTestOnGPUThread.interrupt();
             p.println("interupt: ", startTestOnGPUThread.isAlive());
         }
+        
     }
 
     private Boolean checkIfStrengthTestCPUIsFinished() {
@@ -339,6 +340,9 @@ public class StrengthTestHelper<T> {
 
     public int getStrengthGPU() {
         return pcStrengthGPU;
+    }
+    public String getStrengthTestTerminalWindowName() {
+    	return strengthTestTerminalWindowName;
     }
     public Thread getStartTestOnGPUThread() {
     	return startTestOnGPUThread;

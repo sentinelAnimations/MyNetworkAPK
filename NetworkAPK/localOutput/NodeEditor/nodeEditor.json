@@ -1,18 +1,18 @@
 [
   {
     "Node0": {
-      "posX": 600,
+      "posX": 618,
       "connectorPointIsConnectedArray": [
         true,
-        false,
-        false,
         true,
+        true,
+        false,
         true,
         false,
         false,
         false
       ],
-      "posY": 220,
+      "posY": 154,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -25,9 +25,9 @@
       ],
       "connectorPointConnectedIds": [
         "050c7e66-be09-4c99-9431-ebc25598833c",
-        null,
-        null,
         "4b6db0a4-75a5-4d15-b8d1-d8723cbd7a39",
+        "0726ee82-c31c-4a07-ba4d-70cafe97d948",
+        null,
         "69749ba8-f384-4ece-b035-3dc929326041",
         null,
         null,
@@ -41,8 +41,8 @@
   },
   {
     "Node1": {
-      "posX": 886,
-      "posY": 214,
+      "posX": 904,
+      "posY": 148,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -52,19 +52,19 @@
   },
   {
     "Node2": {
-      "gpuName": "",
+      "gpuName": "NVIDIA GeForce GTX 1080",
       "connectorPointId": "050c7e66-be09-4c99-9431-ebc25598833c",
       "useGpu_checkbox": true,
       "nodeType": 2,
       "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
-      "posX": 248,
-      "posY": 174,
+      "posX": 275,
+      "posY": 40,
       "pcStrengthCPU": 0,
       "cpuCores": 12,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
       "useCpu_checkbox": true,
       "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "myMaster",
+      "selectPc_dropdownItem": "master",
       "selectPc_dropdown": 0,
       "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214",
       "pcStrengthGPU": 0
@@ -72,22 +72,42 @@
   },
   {
     "Node3": {
-      "gpuName": "NVIDIA GeForce GTX 1080",
+      "gpuName": "",
       "connectorPointId": "4b6db0a4-75a5-4d15-b8d1-d8723cbd7a39",
-      "useGpu_checkbox": false,
+      "useGpu_checkbox": true,
       "nodeType": 2,
       "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
-      "posX": 249,
-      "posY": 359,
-      "pcStrengthCPU": 1500,
+      "posX": 275,
+      "posY": 224,
+      "pcStrengthCPU": -1,
       "cpuCores": 12,
-      "connectorPointConnectedId": "85900ff0-1c66-443f-bc8e-74478e58fdba",
+      "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
       "useCpu_checkbox": false,
       "connectorPointIsConnected": true,
       "selectPc_dropdownItem": "myMasterPC - Kopie",
       "selectPc_dropdown": 1,
       "nodeId": "77c611b7-511e-4916-8060-850d8e8037dc",
-      "pcStrengthGPU": 750
+      "pcStrengthGPU": -1
+    }
+  },
+  {
+    "Node4": {
+      "gpuName": "\"NVIDIA GeForce GTX 1080\"",
+      "connectorPointId": "0726ee82-c31c-4a07-ba4d-70cafe97d948",
+      "useGpu_checkbox": true,
+      "nodeType": 1,
+      "cpuName": "\"Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz\"",
+      "posX": 278,
+      "posY": 406,
+      "pcStrengthCPU": -1,
+      "cpuCores": 0,
+      "connectorPointConnectedId": "2e9dc605-e6dd-440e-a96a-afe838a7d123",
+      "useCpu_checkbox": true,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdownItem": "",
+      "selectPc_dropdown": -1,
+      "nodeId": "0a3a1719-783f-454c-bc0f-924d804738b7",
+      "pcStrengthGPU": -1
     }
   }
 ]

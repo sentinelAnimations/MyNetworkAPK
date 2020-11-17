@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="data/JARs/texhyphj.jar"/>
 	<classpathentry kind="lib" path="data/JARs/json-simple-1.1.jar"/>
 	<classpathentry kind="lib" path="data/JARs/gson-2.6.2.jar"/>
+	<classpathentry kind="lib" path="data/JARs/commons-io-2.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

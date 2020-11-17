@@ -64,7 +64,7 @@ public class SettingsScreen {
         setting_pictos = new PictogramImage[imgPaths.length - 2];
         pathSelectors = new PathSelector[imgPaths.length - 4];
         Boolean[] selectFolder = { false, true, true, true };
-        String[] description = { "Setup this Pc as Slave or Master", "Select Blender.exe Folder", "Select image output Folder", "Select Path to Cloud", "Select path to .blend folder", "Enter desired Name of PC", "Save Settings and move on | shortcut: ctrl+s" };
+        String[] description = { "Setup this Pc as Slave or Master", "Select Blender.exe Folder", "Select image output Folder", "Select Path to Cloud", "Select path to .blend folder", "Enter desired Name of PC", "Save Settings and move on" };
         String[] pathSelectorHints = { "...\\\\Blender.exe", "...\\\\images", "...\\\\Cloud", "...\\\\.blend files" };
 
         int widthScale = 6;
@@ -87,7 +87,7 @@ public class SettingsScreen {
             }
         }
 
-        saveSettings_btn = new ImageButton(p, p.width - margin - btnSizeSmall / 2, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, 19, textYShift, true, false, textCol, light, imgPaths[6], description[6], null);
+        saveSettings_btn = new ImageButton(p, p.width - margin - btnSizeSmall / 2, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, imgPaths[6], description[6], null);
         char[] fChars = { '>', '<', ':', '"', '/', '\\', '|', '?', '*' };
         personalData_et = new EditText(p, 0, btnSize, widgetW - margin, btnSizeSmall, stdTs, light, textCol, edgeRad, margin, textYShift, true, true, "Enter PC name", fChars, stdFont, setting_pictos[setting_pictos.length - 1]);
 

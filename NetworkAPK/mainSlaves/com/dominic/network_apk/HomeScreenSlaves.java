@@ -25,242 +25,283 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 public class HomeScreenSlaves {
-    private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, cpuCores=0;
-    private int renderMode; // rendermode --> 0=render files, 1=render on
-                            // sheepit,2=sleeping
-    private float textYShift;
-    private Boolean allWorking = true;
-    private String pathToCloud, pcAlias, pcFolderName, cpuName = "", gpuName = "";
-    private String[] pictoPaths;
-    private long curTime, prevLastModified,lastLogTime=0;
-    private PFont stdFont;
-    private PApplet p;
-    private ImageButton[] mainButtons;
-    private ImageButton cancelRendering_ImageButton;
-    private MainActivity mainActivity;
-    private PictogramImage fileRendering_PictogramImage, sheepitRendering_PictogramImage, sleeping_PictogramImage;
-    private TimeField timeField;
-    private StrengthTestHelper strengthTestHelper;
-    private JsonHelper jsonHelper;
-    private PCInfoHelper pcInfoHelper;
-    private FileInteractionHelper fileInteractionHelper;
-    private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
-    private Thread getSpecInfoThread;
- 
+	private int mode,stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, cpuCores = 0;
+	private int renderMode; // rendermode --> 0=render files, 1=render on
+							// sheepit,2=sleeping
+	private float textYShift;
+	private Boolean allWorking = true;
+	private String pathToCloud, pcAlias, pcFolderName, cpuName = "", gpuName = "";
+	private String[] pictoPaths;
+	private long curTime, prevLastModified, lastLogTime = 0,prevTime1;
+	private PFont stdFont;
+	private PApplet p;
+	private ImageButton[] mainButtons;
+	private ImageButton cancelRendering_ImageButton;
+	private MainActivity mainActivity;
+	private PictogramImage fileRendering_PictogramImage, sheepitRendering_PictogramImage, sleeping_PictogramImage;
+	private TimeField timeField;
+	private StrengthTestHelper strengthTestHelper;
+	private JsonHelper jsonHelper;
+	private PCInfoHelper pcInfoHelper;
+	private FileInteractionHelper fileInteractionHelper;
+	private ArrayList<MakeToast> makeToasts = new ArrayList<MakeToast>();
+	private Thread getSpecInfoThread;
+	private RenderHelper renderHelper;
+	private SheepitRenderHelper sheepitRenderHelper;
+	private CommandExecutionHelper commandExecutionHelper;
 
-    private CommandExecutionHelper commandExecutionHelper;
+	public HomeScreenSlaves(PApplet p,int mode, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int red, int green, float textYShift, String[] pictoPaths, PFont stdFont) {
+		this.p = p;
+		this.mode=mode;
+		this.stdTs = stdTs;
+		this.edgeRad = edgeRad;
+		this.margin = margin;
+		this.btnSize = btnSize;
+		this.btnSizeSmall = btnSizeSmall;
+		this.dark = dark;
+		this.light = light;
+		this.lighter = lighter;
+		this.lightest = lightest;
+		this.textCol = textCol;
+		this.textDark = textDark;
+		this.border = border;
+		this.red = red;
+		this.green = green;
+		this.textYShift = textYShift;
+		this.pictoPaths = pictoPaths;
+		this.stdFont = stdFont;
+		mainActivity = (MainActivity) p;
 
-    public HomeScreenSlaves(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int red, int green, float textYShift, String[] pictoPaths, PFont stdFont) {
-        this.p = p;
-        this.stdTs = stdTs;
-        this.edgeRad = edgeRad;
-        this.margin = margin;
-        this.btnSize = btnSize;
-        this.btnSizeSmall = btnSizeSmall;
-        this.dark = dark;
-        this.light = light;
-        this.lighter = lighter;
-        this.lightest = lightest;
-        this.textCol = textCol;
-        this.textDark = textDark;
-        this.border = border;
-        this.red = red;
-        this.green = green;
-        this.textYShift = textYShift;
-        this.pictoPaths = pictoPaths;
-        this.stdFont = stdFont;
-        mainActivity = (MainActivity) p;
+		pcInfoHelper = new PCInfoHelper(p);
+		fileInteractionHelper = new FileInteractionHelper(p);
+		commandExecutionHelper = new CommandExecutionHelper(p);
+		strengthTestHelper = new StrengthTestHelper(p, "logData", this);
+		renderHelper = new RenderHelper(p);
+		sheepitRenderHelper = new SheepitRenderHelper(p);
+		if (mainActivity.getIsMaster()) {
+			mainButtons = mainActivity.getMainButtonsMaster();
+		} else {
+			mainButtons = mainActivity.getMainButtonsSlave();
+		}
 
-        pcInfoHelper = new PCInfoHelper(p);
-        fileInteractionHelper = new FileInteractionHelper(p);
-        commandExecutionHelper = new CommandExecutionHelper(p);
-        strengthTestHelper= new StrengthTestHelper(p, "logData",this);
+		sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[0], "Rendering on Sheepit", null);
+		sleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[1], "sleeping", null);
+		fileRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[2], "Rendering file", null);
 
-        if (mainActivity.getIsMaster()) {
-            mainButtons = mainActivity.getMainButtonsMaster();
-        } else {
-            mainButtons = mainActivity.getMainButtonsSlave();
-        }
+		timeField = new TimeField(p, margin, p.height - btnSizeSmall / 2 - margin, btnSizeLarge, stdTs + margin * 2, stdTs, margin, edgeRad, textCol, light, false, false, true, "Timestamp: ", "", stdFont, null);
+		timeField.setPos(timeField.getW() / 2 + margin, timeField.getY());
+		pathToCloud = mainActivity.getPathToCloud();
+		pcAlias = mainActivity.getPCName();
+		pcFolderName = mainActivity.getPCFolderName();
+		if (pathToCloud.length() > 0) {
+			while (p.str(pathToCloud.charAt(pathToCloud.length() - 1)) == "\\") {
+				pathToCloud = pathToCloud.substring(0, pathToCloud.length() - 1);
+			}
+		}
+		if (pathToCloud == null) {
+			pathToCloud = "";
+		}
+		if (pcAlias == null) {
+			pcAlias = "";
+		}
 
-        sheepitRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[0], "Rendering on Sheepit", null);
-        sleeping_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[1], "sleeping", null);
-        fileRendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[2], "Rendering file", null);
+		cpuName = pcInfoHelper.getCPUName();
+		getSpecInfoThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				gpuName = pcInfoHelper.getGPUName();
+			}
+		});
+		getSpecInfoThread.start();
+		cpuCores = pcInfoHelper.getAvailableProcessors();
 
-        timeField = new TimeField(p, margin, p.height - btnSizeSmall / 2 - margin, btnSizeLarge, stdTs + margin * 2, stdTs, margin, edgeRad, textCol, light, false, false, true, "Timestamp: ", "", stdFont, null);
-        timeField.setPos(timeField.getW() / 2 + margin, timeField.getY());
-        pathToCloud = mainActivity.getPathToCloud();
-        pcAlias = mainActivity.getPCName();
-        pcFolderName = mainActivity.getPCFolderName();
-        if (pathToCloud.length() > 0) {
-            while (p.str(pathToCloud.charAt(pathToCloud.length() - 1)) == "\\") {
-                pathToCloud = pathToCloud.substring(0, pathToCloud.length() - 1);
-            }
-        }
-        if (pathToCloud == null) {
-            pathToCloud = "";
-        }
-        if (pcAlias == null) {
-            pcAlias = "";
-        }
+		jsonHelper = new JsonHelper(p);
 
-        cpuName = pcInfoHelper.getCPUName();
-        getSpecInfoThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                gpuName = pcInfoHelper.getGPUName();
-            }
-        });
-        getSpecInfoThread.start();
-        cpuCores = pcInfoHelper.getAvailableProcessors();
+		setData();
+	}
 
-        jsonHelper = new JsonHelper(p);
+	public void render() {
+		if (mainActivity.getIsMaster()) {
+			mainActivity.renderMainButtonsMaster();
+		} else {
+			mainActivity.renderMainButtonsSlave();
+		}
 
-        setData();
-    }
+		if (renderMode == 0) {
+			fileRendering_PictogramImage.render();
+		}
+		if (renderMode == 1) {
+			sheepitRendering_PictogramImage.render();
+		}
+		if (renderMode == 2) {
+			sleeping_PictogramImage.render();
+		}
+		timeField.render();
 
-    public void render() {
-        if (mainActivity.getIsMaster()) {
-            mainActivity.renderMainButtonsMaster();
-        } else {
-            mainActivity.renderMainButtonsSlave();
-        }
+		for (int i = 0; i < makeToasts.size(); i++) {
+			MakeToast m = makeToasts.get(i);
+			if (m.remove) {
+				makeToasts.remove(i);
+			} else {
+				m.render();
+			}
+		}
+	}
 
-        if (renderMode == 0) {
-            fileRendering_PictogramImage.render();
-        }
-        if (renderMode == 1) {
-            sheepitRendering_PictogramImage.render();
-        }
-        if (renderMode == 2) {
-            sleeping_PictogramImage.render();
-        }
-        timeField.render();
+	public void calcBackgroundTasks() {
+		curTime = pcInfoHelper.getCurTime();
+		if (curTime - lastLogTime > mainActivity.getStdTimeIntervall()) {
+			logData();
+			lastLogTime = curTime;
+		}
+		if(curTime-prevTime1>mainActivity.getSuperShortTimeIntervall()) {
+			renderFiles();
+			prevTime1=curTime;
+		}
 
-        for (int i = 0; i < makeToasts.size(); i++) {
-            MakeToast m = makeToasts.get(i);
-            if (m.remove) {
-                makeToasts.remove(i);
-            } else {
-                m.render();
-            }
-        }
-    }
+		File cmdFile = new File(mainActivity.getMasterCommandFilePath());
+		if (strengthTestHelper.getStrengthTestStatus() == 0 || cmdFile.lastModified() != prevLastModified) {
+			// checkForCommands();
+			strengthTestHelper.checkForStrengthTestCommands(cpuName, gpuName, getSpecInfoThread);
+			renderFiles();
+			prevLastModified = cmdFile.lastModified();
+		}
+	}
 
-    public void calcBackgroundTasks() {
-        curTime = pcInfoHelper.getCurTime();
-        if (curTime - lastLogTime > mainActivity.getStdTimeIntervall()) {
-            logData();
-            lastLogTime = curTime;
-        }
+	private void renderFiles() {
+		Boolean isRenderingJson = renderHelper.getStartRenderingFromJson();
 
-        File cmdFile = new File(mainActivity.getMasterCommandFilePath());
-        if (strengthTestHelper.getStrengthTestStatus()==0 || cmdFile.lastModified() != prevLastModified) {
-            //checkForCommands();
-            strengthTestHelper.checkForStrengthTestCommands(cpuName, gpuName, getSpecInfoThread);
-            prevLastModified = cmdFile.lastModified();
-        }
-    }
+		Boolean startRendering = renderHelper.getStartRenderingFromJson();
+		if (startRendering) {
+			if (!renderHelper.getAllJobsStarted() && (renderHelper.getCpuFinished() || renderHelper.getGpuFinished())) {
+				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName());
 
-    public void logData() {
-        jsonHelper.clearArray();
-        JSONObject settingsDetails = new JSONObject();
-        JSONObject settingsObject = new JSONObject();
+				if (hwToUse[0] && renderHelper.getCpuFinished()) {
+					renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
+				}
+				if (hwToUse[1] && renderHelper.getGpuFinished()) {
+					renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
+				}
+				renderMode=0;
+			}else {
+				renderMode=2;
+			}
+		}else {
+			Boolean startRenderingOnSheepit=sheepitRenderHelper.getStartRenderingOnSheepit(mainActivity.getMasterCommandFilePath());
+			if(startRenderingOnSheepit) {
+				renderMode=1;
+			}else {
+				renderMode=2;
+			}
+		}
+	}
 
-        settingsDetails.put("logTime", curTime);
-        settingsDetails.put("readableTime", pcInfoHelper.getReadableTime());
-        settingsDetails.put("renderMode", renderMode);
-        settingsDetails.put("cpuCores", cpuCores);
-        settingsDetails.put("cpuName", cpuName);
-        settingsDetails.put("gpuName", gpuName);
-        settingsDetails.put("pcStrengthCPU", strengthTestHelper.getStrengthCPU());
-        settingsDetails.put("pcStrengthGPU", strengthTestHelper.getStrengthGPU());
-        if (strengthTestHelper.getFinishedTestingCPU() && strengthTestHelper.getFinishedTestingGPU()) {
-           // p.println("pcStrength: ", pcStrengthCPU, pcStrengthGPU);
-            p.println("pcStrength: ", strengthTestHelper.getStrengthCPU(), strengthTestHelper.getStrengthGPU());
-            strengthTestHelper.setFinishedTestingCPU(false);
-            strengthTestHelper.setFinishedTestingGPU(false);
-            strengthTestHelper.setStrengthTestStatus(1);
-            p.println("now deleting files ---------------------");
-            fileInteractionHelper.deleteFolder(strengthTestHelper.getBlendFile().getParentFile().getAbsolutePath());
-        }
-        settingsDetails.put("strengthTestStatus", strengthTestHelper.getStrengthTestStatus());
+	public void logData() {
+		jsonHelper.clearArray();
+		JSONObject settingsDetails = new JSONObject();
+		JSONObject settingsObject = new JSONObject();
 
-        settingsObject.put("SystemLog", settingsDetails);
+		settingsDetails.put("cpuIsRendering", renderHelper.getCPUThreadAlive());
+		settingsDetails.put("gpuIsRendering", renderHelper.getGPUThreadAlive());
+		settingsDetails.put("logTime", curTime);
+		settingsDetails.put("readableTime", pcInfoHelper.getReadableTime());
+		settingsDetails.put("renderMode", renderMode);
+		settingsDetails.put("cpuCores", cpuCores);
+		settingsDetails.put("cpuName", cpuName);
+		settingsDetails.put("gpuName", gpuName);
+		settingsDetails.put("pcStrengthCPU", strengthTestHelper.getStrengthCPU());
+		settingsDetails.put("pcStrengthGPU", strengthTestHelper.getStrengthGPU());
+		if (strengthTestHelper.getFinishedTestingCPU() && strengthTestHelper.getFinishedTestingGPU()) {
+			// p.println("pcStrength: ", pcStrengthCPU, pcStrengthGPU);
+			p.println("pcStrength: ", strengthTestHelper.getStrengthCPU(), strengthTestHelper.getStrengthGPU());
+			strengthTestHelper.setFinishedTestingCPU(false);
+			strengthTestHelper.setFinishedTestingGPU(false);
+			strengthTestHelper.setStrengthTestStatus(1);
+			p.println("now deleting files ---------------------");
+			fileInteractionHelper.deleteFolder(strengthTestHelper.getBlendFile().getParentFile().getAbsolutePath());
+		}
+		settingsDetails.put("strengthTestStatus", strengthTestHelper.getStrengthTestStatus());
 
-        String jsonPath = mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
-        if (fileInteractionHelper.createParentFolders(jsonPath)) {
-            jsonHelper.appendObjectToArray(settingsObject);
-            allWorking = jsonHelper.writeData(jsonPath);
-            if (allWorking) {
-                makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Saved LogFile", stdFont, null));
-                timeField.setCol(green);
-                timeField.setPostfix(" -Everything working correctly");
-            } else {
-                String errorMessage = "Error: can't write logFile.Path to cloud: '" + mainActivity.getPathToCloud() + "' might be incorrect";
-                makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, errorMessage.length() * 3, light, textCol, textYShift, false, errorMessage, stdFont, null));
-                timeField.setCol(red);
-                timeField.setPostfix(" -Some errors occured");
-            }
-        }
-    }
+		settingsObject.put("SystemLog", settingsDetails);
 
-    private void setData() {
-        try {
-            if (pcAlias.length() > 0) {
-                String jsonPath = mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
-                JSONArray loadedSettingsData = jsonHelper.getData(jsonPath);
-                if (loadedSettingsData.isEmpty()) {
+		String jsonPath = mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
+		if (fileInteractionHelper.createParentFolders(jsonPath)) {
+			jsonHelper.appendObjectToArray(settingsObject);
+			allWorking = jsonHelper.writeData(jsonPath);
+			if (allWorking) {
+				makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Saved LogFile", stdFont, null));
+				timeField.setCol(green);
+				timeField.setPostfix(" -Everything working correctly");
+			} else {
+				String errorMessage = "Error: can't write logFile.Path to cloud: '" + mainActivity.getPathToCloud() + "' might be incorrect";
+				makeToasts.add(new MakeToast(p, p.width / 2, timeField.getY(), stdTs, margin, edgeRad, errorMessage.length() * 3, light, textCol, textYShift, false, errorMessage, stdFont, null));
+				timeField.setCol(red);
+				timeField.setPostfix(" -Some errors occured");
+			}
+		}
+	}
 
-                } else {
-                    JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
-                    try {
-                        int loadedPcStrengthCPU = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("pcStrengthCPU").getAsString());
-                        int loadedPcStrengthGPU = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("pcStrengthGPU").getAsString());
+	private void setData() {
+		try {
+			if (pcAlias.length() > 0) {
+				String jsonPath = mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
+				JSONArray loadedSettingsData = jsonHelper.getData(jsonPath);
+				if (loadedSettingsData.isEmpty()) {
 
-                        if (loadedPcStrengthCPU >= 0) {
-                            strengthTestHelper.setStrengthCPU(loadedPcStrengthCPU);
-                        }
-                        if (loadedPcStrengthGPU >= 0) {
-                            strengthTestHelper.setStrengthGPU(loadedPcStrengthGPU);
-                        }
+				} else {
+					JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
+					try {
+						int loadedPcStrengthCPU = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("pcStrengthCPU").getAsString());
+						int loadedPcStrengthGPU = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("pcStrengthGPU").getAsString());
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+						if (loadedPcStrengthCPU >= 0) {
+							strengthTestHelper.setStrengthCPU(loadedPcStrengthCPU);
+						}
+						if (loadedPcStrengthGPU >= 0) {
+							strengthTestHelper.setStrengthGPU(loadedPcStrengthGPU);
+						}
 
-    public void onMousePressed(int mouseButton) {
-        for (int i = 0; i < mainButtons.length; i++) {
-            mainButtons[i].onMousePressed();
-        }
-    }
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void onMouseReleased(int mouseButton) {
-        for (int i = 0; i < mainButtons.length; i++) {
-            mainButtons[i].onMouseReleased();
-        }
-    }
+	public void onMousePressed(int mouseButton) {
+		for (int i = 0; i < mainButtons.length; i++) {
+			mainButtons[i].onMousePressed();
+		}
+	}
 
-    public void onKeyPressed(char key) {
-    }
+	public void onMouseReleased(int mouseButton) {
+		for (int i = 0; i < mainButtons.length; i++) {
+			mainButtons[i].onMouseReleased();
+		}
+	}
 
-    public void onKeyReleased(char key) {
-        for (int i = 0; i < mainButtons.length; i++) {
-            mainButtons[i].onKeyReleased(key);
-        }
-    }
+	public void onKeyPressed(char key) {
+	}
 
-    public void onScroll(float e) {
+	public void onKeyReleased(char key) {
+		for (int i = 0; i < mainButtons.length; i++) {
+			mainButtons[i].onKeyReleased(key);
+		}
+	}
 
-    }
+	public void onScroll(float e) {
 
-    public Thread getStartTestOnGPUThread() {
-        return strengthTestHelper.getStartTestOnGPUThread();
-    }
+	}
+	
+	public int getMode() {
+		return mode;
+	}
+
+	public Thread getStartTestOnGPUThread() {
+		return strengthTestHelper.getStartTestOnGPUThread();
+	}
 
 }

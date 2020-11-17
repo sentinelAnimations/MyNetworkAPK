@@ -11,17 +11,19 @@ import processing.core.PFont;
 
 public class FilesRenderingScreen {
 
-	private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, btnSizeLarge, dark, light, green, red, blue, lighter, lightest, textCol, textDark, border, curRenderingFile = 1, prevPCListSelectedInd = -1, onStartup = 0, prevSelectedFileListInd = 0;
+	private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, btnSizeLarge, dark, light, green, red, blue, lighter, lightest, textCol, textDark, border, prevPCListSelectedInd = -1, onStartup = 0, prevSelectedFileListInd = 0;
 	private float textYShift, alpha;
+	private Boolean collected = false;
 	private float[] listX, listW, allFiles_listX, allFiles_listW;
 	private Boolean[] renderAnimation, renderStillFrame, useNewResolution, startedRenderingTiles, allFilesCopyStatus, fileIsFinished;
-	private long prevTime, prevLastModified;
+	private long prevTime;
 	private int[] startFrame, endFrame, stillFrame, resX, resY, samples, allPCStatus; // allPCStatus: 0=prog responding,1=prog is rendering, 2=prog not responding
 	private String[] pictoPaths, hoLiPictoPaths, imageSavePaths;
 	private String[] allPCNames, allLastLogLines, allRenderInfos;
 	private PFont stdFont;
 	private PApplet p;
 	private MainActivity mainActivity;
+	private Loadingbar global_Loadingbar;
 	private PictogramImage[] allPCPictos;
 	private ArrayList<Node> allConnectedNodes = new ArrayList<>();
 	private Loadingbar[] allPCLoadingbars;
@@ -109,7 +111,7 @@ public class FilesRenderingScreen {
 			// allFiles_horizontallist ------------------------
 			logBar.render();
 			showGPUOrCpuLog_switch.render();
-
+			global_Loadingbar.render();
 			fileInfo_LogBar.render();
 			// render allPCs_horizontalList --------------------
 			allPCs_HorizontalList.render();
@@ -144,9 +146,9 @@ public class FilesRenderingScreen {
 						p.fill(textCol);
 						p.textFont(stdFont);
 						p.textSize(stdTs);
-						p.textAlign(p.CENTER, p.CENTER);
+						p.textAlign(p.CENTER, p.TOP);
 						p.textLeading(stdTs * 1.5f);
-						p.text(allRenderInfos[i], listX[i], allPCPictos[i].getY() + allPCPictos[i].getH() / 2 + margin + stdTs + ((allPCLoadingbars[i].getY() - allPCLoadingbars[i].getH() / 2) - (allPCPictos[i].getY() + allPCPictos[i].getH())) / 2);
+						p.text(allRenderInfos[i], listX[i], allPCPictos[i].getY() + allPCPictos[i].getH() / 2 + margin);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -168,14 +170,11 @@ public class FilesRenderingScreen {
 		// update PCView---------------------------------------------
 		if (allConnectedNodes.size() > 0) {
 
-			
-			
 			/*
-			File renderCmds = new File(mainActivity.getMasterRenderJobsFilePath());
-			if (renderCmds.lastModified() != prevLastModified) {
-				checkForFinished();
-				prevLastModified = renderCmds.lastModified();
-			}*/
+			 * File renderCmds = new File(mainActivity.getMasterRenderJobsFilePath()); if
+			 * (renderCmds.lastModified() != prevLastModified) { checkForFinished();
+			 * prevLastModified = renderCmds.lastModified(); }
+			 */
 
 			if (allFiles_HorizontalList.getSelectedInd() != prevSelectedFileListInd) {
 				fileInfo_LogBar.setText(getFileInfoOfSelected(allFiles_HorizontalList.getSelectedInd()));
@@ -187,7 +186,6 @@ public class FilesRenderingScreen {
 
 			if (pcInfoHelper.getCurTime() - prevTime > mainActivity.getSuperShortTimeIntervall()) {
 				updateLists();
-				p.println(renderHelper.getCpuFinished(), renderHelper.getGpuFinished(), "-----------");
 				renderFiles();
 				prevTime = pcInfoHelper.getCurTime();
 			}
@@ -233,7 +231,7 @@ public class FilesRenderingScreen {
 			}
 			// check render status if ok, update last log line -------------------
 
-			// prepare infoString and so on-----------------------------------
+			// prepare infoString -----------------------------------
 			Boolean jobIsFinished = false;
 			String[] splitStr = p.split(allLastLogLines[i], "|");
 			String renderInfoString = allPCNames[i];
@@ -241,7 +239,7 @@ public class FilesRenderingScreen {
 			if (p.match(allLastLogLines[i], "finished") == null) {
 
 				if (allPCStatus[i] > 0) {
-					renderInfoString += " " + n.getPCStatusStrings()[allPCStatus[i]];
+					renderInfoString += "\n" + n.getPCStatusStrings()[allPCStatus[i]];
 				}
 
 				renderInfoString += "\n";
@@ -254,28 +252,33 @@ public class FilesRenderingScreen {
 							curLine += splitStr2[i3] + " | ";
 
 						} else {
-							renderInfoString = renderInfoString.substring(0, renderInfoString.length() - 2);
-							curLine = curLine.substring(0, curLine.length() - 2);
-							renderInfoString += "\n" + splitStr2[i3] + " | ";
-							curLine = splitStr2[i3] + " | ";
-
+							if (curLine.length() != 0) {
+								renderInfoString = renderInfoString.substring(0, renderInfoString.length() - 2);
+								curLine = curLine.substring(0, curLine.length() - 2);
+							}
+							if (p.textWidth(splitStr2[i3]) < allPCLoadingbars[i].getW()) {
+								renderInfoString += "\n" + splitStr2[i3] + " | ";
+								curLine = splitStr2[i3] + " | ";
+							}
 						}
 					}
+
 				}
+
 				renderInfoString = renderInfoString.substring(0, renderInfoString.length() - 2);
 			} else {
-				renderInfoString = "Job finished";
+				renderInfoString = n.getPcSelection_DropdownMenu().getSelectedItem() + "\n" + n.getPCStatusStrings()[allPCStatus[i]] + "\nJob finished";
 				allLastLogLines[i] = renderInfoString;
 				jobIsFinished = true;
 			}
 
 			if (!foundLogLine) {
-				renderInfoString = "File not found!";
+				renderInfoString = "Logfile not found!";
 				allLastLogLines[i] = renderInfoString;
 			}
-			// prepare infoString and so on-----------------------------------
+			// prepare infoString -----------------------------------
 
-			// prepare renderStatus for loadingbar --------------------------
+			// prepare loadingbar progress --------------------------
 			allRenderInfos[i] = renderInfoString;
 			if (jobIsFinished) {
 				allPCLoadingbars[i].setValue(allPCLoadingbars[i].getMax());
@@ -298,9 +301,10 @@ public class FilesRenderingScreen {
 				}
 				if (!foundLogLine || (!curTilesFound && !jobIsFinished)) {
 					allPCLoadingbars[i].setValue(allPCLoadingbars[i].getMin());
+					allRenderInfos[i] = n.getPcSelection_DropdownMenu().getSelectedItem() + "\n" + n.getPCStatusStrings()[allPCStatus[i]] + "\nLogfile not found!";
 				}
 			}
-			// prepare renderStatus for loadingbar --------------------------
+			// prepare loadingbar progress --------------------------
 
 			if (allPCs_HorizontalList.getSelectedInd() == i) {
 				logBar.setText(allLastLogLines[i]);
@@ -313,7 +317,6 @@ public class FilesRenderingScreen {
 		String infoStr = "";
 		String[] strArr = getFileInfoArray(selectedInd);
 		if (strArr != null) {
-			p.println(strArr);
 			for (int i = 0; i < strArr.length; i++) {
 				infoStr += strArr[i];
 				if (i < strArr.length - 1) {
@@ -328,7 +331,6 @@ public class FilesRenderingScreen {
 
 	private String[] getFileInfoArray(int ind) {
 		try {
-			p.println(ind, "---", renderAnimation.length);
 			ArrayList<String> infosJob = new ArrayList<>();
 			if (renderAnimation[ind]) {
 				infosJob.add("Rendering Frame " + startFrame[ind] + " - " + endFrame[ind]);
@@ -353,51 +355,19 @@ public class FilesRenderingScreen {
 	}
 
 	public void startFileRendering() {
+		renderHelper = new RenderHelper(p);
+		File localRenderFolder = new File(mainActivity.getLocalRenderBlendfiles());
+		fileInteractionHelper.deleteFolder(localRenderFolder.getAbsolutePath());
+		fileInteractionHelper.deleteFolder(mainActivity.getCloudImageFolder());
+		fileInteractionHelper.deleteFolder(mainActivity.getOpenCheckPath());
+		collected = false;
+
 		String[] fileList = getHorizontalList().getList();
 		allFilesCopyStatus = new Boolean[fileList.length];
 		fileInteractionHelper.deleteFolder(mainActivity.getPathToBlenderRenderFolder());
 		for (int i = 0; i < fileList.length; i++) {
 			File f = new File(fileList[i]);
-			allFilesCopyStatus[i] = fileInteractionHelper.copyFile(f.getAbsolutePath(), mainActivity.getPathToBlenderRenderFolder() + "\\" + f.getName());
-			// check if fileAlreadyExists Exception but different render settings
-			if (!allFilesCopyStatus[i]) {
-				ArrayList<Integer> allIndsToCheck = new ArrayList();
-				for (int i2 = 0; i2 < fileList.length; i2++) {
-					if (i != i2) {
-						if (fileList[i].equals(fileList[i2])) {
-							allIndsToCheck.add(i2);
-						}
-					}
-				}
-				for (int i2 = 0; i2 < allIndsToCheck.size(); i2++) {
-					if (renderAnimation[i] && renderAnimation[allIndsToCheck.get(i2)]) {
-						if (startFrame[i] != startFrame[allIndsToCheck.get(i2)] || endFrame[i] != endFrame[allIndsToCheck.get(i2)]) {
-							allFilesCopyStatus[i] = true;
-						} else {
-							if (allFilesCopyStatus[allIndsToCheck.get(i2)] != null && allFilesCopyStatus[allIndsToCheck.get(i2)] != false) {
-								allFilesCopyStatus[i] = false;
-								break;
-							}
-						}
-					} else {
-						allFilesCopyStatus[i] = true;
-
-						if (renderStillFrame[i] && renderStillFrame[allIndsToCheck.get(i2)]) {
-							if (stillFrame[i] != stillFrame[allIndsToCheck.get(i)]) {
-								allFilesCopyStatus[i] = true;
-							} else {
-								if (allFilesCopyStatus[allIndsToCheck.get(i2)] != null && allFilesCopyStatus[allIndsToCheck.get(i2)] != false) {
-									allFilesCopyStatus[i] = false;
-									break;
-								}
-							}
-						} else {
-							allFilesCopyStatus[i] = true;
-						}
-					}
-				}
-			}
-			// check if fileAlreadyExists Exception but different render settings
+			allFilesCopyStatus[i] = fileInteractionHelper.copyFile(f.getAbsolutePath(), mainActivity.getPathToBlenderRenderFolder() + "\\" + i + "_" + f.getName());
 		}
 		String relativeFilePathRandomSeed = "/pythonScripts/randomSeed.py";
 		String copyFromPathRandomSeed = getClass().getResource(relativeFilePathRandomSeed).getPath().toString();
@@ -408,9 +378,19 @@ public class FilesRenderingScreen {
 		Boolean forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
 
 		if (randomSeedCopied && forceGPURenderingCopied) {
+
+			String[] newFileList = new String[allFiles_HorizontalList.getList().length];
+			String[] filesList = fileInteractionHelper.getFoldersAndFiles(mainActivity.getPathToBlenderRenderFolder(), false);
+			String[] folderFileList = fileInteractionHelper.getSpecificFileTypes(filesList, new String[] { "blend" });
+			for (int i = 0; i < newFileList.length; i++) {
+				newFileList[i] = mainActivity.getPathToBlenderRenderFolder() + "\\" + folderFileList[i];
+			}
+
+			allFiles_HorizontalList.setList(newFileList);
+			setFileList(newFileList);
 			prepareRenderProcess();
 		}
-
+		p.println("startFileRendering");
 	}
 
 	private void prepareRenderProcess() {
@@ -470,43 +450,104 @@ public class FilesRenderingScreen {
 			jsonHelper.setArray(renderJobsArray);
 			jsonHelper.writeData(mainActivity.getMasterRenderJobsFilePath());
 			// save renderJobsArray------------------------------------------
+			
+			global_Loadingbar.setMax(renderJobsArray.size());
 
 			// save and create renderJobStatusArray--------------------------------------
 			JSONArray renderJobsStatusArray = new JSONArray();
 			for (int i = 0; i < renderJobsArray.size(); i++) {
 				JSONObject statusObject = new JSONObject();
-				statusObject.put("started", false);
-				statusObject.put("finished", false);
+				statusObject.put("started", p.str(false));
+				statusObject.put("finished", p.str(false));
+				statusObject.put("jobIndex", i);
 				renderJobsStatusArray.add(statusObject);
 			}
 			jsonHelper.clearArray();
 			jsonHelper.setArray(renderJobsStatusArray);
 			jsonHelper.writeData(mainActivity.getMasterRenderJobsStatusFilePath());
 			// save and create renderJobStatusArray--------------------------------------
+			
+			//save and create hardwareToUseArray------------------------------
+			JSONArray hardwareToUseArray = new JSONArray();
+			for (int i = 0; i < allConnectedNodes.size(); i++) {
+				Node n=allConnectedNodes.get(i);
+				JSONObject hardwareDetails = new JSONObject();
+				String curPCName=n.getPcSelection_DropdownMenu().getSelectedItem();
+				Boolean useCpu=false,useGPU=false;
+				Boolean[] hwToUse=mainActivity.getHardwareToRenderWith(curPCName);
+				if(hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked()) {
+					useCpu=true;
+				}
+				if(hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked()) {
+					useGPU=true;
+				}
+				hardwareDetails.put("useCPU", p.str(useCpu));
+				hardwareDetails.put("useGPU", p.str(useGPU));
+				hardwareDetails.put("pcName", curPCName);
+				
+				hardwareToUseArray.add(hardwareDetails);
+			}
+			jsonHelper.clearArray();
+			jsonHelper.setArray(hardwareToUseArray);
+			jsonHelper.writeData(mainActivity.getHardwareToUseFilePath());
+			//save and create hardwareToUseArray------------------------------
 
-		renderFiles();
+			
+			renderFiles();
 		}
 	}
 
 	private void renderFiles() {
+		Boolean isRenderingJson = renderHelper.getStartRenderingFromJson();
+		global_Loadingbar.setValue(renderHelper.getJobsDone());
 		
-		if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) {
-			Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName());
+		if (renderHelper.getAllJobsFinished(mainActivity.getMasterRenderJobsStatusFilePath())) {
+			global_Loadingbar.setValue(global_Loadingbar.getMax());
+			if (!collected) {
+				p.println("all jobs finished++++++++++++");
+				p.println(jsonHelper.getData(mainActivity.getMasterRenderJobsStatusFilePath()));
+				if (isRenderingJson) {
+					p.println("set to false");
+					setIsRendering(false);
+				}
+				collectImages();
+			}
+		} else {
+			if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) {
+				if (!renderHelper.getAllJobsStarted()) {
+					Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName());
 
-			if(renderHelper.getAllJobsFinished()) {
-				setIsRendering(false);
-			}else {
-			if (hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked() && renderHelper.getCpuFinished()) {
-				renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
+					if (hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked() && renderHelper.getCpuFinished()) {
+						renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
+					}
+					if (hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked() && renderHelper.getGpuFinished()) {
+						renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
+					}
+					if (!isRenderingJson) {
+						setIsRendering(true);
+					}
+				}
 			}
-			if (hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked() && renderHelper.getGpuFinished()) {
-				renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
-			}
-			setIsRendering(true);
-		}
 		}
 	}
-	
+
+	private void collectImages() {
+		p.println("now collecting");
+		for (int i = 0; i < allFiles_HorizontalList.getList().length; i++) {
+			try {
+				String folderName = new File(allFiles_HorizontalList.getList()[i]).getName().replaceFirst("[.][^.]+$", "");
+				File destinationImageFolder = new File(imageSavePaths[i] + "\\" + folderName);
+				if (destinationImageFolder.exists()) {
+					fileInteractionHelper.deleteFolder(destinationImageFolder.getAbsolutePath());
+				}
+				fileInteractionHelper.copyFolder(mainActivity.getCloudImageFolder() + "\\" + folderName, imageSavePaths[i] + "\\");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		collected = true;
+	}
+
 	public void onMousePressed(int mouseButton) {
 		if (renderGraphics_switch.getIsChecked()) {
 			allFiles_HorizontalList.onMousePressed();
@@ -614,6 +655,14 @@ public class FilesRenderingScreen {
 		}
 	}
 
+	public HorizontalList getHorizontalList() {
+		return allFiles_HorizontalList;
+	}
+
+	public RenderHelper getRenderHelper() {
+		return renderHelper;
+	}
+
 	public void setFileList(String[] l) {
 		allFiles_HorizontalList.setList(l);
 
@@ -625,10 +674,6 @@ public class FilesRenderingScreen {
 		String jsonPath = mainActivity.getAllRenderFilesJsonPath();
 		jsonHelper.setArray(allRenderFiles);
 		jsonHelper.writeData(jsonPath);
-	}
-
-	public HorizontalList getHorizontalList() {
-		return allFiles_HorizontalList;
 	}
 
 	public void setStartupVals() {
@@ -659,7 +704,7 @@ public class FilesRenderingScreen {
 		allConnectedNodes = mainActivity.getNodeEditor().getAllConnectedNodes();
 
 		String[] startList = {};
-		int startH = (p.height - btnSizeSmall * 4 - listH - margin * 2) / 2 + btnSizeSmall / 2;
+		int startH = (p.height - btnSizeSmall * 5 - listH - margin * 2) / 2 + btnSizeSmall / 2;
 		allFiles_HorizontalList = new HorizontalList(p, p.width / 2, startH, p.width - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, true, false, "Files to render", hoLiPictoPaths, startList, stdFont, null);
 
 		startList = new String[allConnectedNodes.size()];
@@ -667,11 +712,12 @@ public class FilesRenderingScreen {
 			startList[i] = listW;
 		}
 		String[] allPCListPictos = { pictoPaths[2], hoLiPictoPaths[1], hoLiPictoPaths[2] };
+		int logBarH = (int) (btnSizeSmall * 1.5f + margin * 2);
 		allPCs_HorizontalList = new HorizontalList(p, 0, allFiles_HorizontalList.getH() / 2 + margin + listH / 2, p.width - margin * 2, listH, margin, edgeRad, stdTs, (int) p.textWidth("Rendering PCs") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', true, false, true, "Rendering PCs", allPCListPictos, startList, stdFont, allFiles_HorizontalList);
-		logBar = new LogBar(p, 0, allPCs_HorizontalList.getH() / 2 + margin * 2 + btnSizeSmall / 2, allFiles_HorizontalList.getW(), btnSizeSmall + margin * 2, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, '|', pictoPaths[0], stdFont, allPCs_HorizontalList);
+		logBar = new LogBar(p, 0, allPCs_HorizontalList.getH() / 2 + margin + logBarH / 2, allFiles_HorizontalList.getW(), logBarH, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, '|', pictoPaths[0], stdFont, allPCs_HorizontalList);
 		logBar.setText("Render Log of selected PC");
 
-		fileInfo_LogBar = new LogBar(p, 0, logBar.getH() + margin, allFiles_HorizontalList.getW(), logBar.getH(), stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, '|', pictoPaths[3], stdFont, logBar);
+		fileInfo_LogBar = new LogBar(p, 0, logBar.getH() / 2 + btnSizeSmall / 2 + margin * 2, allFiles_HorizontalList.getW(), btnSizeSmall + margin * 2, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, '|', pictoPaths[3], stdFont, logBar);
 		fileInfo_LogBar.setText("File settings of selected file");
 
 		allPCNames = new String[allPCs_HorizontalList.getList().length];
@@ -700,14 +746,12 @@ public class FilesRenderingScreen {
 		showGPUOrCpuLog_switch = new Switch(p, logBar.getW() / 2 - switchW / 2 - margin, 0, switchW, btnSizeSmall, edgeRad, margin, stdTs, dark, lightest, lightest, textCol, textYShift, true, true, true, infoString, stdFont, logBar);
 
 		rendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[4], "Rendering file", null);
-
+		global_Loadingbar = new Loadingbar(p, 0, -allFiles_HorizontalList.getH() / 2 - margin * 2, allFiles_HorizontalList.getW(), margin, stdTs, edgeRad, margin, lighter, light, textCol, 0, 600, textYShift, true, stdFont, allFiles_HorizontalList);
 		updateLists();
 	}
 
-	private void setIsRendering(Boolean state) {
-		Boolean allPCsAreDone = false;
+	public void setIsRendering(Boolean state) {
 		JSONArray loadedData = new JSONArray();
-		JSONObject settingsDetails = new JSONObject();
 		JSONObject settingsObject = new JSONObject();
 		// give command to all pcs to do test -----------------------------
 
@@ -729,5 +773,10 @@ public class FilesRenderingScreen {
 			}
 		}
 		// give command to all pcs to do test -----------------------------
+
+		if (state == false) {
+			renderHelper.setFinishAllJobs(true, true);
+		}
 	}
+
 }
