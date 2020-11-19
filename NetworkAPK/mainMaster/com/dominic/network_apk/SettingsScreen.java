@@ -184,80 +184,7 @@ public class SettingsScreen {
             // handle save button ------------------------------------
 
             if (saveSettings_btn.getIsClicked() == true) {
-                // check if all is set
-                Boolean allSet = true;
-                JSONObject settingsDetails = new JSONObject();
-                JSONObject settingsObject = new JSONObject();
-
-                allSet = masterOrSlave_dropdown.getIsSelected();
-                settingsDetails.put("masterOrSlave_dropdown_selectedInd", masterOrSlave_dropdown.getSelectedInd());
-
-                for (int i = pathSelectors.length - 1; i >= 0; i--) {
-                    PathSelector ps = pathSelectors[i];
-                    if (ps.getPath().length() < 1) {
-                        allSet = false;
-                    } else {
-                        settingsDetails.put("pathSelector" + i, fileInteractionHelper.cleanupPath(ps.getPath()));
-                    }
-
-                }
-
-                if (personalData_et.getStrList().get(0).length() < 1) {
-                    allSet = false;
-                } else {
-                    if (allSet == true) {
-                        String[] allFoldersInCloud = fileInteractionHelper.getFoldersAndFiles(pathSelectors[pathSelectors.length - 1].getPath(), true);
-                        Boolean noFolderWithSameName = true;
-                        if (allFoldersInCloud != null) {
-                            for (int i = 0; i < allFoldersInCloud.length; i++) {
-                                String[] splitStr = p.split(allFoldersInCloud[i], ".");
-                                if (splitStr[0].toUpperCase().equals(personalData_et.getStrList().get(0).toUpperCase())) {
-                                    noFolderWithSameName = false;
-                                }
-                            }
-                        }
-                        if (noFolderWithSameName) {
-                            settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
-                                File file = new File(mainActivity.getPathToPCFolder() + "\\" + aliasOnStartup);
-                                if (file.exists()) {
-                                    p.println(file.getAbsolutePath());
-                                    fileInteractionHelper.deleteFolder(file.getAbsolutePath());
-                                }
-                            
-                        } else {
-                            if (aliasOnStartup.toUpperCase().equals(personalData_et.getStrList().get(0).toUpperCase())) {
-                                settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
-
-                            } else {
-                                allSet = false;
-                            }
-                        }
-                    }
-                }
-                // write to jsonfile;--------------------
-                if (allSet == true) {
-                    jHelper.clearArray();
-
-                    settingsObject.put("Settings", settingsDetails);
-                    jHelper.appendObjectToArray(settingsObject);
-                    jHelper.writeData(mySavePath);
-
-                   // successfullySaved = true;
-                    if(!mainActivity.getIsMaster()) {
-                        try {
-                          mainActivity.getHomeScreenSlaves().getStartTestOnGPUThread().interrupt();  
-                        }catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    mainActivity.initializeLoadingScreen();
-
-                    mainActivity.getLoadingScreen().setIsFirstSetup(false);
-                    makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Saved settings", stdFont, null));
-
-                } else {
-                    makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Set all required data & use unique Alias", stdFont, null));
-                }
+                saveData();
                 saveSettings_btn.setIsClicked(false);
             }
             // handle save button ------------------------------------
@@ -278,7 +205,82 @@ public class SettingsScreen {
         }
         masterOrSlave_dropdown.getHoverText().render();
     }
+    public void saveData() {
+    	// check if all is set
+        Boolean allSet = true;
+        JSONObject settingsDetails = new JSONObject();
+        JSONObject settingsObject = new JSONObject();
 
+        allSet = masterOrSlave_dropdown.getIsSelected();
+        settingsDetails.put("masterOrSlave_dropdown_selectedInd", masterOrSlave_dropdown.getSelectedInd());
+
+        for (int i = pathSelectors.length - 1; i >= 0; i--) {
+            PathSelector ps = pathSelectors[i];
+            if (ps.getPath().length() < 1) {
+                allSet = false;
+            } else {
+                settingsDetails.put("pathSelector" + i, fileInteractionHelper.cleanupPath(ps.getPath()));
+            }
+
+        }
+
+        if (personalData_et.getStrList().get(0).length() < 1) {
+            allSet = false;
+        } else {
+            if (allSet == true) {
+                String[] allFoldersInCloud = fileInteractionHelper.getFoldersAndFiles(pathSelectors[pathSelectors.length - 1].getPath(), true);
+                Boolean noFolderWithSameName = true;
+                if (allFoldersInCloud != null) {
+                    for (int i = 0; i < allFoldersInCloud.length; i++) {
+                        String[] splitStr = p.split(allFoldersInCloud[i], ".");
+                        if (splitStr[0].toUpperCase().equals(personalData_et.getStrList().get(0).toUpperCase())) {
+                            noFolderWithSameName = false;
+                        }
+                    }
+                }
+                if (noFolderWithSameName) {
+                    settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
+                        File file = new File(mainActivity.getPathToPCFolder() + "\\" + aliasOnStartup);
+                        if (file.exists()) {
+                            p.println(file.getAbsolutePath());
+                            fileInteractionHelper.deleteFolder(file.getAbsolutePath());
+                        }
+                    
+                } else {
+                    if (aliasOnStartup.toUpperCase().equals(personalData_et.getStrList().get(0).toUpperCase())) {
+                        settingsDetails.put("personalData_et", personalData_et.getStrList().get(0));
+
+                    } else {
+                        allSet = false;
+                    }
+                }
+            }
+        }
+        // write to jsonfile;--------------------
+        if (allSet == true) {
+            jHelper.clearArray();
+
+            settingsObject.put("Settings", settingsDetails);
+            jHelper.appendObjectToArray(settingsObject);
+            jHelper.writeData(mySavePath);
+
+           // successfullySaved = true;
+            if(!mainActivity.getIsMaster()) {
+                try {
+                  mainActivity.getHomeScreenSlaves().getStartTestOnGPUThread().interrupt();  
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            mainActivity.initializeLoadingScreen();
+
+            mainActivity.getLoadingScreen().setIsFirstSetup(false);
+            makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Saved settings", stdFont, null));
+
+        } else {
+            makeToasts.add(new MakeToast(p, p.width / 2, p.height - stdTs * 2, stdTs, margin, edgeRad, 100, light, textCol, textYShift, false, "Set all required data & use unique Alias", stdFont, null));
+        }
+    }
     private void setData() {
         // load settings info, if not available, goto settingsPage----------------------
         loadedSettingsData = jHelper.getData(mySavePath);
@@ -291,7 +293,7 @@ public class SettingsScreen {
                 PathSelector ps = pathSelectors[i];
                 try {
                     String t = jsonObject.getAsJsonObject("Settings").get("pathSelector" + i).getAsString();
-                    ps.setPath(t);
+                    ps.setPath(t,false);
                     if (ps.getPath().length() > 0 == false) {
                         mainActivity.getLoadingScreen().setIsFirstSetup(true);
                         if(mainActivity.getIsMaster()) {

@@ -214,7 +214,7 @@ public class FilesSettingsScreen {
 
 	private void updateWidgets() {
 		int curInd = allFiles_HorizontalList.getSelectedInd();
-		imageSavePath_pathSelector.setPath(imageSavePaths[curInd]);
+		imageSavePath_pathSelector.setPath(imageSavePaths[curInd],false);
 		settings_checkboxes[0].setIsChecked(useNewResolution[curInd]);
 		settings_checkboxes[1].setIsChecked(renderAnimation[curInd]);
 		settings_checkboxes[2].setIsChecked(renderStillFrame[curInd]);
@@ -406,7 +406,7 @@ public class FilesSettingsScreen {
 	}
 
 	public void setStartupVals() {
-		imageSavePath_pathSelector.setPath(mainActivity.getHomeScreenMaster().getImageSavePath_pathSelector().getPath());
+		imageSavePath_pathSelector.setPath(mainActivity.getHomeScreenMaster().getImageSavePath_pathSelector().getPath(),false);
 
 		settings_checkboxes[0].setIsChecked(mainActivity.getHomeScreenMaster().getCheckboxes()[8].getIsChecked()); // useNewResolution
 		settings_checkboxes[1].setIsChecked(mainActivity.getHomeScreenMaster().getCheckboxes()[6].getIsChecked());// renderAnimation

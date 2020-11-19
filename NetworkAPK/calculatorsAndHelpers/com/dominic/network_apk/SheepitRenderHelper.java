@@ -44,8 +44,15 @@ public class SheepitRenderHelper {
 
 	public Boolean getStartRenderingOnSheepit(String path) {
 		try {
-			int mode = mainActivity.getHomeScreenMaster().getMode() - 1;
-			String modeName = mainActivity.getModeNamesMaster()[mode];
+			int mode=0;
+			String modeName="";
+			if(mainActivity.getIsMaster()) {
+				 mode = mainActivity.getHomeScreenMaster().getMode() - 1;
+				 modeName = mainActivity.getModeNamesMaster()[mode];
+				}else {
+					 mode = mainActivity.getHomeScreenSlaves().getMode() - 1;
+					 modeName = mainActivity.getModeNamesSlaves()[mode];
+				}
 			JSONArray loadedArray = jsonHelper.getData(mainActivity.getMasterCommandFilePath());
 			JSONObject homeObj = (JSONObject) (loadedArray.get(mode));
 			JSONObject innerHomeObj = (JSONObject) homeObj.get(modeName);

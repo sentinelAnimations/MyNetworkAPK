@@ -107,7 +107,7 @@ public class HomeScreenMaster {
 
 	public void render() {
 		if (imageSavePath_PathSelector.getPath().length() > 0 == false) {
-			imageSavePath_PathSelector.setPath(mainActivity.getPathToImageFolder());
+			imageSavePath_PathSelector.setPath(mainActivity.getPathToImageFolder(),false);
 		}
 
 		fileExplorerIsOpen = false;
@@ -267,17 +267,17 @@ public class HomeScreenMaster {
 
 				if (correctlySelected) {
 					mainActivity.setMode(101);
-					mainActivity.getRenderOverview().getFilesRenderingScreen().setupAll();
 
 					if (homeSettings_checkboxes[2].getIsChecked()) { // renderFile
+						mainActivity.getRenderOverview().getFilesRenderingScreen().setupAll();
 						mainActivity.getRenderOverview().setRenderMode(0.1f);
 						mainActivity.getRenderOverview().setFileList(fileSelector_HorizontalList.getList());
 						mainActivity.getRenderOverview().getRenderFilesSettings().setStartupVals();
-						mainActivity.getRenderOverview().getRenderFilesSettings().getImageSavePath_pathSelector().setPath(mainActivity.getPathToImageFolder());
+						mainActivity.getRenderOverview().getRenderFilesSettings().getImageSavePath_pathSelector().setPath(mainActivity.getPathToImageFolder(),false);
 					}
 					if (homeSettings_checkboxes[3].getIsChecked()) { // render on sheepit
 						mainActivity.getRenderOverview().setRenderMode(1);
-						// mainActivity.getRenderOverview().getRenderOnSheepitScreen().setupAll();
+						mainActivity.getRenderOverview().getRenderOnSheepitScreen().setupAll();
 					}
 
 				} else {
@@ -353,7 +353,7 @@ public class HomeScreenMaster {
 				stillFrame_counterArea.setCount(Integer.parseInt(settingsObject.get("stillFrame").toString()));
 				startFrame_counterArea.setCount(Integer.parseInt(settingsObject.get("startFrame").toString()));
 				endFrame_counterArea.setCount(Integer.parseInt(settingsObject.get("endFrame").toString()));
-				imageSavePath_PathSelector.setPath(settingsObject.get("imageSavePath").toString());
+				imageSavePath_PathSelector.setPath(settingsObject.get("imageSavePath").toString(),false);
 
 				JSONArray fileArray = (JSONArray) settingsObject.get("fileList");
 				String[] fileArrayStr;

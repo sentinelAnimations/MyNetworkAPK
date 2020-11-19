@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 11/17/2020, 23:43:08
+      Time of this report: 11/20/2020, 00:06:34
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 8400MB used, 10328MB available
+                Page File: 5670MB used, 13057MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -520,7 +520,7 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 125.9 GB
+ Free Space: 157.2 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB
@@ -530,6 +530,12 @@ File System: NTFS
 Total Space: 2861.5 GB
 File System: NTFS
       Model: WDC WD30EFRX-68EUZN0
+
+      Drive: E:
+ Free Space: 201.7 GB
+Total Space: 953.8 GB
+File System: NTFS
+      Model: WD Elements 25A2 USB Device
 
       Drive: F:
  Free Space: 99.8 GB
@@ -827,11 +833,8 @@ Device ID: PCI\VEN_8086&DEV_8D22&SUBSYS_86001043&REV_05\3&11583659&0&FB
 
      Name: Intel(R) Ethernet Connection (2) I218-V
 Device ID: PCI\VEN_8086&DEV_15A1&SUBSYS_85C41043&REV_05\3&11583659&0&C8
-   Driver: C:\WINDOWS\system32\DRIVERS\e1d65x64.sys, 12.18.0008.0009 (German), 2/4/2019 03:12:40, 567880 bytes
-   Driver: C:\WINDOWS\system32\e1d65x64.din, 2/4/2019 03:06:00, 3130 bytes
-   Driver: C:\WINDOWS\system32\NicCo4.dll, 4.02.0003.0000 (English), 2/4/2019 03:12:40, 134560 bytes
-   Driver: C:\WINDOWS\system32\NicInstD.dll, 9.12.0019.0000 (English), 2/4/2019 03:12:40, 99920 bytes
-   Driver: C:\WINDOWS\system32\e1dmsg.dll, 10.00.0856.0000 (English), 2/4/2019 03:12:40, 88136 bytes
+   Driver: C:\WINDOWS\System32\DriverStore\FileRepository\e1d68x64.inf_amd64_26255692c8b1c6b6\e1d68x64.sys, 12.19.0000.0016 (German), 10/1/2020 02:35:12, 600936 bytes
+   Driver: C:\WINDOWS\System32\DriverStore\FileRepository\e1d68x64.inf_amd64_26255692c8b1c6b6\e1dmsg.dll, 10.00.0935.0000 (English), 10/1/2020 02:35:12, 118648 bytes
 
      Name: Intel(R) C610 series/X99 chipset LPC Controller - 8D47
 Device ID: PCI\VEN_8086&DEV_8D47&SUBSYS_86001043&REV_05\3&11583659&0&F8
@@ -1534,55 +1537,55 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
-Fault bucket 1280825500765404570, type 5
+Fault bucket 1452693638392863693, type 5
+Event Name: BEX64
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: SnippingTool.exe
+P2: 10.0.19041.1
+P3: b836827b
+P4: ntdll.dll
+P5: 10.0.19041.610
+P6: e5d7ed5c
+P7: 00000000000a10a0
+P8: c0000409
+P9: 000000000000000a
+P10: 
+
+
++++ WER1 +++:
+Fault bucket , type 0
+Event Name: BEX64
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: SnippingTool.exe
+P2: 10.0.19041.1
+P3: b836827b
+P4: ntdll.dll
+P5: 10.0.19041.610
+P6: e5d7ed5c
+P7: 00000000000a10a0
+P8: c0000409
+P9: 000000000000000a
+P10: 
+
+
++++ WER2 +++:
+Fault bucket 1873304004119921770, type 5
 Event Name: RADAR_PRE_LEAK_64
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: eclipse.exe
-P2: 0.0.0.0
+P1: explorer.exe
+P2: 10.0.19041.610
 P3: 10.0.19041.2.0.0
 P4: 
 P5: 
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER1 +++:
-Fault bucket 1620990508230590550, type 5
-Event Name: AppHangB1
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: blender.exe
-P2: 2.9.0.0
-P3: 5f6b092e
-P4: a057
-P5: 134217728
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER2 +++:
-Fault bucket , type 0
-Event Name: AppHangB1
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: blender.exe
-P2: 2.9.0.0
-P3: 5f6b092e
-P4: a057
-P5: 134217728
 P6: 
 P7: 
 P8: 
@@ -1610,17 +1613,17 @@ P10:
 
 
 +++ WER4 +++:
-Fault bucket , type 0
-Event Name: StoreAgentScanForUpdatesFailure0
+Fault bucket 1634767365696397709, type 5
+Event Name: crashpad_log
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: Update;
-P2: 8024402c
-P3: 19041
-P4: 630
-P5: Windows.Desktop
+P1: MicrosoftEdgeUpdate.exe
+P2: 1.3.137.99
+P3: InstallError
+P4: 0x80040801
+P5: 
 P6: 
 P7: 
 P8: 
@@ -1649,6 +1652,25 @@ P10:
 
 +++ WER6 +++:
 Fault bucket , type 0
+Event Name: crashpad_log
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: MicrosoftEdgeUpdate.exe
+P2: 1.3.137.99
+P3: InstallError
+P4: 0x80040801
+P5: 
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER7 +++:
+Fault bucket , type 0
 Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
@@ -1666,37 +1688,18 @@ P9:
 P10: 
 
 
-+++ WER7 +++:
-Fault bucket 0xCFFFFFFF_CANCELLATION_NOT_SUPPORTED_IMAGE_mrxsmb.sys, type 0
-Event Name: AppTermFailureEvent
-Response: Not available
-Cab Id: ec5e6a7f-9ffb-44c0-ade3-b09777dba439
-
-Problem signature:
-P1: 
-P2: 
-P3: 
-P4: 
-P5: 
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
 +++ WER8 +++:
-Fault bucket 1809745203583969667, type 5
-Event Name: AppHangB1
+Fault bucket , type 0
+Event Name: crashpad_log
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: explorer.exe
-P2: 10.0.19041.610
-P3: ab30c679
-P4: cb4c
-P5: 134742016
+P1: MicrosoftEdgeUpdate.exe
+P2: 1.3.137.99
+P3: InstallError
+P4: 0x80040801
+P5: 
 P6: 
 P7: 
 P8: 
@@ -1706,16 +1709,16 @@ P10:
 
 +++ WER9 +++:
 Fault bucket , type 0
-Event Name: AppTermFailureEvent
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: 
-P2: 
-P3: 
-P4: 
-P5: 
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
 P6: 
 P7: 
 P8: 

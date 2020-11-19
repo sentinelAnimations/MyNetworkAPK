@@ -91,6 +91,20 @@ public class CommandExecutionHelper {
 		}
 		return taskIsKilled;
 	}
+	
+	public Boolean executeCommand(String command) {
+		Boolean executed=false;
+		try {
+			Runtime rt = Runtime.getRuntime();
+			String commandStr = "cmd /c "+command;
+			Process proc = rt.exec(commandStr);
+			proc.waitFor();
+			executed = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return executed;
+	}
 
 	public Boolean isWindowOpen(String windowtitle) {
 		Boolean isOpen = false;

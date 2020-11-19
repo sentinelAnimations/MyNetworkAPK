@@ -1,7 +1,7 @@
 [
   {
     "Node0": {
-      "posX": 618,
+      "posX": 614,
       "connectorPointIsConnectedArray": [
         true,
         true,
@@ -12,7 +12,7 @@
         false,
         false
       ],
-      "posY": 154,
+      "posY": 301,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -41,8 +41,8 @@
   },
   {
     "Node1": {
-      "posX": 904,
-      "posY": 148,
+      "posX": 900,
+      "posY": 295,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -52,13 +52,13 @@
   },
   {
     "Node2": {
-      "gpuName": "NVIDIA GeForce GTX 1080",
+      "gpuName": "",
       "connectorPointId": "050c7e66-be09-4c99-9431-ebc25598833c",
       "useGpu_checkbox": true,
       "nodeType": 2,
       "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
-      "posX": 275,
-      "posY": 40,
+      "posX": 271,
+      "posY": 187,
       "pcStrengthCPU": 0,
       "cpuCores": 12,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
@@ -77,8 +77,8 @@
       "useGpu_checkbox": true,
       "nodeType": 2,
       "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
-      "posX": 275,
-      "posY": 224,
+      "posX": 271,
+      "posY": 371,
       "pcStrengthCPU": -1,
       "cpuCores": 12,
       "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -92,13 +92,13 @@
   },
   {
     "Node4": {
-      "gpuName": "\"NVIDIA GeForce GTX 1080\"",
+      "gpuName": "\"\\\"NVIDIA GeForce GTX 1080\\\"\"",
       "connectorPointId": "0726ee82-c31c-4a07-ba4d-70cafe97d948",
       "useGpu_checkbox": true,
       "nodeType": 1,
-      "cpuName": "\"Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz\"",
-      "posX": 278,
-      "posY": 406,
+      "cpuName": "\"\\\"Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz\\\"\"",
+      "posX": 274,
+      "posY": 553,
       "pcStrengthCPU": -1,
       "cpuCores": 0,
       "connectorPointConnectedId": "2e9dc605-e6dd-440e-a96a-afe838a7d123",

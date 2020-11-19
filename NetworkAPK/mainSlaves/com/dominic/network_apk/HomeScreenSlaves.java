@@ -25,14 +25,14 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 public class HomeScreenSlaves {
-	private int mode,stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, cpuCores = 0;
+	private int mode, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, cpuCores = 0;
 	private int renderMode; // rendermode --> 0=render files, 1=render on
 							// sheepit,2=sleeping
 	private float textYShift;
 	private Boolean allWorking = true;
 	private String pathToCloud, pcAlias, pcFolderName, cpuName = "", gpuName = "";
 	private String[] pictoPaths;
-	private long curTime, prevLastModified, lastLogTime = 0,prevTime1;
+	private long curTime, prevLastModified, lastLogTime = 0, prevTime1;
 	private PFont stdFont;
 	private PApplet p;
 	private ImageButton[] mainButtons;
@@ -50,9 +50,9 @@ public class HomeScreenSlaves {
 	private SheepitRenderHelper sheepitRenderHelper;
 	private CommandExecutionHelper commandExecutionHelper;
 
-	public HomeScreenSlaves(PApplet p,int mode, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int red, int green, float textYShift, String[] pictoPaths, PFont stdFont) {
+	public HomeScreenSlaves(PApplet p, int mode, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int red, int green, float textYShift, String[] pictoPaths, PFont stdFont) {
 		this.p = p;
-		this.mode=mode;
+		this.mode = mode;
 		this.stdTs = stdTs;
 		this.edgeRad = edgeRad;
 		this.margin = margin;
@@ -152,11 +152,41 @@ public class HomeScreenSlaves {
 		curTime = pcInfoHelper.getCurTime();
 		if (curTime - lastLogTime > mainActivity.getStdTimeIntervall()) {
 			logData();
+			
+			// check for new software ----------------------------------------------------
+			File newBlenderVersion = new File(mainActivity.getProgrammFolderPath()+"\\"+fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), true)[0]);
+			File newSheepitVersion = new File(mainActivity.getProgrammFolderPath()+"\\"+fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), false)[0]);
+			File localBlenderVersion = new File(mainActivity.getPathToBlender());
+			File localSheepitVersion = new File(fileInteractionHelper.getFoldersAndFiles(localBlenderVersion.getParentFile().getAbsolutePath(), false)[0]);
+			
+			p.println("check");
+			p.println(newBlenderVersion.getAbsolutePath());
+			if (newBlenderVersion.exists()) {
+				p.println("exists");
+				if (p.abs(localBlenderVersion.lastModified() - newBlenderVersion.lastModified()) > mainActivity.getStdTimeIntervall()) {
+					p.println(newBlenderVersion.getAbsolutePath(), new File(localBlenderVersion.getParentFile().getAbsolutePath()).getParentFile().getAbsolutePath());
+					File copyToPath= new File(new File(localBlenderVersion.getParentFile().getAbsolutePath()).getParentFile().getAbsolutePath()+"\\blabla.txt");
+					new TxtStringHelper(p).writeToFile("adksfljaksdfjakdfjakdsfj","C:\\Users\\Dominic\\Desktop\\blabla.txt");
+					//new File("C:\\Users\\Dominic\\Desktop\\blabla");
+					//fileInteractionHelper.copyFile(newBlenderVersion.getAbsolutePath(),new File(localBlenderVersion.getParentFile().getAbsolutePath()).getParentFile().getAbsolutePath()+"\\blabla");
+					//mainActivity.getSettingsScreen().getPathSelectors()[0].setPath(localBlenderVersion.getParentFile().getAbsolutePath()+"\\"+newBlenderVersion.getName(), false);
+					//mainActivity.getSettingsScreen().saveData();
+					p.println("blender new");
+				}
+			}
+			if (newSheepitVersion.exists()) {
+				if (p.abs(localSheepitVersion.lastModified() - newSheepitVersion.lastModified()) > mainActivity.getStdTimeIntervall()) {
+					//fileInteractionHelper.copyFile(newSheepitVersion.getAbsolutePath(),  new File(localBlenderVersion.getParentFile().getAbsolutePath()).getParentFile().getAbsolutePath());
+					p.println("sheepit new");
+				}
+			}
+			// check for new software ----------------------------------------------------
+			
 			lastLogTime = curTime;
 		}
-		if(curTime-prevTime1>mainActivity.getSuperShortTimeIntervall()) {
+		if (curTime - prevTime1 > mainActivity.getSuperShortTimeIntervall()) {
 			renderFiles();
-			prevTime1=curTime;
+			prevTime1 = curTime;
 		}
 
 		File cmdFile = new File(mainActivity.getMasterCommandFilePath());
@@ -166,6 +196,7 @@ public class HomeScreenSlaves {
 			renderFiles();
 			prevLastModified = cmdFile.lastModified();
 		}
+
 	}
 
 	private void renderFiles() {
@@ -175,23 +206,32 @@ public class HomeScreenSlaves {
 		if (startRendering) {
 			if (!renderHelper.getAllJobsStarted() && (renderHelper.getCpuFinished() || renderHelper.getGpuFinished())) {
 				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName());
-
+				p.println("hw to use");
+				p.println(hwToUse);
+				p.println(renderHelper.getCpuFinished());
 				if (hwToUse[0] && renderHelper.getCpuFinished()) {
 					renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
 				}
 				if (hwToUse[1] && renderHelper.getGpuFinished()) {
 					renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
 				}
-				renderMode=0;
-			}else {
-				renderMode=2;
+				renderMode = 0;
+			} else {
+				if(!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
+					renderMode = 0;
+				}else {
+					renderMode = 2;
+				}
 			}
-		}else {
-			Boolean startRenderingOnSheepit=sheepitRenderHelper.getStartRenderingOnSheepit(mainActivity.getMasterCommandFilePath());
-			if(startRenderingOnSheepit) {
-				renderMode=1;
-			}else {
-				renderMode=2;
+		} else {
+			if(!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
+				renderHelper.setFinishAllJobs(true, true);
+			}
+			Boolean startRenderingOnSheepit = sheepitRenderHelper.getStartRenderingOnSheepit(mainActivity.getMasterCommandFilePath());
+			if (startRenderingOnSheepit) {
+				renderMode = 1;
+			} else {
+				renderMode = 2;
 			}
 		}
 	}
@@ -295,7 +335,7 @@ public class HomeScreenSlaves {
 	public void onScroll(float e) {
 
 	}
-	
+
 	public int getMode() {
 		return mode;
 	}

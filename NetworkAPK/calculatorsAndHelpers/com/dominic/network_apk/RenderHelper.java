@@ -315,6 +315,7 @@ public class RenderHelper {
 						File resolutionAndSamplingGPU = resolutionAndSampling;
 						File forceGPURenderingGPU = forceGPURenderingFile;
 						File logGPU = logFileGPU;
+						p.println(resolutionAndSampling.getAbsolutePath(),"---",forceGPURenderingFile.getAbsolutePath());
 						handleJson(renderJobIndexGPU, "started", p.str(true), pathToRenderJobsStatus, "GPU");
 
 						lastGPULogFound = pcInfoHelper.getCurTime();

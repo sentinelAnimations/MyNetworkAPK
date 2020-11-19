@@ -15,9 +15,10 @@
     "checkbox5": true,
     "checkbox6": true,
     "checkbox7": false,
-    "checkbox8": true,
+    "checkbox8": false,
     "fileList": [
-      "C:\\blenderFiles\\bakeTest.blend"
+      "C:\\blenderFiles\\bakeTest.blend",
+      "C:\\blenderFiles\\\\bakeTest.blend"
     ]
   }
 ]

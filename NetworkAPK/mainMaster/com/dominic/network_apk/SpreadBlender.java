@@ -1,5 +1,6 @@
 package com.dominic.network_apk;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
@@ -7,7 +8,7 @@ import processing.core.PFont;
 import processing.core.PImage;
 
 public class SpreadBlender {
-	private int	mode, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark;
+	private int mode, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark;
 	private float textYShift;
 	private Boolean fileExplorerIsOpen = false;
 	private String[] pictoPaths;
@@ -20,8 +21,8 @@ public class SpreadBlender {
 	private PathSelector spreadBlender_pathSelector, spreadSheepit_PathSelector;
 	private FileInteractionHelper fileInteractionHelper;
 
-	public SpreadBlender(PApplet p,int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] pictoPaths, String[] fileExplStr, PFont stdFont) {
-		this.mode=mode;
+	public SpreadBlender(PApplet p, int mode, int btnSize, int btnSizeSmall, int margin, int stdTs, int edgeRad, int dark, int darkest, int light, int lighter, int lightest, int border, int textCol, int textDark, float textYShift, String[] pictoPaths, String[] fileExplStr, PFont stdFont) {
+		this.mode = mode;
 		this.btnSize = btnSize;
 		this.btnSizeSmall = btnSizeSmall;
 		this.margin = margin;
@@ -53,6 +54,7 @@ public class SpreadBlender {
 		spreadSheepit_PathSelector = new PathSelector(p, p.width / 2 - btnSizeSmall / 2, p.height / 2 + btnSizeSmall / 2 + margin, psW, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, false, false, "...\\\\Folder to copy Sheepit from", pictoPaths[0], fileExplStr, stdFont, null);
 		spreadSheepit_ImageButton = new ImageButton(p, psW / 2 + margin + btnSizeSmall / 2, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, true, textCol, lighter, pictoPaths[2], "Share Sheepit", spreadSheepit_PathSelector);
 
+		spreadBlender_pathSelector.setPath(mainActivity.getPathToBlender(),false);
 		fileInteractionHelper = new FileInteractionHelper(p);
 	}
 
@@ -73,14 +75,18 @@ public class SpreadBlender {
 
 			// share blender folder with slaves ---------------------------------
 			if (spreadBlender_ImageButton.getIsClicked()) {
+				String [] curCloudBlenderFolders=fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), true);
+			if(curCloudBlenderFolders!=null && curCloudBlenderFolders.length>0) {
+				for(int i=0;i<curCloudBlenderFolders.length;i++) {
+					mainActivity.getCommandExecutionHelper().executeCommand("rmdir /s/q "+mainActivity.getProgrammFolderPath()+"\\"+curCloudBlenderFolders[i]);
+				}
+			}
 				if (spreadBlender_pathSelector.getPath().length() > 0) {
-					String copyToPath = mainActivity.getSettingsScreen().getPathSelectors()[2].getPath();
-					if (copyToPath.charAt(copyToPath.length() - 1) != '\\' || copyToPath.charAt(copyToPath.length() - 1) != '/') {
-						copyToPath += "\\";
-					}
-
+					String copyToPath=mainActivity.getProgrammFolderPath()+"\\";
+			
 					String copyFromPath = spreadBlender_pathSelector.getPath();
 					fileInteractionHelper.copyFolder(copyFromPath, copyToPath);
+					new File(copyToPath+"\\"+fileInteractionHelper.getFoldersAndFiles(copyToPath, true)[0]).renameTo(new File(new File(copyToPath).getAbsolutePath()+"\\newBlenderVersion"));
 				}
 				spreadBlender_ImageButton.setIsClicked(false);
 			}
@@ -90,13 +96,18 @@ public class SpreadBlender {
 			if (spreadSheepit_ImageButton.getIsClicked()) {
 
 				if (spreadSheepit_PathSelector.getPath().length() > 0) {
-					String copyToPath = mainActivity.getSettingsScreen().getPathSelectors()[2].getPath();
-					if (copyToPath.charAt(copyToPath.length() - 1) != '\\' || copyToPath.charAt(copyToPath.length() - 1) != '/') {
-						copyToPath += "\\";
-					}
+					/*
+					 * if (copyToPath.charAt(copyToPath.length() - 1) != '\\' ||
+					 * copyToPath.charAt(copyToPath.length() - 1) != '/') { copyToPath += "\\"; }
+					 */
 
 					String copyFromPath = spreadSheepit_PathSelector.getPath();
-					fileInteractionHelper.copyFolder(copyFromPath, copyToPath);
+					String copyToPath = mainActivity.getProgrammFolderPath()+ "\\sheepit.exe";
+					File copyToFile = new File(copyToPath);
+					if (copyToFile.exists()) {
+						copyToFile.delete();
+					}
+					fileInteractionHelper.copyFile(copyFromPath, copyToPath);
 				}
 				spreadSheepit_ImageButton.setIsClicked(false);
 			}
@@ -163,7 +174,8 @@ public class SpreadBlender {
 
 		}
 	}
-	 public int getMode() {
-	    	return mode;
-	    }
+
+	public int getMode() {
+		return mode;
+	}
 }

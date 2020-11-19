@@ -137,6 +137,7 @@ public class MainActivity extends PApplet {
 	private FileInteractionHelper fileInteractionHelper;
 	private PCInfoHelper pcInfoHelper;
 	private StrengthTestHelper strengthTestHelper;
+	private CommandExecutionHelper commandExecutionHelper;
 	// Helpers -----------------------------------
 	// Classes--------------------------------------------------
 	// Global variables
@@ -177,7 +178,7 @@ public class MainActivity extends PApplet {
 		fileInteractionHelper = new FileInteractionHelper(this);
 		pcInfoHelper = new PCInfoHelper(this);
 		strengthTestHelper = new StrengthTestHelper(this, "logDataMaster", this);
-		
+		commandExecutionHelper=new CommandExecutionHelper(this);
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
 
 		initializeLoadingScreen();
@@ -290,6 +291,8 @@ public class MainActivity extends PApplet {
 			} else {
 			}
 		}
+		renderOverview.getRenderOnSheepitScreen().getSheepitRenderHelper().setStartRenderingOnSheepit(false);
+
 		// setup json commandFile -----------------------------------------------
 		Node masterNode = nodeEditor.getMasterNode();
 		if (masterNode != null) {
@@ -318,7 +321,7 @@ public class MainActivity extends PApplet {
 		String[] fsetupPictos = { absPathPictos + "settings.png", absPathPictos + "questions.png" };
 		settingsScreen = new SettingsScreen(this, 3, btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, border, textYShift, mySettingsPath, p1, p2, fileExplorerPaths, fsetupPictos, stdFont);
 		if (isMaster) {
-			homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles());
+			homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles(),true);
 		}
 	}
 
@@ -489,8 +492,8 @@ public class MainActivity extends PApplet {
 					getSurface().setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
 					Dimension d = new Dimension((int) stdScreenDimension.x, (int) stdScreenDimension.y);
 					frame.setPreferredSize(d);
-					if (mode == 1) {
-						homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles());
+					if (mode == getHomeScreenMaster().getMode()) {
+						homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles(),true);
 					}
 					if (mode == 2) {
 						getSurface().setResizable(true);
@@ -968,6 +971,9 @@ public class MainActivity extends PApplet {
 	public StrengthTestHelper getStrengthTestHelper() {
 		return strengthTestHelper;
 	}
+	public CommandExecutionHelper getCommandExecutionHelper() {
+		return commandExecutionHelper;
+	}
 
 	public String getMasterCommandFilePath() {
 		return getPathToCloud() + "\\" + relativeMasterCommandFilePath;
@@ -1016,7 +1022,10 @@ public class MainActivity extends PApplet {
 	public String getHardwareToUseFilePath() {
 		return getPathToCloud() + "\\" + hardwareToUseFilePath;
 	}
-
+	
+	public String getProgrammFolderPath() {
+		return getPathToCloud()+"\\programms";
+	}
 	public Boolean[] getHardwareToRenderWith(String pcNameStr) {
 		Boolean[] renderHardware = new Boolean[2]; // 0=useCpu?, 1=useGpu?
 		if (isMaster) {
@@ -1041,8 +1050,10 @@ public class MainActivity extends PApplet {
 			println(getMasterCommandFilePath());
 			JSONArray loadedSettingsData = jsonHelper.getData(getHardwareToUseFilePath());
 			println(loadedSettingsData);
+			renderHardware[0] = false;
+			renderHardware[1] = false;
 			try {
-		
+				
 				JSONArray hwToUseArray = jsonHelper.getData(getHardwareToUseFilePath());
 				for (int i = 0; i < hwToUseArray.size(); i++) {
 					JSONObject curObj = (JSONObject) hwToUseArray.get(i);
@@ -1055,8 +1066,6 @@ public class MainActivity extends PApplet {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				renderHardware[0] = false;
-				renderHardware[1] = false;
 			}
 		}
 		return renderHardware;

@@ -153,7 +153,7 @@ public class ImageViewScreen {
 	
 	public void setPath(String setPath) {
 	    allImgs_ImageView.setPath(setPath);
-	    imageFolder_pathSelector.setPath(setPath);
+	    imageFolder_pathSelector.setPath(setPath,false);
 	}
 
 }

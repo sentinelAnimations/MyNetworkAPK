@@ -7,7 +7,7 @@ import processing.core.PFont;
 
 public class RenderOnSheepitScreen {
 
-    private int stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, onceOnStartup = 0;
+    private int stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green;
     private float textYShift;
     private Boolean isRendering = true;
     private String[] pictoPaths, hoLiPictoPaths, renderInfoStrings;
@@ -21,7 +21,8 @@ public class RenderOnSheepitScreen {
     private HorizontalList allPCs_HorizontalList;
     private PictogramImage[] allPCPictos;
     private ArrayList<Node> allConnectedNodes = new ArrayList<>();
-
+    private SheepitRenderHelper sheepitRenderHelper;
+    
     public RenderOnSheepitScreen(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int red, int green, float textYShift, String[] pictoPaths, String[] hoLiPictoPaths, PFont stdFont) {
         this.p = p;
         this.stdTs = stdTs;
@@ -44,15 +45,14 @@ public class RenderOnSheepitScreen {
         this.hoLiPictoPaths = hoLiPictoPaths;
         this.stdFont = stdFont;
         mainActivity = (MainActivity) p;
-
-        setupAll();
+        
+        sheepitRenderHelper=new SheepitRenderHelper(p);
+        
+        //setupAll();
 
     }
 
     public void render() {
-        if (onceOnStartup == 0) {
-            onceOnStartup++;
-        }
 
         // render allPCs_horizontalList --------------------
         allPCs_HorizontalList.render();
@@ -73,17 +73,18 @@ public class RenderOnSheepitScreen {
                 p.fill(lighter);
                
                 p.stroke(lighter);
+                p.strokeWeight(2);
                 p.rect(listX[i], allPCs_HorizontalList.getY(), listW[i], allPCs_HorizontalList.getH() - margin * 2, edgeRad);
+                p.strokeWeight(1);
                 allPCPictos[i].render();
 
                 p.fill(textCol);
                 p.textFont(stdFont);
                 p.textSize(stdTs);
-                p.textAlign(p.CENTER, p.CENTER);
+                p.textAlign(p.CENTER, p.TOP);
 
                 try {
-                    p.println(renderInfoStrings[i]);
-                    p.text(renderInfoStrings[i], listX[i], allPCPictos[i].getY() + listW[i] / 2);
+                    p.text(renderInfoStrings[i], listX[i], allPCs_HorizontalList.getY());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -120,25 +121,18 @@ public class RenderOnSheepitScreen {
             String renderInfoString = "PC status: ";
             switch (allPCStatus[i]) {
             case 0:
-                renderInfoString += " -Responding";
+                renderInfoString += "Responding";
                 break;
             case 1:
-                renderInfoString += " -Rendering";
+                renderInfoString += "Rendering";
                 break;
             case 2:
-                renderInfoString += " -Not responding";
+                renderInfoString += "Not responding";
             }
-            renderInfoString += "\n PC name: ";
+            renderInfoString += "\n";
             String pcName = n.getPcSelection_DropdownMenu().getSelectedItem();
             if (pcName != null && pcName.length() > 0) {
                 renderInfoString += pcName;
-            } else {
-                renderInfoString += "---";
-            }
-            renderInfoString += "\n Power: ";
-            int power = 100;
-            if (power > 0) {
-                renderInfoString += power;
             } else {
                 renderInfoString += "---";
             }
@@ -194,6 +188,13 @@ public class RenderOnSheepitScreen {
             renderInfoStrings[i] = "";
             allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
         }
+        
+        sheepitRenderHelper.setStartRenderingOnSheepit(true);
+        sheepitRenderHelper.startRenderingOnSheepit();
+    }
+    
+    public SheepitRenderHelper getSheepitRenderHelper() {
+    	return sheepitRenderHelper;
     }
 
 }

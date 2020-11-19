@@ -66,6 +66,7 @@ public class FileInteractionHelper {
 
 	public void copyFolder(String copyFolderPath, String destination) {
 		if (copyFolderPath.equals(destination) == false) {
+			new File(destination).mkdirs();
 			File f;
 			String[] splitStr1 = p.split(copyFolderPath, "\\");
 			String[] basePath0 = p.split(copyFolderPath, "\\");

@@ -56,7 +56,7 @@ public class RenderOverview {
 	}
 
 	public void render() {
-
+		
 		if (imageViewScreen.getImageView_PathSelector().getFileExplorerIsOpen() == true || filesSettingsScreen.getImageSavePath_pathSelector().getFileExplorerIsOpen() == true) {
 			anyFileExplorerIsOpen = true;
 		} else {
@@ -95,7 +95,7 @@ public class RenderOverview {
 				mainActivity.setMode(1);
 			}
 			if (renderMode == 1) {
-				cancelSheepitRendering();
+				mainActivity.getRenderOverview().getRenderOnSheepitScreen().getSheepitRenderHelper().setStartRenderingOnSheepit(false);
 				mainActivity.setMode(1);
 			}
 			if (renderMode == 2) {
@@ -128,10 +128,6 @@ public class RenderOverview {
 
 	private void cancelFileRendering() {
 		filesRenderingScreen.setIsRendering(false);
-	}
-
-	private void cancelSheepitRendering() {
-
 	}
 
 	public void onMousePressed(int mouseButton) {
