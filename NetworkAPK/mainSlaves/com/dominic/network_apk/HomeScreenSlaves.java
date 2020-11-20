@@ -29,10 +29,10 @@ public class HomeScreenSlaves {
 	private int renderMode; // rendermode --> 0=render files, 1=render on
 							// sheepit,2=sleeping
 	private float textYShift;
-	private Boolean allWorking = true;
+	private Boolean allWorking = true,copying=false;
 	private String pathToCloud, pcAlias, pcFolderName, cpuName = "", gpuName = "";
 	private String[] pictoPaths;
-	private long curTime, prevLastModified, lastLogTime = 0, prevTime1;
+	private long curTime, prevLastModified, lastLogTime = 0, lastLogTime2 = 0, prevTime1;
 	private PFont stdFont;
 	private PApplet p;
 	private ImageButton[] mainButtons;
@@ -153,69 +153,6 @@ public class HomeScreenSlaves {
 		curTime = pcInfoHelper.getCurTime();
 		if (curTime - lastLogTime > mainActivity.getStdTimeIntervall()) {
 			logData();
-
-			// check for new software ----------------------------------------------------
-			try {
-				File newBlenderVersion=null,newSheepitVersion=null,localBlenderVersion=null,localSheepitVersion=null;
-				try {
-					 newBlenderVersion = new File(mainActivity.getProgrammFolderPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), true)[0]);
-					 newSheepitVersion = new File(mainActivity.getProgrammFolderPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), false)[0]);
-					 localBlenderVersion = new File(mainActivity.getLocalProgrammPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), true)[0]);
-					 localSheepitVersion = new File(mainActivity.getLocalProgrammPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), false)[0]);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				p.println("check");
-				if (newBlenderVersion.exists()) {
-					p.println("exists",localBlenderVersion);
-					//p.println(localBlenderVersion.exists(), localBlenderVersion.getAbsolutePath());
-					if (localBlenderVersion==null || !localBlenderVersion.exists() || !localBlenderVersion.getName().toString().equals(newBlenderVersion.getName().toString())) {
-						if(localBlenderVersion!=null && localBlenderVersion.exists()) {
-						fileInteractionHelper.batchDeleteFolder(localBlenderVersion.getAbsolutePath());
-						}
-						String copyToPath = mainActivity.getLocalProgrammPath() + "\\";
-						p.println(newBlenderVersion.getAbsolutePath(), copyToPath);
-						fileInteractionHelper.copyFolder(newBlenderVersion.getAbsolutePath(),copyToPath);
-						//set new blenderPath-------------------------------------------
-						try {
-							File blenderExe=new File(fileInteractionHelper.getPathOfFileInFolder(mainActivity.getLocalProgrammPath(),"blender.exe"));
-							if(blenderExe.exists()) {
-							mainActivity.getSettingsScreen().getPathSelectors()[0].setPath(blenderExe.getAbsolutePath(), false);
-							JSONArray loadedArray = jsonHelper.getData(mainActivity.getSettingsPath());
-							JSONObject elem0 = (JSONObject) (loadedArray.get(0));
-							JSONObject settingsObj= (JSONObject) elem0.get("Settings");
-							settingsObj.put("pathSelector0", blenderExe.getAbsolutePath());
-							elem0.put("Settings", settingsObj);
-							loadedArray.set(0, elem0);
-							jsonHelper.clearArray();
-							jsonHelper.setArray(loadedArray);
-							jsonHelper.writeData(mainActivity.getSettingsPath());
-							}	
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						
-						//set new blenderPath-------------------------------------------
-
-						p.println("blender new");
-					}
-				}
-				if (newSheepitVersion.exists()) {
-					p.println("exists",localBlenderVersion);
-					//p.println(localBlenderVersion.exists(), localBlenderVersion.getAbsolutePath());
-					if (localSheepitVersion==null || !localSheepitVersion.exists() || !localSheepitVersion.getName().toString().equals(newSheepitVersion.getName().toString())) {
-						if(localSheepitVersion!=null && localSheepitVersion.exists()) {
-							new File(localSheepitVersion.getAbsolutePath()).delete();
-						}
-						fileInteractionHelper.copyFile(newSheepitVersion.getAbsolutePath(), mainActivity.getLocalProgrammPath() + "\\" + newSheepitVersion.getName());
-						p.println("sheepit new");
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			// check for new software ----------------------------------------------------
-
 			lastLogTime = curTime;
 		}
 		if (curTime - prevTime1 > mainActivity.getSuperShortTimeIntervall()) {
@@ -231,6 +168,82 @@ public class HomeScreenSlaves {
 			prevLastModified = cmdFile.lastModified();
 		}
 
+	}
+
+	public void checkForNewSoftware() {
+		// check for new software ----------------------------------------------------
+		if (curTime - lastLogTime2 > mainActivity.getStdTimeIntervall() && !copying) {
+			try {
+				File newBlenderVersion = null, newSheepitVersion = null, localBlenderVersion = null, localSheepitVersion = null;
+				try {
+					newBlenderVersion = new File(mainActivity.getProgrammFolderPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), true)[0]);
+					newSheepitVersion = new File(mainActivity.getProgrammFolderPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), false)[0]);
+					localBlenderVersion = new File(mainActivity.getLocalProgrammPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), true)[0]);
+					localSheepitVersion = new File(mainActivity.getLocalProgrammPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), false)[0]);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				p.println("check");
+				if (newBlenderVersion.exists()) {
+					p.println("exists", localBlenderVersion);
+					// p.println(localBlenderVersion.exists(),
+					// localBlenderVersion.getAbsolutePath());
+					if (localBlenderVersion == null || !localBlenderVersion.exists() || !localBlenderVersion.getName().toString().equals(newBlenderVersion.getName().toString())) {
+						copying=true;
+						if (localBlenderVersion != null && localBlenderVersion.exists()) {
+							p.println("delete local");
+							fileInteractionHelper.batchDeleteFolder(localBlenderVersion.getAbsolutePath());
+						}
+						String copyToPath = mainActivity.getLocalProgrammPath() + "\\";
+						p.println(newBlenderVersion.getAbsolutePath(), copyToPath);
+						fileInteractionHelper.copyFolder(newBlenderVersion.getAbsolutePath(), copyToPath);
+						// set new blenderPath-------------------------------------------
+						try {
+							File blenderExe = new File(fileInteractionHelper.getPathOfFileInFolder(mainActivity.getLocalProgrammPath(), "blender.exe"));
+							if (blenderExe.exists()) {
+								mainActivity.getSettingsScreen().getPathSelectors()[0].setPath(blenderExe.getAbsolutePath(), false);
+								JSONArray loadedArray = jsonHelper.getData(mainActivity.getSettingsPath());
+								JSONObject elem0 = (JSONObject) (loadedArray.get(0));
+								JSONObject settingsObj = (JSONObject) elem0.get("Settings");
+								settingsObj.put("pathSelector0", blenderExe.getAbsolutePath());
+								elem0.put("Settings", settingsObj);
+								loadedArray.set(0, elem0);
+								jsonHelper.clearArray();
+								jsonHelper.setArray(loadedArray);
+								jsonHelper.writeData(mainActivity.getSettingsPath());
+								p.println("now written");
+								mainActivity.getSettingsScreen().setData();
+								copying=false;
+								p.println("now set");
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+						// set new blenderPath-------------------------------------------
+
+						p.println("blender new");
+					}
+				}
+				if (newSheepitVersion.exists()) {
+					p.println("exists", localBlenderVersion);
+					// p.println(localBlenderVersion.exists(),
+					// localBlenderVersion.getAbsolutePath());
+					if (localSheepitVersion == null || !localSheepitVersion.exists() || !localSheepitVersion.getName().toString().equals(newSheepitVersion.getName().toString())) {
+						if (localSheepitVersion != null && localSheepitVersion.exists()) {
+							new File(localSheepitVersion.getAbsolutePath()).delete();
+						}
+						fileInteractionHelper.copyFile(newSheepitVersion.getAbsolutePath(), mainActivity.getLocalProgrammPath() + "\\" + newSheepitVersion.getName());
+						p.println("sheepit new");
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			lastLogTime2 = curTime;
+		}
+
+		// check for new software ----------------------------------------------------
 	}
 
 	private void renderFiles() {

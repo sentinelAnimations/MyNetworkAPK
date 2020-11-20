@@ -107,7 +107,7 @@ public class MainActivity extends PApplet {
 	// images--------------------------------------------------
 
 	// Threads--------------------------
-	private Thread getSpecInfoThread;
+	private Thread getSpecInfoThread,backgroundTaskThread;
 	// Threads--------------------------
 
 	// Classes--------------------------------------------------
@@ -443,6 +443,15 @@ public class MainActivity extends PApplet {
 
 				// log ---------------------
 				homeScreenSlaves.calcBackgroundTasks();
+
+				 backgroundTaskThread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+							homeScreenSlaves.checkForNewSoftware();
+					}
+				});
+				backgroundTaskThread.start();
+
 				// log ---------------------
 			}
 		}
@@ -923,12 +932,12 @@ public class MainActivity extends PApplet {
 
 	public String getLocalProgrammPath() {
 		return localProgrammPath;
-	} 
+	}
 
 	public String getSettingsPath() {
 		return mySettingsPath;
 	}
-	
+
 	public String[] getModeNamesMaster() {
 		return modeNamesMaster;
 	}
