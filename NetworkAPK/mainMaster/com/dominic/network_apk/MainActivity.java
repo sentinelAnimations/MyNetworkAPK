@@ -70,6 +70,7 @@ public class MainActivity extends PApplet {
 	// Save paths ----------------------
 	// Local -----------
 	private String mySettingsPath = "localOutput/SettingsScreen/settings.json", myNodeSettingsPath = "localOutput/NodeEditor/nodeEditor.json", myThemeScreenPath = "localOutput/ThemeScreen/colorTheme.json", myStrengthTestPath = "localOutput/StrengthTest/strengthTest.json", homeScreenMasterSettingsPath = "localOutput/HomeScreenMaster/settingsMaster.json", homeScreenSlavePath = "localOutput/homeScreenSlave", strengthTestBlendfilePath = "localOutput/homeScreenSlave/blendFiles", localBlendfilePath = "localOutput/renderBlendfiles";
+	private String localProgrammPath = "localOutput/programms";
 	// Local -----------
 	// File names -------
 	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json", relativeMasterRenderJobsStatusFilePath = "MasterCommands\\MasterRenderJobsStatus.json", hardwareToUseFilePath = "MasterCommands\\hardwareToUse.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
@@ -178,7 +179,7 @@ public class MainActivity extends PApplet {
 		fileInteractionHelper = new FileInteractionHelper(this);
 		pcInfoHelper = new PCInfoHelper(this);
 		strengthTestHelper = new StrengthTestHelper(this, "logDataMaster", this);
-		commandExecutionHelper=new CommandExecutionHelper(this);
+		commandExecutionHelper = new CommandExecutionHelper(this);
 		stdFont = createFont("fonts/stdFont.ttf", titleTs);
 
 		initializeLoadingScreen();
@@ -196,7 +197,7 @@ public class MainActivity extends PApplet {
 	}
 
 	public void initializeClassInstancesMaster() {
-		
+
 		loadingScreen.setLoadingStatus("Init MainButtons");
 
 		// pc specs ----------------------------------------
@@ -321,7 +322,7 @@ public class MainActivity extends PApplet {
 		String[] fsetupPictos = { absPathPictos + "settings.png", absPathPictos + "questions.png" };
 		settingsScreen = new SettingsScreen(this, 3, btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, border, textYShift, mySettingsPath, p1, p2, fileExplorerPaths, fsetupPictos, stdFont);
 		if (isMaster) {
-			homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles(),true);
+			homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles(), true);
 		}
 	}
 
@@ -493,7 +494,7 @@ public class MainActivity extends PApplet {
 					Dimension d = new Dimension((int) stdScreenDimension.x, (int) stdScreenDimension.y);
 					frame.setPreferredSize(d);
 					if (mode == getHomeScreenMaster().getMode()) {
-						homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles(),true);
+						homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles(), true);
 					}
 					if (mode == 2) {
 						getSurface().setResizable(true);
@@ -920,6 +921,14 @@ public class MainActivity extends PApplet {
 		return "RenderOverview";
 	}
 
+	public String getLocalProgrammPath() {
+		return localProgrammPath;
+	} 
+
+	public String getSettingsPath() {
+		return mySettingsPath;
+	}
+	
 	public String[] getModeNamesMaster() {
 		return modeNamesMaster;
 	}
@@ -971,6 +980,7 @@ public class MainActivity extends PApplet {
 	public StrengthTestHelper getStrengthTestHelper() {
 		return strengthTestHelper;
 	}
+
 	public CommandExecutionHelper getCommandExecutionHelper() {
 		return commandExecutionHelper;
 	}
@@ -1022,10 +1032,11 @@ public class MainActivity extends PApplet {
 	public String getHardwareToUseFilePath() {
 		return getPathToCloud() + "\\" + hardwareToUseFilePath;
 	}
-	
+
 	public String getProgrammFolderPath() {
-		return getPathToCloud()+"\\programms";
+		return getPathToCloud() + "\\programms";
 	}
+
 	public Boolean[] getHardwareToRenderWith(String pcNameStr) {
 		Boolean[] renderHardware = new Boolean[2]; // 0=useCpu?, 1=useGpu?
 		if (isMaster) {
@@ -1053,7 +1064,7 @@ public class MainActivity extends PApplet {
 			renderHardware[0] = false;
 			renderHardware[1] = false;
 			try {
-				
+
 				JSONArray hwToUseArray = jsonHelper.getData(getHardwareToUseFilePath());
 				for (int i = 0; i < hwToUseArray.size(); i++) {
 					JSONObject curObj = (JSONObject) hwToUseArray.get(i);

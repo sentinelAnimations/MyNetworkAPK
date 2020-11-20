@@ -118,6 +118,7 @@ public class HomeScreenSlaves {
 		jsonHelper = new JsonHelper(p);
 
 		setData();
+
 	}
 
 	public void render() {
@@ -152,36 +153,69 @@ public class HomeScreenSlaves {
 		curTime = pcInfoHelper.getCurTime();
 		if (curTime - lastLogTime > mainActivity.getStdTimeIntervall()) {
 			logData();
-			
+
 			// check for new software ----------------------------------------------------
-			File newBlenderVersion = new File(mainActivity.getProgrammFolderPath()+"\\"+fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), true)[0]);
-			File newSheepitVersion = new File(mainActivity.getProgrammFolderPath()+"\\"+fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), false)[0]);
-			File localBlenderVersion = new File(mainActivity.getPathToBlender());
-			File localSheepitVersion = new File(fileInteractionHelper.getFoldersAndFiles(localBlenderVersion.getParentFile().getAbsolutePath(), false)[0]);
-			
-			p.println("check");
-			p.println(newBlenderVersion.getAbsolutePath());
-			if (newBlenderVersion.exists()) {
-				p.println("exists");
-				if (p.abs(localBlenderVersion.lastModified() - newBlenderVersion.lastModified()) > mainActivity.getStdTimeIntervall()) {
-					p.println(newBlenderVersion.getAbsolutePath(), new File(localBlenderVersion.getParentFile().getAbsolutePath()).getParentFile().getAbsolutePath());
-					File copyToPath= new File(new File(localBlenderVersion.getParentFile().getAbsolutePath()).getParentFile().getAbsolutePath()+"\\blabla.txt");
-					new TxtStringHelper(p).writeToFile("adksfljaksdfjakdfjakdsfj","C:\\Users\\Dominic\\Desktop\\blabla.txt");
-					//new File("C:\\Users\\Dominic\\Desktop\\blabla");
-					//fileInteractionHelper.copyFile(newBlenderVersion.getAbsolutePath(),new File(localBlenderVersion.getParentFile().getAbsolutePath()).getParentFile().getAbsolutePath()+"\\blabla");
-					//mainActivity.getSettingsScreen().getPathSelectors()[0].setPath(localBlenderVersion.getParentFile().getAbsolutePath()+"\\"+newBlenderVersion.getName(), false);
-					//mainActivity.getSettingsScreen().saveData();
-					p.println("blender new");
+			try {
+				File newBlenderVersion=null,newSheepitVersion=null,localBlenderVersion=null,localSheepitVersion=null;
+				try {
+					 newBlenderVersion = new File(mainActivity.getProgrammFolderPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), true)[0]);
+					 newSheepitVersion = new File(mainActivity.getProgrammFolderPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), false)[0]);
+					 localBlenderVersion = new File(mainActivity.getLocalProgrammPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), true)[0]);
+					 localSheepitVersion = new File(mainActivity.getLocalProgrammPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), false)[0]);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}
-			if (newSheepitVersion.exists()) {
-				if (p.abs(localSheepitVersion.lastModified() - newSheepitVersion.lastModified()) > mainActivity.getStdTimeIntervall()) {
-					//fileInteractionHelper.copyFile(newSheepitVersion.getAbsolutePath(),  new File(localBlenderVersion.getParentFile().getAbsolutePath()).getParentFile().getAbsolutePath());
-					p.println("sheepit new");
+				p.println("check");
+				if (newBlenderVersion.exists()) {
+					p.println("exists",localBlenderVersion);
+					//p.println(localBlenderVersion.exists(), localBlenderVersion.getAbsolutePath());
+					if (localBlenderVersion==null || !localBlenderVersion.exists() || !localBlenderVersion.getName().toString().equals(newBlenderVersion.getName().toString())) {
+						if(localBlenderVersion!=null && localBlenderVersion.exists()) {
+						fileInteractionHelper.batchDeleteFolder(localBlenderVersion.getAbsolutePath());
+						}
+						String copyToPath = mainActivity.getLocalProgrammPath() + "\\";
+						p.println(newBlenderVersion.getAbsolutePath(), copyToPath);
+						fileInteractionHelper.copyFolder(newBlenderVersion.getAbsolutePath(),copyToPath);
+						//set new blenderPath-------------------------------------------
+						try {
+							File blenderExe=new File(fileInteractionHelper.getPathOfFileInFolder(mainActivity.getLocalProgrammPath(),"blender.exe"));
+							if(blenderExe.exists()) {
+							mainActivity.getSettingsScreen().getPathSelectors()[0].setPath(blenderExe.getAbsolutePath(), false);
+							JSONArray loadedArray = jsonHelper.getData(mainActivity.getSettingsPath());
+							JSONObject elem0 = (JSONObject) (loadedArray.get(0));
+							JSONObject settingsObj= (JSONObject) elem0.get("Settings");
+							settingsObj.put("pathSelector0", blenderExe.getAbsolutePath());
+							elem0.put("Settings", settingsObj);
+							loadedArray.set(0, elem0);
+							jsonHelper.clearArray();
+							jsonHelper.setArray(loadedArray);
+							jsonHelper.writeData(mainActivity.getSettingsPath());
+							}	
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
+						//set new blenderPath-------------------------------------------
+
+						p.println("blender new");
+					}
 				}
+				if (newSheepitVersion.exists()) {
+					p.println("exists",localBlenderVersion);
+					//p.println(localBlenderVersion.exists(), localBlenderVersion.getAbsolutePath());
+					if (localSheepitVersion==null || !localSheepitVersion.exists() || !localSheepitVersion.getName().toString().equals(newSheepitVersion.getName().toString())) {
+						if(localSheepitVersion!=null && localSheepitVersion.exists()) {
+							new File(localSheepitVersion.getAbsolutePath()).delete();
+						}
+						fileInteractionHelper.copyFile(newSheepitVersion.getAbsolutePath(), mainActivity.getLocalProgrammPath() + "\\" + newSheepitVersion.getName());
+						p.println("sheepit new");
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			// check for new software ----------------------------------------------------
-			
+
 			lastLogTime = curTime;
 		}
 		if (curTime - prevTime1 > mainActivity.getSuperShortTimeIntervall()) {
@@ -217,14 +251,14 @@ public class HomeScreenSlaves {
 				}
 				renderMode = 0;
 			} else {
-				if(!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
+				if (!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
 					renderMode = 0;
-				}else {
+				} else {
 					renderMode = 2;
 				}
 			}
 		} else {
-			if(!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
+			if (!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
 				renderHelper.setFinishAllJobs(true, true);
 			}
 			Boolean startRenderingOnSheepit = sheepitRenderHelper.getStartRenderingOnSheepit(mainActivity.getMasterCommandFilePath());

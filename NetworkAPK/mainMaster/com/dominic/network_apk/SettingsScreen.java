@@ -184,7 +184,7 @@ public class SettingsScreen {
             // handle save button ------------------------------------
 
             if (saveSettings_btn.getIsClicked() == true) {
-                saveData();
+                checkAndSaveData();
                 saveSettings_btn.setIsClicked(false);
             }
             // handle save button ------------------------------------
@@ -205,7 +205,7 @@ public class SettingsScreen {
         }
         masterOrSlave_dropdown.getHoverText().render();
     }
-    public void saveData() {
+    public void checkAndSaveData() {
     	// check if all is set
         Boolean allSet = true;
         JSONObject settingsDetails = new JSONObject();

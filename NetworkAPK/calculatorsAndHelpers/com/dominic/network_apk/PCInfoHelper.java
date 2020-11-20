@@ -90,7 +90,7 @@ public class PCInfoHelper {
     }
     
     public String getReadableTime() {
-        return p.str(p.hour()) + " : " + p.str(p.minute()) + " : " + p.str(p.second());
+        return p.str(p.hour()) + " : " + p.nf(p.minute(),2) + " : " + p.nf(p.second(),2);
     }
 
 }

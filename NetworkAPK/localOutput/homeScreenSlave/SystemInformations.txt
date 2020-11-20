@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 11/20/2020, 00:06:34
+      Time of this report: 11/20/2020, 15:06:01
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 5670MB used, 13057MB available
+                Page File: 6137MB used, 12590MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -520,7 +520,7 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 157.2 GB
+ Free Space: 156.1 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB
@@ -1537,6 +1537,44 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
+Fault bucket 1628469443091644801, type 5
+Event Name: AppHangB1
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.610
+P3: ab30c679
+P4: a63a
+P5: 134217728
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER1 +++:
+Fault bucket , type 0
+Event Name: AppHangB1
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.610
+P3: ab30c679
+P4: a63a
+P5: 134217728
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER2 +++:
 Fault bucket 1452693638392863693, type 5
 Event Name: BEX64
 Response: Not available
@@ -1555,7 +1593,7 @@ P9: 000000000000000a
 P10: 
 
 
-+++ WER1 +++:
++++ WER3 +++:
 Fault bucket , type 0
 Event Name: BEX64
 Response: Not available
@@ -1574,7 +1612,7 @@ P9: 000000000000000a
 P10: 
 
 
-+++ WER2 +++:
++++ WER4 +++:
 Fault bucket 1873304004119921770, type 5
 Event Name: RADAR_PRE_LEAK_64
 Response: Not available
@@ -1593,7 +1631,7 @@ P9:
 P10: 
 
 
-+++ WER3 +++:
++++ WER5 +++:
 Fault bucket 1436477026018957989, type 5
 Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
@@ -1612,46 +1650,8 @@ P9:
 P10: 
 
 
-+++ WER4 +++:
-Fault bucket 1634767365696397709, type 5
-Event Name: crashpad_log
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: MicrosoftEdgeUpdate.exe
-P2: 1.3.137.99
-P3: InstallError
-P4: 0x80040801
-P5: 
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER5 +++:
-Fault bucket , type 0
-Event Name: StoreAgentScanForUpdatesFailure0
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Update;
-P2: 8024402c
-P3: 19041
-P4: 630
-P5: Windows.Desktop
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
 +++ WER6 +++:
-Fault bucket , type 0
+Fault bucket 1634767365696397709, type 5
 Event Name: crashpad_log
 Response: Not available
 Cab Id: 0

@@ -18,11 +18,12 @@ public class FileInteractionHelper {
 	private PApplet p;
 	private PCInfoHelper pcInfoHelper;
 	private MainActivity mainActivity;
-
+	private CommandExecutionHelper commandExecutionHelper;
 	public FileInteractionHelper(PApplet p) {
 		this.p = p;
 		mainActivity = (MainActivity) p;
 		pcInfoHelper = mainActivity.getPcInfoHelper();
+		commandExecutionHelper=mainActivity.getCommandExecutionHelper();
 	}
 
 	public String getAbsolutePath(String relativeFilePath) {
@@ -110,7 +111,11 @@ public class FileInteractionHelper {
 			p.println("cant copy to same path!");
 		}
 	}
-
+	
+	public void batchDeleteFolder(String path) {
+		commandExecutionHelper.executeCommand("rmdir /s/q "+path);
+	}
+	
 	public void deleteFolder(String path) {
 		allInPathsDeleteFolder.clear();
 		allInPathsDeleteFolder.append(path);
@@ -229,6 +234,19 @@ public class FileInteractionHelper {
 	public String cleanupPath(String pathToClean) {
 		String cleanPath = pathToClean.replace("\\\\", "\\");
 		return cleanPath;
+	}
+	
+	public String getPathOfFileInFolder(String folderPath,String fileName) {
+		String filePath="";
+		ArrayList<File> allFilesInFolder=listFilesRecursive(folderPath);
+		for(int i=0;i<allFilesInFolder.size();i++) {
+			File f=allFilesInFolder.get(i);
+			if(f.getName().toString().equals(fileName)) {
+				filePath=f.getAbsolutePath();
+				break;
+			}
+		}
+		return filePath;
 	}
 
 	public Boolean fileLastModifiedInTimeRange(File fileToCheck, int maxTimeRange) {
