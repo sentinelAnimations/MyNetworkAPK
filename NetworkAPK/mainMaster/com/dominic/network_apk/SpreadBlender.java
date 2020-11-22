@@ -74,27 +74,27 @@ public class SpreadBlender {
 			spreadSheepit_ImageButton.render();
 
 			// share blender folder with slaves ---------------------------------
-			String date = p.str(p.year()) + p.nf(p.month(), 2) + p.nf(p.day(), 2)+p.nf(p.hour(), 2)+p.nf(p.minute(), 2);
+			String date = p.str(p.year()) + p.nf(p.month(), 2) + p.nf(p.day(), 2) + p.nf(p.hour(), 2) + p.nf(p.minute(), 2);
 			if (spreadBlender_ImageButton.getIsClicked()) {
-				try {
-					String[] curCloudBlenderFolders = fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), true);
-					if (curCloudBlenderFolders != null && curCloudBlenderFolders.length > 0) {
-						for (int i = 0; i < curCloudBlenderFolders.length; i++) {
-							// mainActivity.getCommandExecutionHelper().executeCommand("rmdir /s/q
-							// "+mainActivity.getProgrammFolderPath()+"\\"+curCloudBlenderFolders[i]);
-							fileInteractionHelper.batchDeleteFolder(mainActivity.getProgrammFolderPath() + "\\" + curCloudBlenderFolders[i]);
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
 				if (spreadBlender_pathSelector.getPath().length() > 0) {
+					try {
+						String[] curCloudBlenderFolders = fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), true);
+						if (curCloudBlenderFolders != null && curCloudBlenderFolders.length > 0) {
+							for (int i = 0; i < curCloudBlenderFolders.length; i++) {
+								fileInteractionHelper.batchDeleteFolder(mainActivity.getProgrammFolderPath() + "\\" + curCloudBlenderFolders[i]);
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
 					String copyToPath = mainActivity.getProgrammFolderPath() + "\\";
 
 					String copyFromPath = spreadBlender_pathSelector.getPath();
 					fileInteractionHelper.copyFolder(copyFromPath, copyToPath);
 					new File(copyToPath + "\\" + fileInteractionHelper.getFoldersAndFiles(copyToPath, true)[0]).renameTo(new File(new File(copyToPath).getAbsolutePath() + "\\newBlenderVersion" + date));
+					
+					
 				}
 				spreadBlender_ImageButton.setIsClicked(false);
 			}
@@ -102,32 +102,39 @@ public class SpreadBlender {
 
 			// share sheepit with slaves ---------------------------------
 			if (spreadSheepit_ImageButton.getIsClicked()) {
-				try {
-					String[] curCloudSheepitFile = fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), false);
-					if (curCloudSheepitFile != null && curCloudSheepitFile.length > 0) {
-						for (int i = 0; i < curCloudSheepitFile.length; i++) {
-							// mainActivity.getCommandExecutionHelper().executeCommand("rmdir /s/q
-							// "+mainActivity.getProgrammFolderPath()+"\\"+curCloudBlenderFolders[i]);
-							new File(mainActivity.getProgrammFolderPath() + "\\" + curCloudSheepitFile[i]).delete();
-							//fileInteractionHelper.batchDeleteFolder(mainActivity.getProgrammFolderPath() + "\\" + curCloudSheepitFile[i]);
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 				if (spreadSheepit_PathSelector.getPath().length() > 0) {
-					/*
-					 * if (copyToPath.charAt(copyToPath.length() - 1) != '\\' ||
-					 * copyToPath.charAt(copyToPath.length() - 1) != '/') { copyToPath += "\\"; }
-					 */
-
+					try {
+						String[] curCloudSheepitFile = fileInteractionHelper.getFoldersAndFiles(mainActivity.getProgrammFolderPath(), false);
+						if (curCloudSheepitFile != null && curCloudSheepitFile.length > 0) {
+							for (int i = 0; i < curCloudSheepitFile.length; i++) {
+								new File(mainActivity.getProgrammFolderPath() + "\\" + curCloudSheepitFile[i]).delete();
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					String fileName="sheepit" + date + ".exe";
 					String copyFromPath = spreadSheepit_PathSelector.getPath();
-					String copyToPath = mainActivity.getProgrammFolderPath() + "\\sheepit" + date + ".exe";
+					String copyToPath = mainActivity.getProgrammFolderPath() +"\\"+fileName;
 					File copyToFile = new File(copyToPath);
 					if (copyToFile.exists()) {
 						copyToFile.delete();
 					}
 					fileInteractionHelper.copyFile(copyFromPath, copyToPath);
+					
+					//copy sheepit to localProgramFolder too ------------------------------
+					try {
+						File localSheepitVersion = new File(mainActivity.getLocalProgrammPath() + "\\" + fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), false)[0]);
+						if(localSheepitVersion.exists()) {
+							localSheepitVersion.delete();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					p.println(copyToPath,mainActivity.getLocalProgrammPath()+"\\"+fileName);
+					fileInteractionHelper.copyFile(copyToPath, mainActivity.getLocalProgrammPath()+"\\"+fileName);
+					//copy sheepit to localProgramFolder too ------------------------------
+					
 				}
 				spreadSheepit_ImageButton.setIsClicked(false);
 			}

@@ -1,12 +1,17 @@
 package com.dominic.network_apk;
 
+import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 
 public class RenderOverview {
 
 	private int mode, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border;
-	private float renderMode; // rendermode --> 0=render files, 0.1=files render settings, 1=render on sheepit
+	private float renderMode; // rendermode --> 0=render files, 0.1=files render settings, 1=render on sheepit,1.1=sheepitSettings
 								// 2=imageView
 	private float textYShift;
 	private Boolean anyFileExplorerIsOpen = false;
@@ -20,7 +25,9 @@ public class RenderOverview {
 	private FilesRenderingScreen filesRenderingScreen;
 	private RenderOnSheepitScreen renderOnSheepitScreen;
 	private ImageViewScreen imageViewScreen;
-
+	private SheepitSettingsScreen sheepitSettingsScreen;
+	private JsonHelper jsonHelper;
+	
 	public RenderOverview(PApplet p, int mode, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int lightest, int textCol, int textDark, int border, int green, int red, int blue, float textYShift, String mySavePath, String[] pictoPaths, String[] hoLiPictoPaths, String[] arrowPaths, String[] fileExplorerPaths, PFont stdFont) {
 		this.mode = mode;
 		this.p = p;
@@ -52,7 +59,8 @@ public class RenderOverview {
 		renderOnSheepitScreen = new RenderOnSheepitScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, red, green, textYShift, rOSPictoPaths, hoLiPictoPaths, stdFont);
 		String[] iVSPictoPaths = { pictoPaths[6], pictoPaths[8] };
 		imageViewScreen = new ImageViewScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, textYShift, iVSPictoPaths, fileExplorerPaths, stdFont);
-
+		sheepitSettingsScreen=new SheepitSettingsScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift,new String[] {pictoPaths[3]}, stdFont);
+		jsonHelper = new JsonHelper(p);
 	}
 
 	public void render() {
@@ -71,6 +79,9 @@ public class RenderOverview {
 		if (renderMode == 0) {
 			filesRenderingScreen.render();
 			imageView_imageButton.render();
+		}
+		if (renderMode == 1.1f) {
+			sheepitSettingsScreen.render();
 		}
 		if (renderMode == 1) {
 			renderOnSheepitScreen.render();
@@ -92,6 +103,9 @@ public class RenderOverview {
 			}
 			if (renderMode == 0) {
 				cancelFileRendering();
+				mainActivity.setMode(1);
+			}
+			if(renderMode==1.1f) {
 				mainActivity.setMode(1);
 			}
 			if (renderMode == 1) {
@@ -125,7 +139,32 @@ public class RenderOverview {
 	public void startSheepit() {
 
 	}
-
+    public void saveHardwareToUse(ArrayList<Node> allConnectedNodes) {
+    	//save and create hardwareToUseArray------------------------------
+		JSONArray hardwareToUseArray = new JSONArray();
+		for (int i = 0; i < allConnectedNodes.size(); i++) {
+			Node n=allConnectedNodes.get(i);
+			JSONObject hardwareDetails = new JSONObject();
+			String curPCName=n.getPcSelection_DropdownMenu().getSelectedItem();
+			Boolean useCpu=false,useGPU=false;
+			Boolean[] hwToUse=mainActivity.getHardwareToRenderWith(curPCName,false);
+			if(hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked()) {
+				useCpu=true;
+			}
+			if(hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked()) {
+				useGPU=true;
+			}
+			hardwareDetails.put("useCPU", p.str(useCpu));
+			hardwareDetails.put("useGPU", p.str(useGPU));
+			hardwareDetails.put("pcName", curPCName);
+			
+			hardwareToUseArray.add(hardwareDetails);
+		}
+		jsonHelper.clearArray();
+		jsonHelper.setArray(hardwareToUseArray);
+		jsonHelper.writeData(mainActivity.getHardwareToUseFilePath());
+		//save and create hardwareToUseArray------------------------------
+    }
 	private void cancelFileRendering() {
 		filesRenderingScreen.setIsRendering(false);
 	}
@@ -137,6 +176,9 @@ public class RenderOverview {
 		if (renderMode == 0) {
 			filesRenderingScreen.onMousePressed(mouseButton);
 			imageView_imageButton.onMousePressed();
+		}
+		if(renderMode==1.1f) {
+			sheepitSettingsScreen.onMousePressed(mouseButton);
 		}
 		if (renderMode == 1) {
 			renderOnSheepitScreen.onMousePressed(mouseButton);
@@ -158,6 +200,9 @@ public class RenderOverview {
 			filesRenderingScreen.onMouseReleased(mouseButton);
 			imageView_imageButton.onMouseReleased();
 		}
+		if(renderMode==1.1f) {
+			sheepitSettingsScreen.onMouseReleased(mouseButton);
+		}
 		if (renderMode == 1) {
 			renderOnSheepitScreen.onMouseReleased(mouseButton);
 		}
@@ -176,6 +221,9 @@ public class RenderOverview {
 		if (renderMode == 0) {
 			filesRenderingScreen.onKeyPressed(key);
 		}
+		if(renderMode==1.1f) {
+			sheepitSettingsScreen.onKeyPressed(key);
+		}
 		if (renderMode == 1) {
 			renderOnSheepitScreen.onKeyPressed(key);
 		}
@@ -191,6 +239,9 @@ public class RenderOverview {
 		}
 		if (renderMode == 0) {
 			filesRenderingScreen.onKeyReleased(key);
+		}
+		if(renderMode==1.1f) {
+			sheepitSettingsScreen.onKeyReleased(key);
 		}
 		if (renderMode == 1) {
 			renderOnSheepitScreen.onKeyReleased(key);

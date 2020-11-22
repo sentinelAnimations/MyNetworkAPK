@@ -74,6 +74,7 @@ public class MainActivity extends PApplet {
 	// Local -----------
 	// File names -------
 	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json", relativeMasterRenderJobsStatusFilePath = "MasterCommands\\MasterRenderJobsStatus.json", hardwareToUseFilePath = "MasterCommands\\hardwareToUse.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
+	private String sheepitSettingsFileName="sheepitSettings.json";
 	// File names -------
 
 	// shared ----------
@@ -107,7 +108,7 @@ public class MainActivity extends PApplet {
 	// images--------------------------------------------------
 
 	// Threads--------------------------
-	private Thread getSpecInfoThread,backgroundTaskThread;
+	private Thread getSpecInfoThread, backgroundTaskThread;
 	// Threads--------------------------
 
 	// Classes--------------------------------------------------
@@ -444,10 +445,10 @@ public class MainActivity extends PApplet {
 				// log ---------------------
 				homeScreenSlaves.calcBackgroundTasks();
 
-				 backgroundTaskThread = new Thread(new Runnable() {
+				backgroundTaskThread = new Thread(new Runnable() {
 					@Override
 					public void run() {
-							homeScreenSlaves.checkForNewSoftware();
+						homeScreenSlaves.checkForNewSoftware();
 					}
 				});
 				backgroundTaskThread.start();
@@ -937,6 +938,9 @@ public class MainActivity extends PApplet {
 	public String getSettingsPath() {
 		return mySettingsPath;
 	}
+	public String getSheepitSettingsPath() {
+		return new File(getMasterCommandFilePath()).getParentFile().getAbsolutePath()+"\\"+sheepitSettingsFileName;
+	}
 
 	public String[] getModeNamesMaster() {
 		return modeNamesMaster;
@@ -1046,26 +1050,9 @@ public class MainActivity extends PApplet {
 		return getPathToCloud() + "\\programms";
 	}
 
-	public Boolean[] getHardwareToRenderWith(String pcNameStr) {
+	public Boolean[] getHardwareToRenderWith(String pcNameStr, Boolean fromJson) {
 		Boolean[] renderHardware = new Boolean[2]; // 0=useCpu?, 1=useGpu?
-		if (isMaster) {
-			Node foundNode = null;
-			for (int i = 0; i < nodeEditor.getAllConnectedNodes().size(); i++) {
-				Node n = (Node) nodeEditor.getAllConnectedNodes().get(i);
-				if (n.getPcSelection_DropdownMenu().getSelectedItem().toUpperCase().equals(pcNameStr.toUpperCase())) {
-					foundNode = n;
-					break;
-				}
-			}
-			if (foundNode != null) {
-				renderHardware[0] = foundNode.getCheckoxes()[0].getIsChecked();
-				renderHardware[1] = foundNode.getCheckoxes()[1].getIsChecked();
-
-			} else {
-				renderHardware[0] = false;
-				renderHardware[1] = false;
-			}
-		} else {
+		if (fromJson) {
 			println(getHardwareToUseFilePath());
 			println(getMasterCommandFilePath());
 			JSONArray loadedSettingsData = jsonHelper.getData(getHardwareToUseFilePath());
@@ -1086,6 +1073,23 @@ public class MainActivity extends PApplet {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		} else {
+			Node foundNode = null;
+			for (int i = 0; i < nodeEditor.getAllConnectedNodes().size(); i++) {
+				Node n = (Node) nodeEditor.getAllConnectedNodes().get(i);
+				if (n.getPcSelection_DropdownMenu().getSelectedItem().toUpperCase().equals(pcNameStr.toUpperCase())) {
+					foundNode = n;
+					break;
+				}
+			}
+			if (foundNode != null) {
+				renderHardware[0] = foundNode.getCheckoxes()[0].getIsChecked();
+				renderHardware[1] = foundNode.getCheckoxes()[1].getIsChecked();
+
+			} else {
+				renderHardware[0] = false;
+				renderHardware[1] = false;
 			}
 		}
 		return renderHardware;

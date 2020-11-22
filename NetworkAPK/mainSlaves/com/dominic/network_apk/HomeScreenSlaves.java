@@ -29,7 +29,7 @@ public class HomeScreenSlaves {
 	private int renderMode; // rendermode --> 0=render files, 1=render on
 							// sheepit,2=sleeping
 	private float textYShift;
-	private Boolean allWorking = true,copying=false;
+	private Boolean allWorking = true, copying = false;
 	private String pathToCloud, pcAlias, pcFolderName, cpuName = "", gpuName = "";
 	private String[] pictoPaths;
 	private long curTime, prevLastModified, lastLogTime = 0, lastLogTime2 = 0, prevTime1;
@@ -189,7 +189,7 @@ public class HomeScreenSlaves {
 					// p.println(localBlenderVersion.exists(),
 					// localBlenderVersion.getAbsolutePath());
 					if (localBlenderVersion == null || !localBlenderVersion.exists() || !localBlenderVersion.getName().toString().equals(newBlenderVersion.getName().toString())) {
-						copying=true;
+						copying = true;
 						if (localBlenderVersion != null && localBlenderVersion.exists()) {
 							p.println("delete local");
 							fileInteractionHelper.batchDeleteFolder(localBlenderVersion.getAbsolutePath());
@@ -213,7 +213,7 @@ public class HomeScreenSlaves {
 								jsonHelper.writeData(mainActivity.getSettingsPath());
 								p.println("now written");
 								mainActivity.getSettingsScreen().setData();
-								copying=false;
+								copying = false;
 								p.println("now set");
 							}
 						} catch (Exception e) {
@@ -252,7 +252,7 @@ public class HomeScreenSlaves {
 		Boolean startRendering = renderHelper.getStartRenderingFromJson();
 		if (startRendering) {
 			if (!renderHelper.getAllJobsStarted() && (renderHelper.getCpuFinished() || renderHelper.getGpuFinished())) {
-				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName());
+				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(),true);
 				p.println("hw to use");
 				p.println(hwToUse);
 				p.println(renderHelper.getCpuFinished());
@@ -276,8 +276,19 @@ public class HomeScreenSlaves {
 			}
 			Boolean startRenderingOnSheepit = sheepitRenderHelper.getStartRenderingOnSheepit(mainActivity.getMasterCommandFilePath());
 			if (startRenderingOnSheepit) {
-				renderMode = 1;
+				if (!sheepitRenderHelper.getIsRendering()) {
+					String sheepitPath = sheepitRenderHelper.getSheepitExePath();
+					if (sheepitPath.length() > 0) {
+						sheepitRenderHelper.startRenderingOnSheepit(sheepitPath);
+						renderMode = 1;
+					} else {
+						renderMode = 2;
+					}
+				}
 			} else {
+				if (sheepitRenderHelper.getIsRendering()) {
+					sheepitRenderHelper.finishRenderingOnSheepit();
+				}
 				renderMode = 2;
 			}
 		}

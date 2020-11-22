@@ -2,6 +2,9 @@ package com.dominic.network_apk;
 
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -22,7 +25,6 @@ public class RenderOnSheepitScreen {
     private PictogramImage[] allPCPictos;
     private ArrayList<Node> allConnectedNodes = new ArrayList<>();
     private SheepitRenderHelper sheepitRenderHelper;
-    
     public RenderOnSheepitScreen(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int textCol, int textDark, int border, int red, int green, float textYShift, String[] pictoPaths, String[] hoLiPictoPaths, PFont stdFont) {
         this.p = p;
         this.stdTs = stdTs;
@@ -47,7 +49,6 @@ public class RenderOnSheepitScreen {
         mainActivity = (MainActivity) p;
         
         sheepitRenderHelper=new SheepitRenderHelper(p);
-        
         //setupAll();
 
     }
@@ -141,6 +142,8 @@ public class RenderOnSheepitScreen {
 
         }
     }
+    
+
 
     public void onMousePressed(int mouseButton) {
         allPCs_HorizontalList.onMousePressed();
@@ -189,8 +192,10 @@ public class RenderOnSheepitScreen {
             allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
         }
         
+        
+		mainActivity.getRenderOverview().saveHardwareToUse(allConnectedNodes);
         sheepitRenderHelper.setStartRenderingOnSheepit(true);
-        sheepitRenderHelper.startRenderingOnSheepit();
+        sheepitRenderHelper.startRenderingOnSheepit(sheepitRenderHelper.getSheepitExePath());
     }
     
     public SheepitRenderHelper getSheepitRenderHelper() {

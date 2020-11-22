@@ -467,31 +467,7 @@ public class FilesRenderingScreen {
 			jsonHelper.writeData(mainActivity.getMasterRenderJobsStatusFilePath());
 			// save and create renderJobStatusArray--------------------------------------
 			
-			//save and create hardwareToUseArray------------------------------
-			JSONArray hardwareToUseArray = new JSONArray();
-			for (int i = 0; i < allConnectedNodes.size(); i++) {
-				Node n=allConnectedNodes.get(i);
-				JSONObject hardwareDetails = new JSONObject();
-				String curPCName=n.getPcSelection_DropdownMenu().getSelectedItem();
-				Boolean useCpu=false,useGPU=false;
-				Boolean[] hwToUse=mainActivity.getHardwareToRenderWith(curPCName);
-				if(hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked()) {
-					useCpu=true;
-				}
-				if(hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked()) {
-					useGPU=true;
-				}
-				hardwareDetails.put("useCPU", p.str(useCpu));
-				hardwareDetails.put("useGPU", p.str(useGPU));
-				hardwareDetails.put("pcName", curPCName);
-				
-				hardwareToUseArray.add(hardwareDetails);
-			}
-			jsonHelper.clearArray();
-			jsonHelper.setArray(hardwareToUseArray);
-			jsonHelper.writeData(mainActivity.getHardwareToUseFilePath());
-			//save and create hardwareToUseArray------------------------------
-
+			mainActivity.getRenderOverview().saveHardwareToUse(allConnectedNodes);
 			
 			renderFiles();
 		}
@@ -515,7 +491,7 @@ public class FilesRenderingScreen {
 		} else {
 			if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) {
 				if (!renderHelper.getAllJobsStarted()) {
-					Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName());
+					Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(),false);
 
 					if (hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked() && renderHelper.getCpuFinished()) {
 						renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
