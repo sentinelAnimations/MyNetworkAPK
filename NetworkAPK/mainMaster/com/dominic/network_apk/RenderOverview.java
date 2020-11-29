@@ -139,6 +139,7 @@ public class RenderOverview {
 	public void startSheepit() {
 
 	}
+	
     public void saveHardwareToUse(ArrayList<Node> allConnectedNodes) {
     	//save and create hardwareToUseArray------------------------------
 		JSONArray hardwareToUseArray = new JSONArray();
@@ -276,7 +277,7 @@ public class RenderOverview {
 	public ImageButton getImageViewImageButton() {
 		return imageView_imageButton;
 	}
-
+	
 	public FilesSettingsScreen getRenderFilesSettings() {
 		return filesSettingsScreen;
 	}
@@ -284,7 +285,9 @@ public class RenderOverview {
 	public FilesRenderingScreen getFilesRenderingScreen() {
 		return filesRenderingScreen;
 	}
-
+	public SheepitSettingsScreen getSheepitSettingsScreen() {
+		return sheepitSettingsScreen;
+	}
 	public RenderOnSheepitScreen getRenderOnSheepitScreen() {
 		return renderOnSheepitScreen;
 	}

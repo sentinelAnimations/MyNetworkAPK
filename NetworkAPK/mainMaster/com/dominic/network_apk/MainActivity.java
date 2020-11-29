@@ -413,6 +413,7 @@ public class MainActivity extends PApplet {
 				// log ---------------------
 
 				if (mode != prevMode && prevMode == getStrengthTestScreen().getMode()) {
+					println("now"); 
 					// strengthTestHelper.checkForStrengthTestCommands(cpuNameMaster, gpuNameMaster,
 					// getSpecInfoThread);
 					strengthTestHelper.stopStrengthTest();
@@ -952,6 +953,9 @@ public class MainActivity extends PApplet {
 
 	public LoadingScreen getLoadingScreen() {
 		return loadingScreen;
+	}
+	public SpreadBlender getSpreadBlenderScreen() {
+		return spreadBlenderScreen;
 	}
 
 	public ImageButton[] getMainButtonsMaster() {

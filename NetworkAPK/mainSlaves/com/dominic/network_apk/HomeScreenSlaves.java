@@ -252,7 +252,7 @@ public class HomeScreenSlaves {
 		Boolean startRendering = renderHelper.getStartRenderingFromJson();
 		if (startRendering) {
 			if (!renderHelper.getAllJobsStarted() && (renderHelper.getCpuFinished() || renderHelper.getGpuFinished())) {
-				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(),true);
+				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(), true);
 				p.println("hw to use");
 				p.println(hwToUse);
 				p.println(renderHelper.getCpuFinished());
@@ -274,13 +274,14 @@ public class HomeScreenSlaves {
 			if (!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
 				renderHelper.setFinishAllJobs(true, true);
 			}
+
 			Boolean startRenderingOnSheepit = sheepitRenderHelper.getStartRenderingOnSheepit(mainActivity.getMasterCommandFilePath());
 			if (startRenderingOnSheepit) {
 				if (!sheepitRenderHelper.getIsRendering()) {
 					String sheepitPath = sheepitRenderHelper.getSheepitExePath();
 					if (sheepitPath.length() > 0) {
 						sheepitRenderHelper.startRenderingOnSheepit(sheepitPath);
-						renderMode = 1;
+
 					} else {
 						renderMode = 2;
 					}
@@ -289,6 +290,15 @@ public class HomeScreenSlaves {
 				if (sheepitRenderHelper.getIsRendering()) {
 					sheepitRenderHelper.finishRenderingOnSheepit();
 				}
+				renderMode = 2;
+			}
+			if (sheepitRenderHelper.getIsRendering()) {
+				if(sheepitRenderHelper.getWindowIsOpen()) {
+				renderMode = 1;
+				}else {
+					renderMode=2;
+				}
+			} else {
 				renderMode = 2;
 			}
 		}

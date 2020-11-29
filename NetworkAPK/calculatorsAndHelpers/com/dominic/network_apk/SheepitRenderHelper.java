@@ -22,20 +22,55 @@ public class SheepitRenderHelper {
 	}
 
 	public String getSheepitExePath() {
-		String path = fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), false)[0];
-		if (path == null) {
-			path = "";
+		String path = "";
+		try {
+			path = mainActivity.getLocalProgrammPath()+"\\"+fileInteractionHelper.getFoldersAndFiles(mainActivity.getLocalProgrammPath(), false)[0];
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 		return path;
 	}
 
 	public void startRenderingOnSheepit(String sheepitExePath) {
 		
-		
-		Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(), true);
-		commandExecutionHelper.executeCommand("");
-		isRendering = true;
-		p.println("started sheepit");
+		JSONArray loadedData = jsonHelper.getData(mainActivity.getSheepitSettingsPath());
+		if (loadedData.isEmpty()) {
+		} else {
+			try {
+				JSONObject settingsObject = (JSONObject) loadedData.get(0);
+				String password = settingsObject.get("password").toString();
+				String username = settingsObject.get("username").toString();
+				
+				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(), true);
+				p.println(hwToUse);
+				for(int i=0;i<hwToUse.length;i++) {
+				p.println(sheepitExePath);
+				if( hwToUse[i]==true) {
+				String commandStr="start "+sheepitExePath+" -compute-method ";
+				if(i==0) {
+					commandStr+="CPU";
+				}
+				if(i==1) {
+					commandStr+="GPU";
+				}
+				commandStr+=" -login "+username+" -password "+password;
+				if(i==1 ) {
+					commandStr+=" -gpu CUDA_0";
+				}
+				
+				commandExecutionHelper.executeCommand(commandStr);
+				isRendering = true;
+				p.println("started sheepit"+commandStr);
+				}
+			}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	public void finishRenderingOnSheepit() {
@@ -84,5 +119,10 @@ public class SheepitRenderHelper {
 
 	public Boolean getIsRendering() {
 		return isRendering;
+	}
+	public Boolean getWindowIsOpen() {
+		Boolean isOpen=false;
+		isOpen=commandExecutionHelper.isWindowOpenSimple("Sheep*");
+		return isOpen;
 	}
 }

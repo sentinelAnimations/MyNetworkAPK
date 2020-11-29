@@ -146,4 +146,19 @@ public class CommandExecutionHelper {
 
 		return isOpen;
 	}
+	public Boolean isWindowOpenSimple(String windowtitle) {
+		Boolean isOpen=false;
+		File logFile=new File(mainActivity.getOpenCheckPath()+"\\opencheckSimple.txt");
+		executeCommand("tasklist /FI \"windowtitle eq "+windowtitle+"\" >>"+logFile.getAbsolutePath());
+		try {
+			String[] lines = p.loadStrings(logFile.getAbsolutePath());
+			if (lines != null && lines.length > 0 && p.match(lines[0],"INFO")==null) {
+				isOpen = true;
+			}
+			logFile.delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return isOpen;
+	}
 }

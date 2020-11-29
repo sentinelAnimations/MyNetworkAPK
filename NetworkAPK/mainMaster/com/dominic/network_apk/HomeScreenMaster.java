@@ -276,6 +276,7 @@ public class HomeScreenMaster {
 						mainActivity.getRenderOverview().getRenderFilesSettings().getImageSavePath_pathSelector().setPath(mainActivity.getPathToImageFolder(),false);
 					}
 					if (homeSettings_checkboxes[3].getIsChecked()) { // render on sheepit
+						mainActivity.getRenderOverview().getSheepitSettingsScreen().setData();
 						mainActivity.getRenderOverview().setRenderMode(1.1f);
 					}
 

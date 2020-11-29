@@ -59,7 +59,7 @@
       "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
       "posX": 280,
       "posY": 115,
-      "pcStrengthCPU": 0,
+      "pcStrengthCPU": 461,
       "cpuCores": 12,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
       "useCpu_checkbox": true,
@@ -67,7 +67,7 @@
       "selectPc_dropdownItem": "master",
       "selectPc_dropdown": 0,
       "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214",
-      "pcStrengthGPU": 0
+      "pcStrengthGPU": 666
     }
   },
   {

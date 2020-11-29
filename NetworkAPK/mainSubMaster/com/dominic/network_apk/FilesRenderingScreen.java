@@ -484,12 +484,12 @@ public class FilesRenderingScreen {
 				p.println(jsonHelper.getData(mainActivity.getMasterRenderJobsStatusFilePath()));
 				if (isRenderingJson) {
 					p.println("set to false");
-					setIsRendering(false);
+					//setIsRendering(false);
 				}
 				collectImages();
 			}
 		} else {
-			if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) {
+			if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) { //useMaster
 				if (!renderHelper.getAllJobsStarted()) {
 					Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(),false);
 
@@ -500,7 +500,7 @@ public class FilesRenderingScreen {
 						renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
 					}
 					if (!isRenderingJson) {
-						setIsRendering(true);
+						//setIsRendering(true);
 					}
 				}
 			}
@@ -665,7 +665,7 @@ public class FilesRenderingScreen {
 		samples = mainActivity.getRenderOverview().getRenderFilesSettings().getSamples();
 
 		fileInfo_LogBar.setText(getFileInfoOfSelected(allFiles_HorizontalList.getSelectedInd()));
-
+		setIsRendering(true);
 	}
 
 	public void setupAll() {
@@ -744,6 +744,7 @@ public class FilesRenderingScreen {
 				loadedData.set(mode, settingsObject);
 				jsonHelper.setArray(loadedData);
 				jsonHelper.writeData(mainActivity.getMasterCommandFilePath());
+				p.println("now setIsRendering");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

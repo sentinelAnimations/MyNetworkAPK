@@ -195,8 +195,7 @@ public class StrengthTestHelper<T> {
         if (startTestOnGPUThread != null) {
             startTestOnGPUThread.interrupt();
             p.println("interupt: ", startTestOnGPUThread.isAlive());
-        }
-        
+        }  
     }
 
     private Boolean checkIfStrengthTestCPUIsFinished() {

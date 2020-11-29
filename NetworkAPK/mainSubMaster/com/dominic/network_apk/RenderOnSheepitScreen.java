@@ -195,7 +195,9 @@ public class RenderOnSheepitScreen {
         
 		mainActivity.getRenderOverview().saveHardwareToUse(allConnectedNodes);
         sheepitRenderHelper.setStartRenderingOnSheepit(true);
+        if(mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) {//useMaster
         sheepitRenderHelper.startRenderingOnSheepit(sheepitRenderHelper.getSheepitExePath());
+        }
     }
     
     public SheepitRenderHelper getSheepitRenderHelper() {
