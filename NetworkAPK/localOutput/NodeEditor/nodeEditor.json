@@ -1,18 +1,18 @@
 [
   {
     "Node0": {
-      "posX": 623,
+      "posX": 617,
       "connectorPointIsConnectedArray": [
         true,
-        true,
-        true,
+        false,
+        false,
         false,
         true,
         false,
         false,
         false
       ],
-      "posY": 229,
+      "posY": 217,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -41,8 +41,8 @@
   },
   {
     "Node1": {
-      "posX": 909,
-      "posY": 223,
+      "posX": 903,
+      "posY": 211,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -57,9 +57,9 @@
       "useGpu_checkbox": true,
       "nodeType": 2,
       "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
-      "posX": 280,
-      "posY": 115,
-      "pcStrengthCPU": 461,
+      "posX": 266,
+      "posY": 221,
+      "pcStrengthCPU": 0,
       "cpuCores": 12,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
       "useCpu_checkbox": true,
@@ -67,46 +67,6 @@
       "selectPc_dropdownItem": "master",
       "selectPc_dropdown": 0,
       "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214",
-      "pcStrengthGPU": 666
-    }
-  },
-  {
-    "Node3": {
-      "gpuName": "",
-      "connectorPointId": "4b6db0a4-75a5-4d15-b8d1-d8723cbd7a39",
-      "useGpu_checkbox": true,
-      "nodeType": 2,
-      "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
-      "posX": 280,
-      "posY": 299,
-      "pcStrengthCPU": -1,
-      "cpuCores": 12,
-      "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
-      "useCpu_checkbox": false,
-      "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "myMasterPC - Kopie",
-      "selectPc_dropdown": 1,
-      "nodeId": "77c611b7-511e-4916-8060-850d8e8037dc",
-      "pcStrengthGPU": -1
-    }
-  },
-  {
-    "Node4": {
-      "gpuName": "",
-      "connectorPointId": "0726ee82-c31c-4a07-ba4d-70cafe97d948",
-      "useGpu_checkbox": true,
-      "nodeType": 1,
-      "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
-      "posX": 283,
-      "posY": 481,
-      "pcStrengthCPU": 0,
-      "cpuCores": 12,
-      "connectorPointConnectedId": "2e9dc605-e6dd-440e-a96a-afe838a7d123",
-      "useCpu_checkbox": true,
-      "connectorPointIsConnected": true,
-      "selectPc_dropdownItem": "Slave001 - Copy",
-      "selectPc_dropdown": 2,
-      "nodeId": "0a3a1719-783f-454c-bc0f-924d804738b7",
       "pcStrengthGPU": 0
     }
   }
