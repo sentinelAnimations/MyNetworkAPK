@@ -146,6 +146,7 @@ public class CommandExecutionHelper {
 
 		return isOpen;
 	}
+	
 	public Boolean isWindowOpenSimple(String windowtitle) {
 		Boolean isOpen=false;
 		File logFile=new File(mainActivity.getOpenCheckPath()+"\\opencheckSimple.txt");

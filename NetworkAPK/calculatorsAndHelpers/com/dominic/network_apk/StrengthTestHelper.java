@@ -278,7 +278,8 @@ public class StrengthTestHelper<T> {
         Boolean copiedFiles = true, blendFileCopied = false, randomSeedCopied = false, forceGPURenderingCopied = false;
 
         String relativeFilePathBlendfile = "/blendFiles/strengthTest.blend";
-        String copyFromPathBlendfile = getClass().getResource(relativeFilePathBlendfile).getPath().toString();
+        //String copyFromPathBlendfile = getClass().getResource(relativeFilePathBlendfile).getPath().toString();
+        String copyFromPathBlendfile=relativeFilePathBlendfile;
         ressourceBlendFile = new File(copyFromPathBlendfile);
         String destinationBlendfile = fileInteractionHelper.getAbsolutePath(mainActivity.getStrengthTestBlendfilePath()) + "\\" + ressourceBlendFile.getName();
         if (deleteResultsFolder) {
@@ -288,14 +289,16 @@ public class StrengthTestHelper<T> {
         blendFile = new File(destinationBlendfile);
 
         String relativeFilePathRandomSeed = "/pythonScripts/randomSeed.py";
-        String copyFromPathRandomSeed = getClass().getResource(relativeFilePathRandomSeed).getPath().toString();
+        //String copyFromPathRandomSeed = getClass().getResource(relativeFilePathRandomSeed).getPath().toString();
+        String copyFromPathRandomSeed=relativeFilePathRandomSeed;
         ressourceRandomSeed = new File(copyFromPathRandomSeed);
         String destinationRandomSeed = fileInteractionHelper.getAbsolutePath(mainActivity.getStrengthTestBlendfilePath()) + "\\" + ressourceRandomSeed.getName();
         randomSeedCopied = fileInteractionHelper.copyFile(copyFromPathRandomSeed, destinationRandomSeed);
         randomSeedFile = new File(destinationRandomSeed);
 
         String relativeFileForceGPURendering = "/pythonScripts/forceGPURendering.py";
-        String copyFromPathForceGPURendering = getClass().getResource(relativeFileForceGPURendering).getPath().toString();
+       // String copyFromPathForceGPURendering = getClass().getResource(relativeFileForceGPURendering).getPath().toString();
+        String copyFromPathForceGPURendering=relativeFileForceGPURendering;
         ressourceForceGPURendering = new File(copyFromPathForceGPURendering);
         String destinationForceGPURendering = fileInteractionHelper.getAbsolutePath(mainActivity.getStrengthTestBlendfilePath()) + "\\" + ressourceForceGPURendering.getName();
         forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, destinationForceGPURendering);

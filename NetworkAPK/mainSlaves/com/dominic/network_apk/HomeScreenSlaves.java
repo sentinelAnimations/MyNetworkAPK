@@ -25,7 +25,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 public class HomeScreenSlaves {
-	private int mode, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, cpuCores = 0;
+	private int mode, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, red, green, cpuCores = 0, checkIterations = 0;
 	private int renderMode; // rendermode --> 0=render files, 1=render on
 							// sheepit,2=sleeping
 	private float textYShift;
@@ -40,7 +40,6 @@ public class HomeScreenSlaves {
 	private MainActivity mainActivity;
 	private PictogramImage fileRendering_PictogramImage, sheepitRendering_PictogramImage, sleeping_PictogramImage;
 	private TimeField timeField;
-	private StrengthTestHelper strengthTestHelper;
 	private JsonHelper jsonHelper;
 	private PCInfoHelper pcInfoHelper;
 	private FileInteractionHelper fileInteractionHelper;
@@ -75,7 +74,6 @@ public class HomeScreenSlaves {
 		pcInfoHelper = new PCInfoHelper(p);
 		fileInteractionHelper = new FileInteractionHelper(p);
 		commandExecutionHelper = new CommandExecutionHelper(p);
-		strengthTestHelper = new StrengthTestHelper(p, "logData", this);
 		renderHelper = new RenderHelper(p);
 		sheepitRenderHelper = new SheepitRenderHelper(p);
 		if (mainActivity.getIsMaster()) {
@@ -161,9 +159,8 @@ public class HomeScreenSlaves {
 		}
 
 		File cmdFile = new File(mainActivity.getMasterCommandFilePath());
-		if (strengthTestHelper.getStrengthTestStatus() == 0 || cmdFile.lastModified() != prevLastModified) {
+		if (cmdFile.lastModified() != prevLastModified) {
 			// checkForCommands();
-			strengthTestHelper.checkForStrengthTestCommands(cpuName, gpuName, getSpecInfoThread);
 			renderFiles();
 			prevLastModified = cmdFile.lastModified();
 		}
@@ -281,7 +278,6 @@ public class HomeScreenSlaves {
 					String sheepitPath = sheepitRenderHelper.getSheepitExePath();
 					if (sheepitPath.length() > 0) {
 						sheepitRenderHelper.startRenderingOnSheepit(sheepitPath);
-
 					} else {
 						renderMode = 2;
 					}
@@ -293,10 +289,20 @@ public class HomeScreenSlaves {
 				renderMode = 2;
 			}
 			if (sheepitRenderHelper.getIsRendering()) {
-				if(sheepitRenderHelper.getWindowIsOpen()) {
-				renderMode = 1;
-				}else {
-					renderMode=2;
+				if (sheepitRenderHelper.getWindowIsOpen()) {
+					renderMode = 1;
+					checkIterations=0;
+				} else {
+					p.println(checkIterations);
+					String sheepitPath = sheepitRenderHelper.getSheepitExePath();
+					if (sheepitPath.length() > 0 && checkIterations > 10) {
+						sheepitRenderHelper.startRenderingOnSheepit(sheepitPath);
+						checkIterations = 0;
+					} else {
+						checkIterations++;
+						renderMode = 2;
+					}
+					renderMode = 2;
 				}
 			} else {
 				renderMode = 2;
@@ -317,19 +323,7 @@ public class HomeScreenSlaves {
 		settingsDetails.put("cpuCores", cpuCores);
 		settingsDetails.put("cpuName", cpuName);
 		settingsDetails.put("gpuName", gpuName);
-		settingsDetails.put("pcStrengthCPU", strengthTestHelper.getStrengthCPU());
-		settingsDetails.put("pcStrengthGPU", strengthTestHelper.getStrengthGPU());
-		if (strengthTestHelper.getFinishedTestingCPU() && strengthTestHelper.getFinishedTestingGPU()) {
-			// p.println("pcStrength: ", pcStrengthCPU, pcStrengthGPU);
-			p.println("pcStrength: ", strengthTestHelper.getStrengthCPU(), strengthTestHelper.getStrengthGPU());
-			strengthTestHelper.setFinishedTestingCPU(false);
-			strengthTestHelper.setFinishedTestingGPU(false);
-			strengthTestHelper.setStrengthTestStatus(1);
-			p.println("now deleting files ---------------------");
-			fileInteractionHelper.deleteFolder(strengthTestHelper.getBlendFile().getParentFile().getAbsolutePath());
-		}
-		settingsDetails.put("strengthTestStatus", strengthTestHelper.getStrengthTestStatus());
-
+		
 		settingsObject.put("SystemLog", settingsDetails);
 
 		String jsonPath = mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
@@ -350,33 +344,7 @@ public class HomeScreenSlaves {
 	}
 
 	private void setData() {
-		try {
-			if (pcAlias.length() > 0) {
-				String jsonPath = mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
-				JSONArray loadedSettingsData = jsonHelper.getData(jsonPath);
-				if (loadedSettingsData.isEmpty()) {
-
-				} else {
-					JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
-					try {
-						int loadedPcStrengthCPU = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("pcStrengthCPU").getAsString());
-						int loadedPcStrengthGPU = Integer.parseInt(jsonObject.getAsJsonObject("SystemLog").get("pcStrengthGPU").getAsString());
-
-						if (loadedPcStrengthCPU >= 0) {
-							strengthTestHelper.setStrengthCPU(loadedPcStrengthCPU);
-						}
-						if (loadedPcStrengthGPU >= 0) {
-							strengthTestHelper.setStrengthGPU(loadedPcStrengthGPU);
-						}
-
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
 	}
 
 	public void onMousePressed(int mouseButton) {
@@ -406,10 +374,6 @@ public class HomeScreenSlaves {
 
 	public int getMode() {
 		return mode;
-	}
-
-	public Thread getStartTestOnGPUThread() {
-		return strengthTestHelper.getStartTestOnGPUThread();
 	}
 
 }

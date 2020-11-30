@@ -370,11 +370,13 @@ public class FilesRenderingScreen {
 			allFilesCopyStatus[i] = fileInteractionHelper.copyFile(f.getAbsolutePath(), mainActivity.getPathToBlenderRenderFolder() + "\\" + i + "_" + f.getName());
 		}
 		String relativeFilePathRandomSeed = "/pythonScripts/randomSeed.py";
-		String copyFromPathRandomSeed = getClass().getResource(relativeFilePathRandomSeed).getPath().toString();
+		//String copyFromPathRandomSeed = getClass().getResource(relativeFilePathRandomSeed).getPath().toString();
+		String copyFromPathRandomSeed = relativeFilePathRandomSeed;
 		Boolean randomSeedCopied = fileInteractionHelper.copyFile(copyFromPathRandomSeed, mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py");
 
 		String relativeFileForceGPURendering = "/pythonScripts/forceGPURendering.py";
-		String copyFromPathForceGPURendering = getClass().getResource(relativeFileForceGPURendering).getPath().toString();
+		//String copyFromPathForceGPURendering = getClass().getResource(relativeFileForceGPURendering).getPath().toString();
+		String copyFromPathForceGPURendering=relativeFileForceGPURendering;
 		Boolean forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
 
 		if (randomSeedCopied && forceGPURenderingCopied) {

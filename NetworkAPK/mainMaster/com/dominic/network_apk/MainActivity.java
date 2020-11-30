@@ -64,8 +64,8 @@ public class MainActivity extends PApplet {
 
 	// Strings--------------------------------------------------
 	private String APKName = "InSevenDays© 1.0", APKDescription = "A network solution", cpuNameMaster = "", gpuNameMaster = "";
-	private String[] modeNamesMaster = { "Home", "Node Editor", "Settings", "Share", "Theme", "Strength test", "Questions" };
-	private String[] modeNamesSlaves = { modeNamesMaster[0], modeNamesMaster[2], modeNamesMaster[4], modeNamesMaster[6] };
+	private String[] modeNamesMaster = { "Home", "Node Editor", "Settings", "Share", "Theme", "Questions" };
+	private String[] modeNamesSlaves = { modeNamesMaster[0], modeNamesMaster[2], modeNamesMaster[4], modeNamesMaster[5] };
 
 	// Save paths ----------------------
 	// Local -----------
@@ -74,7 +74,7 @@ public class MainActivity extends PApplet {
 	// Local -----------
 	// File names -------
 	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json", relativeMasterRenderJobsStatusFilePath = "MasterCommands\\MasterRenderJobsStatus.json", hardwareToUseFilePath = "MasterCommands\\hardwareToUse.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
-	private String sheepitSettingsFileName="sheepitSettings.json";
+	private String sheepitSettingsFileName = "sheepitSettings.json";
 	// File names -------
 
 	// shared ----------
@@ -120,7 +120,7 @@ public class MainActivity extends PApplet {
 	private SettingsScreen settingsScreen;
 	private SpreadBlender spreadBlenderScreen;
 	private ThemeScreen themeScreen;
-	private StrengthTestScreen strengthTestScreen;
+	// private StrengthTestScreen strengthTestScreen;
 	private QuestionScreen questionScreen;
 	private RenderOverview renderOverview;
 	// Master ------------------------
@@ -130,7 +130,7 @@ public class MainActivity extends PApplet {
 	// Main classes-------------------------------
 
 	// widgets -----------------------------------
-	private ImageButton[] mainButtonsMaster = new ImageButton[8];
+	private ImageButton[] mainButtonsMaster = new ImageButton[7];
 	private ImageButton[] mainButtonsSlave = new ImageButton[4];
 	// widgets -----------------------------------
 
@@ -213,7 +213,7 @@ public class MainActivity extends PApplet {
 		cpuCoresMaster = pcInfoHelper.getAvailableProcessors();
 		// pc specs ----------------------------------------
 
-		String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "share.png", absPathPictos + "themeSettings.png", absPathPictos + "strength.png", absPathPictos + "questions.png" };
+		String[] p3 = { absPathPictos + "collapse.png", absPathPictos + "home.png", absPathPictos + "nodeEditor.png", absPathPictos + "settings.png", absPathPictos + "share.png", absPathPictos + "themeSettings.png", absPathPictos + "questions.png" };
 		for (int i = 0; i < mainButtonsMaster.length; i++) {
 			String s = "";
 			if (i > 0) {
@@ -250,13 +250,6 @@ public class MainActivity extends PApplet {
 		loadingScreen.setLoadingStatus("Init " + modeNamesMaster[4]);
 		initializeThemeScreen();
 		// variableInitialisation for mode 5 --> Theme screen-------------------
-
-		// variableInitialisation for mode 6 --> Test strength screen-----------
-		loadingScreen.setLoadingStatus("Init " + modeNamesMaster[5]);
-		String[] pp2 = { absPathPictos + "strength.png" };
-		String[] hoLiPictoPathsStrengthTest = { absPathPictos + "masterPC.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
-		strengthTestScreen = new StrengthTestScreen(this, 6, btnSize, btnSizeSmall, margin, stdTs, edgeRad, dark, darkest, light, lighter, lightest, border, textCol, textDark, red, green, textYShift, myStrengthTestPath, pp2, hoLiPictoPathsStrengthTest, stdFont);
-		// variableInitialisation for mode 6 --> Test strength screen-----------
 
 		// variableInitialisation for mode mainButtons.length-1 --> help
 		// screen-------------------
@@ -299,8 +292,6 @@ public class MainActivity extends PApplet {
 		Node masterNode = nodeEditor.getMasterNode();
 		if (masterNode != null) {
 			masterNode.checkForSignsOfLife();
-			strengthTestHelper.setStrengthCPU(masterNode.getPCStrengthCPU());
-			strengthTestHelper.setStrengthGPU(masterNode.getPCStrengthGPU());
 		}
 	}
 
@@ -320,7 +311,7 @@ public class MainActivity extends PApplet {
 	public void initializeSettingsScreen() {
 		String[] p1 = { absPathPictos + "masterOrSlave.png", absPathPictos + "blenderExeFolder.png", absPathPictos + "imageFolder.png", absPathPictos + "pathToCloud.png", absPathPictos + "blendFile.png", absPathPictos + "personalData.png", absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png" };
 		String[] p2 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
-		String[] fsetupPictos = { absPathPictos + "settings.png", absPathPictos + "questions.png" };
+		String[] fsetupPictos = { absPathPictos + "settings.png", absPathPictos + "questions.png",absPathPictos+"cross.png" };
 		settingsScreen = new SettingsScreen(this, 3, btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, border, textYShift, mySettingsPath, p1, p2, fileExplorerPaths, fsetupPictos, stdFont);
 		if (isMaster) {
 			homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles(), true);
@@ -396,14 +387,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.render();
 				}
-				if (mode == 6) {
-					strengthTestScreen.render();
-					File cmdFile = new File(getMasterCommandFilePath());
-					if (strengthTestScreen.getStartedTest() || cmdFile.lastModified() != prevLastModified) {
-						strengthTestHelper.checkForStrengthTestCommands(cpuNameMaster, gpuNameMaster, getSpecInfoThread);
-						prevLastModified = cmdFile.lastModified();
-					}
-				}
+			
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.render();
 				}
@@ -411,14 +395,6 @@ public class MainActivity extends PApplet {
 					renderOverview.render();
 				}
 				// log ---------------------
-
-				if (mode != prevMode && prevMode == getStrengthTestScreen().getMode()) {
-					println("now"); 
-					// strengthTestHelper.checkForStrengthTestCommands(cpuNameMaster, gpuNameMaster,
-					// getSpecInfoThread);
-					strengthTestHelper.stopStrengthTest();
-					getStrengthTestScreen().controllStrengthTest(false);
-				}
 
 				curTime = pcInfoHelper.getCurTime();
 				if (curTime - lastLogTime > getStdTimeIntervall()) {
@@ -510,9 +486,7 @@ public class MainActivity extends PApplet {
 					if (mode == 2) {
 						getSurface().setResizable(true);
 					}
-					if (mode == 6) {
-						strengthTestScreen.setupAll();
-					}
+					
 
 					break;
 				}
@@ -613,9 +587,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.onMousePressed();
 				}
-				if (mode == 6) {
-					strengthTestScreen.onMousePressed(mouseButton);
-				}
+				
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onMousePressed();
 				}
@@ -664,9 +636,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.onMouseReleased();
 				}
-				if (mode == 6) {
-					strengthTestScreen.onMouseReleased(mouseButton);
-				}
+				
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onMouseReleased();
 				}
@@ -718,9 +688,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.onScroll(e);
 				}
-				if (mode == 6) {
-					strengthTestScreen.onScroll(e);
-				}
+				
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onScroll(e);
 				}
@@ -767,9 +735,7 @@ public class MainActivity extends PApplet {
 				}
 				if (mode == 5) {
 				}
-				if (mode == 6) {
-					strengthTestScreen.onKeyPressed(key);
-				}
+				
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onKeyPressed(key);
 				}
@@ -817,9 +783,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.onKeyReleased(key);
 				}
-				if (mode == 6) {
-					strengthTestScreen.onKeyReleased(key);
-				}
+				
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onKeyReleased(key);
 				}
@@ -939,8 +903,9 @@ public class MainActivity extends PApplet {
 	public String getSettingsPath() {
 		return mySettingsPath;
 	}
+
 	public String getSheepitSettingsPath() {
-		return new File(getMasterCommandFilePath()).getParentFile().getAbsolutePath()+"\\"+sheepitSettingsFileName;
+		return new File(getMasterCommandFilePath()).getParentFile().getAbsolutePath() + "\\" + sheepitSettingsFileName;
 	}
 
 	public String[] getModeNamesMaster() {
@@ -954,6 +919,7 @@ public class MainActivity extends PApplet {
 	public LoadingScreen getLoadingScreen() {
 		return loadingScreen;
 	}
+
 	public SpreadBlender getSpreadBlenderScreen() {
 		return spreadBlenderScreen;
 	}
@@ -980,10 +946,6 @@ public class MainActivity extends PApplet {
 
 	public SettingsScreen getSettingsScreen() {
 		return settingsScreen;
-	}
-
-	public StrengthTestScreen getStrengthTestScreen() {
-		return strengthTestScreen;
 	}
 
 	public RenderOverview getRenderOverview() {
@@ -1016,6 +978,8 @@ public class MainActivity extends PApplet {
 
 	public String getRenderPythonScriptsPath() {
 		return getPathToCloud() + "\\" + blenderRenderFilesFolderName + "\\" + relativePathRenderPythonScrips;
+		// return "/pythonScripts";
+
 	}
 
 	public String getRenderLogPathCPU(String pcName) {

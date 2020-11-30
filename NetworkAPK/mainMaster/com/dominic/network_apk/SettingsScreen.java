@@ -25,10 +25,11 @@ public class SettingsScreen {
 	private MainActivity mainActivity;
 	private PictogramImage firstSetupPicto;
 	private PictogramImage[] setting_pictos;
-	public PathSelector[] pathSelectors;
-	public ImageButton saveSettings_btn, firstSetupHelp_btn;
-	public EditText personalData_et;
-	public DropdownMenu masterOrSlave_dropdown;
+	private PathSelector[] pathSelectors;
+	private ImageButton saveSettings_btn, firstSetupHelp_btn;
+	private EditText personalData_et;
+	private DropdownMenu masterOrSlave_dropdown;
+	private TextPopup textPopup;
 	private JsonHelper jHelper;
 	private JSONArray loadedSettingsData = new JSONArray();
 	private ImageButton[] mainButtons;
@@ -69,20 +70,11 @@ public class SettingsScreen {
 
 		int widthScale = 6;
 		int spacing = margin;
-		int widgetW = (p.width - spacing * 2) / widthScale;
+		int widgetW = (p.width - spacing * 2+margin) / widthScale;
 		for (int i = 0; i < setting_pictos.length; i++) {
-			// setting_pictos[i] = new PictogramImage(p, (p.width / widthScale * 4) / 2 +
-			// p.width / 8 * (i), p.height / 2 - btnSize / 2, btnSize, btnSize, margin,
-			// stdTs, edgeRad, textCol, textYShift, false, false, imgPaths[i],
-			// description[i], null);
-			setting_pictos[i] = new PictogramImage(p, spacing + widgetW / 2 + widgetW * i, p.height / 2 - btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, imgPaths[i], description[i], null);
+			setting_pictos[i] = new PictogramImage(p, spacing-margin/2 + widgetW / 2 + widgetW * i, p.height / 2 - btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, imgPaths[i], description[i], null);
 
 			if (i > 0 && i < pathSelectors.length + 1) {
-				// pathSelectors[i - 1] = new PathSelector(p, 0, btnSize, p.width / widthScale -
-				// margin * 2, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border,
-				// light, textCol, dark, light, lighter, textDark, textYShift, selectFolder[i -
-				// 1], true, pathSelectorHints[i - 1], imgPaths[imgPaths.length - 1],
-				// fileExplorerPaths, stdFont, setting_pictos[i]);
 				pathSelectors[i - 1] = new PathSelector(p, 0, btnSize, widgetW - margin, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, selectFolder[i - 1], true, pathSelectorHints[i - 1], imgPaths[imgPaths.length - 1], fileExplorerPaths, stdFont, setting_pictos[i]);
 			}
 		}
@@ -97,6 +89,10 @@ public class SettingsScreen {
 
 		firstSetupPicto = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, firstSetupPictos[0], "First setup page", null);
 		firstSetupHelp_btn = new ImageButton(p, p.width - btnSize / 2 - margin, btnSize / 2 + margin, btnSize, btnSize, stdTs, margin, edgeRad, 8, textYShift, false, false, textCol, textCol, firstSetupPictos[1], "questions and infos | sortcut: ctrl+h", null);
+		
+		int popupY=(int)(setting_pictos[0].getY()-margin + btnSize*1.5f);
+		int popupH=p.height -popupY-margin*2-btnSizeSmall;
+		textPopup = new TextPopup(p, p.width / 2, popupY+popupH/2, p.width-margin*2, popupH, btnSizeSmall, edgeRad, stdTs, margin, light, lighter, textCol, textYShift, false, "textSources/questionScreen_firstSetup.txt", new String[] {firstSetupPictos[firstSetupPictos.length-1]}, stdFont, null);
 
 		jHelper = new JsonHelper(p);
 		fileInteractionHelper = new FileInteractionHelper(p);
@@ -162,7 +158,7 @@ public class SettingsScreen {
 
 			// render edittext before path selectors
 			personalData_et.render();
-
+			textPopup.render();
 			// render edittext before path selectors
 
 			// normal mode
@@ -188,6 +184,13 @@ public class SettingsScreen {
 				saveSettings_btn.setIsClicked(false);
 			}
 			// handle save button ------------------------------------
+
+			// handle questions button-------------------------------
+			if (firstSetupHelp_btn.getIsClicked()) {
+				textPopup.setShowPopup(true);
+				firstSetupHelp_btn.setIsClicked(false);
+			}
+			// handle questions button-------------------------------
 
 		} else {
 
@@ -266,13 +269,7 @@ public class SettingsScreen {
 			jHelper.writeData(mySavePath);
 
 			// successfullySaved = true;
-			if (!mainActivity.getIsMaster()) {
-				try {
-					mainActivity.getHomeScreenSlaves().getStartTestOnGPUThread().interrupt();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+
 			mainActivity.initializeLoadingScreen();
 
 			mainActivity.getLoadingScreen().setIsFirstSetup(false);
@@ -303,34 +300,36 @@ public class SettingsScreen {
 					String t = jsonObject.getAsJsonObject("Settings").get("pathSelector" + i).getAsString();
 					ps.setPath(t, false);
 					if (ps.getPath().length() > 0 == false) {
-						if(i==0) {
-						t = fileInteractionHelper.getPathOfFileInFolder(mainActivity.getLocalProgrammPath(), "blender.exe");
-						ps.setPath(t, false);
+						if (i == 0) {
+							t = fileInteractionHelper.getPathOfFileInFolder(mainActivity.getLocalProgrammPath(), "blender.exe");
+							ps.setPath(t, false);
 						}
 						if (ps.getPath().length() > 0 == false) {
 							allSet = false;
-							p.println("now1");
-							mainActivity.getLoadingScreen().setIsFirstSetup(true);
-							if (mainActivity.getIsMaster()) {
-								mainActivity.setMode(3);
-								p.println("now2");
 
-							} else {
-								mainActivity.setMode(2);
-								p.println("now3");
-							}
 						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-
-			aliasOnStartup = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
-			if (aliasOnStartup.length() > 0) {
-				personalData_et.setText(aliasOnStartup);
-			} else {
+			try {
+				aliasOnStartup = jsonObject.getAsJsonObject("Settings").get("personalData_et").getAsString();
+				if (aliasOnStartup.length() > 0) {
+					personalData_et.setText(aliasOnStartup);
+				}
+			} catch (Exception e) {
 				allSet = false;
+				e.printStackTrace();
+			}
+			if (!allSet) {
+				mainActivity.getLoadingScreen().setIsFirstSetup(true);
+				if (mainActivity.getIsMaster()) {
+					mainActivity.setMode(3);
+
+				} else {
+					mainActivity.setMode(2);
+				}
 			}
 			if (allSet && mainActivity.getLoadingScreen().getInstanciatedClasses()) {
 				mainActivity.getLoadingScreen().setIsFirstSetup(false);
@@ -344,6 +343,7 @@ public class SettingsScreen {
 		if (fileExplorerIsOpen == false) {
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
 				firstSetupHelp_btn.onMousePressed();
+				textPopup.onMousePressed();
 			}
 
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
@@ -372,6 +372,7 @@ public class SettingsScreen {
 		if (fileExplorerIsOpen == false) {
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
 				firstSetupHelp_btn.onMouseReleased();
+				textPopup.onMouseReleased();
 			}
 			p.println(fileExplorerIsOpen);
 			if (mainActivity.getLoadingScreen().getIsFirstSetup() == false) {
@@ -423,7 +424,13 @@ public class SettingsScreen {
 	}
 
 	public void onScroll(float e) {
-		masterOrSlave_dropdown.onScroll(e);
+		if (fileExplorerIsOpen == false) {
+
+			masterOrSlave_dropdown.onScroll(e);
+			if (mainActivity.getLoadingScreen().getIsFirstSetup() == true) {
+				textPopup.onScroll(e);
+			}
+		}
 		for (int i = 0; i < pathSelectors.length; i++) {
 			pathSelectors[i].onScroll(e);
 		}

@@ -185,7 +185,7 @@ public class RenderHelper {
 
 				File forceGPURenderingFile = new File(mainActivity.getPathToBlenderRenderFolder() + "\\job_" + renderJobIndex + "_forceGPURendering.py");
 				if (!forceGPURenderingFile.exists()) {
-					fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py", forceGPURenderingFile.getAbsolutePath());
+					fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "/forceGPURendering.py", forceGPURenderingFile.getAbsolutePath());
 				}
 
 				resultFileCPU = new File(mainActivity.getCloudImageFolder() + "\\" + blendFileName + "\\######");
@@ -315,7 +315,7 @@ public class RenderHelper {
 						File resolutionAndSamplingGPU = resolutionAndSampling;
 						File forceGPURenderingGPU = forceGPURenderingFile;
 						File logGPU = logFileGPU;
-						p.println(resolutionAndSampling.getAbsolutePath(),"---",forceGPURenderingFile.getAbsolutePath());
+						p.println(resolutionAndSampling.getAbsolutePath(), "---", forceGPURenderingFile.getAbsolutePath());
 						handleJson(renderJobIndexGPU, "started", p.str(true), pathToRenderJobsStatus, "GPU");
 
 						lastGPULogFound = pcInfoHelper.getCurTime();
@@ -408,13 +408,13 @@ public class RenderHelper {
 		while (!jsonFile.canWrite()) {
 		}
 		try {
-		   FileOutputStream fos= new FileOutputStream("file.txt");
-		    FileLock fl = fos.getChannel().tryLock();
-		    if(fl != null) {
-		      System.out.println("Locked File");
-		      //Thread.sleep(100);
+			FileOutputStream fos = new FileOutputStream("file.txt");
+			FileLock fl = fos.getChannel().tryLock();
+			if (fl != null) {
+				System.out.println("Locked File");
+				// Thread.sleep(100);
 				p.println("now writing");
-				while(!valueSet) {
+				while (!valueSet) {
 					try {
 						JSONArray array = jHelper.getData(path);
 						JSONObject curObj = (JSONObject) array.get(index);
@@ -435,66 +435,18 @@ public class RenderHelper {
 						e.printStackTrace();
 					}
 					iterations++;
-					if(iterations>500) {
+					if (iterations > 500) {
 						break;
 					}
-				}
-		      fl.release();
-		      System.out.println("Released Lock");
-		    }
-		    fos.close();
-	}catch(Exception e) {
-	e.printStackTrace();	
-	}
-		/*try {
-			FileOutputStream fos = new FileOutputStream(path);
-			FileLock fl = fos.getChannel().tryLock();
-			if (fl != null) {
-				System.out.println("Locked File");
-				// Thread.sleep(100);
-				try {
-					JSONArray array = jHelper.getData(path);
-					JSONObject curObj = (JSONObject) array.get(index);
-					if (array.size() > 0) {
-						jHelper.clearArray();
-						if (key.equals("started")) {
-							curObj.put("startedBy", mainActivity.getPCName());
-							curObj.put("hardware", cpuOrGpuStr);
-						}
-						p.println(index, key, value, cpuOrGpuStr);
-						curObj.put(key, value);
-						array.set(index, curObj);
-						jHelper.setArray(array);
-						jHelper.writeData(path);
-						valueSet = true;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 				fl.release();
 				System.out.println("Released Lock");
 			}
 			fos.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
-		}*/
-
+		}
 	}
-
-	/*
-	 * private void handleJson(int index, String key, String value, String path,
-	 * String cpuOrGpuStr) { Boolean valueSet = false; int iterations = 0;
-	 * JsonHelper jHelper = new JsonHelper(p); while (!valueSet) { try {
-	 * iterations++; if (iterations > 500) { break; } JSONArray array =
-	 * jHelper.getData(path); JSONObject curObj = (JSONObject) array.get(index); if
-	 * (array.size() > 0) { jHelper.clearArray(); if (key.equals("started")) {
-	 * curObj.put("startedBy", mainActivity.getPCName()); curObj.put("hardware",
-	 * cpuOrGpuStr); } p.println(index, key, value, cpuOrGpuStr); curObj.put(key,
-	 * value); array.set(index, curObj); jHelper.setArray(array);
-	 * jHelper.writeData(path); valueSet = true; } } catch (Exception e) {
-	 * e.printStackTrace(); } } }
-	 */
 
 	private Boolean checkIfJobExists(File fileToCheck, String pathToRenderJobsStatus, int rendJobInd, String cpuOrGpuStr) {
 		Boolean jobExists = false;
@@ -529,12 +481,12 @@ public class RenderHelper {
 		try {
 			int mode;
 			String modeName;
-			if(mainActivity.getIsMaster()) {
-			 mode = mainActivity.getHomeScreenMaster().getMode() - 1;
-			 modeName = mainActivity.getModeNamesMaster()[mode];
-			}else {
-				 mode = mainActivity.getHomeScreenSlaves().getMode() - 1;
-				 modeName = mainActivity.getModeNamesSlaves()[mode];
+			if (mainActivity.getIsMaster()) {
+				mode = mainActivity.getHomeScreenMaster().getMode() - 1;
+				modeName = mainActivity.getModeNamesMaster()[mode];
+			} else {
+				mode = mainActivity.getHomeScreenSlaves().getMode() - 1;
+				modeName = mainActivity.getModeNamesSlaves()[mode];
 			}
 			JSONObject homeObj = (JSONObject) (jsonHelper.getData(mainActivity.getMasterCommandFilePath()).get(mode));
 			JSONObject innerHomeObj = (JSONObject) homeObj.get(modeName);

@@ -28,29 +28,29 @@
   },
   {
     "colorPicker3": {
-      "brightness": 37.0,
+      "brightness": 32.0,
       "index": 3,
-      "pickedCol": -9264992,
-      "pickerPosX": 507.0,
-      "pickerPosY": 227.0
+      "pickedCol": -5395027,
+      "pickerPosX": 524.0,
+      "pickerPosY": 225.0
     }
   },
   {
     "colorPicker4": {
-      "brightness": 0.0,
+      "brightness": 77.0,
       "index": 4,
-      "pickedCol": -6813697,
-      "pickerPosX": 659.0,
-      "pickerPosY": 167.0
+      "pickedCol": -12961222,
+      "pickerPosX": 655.0,
+      "pickerPosY": 225.0
     }
   },
   {
     "colorPicker5": {
-      "brightness": 52.0,
+      "brightness": 100.0,
       "index": 5,
-      "pickedCol": -16489350,
-      "pickerPosX": 730.0,
-      "pickerPosY": 212.0
+      "pickedCol": -16777216,
+      "pickerPosX": 786.0,
+      "pickerPosY": 225.0
     }
   },
   {

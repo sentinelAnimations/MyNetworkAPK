@@ -1,44 +1,192 @@
-Home ScreenSTARTMid: \n
-bliblablu ajskldfjasd. \n
-\n
-Node Editor: \n
-alkdsjafjakdjfkadfj\n
-\n
-Settings Screen: \n
-askdjfaskjfkasdjfaksdjfakf\n
-\n
-Spread Blender Screen: \n
-aksdfjakdfjaklfjaskdfjakdfjakdfj\n
-\n
-Theme Screen: \n
-aksdfjakjfdakldfjakfd\n
-Home Screen: \n
-bliblablu ajskldfjasd. \n
-\n
-Node Editor: \n
-alkdsjafjakdjfkadfj\n
-\n
-Settings Screen: \n
-askdjfaskjfkasdjfaksdjfakfMID\n
-\n
-Spread Blender Screen: \n
-aksdfjakdfjaklfjaskdfjakdfjakdfj\n
-\n
-Theme Screen: \n
-aksdfjakjfdakldfjakfd\n
-Home Screen: \n
-bliblablu ajskldfjasd. \n
-\n
-Node Editor: \n
-alkdsjafjakdjfkadfj\n
-\n
-Settings Screen: \n
-askdjfaskjfkasdjfaksdjfakf\n
-\n
-Spread Blender Screen: \n
-aksdfjakdfjaklfjaskdfjakdfjakdfj\n
-\n
-Theme Screen: \n
-aksdfjakjfdakldfjakfdEND\n
+//// beim letsten wort einer leerzeile und vor zeilenumbrüchen(\n), muss das letzte zeichen ein leerschlag sein
 
-
+\n
+1 Home \n
+\n
+1.1 Files-to-render-list \n
+All files in this list will be rendered (if checkbox three is selected). to add a file, use the file explorer next to checkbox three, to delete one, simply select it in i the list and press "delete" on the keyboard. \n
+\n
+1.1.1 The file explorer \n
+\n
+Unlike to other file explorers these one is constructed in a horizontal way with the reason of better embedment into the rest of the design.
+It consists of multiple rows composited of a description of the row on the left (eg. "Volumes") and a list of objects according to these description on the right (eg. "C:/", "D:/" ...). 
+Every of those lists could be scrolled sidewards. Left mouse click to dive deeper into the filestructure, right mouse click to mark/select a file/folder. \n
+\n
+1.2 Checkboxes \n
+All these settings are overall quick adjustments counting for all selected .blend files. Be aware of the fact, that certain combinations of checkboxes wont work due to logical discrepancies.  \n
+\n
+1.2.1 Render with full force \n
+if this checkbox is selected, The software will use all PCs (which are alive & connected to the output node) to render, including the master. give atention to the node setup. 
+if a pc is connected to the output node, but whether CPU nor GPU is checked the machine logically won't start rendering. \n
+\n
+1.2.2 Render only with slaves \n
+Excludes the master from render activities (pc power could be used for other tasks). \n
+\n
+1.2.3 Render listed .blend files \n
+If checked, selected files will be rendered. \n
+\n
+1.2.4 Render on Sheepit \n
+Render on Sheepit (not files). \n
+\n
+1.2.5/1.2.6 Use GPU/CPU \n
+Choose hardware to render with. Doesn't override settings made in Node editor (Szenario 1: CPU checkbox in homescreen is checked but a pc-node in Node editor is setup not to use CPU, the pc wont render on cpu. 
+Szenario 2: CPU checkbox in homescreen is not checked but a pc-node in Node editor is setup to use CPU, the pc wont render on cpu. \n
+\n
+1.2.7 Render animation \n
+First number = startframe, second number = endframe. \n
+\n
+1.2.8 Render stillframe \n
+choose which single frame should be rendered. \n
+\n
+1.2.9 Use new resolution \n
+Use another resolution than setup in .blend file. \n
+\n
+1.2.10 Sampling \n
+Use anothe samplerate than setup in .blend file. \n
+\n
+1.2.11 Image folder \n
+Use another folder to save results in than setup in settings. \n
+\n
+1.3 Save Home settings \n
+Saves Settings to save time when often rendering with same calibrations. \n
+\n
+1.4 Start rendering Button \n
+Starts rendering files/on Sheepit according to the setup \n
+\n 
+1.4.1 Files Render settings \n
+Same Settings like in Home but file specific (select file in list and make calibrations, select next file...). \n
+\n
+1.4.2 Quit \n
+Leads back to Home and quits render process. \n
+\n
+1.4.3 Save and continue \n
+When all files are setup, continue. \n
+\n
+1.4.3.1 Global progress \n
+The top progress-bar shows the (rendered-images)/(all-images) ratio. \n
+\n
+1.4.3.2 File list \n
+All Files to render. Even now, files could be removed from list --> are excluded from render process. \n
+\n
+1.4.3.3 Rendering PCs \n
+Lists all Connected PCs and their status. \n
+\n
+1.4.3.4 Logbar \n
+Shows the current log of the renderprocess of the PC selected in Render-PC-list. Note the GPU/CPU-switch at the right (switch between gpu/cpu log/progress). \n
+\n
+1.4.3.5 File settings \n
+Shows the file settings of the file selected in the files-to-render-list. \n
+\n
+1.4.3.6 Display stats switch \n
+To guarantee that every quantum available power is used to render and not to show any GUI, the user can switch between more/less power consuming GUIs. \n
+\n
+1.4.3.7 Quit button \n
+Self explanatory \n
+\n
+1.4.3.8 Image view \n
+Use the file explorer to set the path of the image folder you want to discover (by default it is set to the standard image folder) and use the search function to find particular images. 
+Double-click to enlarge Images. Hover over Images to see names. \n
+\n
+\n
+\n
+2. Node Editor \n
+The basic concept of the Node Editor is to setup your Network and to define the desired usage of every single computer in it. All PC-Nodes connected to the output node (direct or indirect (switch)) are used to render. 
+To Connect two nodes, simply grab the connector dots. Nodes could be selected with a right-mouse-click and deleted with keyboard delete. To Move a Node just grab its body. 
+The Node editor is the only one where the size of the Window could be changed to allow a more enjoyable workflow. \n
+\n
+2.1 Nodes\n
+Nodes could be added with the add-node-button (vertical buttons) or with the shortcut ctrl+a. \n
+\n
+2.1.1 Laptop/Server/Master-Node \n
+All these Nodes behave the same way and represent an existing computer in the network which could be selected with the dropdown menu in the head of the node. 
+The use CPU/GPU checkbox determines whether or not the CPU/GPU of these computer should be used. Below the checkboxes are the PC status/specifications apparent. \n
+\n
+2.1.2 Switch-Node \n
+The Switch-Node represents a realworld connection between PCs (Physical or cloud). Name the Switch and setup how many ports it offers.  \n
+\n
+2.1.3 Output Node \n
+The Output-Node sums up all connected GPUs and CPU threads. \n
+\n
+2.2 Buttons \n
+\n
+2.2.1 Delete all nodes button \n
+Self explanatory. \n
+\n
+2.2.2 Reload button \n
+Reloads the last saved setup. \n
+\n
+2.2.3 Add Node button\n
+Self explanatory. \n
+\n
+2.2.4 Center nodes button \n
+Calculates the absolute center of all nodes and places it to the center of the screen. \n
+\n
+2.2.5 Save button \n
+Self explanatory. \n
+\n
+\n
+\n
+3 Settings \n
+\n
+3.1 Master or Slave? \n
+Basically the render network consists of one master-computer which operates as the head and multiple Slave-computers, whose task it is to follow the commands of their master.
+A computer with the APK setup as slave will listen to commands from the one pc setup as master. 
+Those commands are transmitted via a file in the cloud folder one has to choose too in the setup. \n
+\n
+3.2 The blender.exe file \n
+To guarantee the success of the render process, it is indispensable to set the path to the blender.exe file, which could be found in the current blender installation folder. \n
+\n
+3.3 The image folder \n
+Once started rendering, the software will output all rendered PNGs to a sub folder of your chosen cloud folder. After rendering the last frame, the software collects all images
+and saves them to the selected image folder. \n
+\n
+3.4 The cloud folder \n
+As described above, the cloud folder is the connection between all computers belonging to the render network. It is recommended to create a separate cloud folder due to the 
+amount of files which will be generated over time. Name the folder with a recognizable tag like "NetworkAPK" or something similar. \n
+\n
+3.5 The Blenderfile folder \n
+This path tells the software where to search for .blend files. Its only purpose is to optimize the workflow. \n
+\n
+3.6 PC Alias \n
+Every Computer need to be named with a unique tag to operate correctly in the network, to be recognized in the node editor and to create its own data structure. \n
+\n 
+\n
+\n
+4 Share \n
+\n
+4.1 Share blender \n
+If it is time to update all Blender versions an every PC in the network, just use the file explorer to navigate to the blender.exe file and press the Share button at the right. 
+All other PCs will now automatically update their versions. \n
+\n
+4.2 Share SheepIt \n
+Same procedure like in the Share blender passage but select the Sheepit.exe. \n
+\n
+\n
+\n
+5 Theme \n
+\n
+5.1 Colors \n
+Use the dots in the color-circle to chose the color and set its brightness with the slider below. \n
+\n
+5.1.1 Background \n
+Color of the background (main color). \n
+\n
+5.1.2 Layer 1-3 \n
+The more in the foreground a color is, the higher the layer. Eg. Background is dark, to differ from it, 
+the color of a button is set to layer one. If the button is element of another object with the color of layer 1, the button would use the layer 2 color. \n
+\n
+5.1.3 Highlights \n
+All Highlighted/Marked elements. \n
+\n
+5.1.4 Text \n
+Color of the text \n
+\n
+5.1.5 Text Transparent \n
+Appearance of slightly transparent text. \n
+\n  
+5.2 Light/Dark-theme button \n
+Sets the colors to the chosen theme. \n
+\n
+5.3 Restart button \n
+After restarting the application the GUI appears in the new color-theme.\n
+\n

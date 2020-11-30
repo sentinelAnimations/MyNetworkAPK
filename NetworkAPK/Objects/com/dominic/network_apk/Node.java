@@ -14,7 +14,7 @@ import processing.core.PFont;
 
 public class Node<T> {
 
-	private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, startW, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus = 2, pcStrengthCPU = 100, pcStrengthGPU = 100, prevAllFilesInPCFolderSize = -1;
+	private int x, y, dragShiftX, dragShiftY, headY, bodyY, w, h, startW, bodyH, headH, type, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, bgCol, textCol, textDark, lighter, lightest, border, red, doOnce = 0, anzTypes = 5, conS, prevPortCount = 0, cpuCores, pcStatus = 2, prevAllFilesInPCFolderSize = -1;
 	private float textYShift;
 	private Boolean isTypePC = false, mouseIsPressed = false, isGrabbed = true, isSelected = false, isDeleted = false, isCheckedForConnection = false, isReady = true;
 	private String id, cpuText = "CPU cores: 0", gpuText = "GPUs: 0", cpuName = "", gpuName = "";
@@ -181,9 +181,7 @@ public class Node<T> {
 			statusString = pcStatusStrings[pcStatus];
 		}
 		p.text("Status: " + statusString, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 2.5f);
-		p.text("Strength CPU: " + pcStrengthCPU, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 3.5f);
-		p.text("Strength GPU: " + pcStrengthGPU, x - w / 2 + margin, useCpu_checkbox.getY() + useCpu_checkbox.getBoxDim() + margin - stdTs * textYShift + stdTs * 4.5f);
-
+		
 		renderConnector(x + w / 2, bodyY, false, "");
 		output_connectorPoint.render();
 		pcSelection_DropdownMenu.render();
@@ -226,12 +224,7 @@ public class Node<T> {
 					}
 
 					if (pcIsAlive) {
-						try {
-							pcStrengthCPU = Integer.parseInt((jsonObject.getAsJsonObject("SystemLog").get("pcStrengthCPU").getAsString()));
-							pcStrengthGPU = Integer.parseInt((jsonObject.getAsJsonObject("SystemLog").get("pcStrengthGPU").getAsString()));
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						
 						try {
 							String cpuNameLoaded = jsonObject.getAsJsonObject("SystemLog").get("cpuName").getAsString();
 							String gpuNameLoaded = jsonObject.getAsJsonObject("SystemLog").get("gpuName").getAsString();
@@ -756,13 +749,7 @@ public class Node<T> {
 		}
 	}
 
-	public int getPCStrengthCPU() {
-		return pcStrengthCPU;
-	}
-
-	public int getPCStrengthGPU() {
-		return pcStrengthGPU;
-	}
+	
 
 	public int getCPUCores() {
 		return cpuCores;
@@ -801,14 +788,6 @@ public class Node<T> {
 		return type_picto;
 	}
 
-	public void setPCStrengthCPU(int setStrengthCPU) {
-		pcStrengthCPU = setStrengthCPU;
-	}
-
-	public void setPCStrengthGPU(int setStrengthGPU) {
-		pcStrengthGPU = setStrengthGPU;
-	}
-
 	public void setPos(int xp, int yp) {
 		x = xp;
 		y = yp;
@@ -823,8 +802,6 @@ public class Node<T> {
 			type_picto.setCol(textCol);
 		} else {
 			type_picto.setCol(red);
-			pcStrengthCPU = -1;
-			pcStrengthGPU = -1;
 		}
 	}
 

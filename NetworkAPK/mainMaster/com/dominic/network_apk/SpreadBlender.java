@@ -147,6 +147,9 @@ public class SpreadBlender {
 		if (spreadBlender_pathSelector.getFileExplorerIsOpen() == false) {
 			spreadSheepit_PathSelector.render();
 		}
+		if(!spreadBlender_pathSelector.getFileExplorerIsOpen() && !spreadSheepit_PathSelector.getFileExplorerIsOpen()) {
+			spreadBlender_pathSelector.getHoverText().render();
+		}
 	}
 
 	public void onMousePressed(int mouseButton) {

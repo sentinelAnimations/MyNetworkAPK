@@ -1,0 +1,38 @@
+//// beim letsten wort einer leerzeile und vor zeilenumbrüchen(\n), muss das letzte zeichen ein leerschlag sein
+
+1 The file explorer \n
+\n
+Unlike to other file explorers these one is constructed in a horizontal way with the reason of better embedment into the rest of the design.
+It consists of multiple rows composited of a description of the row on the left (eg. "Volumes") and a list of objects according to these description on the right (eg. "C:/", "D:/" ...). 
+Every of those lists could be scrolled sidewards. Left mouse click to dive deeper into the filestructure, right mouse click to mark/select a file/folder. \n
+\n
+2 Master or Slave? \n
+\n
+Basically the render network consists of one master-computer which operates as the head and multiple Slave-computers, whose task it is to follow the commands of their master.
+A computer with the APK setup as slave will listen to commands from the one pc setup as master. 
+Those commands are transmitted via a file in the cloud folder one has to choose too in the setup. \n
+\n
+3 The blender.exe file \n
+\n
+To guarantee the success of the render process, it is indispensable to set the path to the blender.exe file, which could be found in the current blender installation folder. \n
+\n
+4 The image folder \n
+\n
+Once started rendering, the software will output all rendered PNGs to a sub folder of your chosen cloud folder. After rendering the last frame, the software collects all images
+and saves them to the selected image folder. \n
+\n
+5 The cloud folder \n
+\n
+As described above, the cloud folder is the connection between all computers belonging to the render network. It is recommended to create a separate cloud folder due to the 
+amount of files which will be generated over time. Name the folder with a recognizable tag like "NetworkAPK" or something similar. \n
+\n
+6 The Blenderfile folder \n
+\n
+This path tells the software where to search for .blend files. Its only purpose is to optimize the workflow. \n
+\n
+7 PC Alias \n
+\n
+Every Computer need to be named with a unique tag to operate correctly in the network, to be recognized in the node editor and to create its own data structure. \n
+\n 
+
+ 

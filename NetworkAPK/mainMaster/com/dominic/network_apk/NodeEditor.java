@@ -64,7 +64,7 @@ public class NodeEditor<T> {
 		this.p = p;
 
 		nodeW = (int) (btnSize * 4f);
-		nodeH = (int) (btnSize * 3.2f);
+		nodeH = (int) (btnSize * 2.8f);
 		mainActivity = (MainActivity) p;
 		gridSize = btnSizeSmall / 2;
 		if (mainActivity.getIsMaster()) {
@@ -125,7 +125,6 @@ public class NodeEditor<T> {
 
 		renderGrid();
 		if (renderNodeMenu == false) {
-
 			handleNodes();
 		}
 		if (mainActivity.getIsMaster()) {
@@ -143,6 +142,9 @@ public class NodeEditor<T> {
 
 			for (int i = 0; i < nodeEditorButtons.length; i++) {
 				nodeEditorButtons[i].render();
+			}
+			for (int i = 0; i < nodeEditorButtons.length; i++) {
+				nodeEditorButtons[i].getHoverText().render();
 			}
 		}
 
@@ -416,8 +418,6 @@ public class NodeEditor<T> {
 					nodeDetails.put("selectPc_dropdownItem", n.getPcSelection_DropdownMenu().getSelectedItem());
 					nodeDetails.put("useCpu_checkbox", n.getCheckoxes()[0].getIsChecked());
 					nodeDetails.put("useGpu_checkbox", n.getCheckoxes()[1].getIsChecked());
-					nodeDetails.put("pcStrengthCPU", n.getPCStrengthCPU());
-					nodeDetails.put("pcStrengthGPU", n.getPCStrengthGPU());
 					nodeDetails.put("cpuName", n.getCPUName());
 					nodeDetails.put("gpuName", n.getGPUName());
 					nodeDetails.put("cpuCores", n.getCpuCores());
@@ -498,12 +498,6 @@ public class NodeEditor<T> {
 					int yp = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("posY").getAsString()));
 					int selectPc_dropdown = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("selectPc_dropdown").getAsString()));
 					try {
-						pcStrengthCPU = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("pcStrengthCPU").getAsString()));
-						pcStrengthGPU = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("pcStrengthGPU").getAsString()));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					try {
 						cpuCores = Integer.parseInt((jsonObject.getAsJsonObject("Node" + i).get("cpuCores").getAsString()));
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -522,8 +516,6 @@ public class NodeEditor<T> {
 					nodes.add(new Node(p, xp, yp, nodeW, nh, nodeType, edgeRad, margin, stdTs, btnSizeSmall, dark, darkest, light, textCol, textDark, lighter, lightest, border, red, textYShift, nodeId, connectorPointId, nodePaths2, stdFont, this));
 					Node<T> n = nodes.get(nodes.size() - 1);
 
-					n.setPCStrengthCPU(pcStrengthCPU);
-					n.setPCStrengthGPU(pcStrengthGPU);
 					n.setCPUName(cpuName);
 					n.setGPUName(gpuName);
 

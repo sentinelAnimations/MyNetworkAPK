@@ -256,8 +256,8 @@ public class StrengthTestScreen {
 		if (respondingPCs.size() == finishedPCs.size()) {
 			for (int i = 0; i < allConnectedNodes.size(); i++) {
 				Node n = allConnectedNodes.get(i);
-				n.setPCStrengthCPU(allPCStrengthsCPU[i]);
-				n.setPCStrengthGPU(allPCStrengthsGPU[i]);
+				//n.setPCStrengthCPU(allPCStrengthsCPU[i]);
+				//n.setPCStrengthGPU(allPCStrengthsGPU[i]);
 			}
 			controllStrengthTest(false);
 			resetPCStatusInLogFiles(respondingPCs);
@@ -310,8 +310,8 @@ public class StrengthTestScreen {
 
 				allPCStatus[i] = n.getPcStatus();
 				allPCNames[i] = n.getPcSelection_DropdownMenu().getSelectedItem();
-				allPCStrengthsCPU[i] = n.getPCStrengthCPU();
-				allPCStrengthsGPU[i] = n.getPCStrengthGPU();
+				//allPCStrengthsCPU[i] = n.getPCStrengthCPU();
+				//allPCStrengthsGPU[i] = n.getPCStrengthGPU();
 				if (allPCNames[i].length() > 0 == false) {
 					allPCNames[i] = "Name unknown";
 				}

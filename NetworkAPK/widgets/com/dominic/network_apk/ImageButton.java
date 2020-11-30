@@ -66,7 +66,15 @@ public class ImageButton<T> implements Widgets {
 		isPressed = true;
 		if (mouseIsInArea()) {
 			if (onceOnClick == 0) {
-				picto.resize(picto.width - margin, picto.height - margin);
+				int resX=1,resY=1;
+				if(picto.width - margin>0) {
+					resX=picto.width - margin;
+				}
+				if(picto.height - margin>0) {
+					resY=picto.height - margin;
+				}
+				p.println(resX,resY);
+				picto.resize(resX, resY);
 				w -= margin;
 				h -= margin;
 				onceOnClick = 1;
@@ -169,7 +177,11 @@ public class ImageButton<T> implements Widgets {
 			return false;
 		}
 	}
-
+	
+	public HoverText getHoverText() {
+		return hoverText;
+	}
+	
 	public void setIsClicked(Boolean state) {
 		isClicked = state;
 	}

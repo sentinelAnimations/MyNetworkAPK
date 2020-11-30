@@ -1,38 +1,38 @@
 [
   {
     "colorPicker0": {
-      "brightness": 81.0,
+      "brightness": 79.0,
       "index": 0,
-      "pickedCol": -14864336,
-      "pickerPosX": 108.0,
-      "pickerPosY": 226.0
+      "pickedCol": -13290187,
+      "pickerPosX": 131.0,
+      "pickerPosY": 225.0
     }
   },
   {
     "colorPicker1": {
-      "brightness": 71.0,
+      "brightness": 73.0,
       "index": 1,
-      "pickedCol": -13678263,
-      "pickerPosX": 241.0,
+      "pickedCol": -12303292,
+      "pickerPosX": 262.0,
       "pickerPosY": 225.0
     }
   },
   {
     "colorPicker2": {
-      "brightness": 65.0,
+      "brightness": 66.0,
       "index": 2,
-      "pickedCol": -12887719,
-      "pickerPosX": 373.0,
-      "pickerPosY": 224.0
+      "pickedCol": -11119018,
+      "pickerPosX": 393.0,
+      "pickerPosY": 225.0
     }
   },
   {
     "colorPicker3": {
-      "brightness": 55.0,
+      "brightness": 56.0,
       "index": 3,
-      "pickedCol": -11439502,
-      "pickerPosX": 507.0,
-      "pickerPosY": 227.0
+      "pickedCol": -9408400,
+      "pickerPosX": 524.0,
+      "pickerPosY": 225.0
     }
   },
   {
