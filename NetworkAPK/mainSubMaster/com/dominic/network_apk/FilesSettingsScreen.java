@@ -54,9 +54,9 @@ public class FilesSettingsScreen {
 		imageSavePath_pathSelector = new PathSelector(p, p.width / 2, startY + 2 * rowDist, colW, rowH, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, true, false, "select Folder to save Results", pictoPaths[1], fileExplorerPaths, stdFont, null);
 		sampling_counterArea = new CounterArea(p, p.width / 2, startY + 3 * rowDist, colW, rowH, edgeRad, margin, stdTs, 2, 1000000000, 0, light, lighter, textCol, textYShift, false, "Sampling", arrowPaths, stdFont, null);
 		String[] infoTexts = { "Use Resolution", "Render Animation", "renderStillFrame" };
-
+		Boolean[] hasThreeOptions= {false,false,false};
 		for (int i = 0; i < settings_checkboxes.length; i++) {
-			settings_checkboxes[i] = new Checkbox(p, p.width / 2 - colW / 2 + rowH / 2 - margin, startY + 4 * rowDist + i * rowDist, rowH, rowH, rowH, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, false, false, "", infoTexts[i], pictoPaths[0], stdFont, null);
+			settings_checkboxes[i] = new Checkbox(p, p.width / 2 - colW / 2 + rowH / 2 - margin, startY + 4 * rowDist + i * rowDist, rowH, rowH, rowH, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, false, false,hasThreeOptions[i], "", infoTexts[i], stdFont, null);
 		}
 
 		int sfW = (colW - rowH - margin * 2) / 2;
@@ -411,6 +411,7 @@ public class FilesSettingsScreen {
 		settings_checkboxes[0].setIsChecked(mainActivity.getHomeScreenMaster().getCheckboxes()[8].getIsChecked()); // useNewResolution
 		settings_checkboxes[1].setIsChecked(mainActivity.getHomeScreenMaster().getCheckboxes()[6].getIsChecked());// renderAnimation
 		settings_checkboxes[2].setIsChecked(mainActivity.getHomeScreenMaster().getCheckboxes()[7].getIsChecked());// renderStillFrame
+		
 		startFrame_counterArea.setCount(mainActivity.getHomeScreenMaster().getStartFrame_CounterArea().getCount());
 		endFrame_counterArea.setCount(mainActivity.getHomeScreenMaster().getEndFrame_CounterArea().getCount());
 		stillFrame_counterArea.setCount(mainActivity.getHomeScreenMaster().getStillFrame_counterArea().getCount());

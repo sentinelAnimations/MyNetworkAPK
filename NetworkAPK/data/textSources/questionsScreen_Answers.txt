@@ -188,5 +188,5 @@ Appearance of slightly transparent text. \n
 Sets the colors to the chosen theme. \n
 \n
 5.3 Restart button \n
-After restarting the application the GUI appears in the new color-theme.\n
+After restarting the application the GUI appears in the new color-theme. \n
 \n

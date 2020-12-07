@@ -53,6 +53,7 @@ public class HomeScreenMaster {
 		int startX = colDist / 2 + (p.width - homeSettings_checkboxes.length / 2 * colDist) / 2;
 		String[] checkBoxTexts = { "Render with full force", "Render only with slaves", "", "Render on Sheepit", "Use CPU", "Use GPU", "", "", "" };
 		String[] checkBoxHoverTexts = { "", "", "Render listed .blend files", "", "", "", "", "", "Use new Resolution" };
+		Boolean[] hasThreeOptions= {false,false,false,false,false,false,false,false,false};
 		int ys = rowDist;
 		int is = 0;
 		for (int i = 0; i < homeSettings_checkboxes.length; i++) {
@@ -62,7 +63,7 @@ public class HomeScreenMaster {
 					is += 4;
 				}
 			}
-			homeSettings_checkboxes[i] = new Checkbox(p, (int) (startX + colDist * (i - is)), startY + ys, (int) (colDist / 1.5f), btnSizeSmall, btnSizeSmall, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, false, false, checkBoxTexts[i], checkBoxHoverTexts[i], homeScreenPictoPaths[0], stdFont, null);
+			homeSettings_checkboxes[i] = new Checkbox(p, (int) (startX + colDist * (i - is)), startY + ys, (int) (colDist / 1.5f), btnSizeSmall, btnSizeSmall, edgeRad, margin, stdTs, light, light, border, textCol, textYShift, false, false,hasThreeOptions[i], checkBoxTexts[i], checkBoxHoverTexts[i], stdFont, null);
 		}
 		int psW = homeSettings_checkboxes[2].getW() - homeSettings_checkboxes[2].getBoxDim() - margin;
 		fileToRender_pathSelector = new PathSelector(p, -homeSettings_checkboxes[2].getW() / 2 + homeSettings_checkboxes[2].getBoxDim() + margin * 2 + psW / 2, 0, psW, btnSizeSmall, edgeRad, margin, stdTs, btnSizeSmall, border, light, textCol, dark, light, lighter, textDark, textYShift, false, true, "...\\\\File.blend", homeScreenPictoPaths[1], fileExplorerPaths, stdFont, homeSettings_checkboxes[2]);
@@ -311,7 +312,8 @@ public class HomeScreenMaster {
 		JSONObject settingsObj = new JSONObject();
 
 		for (int i = 0; i < homeSettings_checkboxes.length; i++) {
-			settingsObj.put("checkbox" + i, homeSettings_checkboxes[i].getIsChecked());
+			settingsObj.put("checkboxIsChecked" + i, homeSettings_checkboxes[i].getIsChecked());
+			//settingsObj.put("checkboxCheckMode" + i, homeSettings_checkboxes[i].getCheckMode());
 		}
 		settingsObj.put("resX", resX_counterArea.getCount());
 		settingsObj.put("resY", resY_counterArea.getCount());
@@ -320,7 +322,7 @@ public class HomeScreenMaster {
 		settingsObj.put("startFrame", startFrame_counterArea.getCount());
 		settingsObj.put("endFrame", endFrame_counterArea.getCount());
 		settingsObj.put("imageSavePath", imageSavePath_PathSelector.getPath());
-
+		
 		JSONArray fileArray = new JSONArray();
 		for (int i = 0; i < fileSelector_HorizontalList.getList().length; i++) {
 			fileArray.add(fileSelector_HorizontalList.getList()[i]);
@@ -345,7 +347,8 @@ public class HomeScreenMaster {
 			try {
 				settingsObject = (JSONObject) loadedData.get(0);
 				for (int i = 0; i < homeSettings_checkboxes.length; i++) {
-					homeSettings_checkboxes[i].setIsChecked(Boolean.parseBoolean(settingsObject.get("checkbox" + i).toString()));
+					homeSettings_checkboxes[i].setIsChecked(Boolean.parseBoolean(settingsObject.get("checkboxIsChecked" + i).toString()));
+					//homeSettings_checkboxes[i].setCheckMode(Integer.parseInt(settingsObject.get("checkboxCheckMode" + i).toString()));
 				}
 				resX_counterArea.setCount(Integer.parseInt(settingsObject.get("resX").toString()));
 				resY_counterArea.setCount(Integer.parseInt(settingsObject.get("resY").toString()));

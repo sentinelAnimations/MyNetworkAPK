@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 11/30/2020, 22:59:59
+      Time of this report: 12/7/2020, 13:31:13
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 8235MB used, 10492MB available
+                Page File: 7840MB used, 10887MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -456,22 +456,16 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 153.9 GB
+ Free Space: 144.4 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB
 
       Drive: D:
- Free Space: 1084.7 GB
+ Free Space: 1080.9 GB
 Total Space: 2861.5 GB
 File System: NTFS
       Model: WDC WD30EFRX-68EUZN0
-
-      Drive: E:
- Free Space: 201.6 GB
-Total Space: 953.8 GB
-File System: NTFS
-      Model: WD Elements 25A2 USB Device
 
       Drive: F:
  Free Space: 99.8 GB
@@ -1473,14 +1467,14 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
-Fault bucket 2235852357753565420, type 5
+Fault bucket 2155596857590126729, type 5
 Event Name: RADAR_PRE_LEAK_64
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: javaw.exe
-P2: 14.0.1.0
+P1: chrome.exe
+P2: 87.0.4280.88
 P3: 10.0.19041.2.0.0
 P4: 
 P5: 
@@ -1492,17 +1486,17 @@ P10:
 
 
 +++ WER1 +++:
-Fault bucket 1634767365696397709, type 5
-Event Name: crashpad_log
+Fault bucket 1436477026018957989, type 5
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: MicrosoftEdgeUpdate.exe
-P2: 1.3.137.99
-P3: InstallError
-P4: 0x80040801
-P5: 
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
 P6: 
 P7: 
 P8: 
@@ -1512,16 +1506,16 @@ P10:
 
 +++ WER2 +++:
 Fault bucket , type 0
-Event Name: crashpad_log
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: MicrosoftEdgeUpdate.exe
-P2: 1.3.137.99
-P3: InstallError
-P4: 0x80040801
-P5: 
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
 P6: 
 P7: 
 P8: 
@@ -1531,16 +1525,16 @@ P10:
 
 +++ WER3 +++:
 Fault bucket , type 0
-Event Name: crashpad_log
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: MicrosoftEdgeUpdate.exe
-P2: 1.3.137.99
-P3: InstallError
-P4: 0x80040801
-P5: 
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
 P6: 
 P7: 
 P8: 
@@ -1550,16 +1544,16 @@ P10:
 
 +++ WER4 +++:
 Fault bucket , type 0
-Event Name: crashpad_log
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: MicrosoftEdgeUpdate.exe
-P2: 1.3.137.99
-P3: InstallError
-P4: 0x80040801
-P5: 
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
 P6: 
 P7: 
 P8: 
@@ -1568,55 +1562,55 @@ P10:
 
 
 +++ WER5 +++:
-Fault bucket 1556756571571139680, type 5
-Event Name: BEX64
+Fault bucket , type 0
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: SnippingTool.exe
-P2: 10.0.19041.1
-P3: b836827b
-P4: ntdll.dll
-P5: 10.0.19041.610
-P6: e5d7ed5c
-P7: 000000000008b70f
-P8: c0000409
-P9: 000000000000000a
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
+P6: 
+P7: 
+P8: 
+P9: 
 P10: 
 
 
 +++ WER6 +++:
 Fault bucket , type 0
-Event Name: BEX64
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: SnippingTool.exe
-P2: 10.0.19041.1
-P3: b836827b
-P4: ntdll.dll
-P5: 10.0.19041.610
-P6: e5d7ed5c
-P7: 000000000008b70f
-P8: c0000409
-P9: 000000000000000a
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
+P6: 
+P7: 
+P8: 
+P9: 
 P10: 
 
 
 +++ WER7 +++:
-Fault bucket 2077415790440773126, type 5
-Event Name: AppHangB1
+Fault bucket , type 0
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: blender.exe
-P2: 2.9.0.0
-P3: 5f6b092e
-P4: e594
-P5: 134217728
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
 P6: 
 P7: 
 P8: 
@@ -1625,17 +1619,17 @@ P10:
 
 
 +++ WER8 +++:
-Fault bucket , type 0
-Event Name: AppHangB1
+Fault bucket 1436477026018957989, type 5
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: blender.exe
-P2: 2.9.0.0
-P3: 5f6b092e
-P4: e594
-P5: 134217728
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
 P6: 
 P7: 
 P8: 
@@ -1644,21 +1638,21 @@ P10:
 
 
 +++ WER9 +++:
-Fault bucket 1435755293987523060, type 5
-Event Name: MoAppCrash
+Fault bucket , type 0
+Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: Microsoft.Windows.Search_1.14.0.19041_neutral_neutral_cw5n1h2txyewy
-P2: praid:CortanaUI
-P3: 10.0.19041.546
-P4: c404ae05
-P5: KERNELBASE.dll
-P6: 10.0.19041.572
-P7: 1183946c
-P8: c0000602
-P9: 000000000010b65c
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
+P6: 
+P7: 
+P8: 
+P9: 
 P10: 
 
 
