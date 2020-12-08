@@ -1,21 +1,21 @@
 [
   {
-    "checkbox0": true,
-    "checkbox1": false,
-    "checkbox2": true,
-    "endFrame": 4,
-    "resY": 400,
-    "resX": 400,
+    "endFrame": 250,
+    "resY": 1080,
+    "resX": 2520,
     "samples": 2,
+    "checkboxIsChecked8": false,
     "startFrame": 0,
+    "checkboxIsChecked6": true,
     "stillFrame": 0,
-    "checkbox3": false,
-    "checkbox4": true,
+    "checkboxIsChecked7": false,
+    "checkboxIsChecked4": true,
+    "checkboxIsChecked5": true,
+    "checkboxIsChecked2": true,
+    "checkboxIsChecked3": false,
+    "checkboxIsChecked0": true,
+    "checkboxIsChecked1": false,
     "imageSavePath": "D:\\algemeine Bilder\\ImageFolderFor_NetworkAPK",
-    "checkbox5": true,
-    "checkbox6": true,
-    "checkbox7": false,
-    "checkbox8": false,
     "fileList": [
       "C:\\blenderFiles\\bakeTest.blend"
     ]

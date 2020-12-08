@@ -260,6 +260,9 @@ public class HomeScreenSlaves {
 					renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
 				}
 				renderMode = 0;
+				if(!hwToUse[0] && !hwToUse[1]) {
+					renderMode=2;
+				}
 			} else {
 				if (!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
 					renderMode = 0;

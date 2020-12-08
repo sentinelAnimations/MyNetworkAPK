@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 12/7/2020, 13:31:13
+      Time of this report: 12/8/2020, 18:04:21
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 7840MB used, 10887MB available
+                Page File: 8584MB used, 10640MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -456,13 +456,13 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 144.4 GB
+ Free Space: 142.8 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB
 
       Drive: D:
- Free Space: 1080.9 GB
+ Free Space: 1080.8 GB
 Total Space: 2861.5 GB
 File System: NTFS
       Model: WDC WD30EFRX-68EUZN0
@@ -1467,6 +1467,44 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
+Fault bucket , type 0
+Event Name: AppHangB1
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: wish.exe
+P2: 8.6.2.10
+P3: 00000000
+P4: 5299
+P5: 134217728
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER1 +++:
+Fault bucket , type 0
+Event Name: AppHangB1
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: blender.exe
+P2: 2.9.0.0
+P3: 5f6b092e
+P4: e309
+P5: 134217728
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER2 +++:
 Fault bucket 2155596857590126729, type 5
 Event Name: RADAR_PRE_LEAK_64
 Response: Not available
@@ -1485,46 +1523,8 @@ P9:
 P10: 
 
 
-+++ WER1 +++:
-Fault bucket 1436477026018957989, type 5
-Event Name: StoreAgentScanForUpdatesFailure0
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Update;
-P2: 8024402c
-P3: 19041
-P4: 630
-P5: Windows.Desktop
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER2 +++:
-Fault bucket , type 0
-Event Name: StoreAgentScanForUpdatesFailure0
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Update;
-P2: 8024402c
-P3: 19041
-P4: 630
-P5: Windows.Desktop
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
 +++ WER3 +++:
-Fault bucket , type 0
+Fault bucket 1436477026018957989, type 5
 Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
@@ -1619,7 +1619,7 @@ P10:
 
 
 +++ WER8 +++:
-Fault bucket 1436477026018957989, type 5
+Fault bucket , type 0
 Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0

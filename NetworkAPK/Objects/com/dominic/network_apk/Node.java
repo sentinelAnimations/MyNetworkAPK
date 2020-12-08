@@ -211,15 +211,16 @@ public class Node<T> {
 		String pcAlias = pcSelection_DropdownMenu.getSelectedItem();
 		try {
 			if (pcAlias.length() > 0) {
-				JSONArray loadedSettingsData = jsonHelper.getData(mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName());
+				File logFile=new File(mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName());
+				JSONArray loadedSettingsData = jsonHelper.getData(logFile.getAbsolutePath());
 				if (loadedSettingsData.isEmpty()) {
 					pcIsAlive = false;
 					calculatedPcStatus = 2;
 				} else {
 					JsonObject jsonObject = new JsonParser().parse(loadedSettingsData.get(0).toString()).getAsJsonObject();
 					long logTime = Long.parseLong(jsonObject.getAsJsonObject("SystemLog").get("logTime").getAsString());
-					// Atention for condition (1!=1 only for testing)
-					if (pcInfoHelper.getCurTime() - logTime > mainActivity.getStdTimeIntervall() && 1 != 1) {
+			
+					if(System.currentTimeMillis()-logFile.lastModified()>mainActivity.getLongTimeIntervall()*1000) {
 						pcIsAlive = false;
 					}
 

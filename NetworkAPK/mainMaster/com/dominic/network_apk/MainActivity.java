@@ -151,6 +151,16 @@ public class MainActivity extends PApplet {
 
 	@Override
 	public void setup() {
+
+		/*
+		 * sortTest --------------------- SortHelper sortHelper=new SortHelper(this);
+		 * int[] si={7,33,7,19,6,25,16,32,6}; println(sortHelper.sort(si.clone(),null,
+		 * 0, si.length-1)); println("finished"); println(si);
+		 * println(sortHelper.sortIntAndGetWeight(si));
+		 * 
+		 * //sortTest ---------------------
+		 */
+
 		pixelDensity(displayDensity());
 		getSurface().setSize((int) stdScreenDimension.x, (int) stdScreenDimension.y);
 		getSurface().setTitle(APKName);
@@ -311,7 +321,7 @@ public class MainActivity extends PApplet {
 	public void initializeSettingsScreen() {
 		String[] p1 = { absPathPictos + "masterOrSlave.png", absPathPictos + "blenderExeFolder.png", absPathPictos + "imageFolder.png", absPathPictos + "pathToCloud.png", absPathPictos + "blendFile.png", absPathPictos + "personalData.png", absPathPictos + "checkmark.png", absPathPictos + "selectFolder.png" };
 		String[] p2 = { absPathPictos + "volume.png", absPathPictos + "folderStructure.png", absPathPictos + "folder.png", absPathPictos + "file.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png", absPathPictos + "rename.png", absPathPictos + "search.png", absPathPictos + "copy.png", absPathPictos + "cutFolder.png", absPathPictos + "pasteFolder.png", absPathPictos + "addFolder.png", absPathPictos + "deleteFolder.png", absPathPictos + "deleteFile.png", absPathPictos + "questions.png", absPathPictos + "cross.png", absPathPictos + "checkmark.png", absPathPictos + "arrowUp.png", absPathPictos + "arrowDown.png" };
-		String[] fsetupPictos = { absPathPictos + "settings.png", absPathPictos + "questions.png",absPathPictos+"cross.png" };
+		String[] fsetupPictos = { absPathPictos + "settings.png", absPathPictos + "questions.png", absPathPictos + "cross.png" };
 		settingsScreen = new SettingsScreen(this, 3, btnSize, btnSizeSmall, stdTs, subtitleTs, margin, edgeRad, textCol, textDark, dark, light, lighter, border, textYShift, mySettingsPath, p1, p2, fileExplorerPaths, fsetupPictos, stdFont);
 		if (isMaster) {
 			homeScreen.getFileToRender_pathSelector().setPath(getPathToBlendFiles(), true);
@@ -387,7 +397,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.render();
 				}
-			
+
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.render();
 				}
@@ -486,7 +496,6 @@ public class MainActivity extends PApplet {
 					if (mode == 2) {
 						getSurface().setResizable(true);
 					}
-					
 
 					break;
 				}
@@ -587,7 +596,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.onMousePressed();
 				}
-				
+
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onMousePressed();
 				}
@@ -636,7 +645,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.onMouseReleased();
 				}
-				
+
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onMouseReleased();
 				}
@@ -688,7 +697,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.onScroll(e);
 				}
-				
+
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onScroll(e);
 				}
@@ -735,7 +744,7 @@ public class MainActivity extends PApplet {
 				}
 				if (mode == 5) {
 				}
-				
+
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onKeyPressed(key);
 				}
@@ -783,7 +792,7 @@ public class MainActivity extends PApplet {
 				if (mode == 5) {
 					themeScreen.onKeyReleased(key);
 				}
-				
+
 				if (mode == mainButtonsMaster.length - 1) {
 					questionScreen.onKeyReleased(key);
 				}

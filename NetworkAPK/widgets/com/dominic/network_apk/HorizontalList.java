@@ -70,6 +70,8 @@ public class HorizontalList<T> implements Widgets {
         if (isParented) {
             getParentPos();
             if (onceOnStartup == 0) {
+            	//goLeft_btn.render();
+            	//goRight_btn.render();
                 goLeft_btn.getParentPos();
                 goRight_btn.getParentPos();
                 startListX = goLeft_btn.getX() + goLeft_btn.getW() / 2.0f + margin;

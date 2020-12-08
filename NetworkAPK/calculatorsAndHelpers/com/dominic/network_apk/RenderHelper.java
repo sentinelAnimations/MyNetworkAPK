@@ -20,6 +20,7 @@ public class RenderHelper {
 	private Boolean cpuFinished = false, gpuFinished = false, allJobsStarted = false, finishCPUJob = false, finishGPUJob = false;
 	private long prevCheckFinishedTime, startTimeCpu, startTimeGpu, lastCPULogFound, lastGPULogFound;
 	private String renderTerminalWindowNameCPU = "renderTerminalCPU", renderTerminalWindowNameGPU = "renderTerminalGPU", blendCommandCPU, blendCommandGPU;
+	private int[] renderedFrames;
 	private PApplet p;
 	private JSONObject renderJob;
 	private JSONArray allRenderJobs;
@@ -74,21 +75,42 @@ public class RenderHelper {
 		return allJobsStarted;
 	}
 
-	public Boolean getAllJobsFinished(String pathToRenderJobsStatus) {
+	public Boolean getAllJobsFinished(String pathToRenderJobsStatus, String[] allPCNames) {
 		Boolean allFinished = true;
 		JSONArray allRenderJobsStatus = jsonHelper.getData(pathToRenderJobsStatus);
-
+		renderedFrames = new int[allPCNames.length];
+		Arrays.fill(renderedFrames,0);
 		for (int i = 0; i < allRenderJobsStatus.size(); i++) {
 			JSONObject curObj = (JSONObject) allRenderJobsStatus.get(i);
-			if (!Boolean.parseBoolean(curObj.get("finished").toString()) || !Boolean.parseBoolean(curObj.get("started").toString())) {
+			Boolean startedJob=Boolean.parseBoolean(curObj.get("started").toString());
+			Boolean finishedJob=Boolean.parseBoolean(curObj.get("finished").toString());
+
+			if (!finishedJob || !startedJob) {
 				allFinished = false;
 				if (i > jobsDone) {
 					jobsDone = i;
 				}
 				break;
 			}
+			if(finishedJob) {
+			for (int i2 = 0; i2 < renderedFrames.length; i2++) {
+				Boolean isEqual = false;
+				try {
+					isEqual = curObj.get("startedBy").toString().equals(allPCNames[i2]);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (isEqual) {
+					renderedFrames[i2] = renderedFrames[i2] + 1;
+				}
+			}
+		}
 		}
 		return allFinished;
+	}
+
+	public int[] getRenderedFrames() {
+		return renderedFrames;
 	}
 
 	private int getNextJob(JSONArray allRenderJobsStatus, String pathToRenderJobsStatus, String cpuOrGPUStr) {
@@ -140,7 +162,7 @@ public class RenderHelper {
 			} else {
 				cpuOrGpuStr = "GPU";
 			}
-			renderJobIndex = getNextJob(jsonHelper.getData(pathToRenderJobsStatus), pathToRenderJobsStatus, cpuOrGpuStr); // to do
+			renderJobIndex = getNextJob(jsonHelper.getData(pathToRenderJobsStatus), pathToRenderJobsStatus, cpuOrGpuStr);
 
 			if (renderJobIndex >= 0) {
 

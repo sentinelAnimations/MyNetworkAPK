@@ -194,7 +194,7 @@ public class HomeScreenMaster {
 					}
 				}
 
-				if (homeSettings_checkboxes[0].getIsChecked() == false && homeSettings_checkboxes[1].getIsChecked() == false) {
+				if ((homeSettings_checkboxes[0].getIsChecked() == false && homeSettings_checkboxes[1].getIsChecked() == false) || (homeSettings_checkboxes[0].getIsChecked() && homeSettings_checkboxes[1].getIsChecked())) {
 					correctlySelected = false;
 					if (errorMessage.length() > 0) {
 						errorMessage += " - ";

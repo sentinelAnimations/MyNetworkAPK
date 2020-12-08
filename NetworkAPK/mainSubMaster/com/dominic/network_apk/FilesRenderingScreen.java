@@ -2,6 +2,7 @@ package com.dominic.network_apk;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,9 +15,9 @@ public class FilesRenderingScreen {
 	private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, btnSizeLarge, dark, light, green, red, blue, lighter, lightest, textCol, textDark, border, prevPCListSelectedInd = -1, onStartup = 0, prevSelectedFileListInd = 0;
 	private float textYShift, alpha;
 	private Boolean collected = false;
+	private long prevTime;
 	private float[] listX, listW, allFiles_listX, allFiles_listW;
 	private Boolean[] renderAnimation, renderStillFrame, useNewResolution, startedRenderingTiles, allFilesCopyStatus, fileIsFinished;
-	private long prevTime;
 	private int[] startFrame, endFrame, stillFrame, resX, resY, samples, allPCStatus; // allPCStatus: 0=prog responding,1=prog is rendering, 2=prog not responding
 	private String[] pictoPaths, hoLiPictoPaths, imageSavePaths;
 	private String[] allPCNames, allLastLogLines, allRenderInfos;
@@ -27,14 +28,15 @@ public class FilesRenderingScreen {
 	private PictogramImage[] allPCPictos;
 	private ArrayList<Node> allConnectedNodes = new ArrayList<>();
 	private Loadingbar[] allPCLoadingbars;
-	private HorizontalList allFiles_HorizontalList, allPCs_HorizontalList;
+	private HorizontalList allFiles_HorizontalList, allPCs_HorizontalList, renderStatistics_HorizontalList;
 	private LogBar logBar, fileInfo_LogBar;
 	private Switch renderGraphics_switch, showGPUOrCpuLog_switch;
-	private PictogramImage rendering_PictogramImage;
+	private PictogramImage rendering_PictogramImage, sleep_PictogramImage;
 	private FileInteractionHelper fileInteractionHelper;
 	private JsonHelper jsonHelper;
 	private RenderHelper renderHelper;
 	private PCInfoHelper pcInfoHelper;
+	private SortHelper sortHelper;
 
 	public FilesRenderingScreen(PApplet p, int stdTs, int edgeRad, int margin, int btnSizeLarge, int btnSize, int btnSizeSmall, int dark, int light, int lighter, int lightest, int textCol, int textDark, int border, int green, int red, int blue, float textYShift, String[] pictoPaths, String[] hoLiPictoPaths, PFont stdFont) {
 		this.p = p;
@@ -63,6 +65,7 @@ public class FilesRenderingScreen {
 		jsonHelper = new JsonHelper(p);
 		renderHelper = new RenderHelper(p);
 		pcInfoHelper = new PCInfoHelper(p);
+		sortHelper = new SortHelper(p);
 		setupAll();
 	}
 
@@ -157,10 +160,27 @@ public class FilesRenderingScreen {
 			}
 
 			// render allPCs_horizontalList --------------------
-
+			renderStatistics_HorizontalList.render();
+			String statusText = "";
+			if (mainActivity.getRenderOverview().getSleepImageButton().getClickCount() % 2 == 0) {
+				statusText = "Rendering";
+			} else {
+				statusText = "Sleeping";
+			}
+			p.fill(textCol);
+			p.textFont(stdFont);
+			p.textSize(stdTs);
+			p.textAlign(p.RIGHT, p.CENTER);
+			p.text(statusText, mainActivity.getRenderOverview().getSleepImageButton().getX() - mainActivity.getRenderOverview().getSleepImageButton().getW() / 2 - margin, mainActivity.getRenderOverview().getSleepImageButton().getY());
 			// render all ----------------------------------------------
 		} else {
-			rendering_PictogramImage.render();
+
+			if (mainActivity.getRenderOverview().getSleepImageButton().getClickCount() % 2 == 0) {
+				rendering_PictogramImage.render();
+			} else {
+				sleep_PictogramImage.render();
+			}
+
 		}
 
 		// get loglines -----------------------------------
@@ -370,13 +390,11 @@ public class FilesRenderingScreen {
 			allFilesCopyStatus[i] = fileInteractionHelper.copyFile(f.getAbsolutePath(), mainActivity.getPathToBlenderRenderFolder() + "\\" + i + "_" + f.getName());
 		}
 		String relativeFilePathRandomSeed = "/pythonScripts/randomSeed.py";
-		//String copyFromPathRandomSeed = getClass().getResource(relativeFilePathRandomSeed).getPath().toString();
 		String copyFromPathRandomSeed = relativeFilePathRandomSeed;
 		Boolean randomSeedCopied = fileInteractionHelper.copyFile(copyFromPathRandomSeed, mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py");
 
 		String relativeFileForceGPURendering = "/pythonScripts/forceGPURendering.py";
-		//String copyFromPathForceGPURendering = getClass().getResource(relativeFileForceGPURendering).getPath().toString();
-		String copyFromPathForceGPURendering=relativeFileForceGPURendering;
+		String copyFromPathForceGPURendering = relativeFileForceGPURendering;
 		Boolean forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
 
 		if (randomSeedCopied && forceGPURenderingCopied) {
@@ -452,7 +470,7 @@ public class FilesRenderingScreen {
 			jsonHelper.setArray(renderJobsArray);
 			jsonHelper.writeData(mainActivity.getMasterRenderJobsFilePath());
 			// save renderJobsArray------------------------------------------
-			
+
 			global_Loadingbar.setMax(renderJobsArray.size());
 
 			// save and create renderJobStatusArray--------------------------------------
@@ -468,9 +486,9 @@ public class FilesRenderingScreen {
 			jsonHelper.setArray(renderJobsStatusArray);
 			jsonHelper.writeData(mainActivity.getMasterRenderJobsStatusFilePath());
 			// save and create renderJobStatusArray--------------------------------------
-			
+
 			mainActivity.getRenderOverview().saveHardwareToUse(allConnectedNodes);
-			
+
 			renderFiles();
 		}
 	}
@@ -478,35 +496,62 @@ public class FilesRenderingScreen {
 	private void renderFiles() {
 		Boolean isRenderingJson = renderHelper.getStartRenderingFromJson();
 		global_Loadingbar.setValue(renderHelper.getJobsDone());
-		
-		if (renderHelper.getAllJobsFinished(mainActivity.getMasterRenderJobsStatusFilePath())) {
+
+		if (renderHelper.getAllJobsFinished(mainActivity.getMasterRenderJobsStatusFilePath(), allPCNames)) {
 			global_Loadingbar.setValue(global_Loadingbar.getMax());
 			if (!collected) {
 				p.println("all jobs finished++++++++++++");
 				p.println(jsonHelper.getData(mainActivity.getMasterRenderJobsStatusFilePath()));
 				if (isRenderingJson) {
-					p.println("set to false");
-					//setIsRendering(false);
+					// p.println("set to false");
+					// setIsRendering(false);
 				}
 				collectImages();
 			}
 		} else {
-			if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) { //useMaster
-				if (!renderHelper.getAllJobsStarted()) {
-					Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(),false);
+			if (renderHelper.getStartRenderingFromJson()) {
+				if (mainActivity.getHomeScreenMaster().getCheckboxes()[0].getIsChecked()) { // useMaster
+					if (!renderHelper.getAllJobsStarted()) {
+						Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(), false);
 
-					if (hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked() && renderHelper.getCpuFinished()) {
-						renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
+						if (hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked() && renderHelper.getCpuFinished()) {
+							renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
+						}
+						if (hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked() && renderHelper.getGpuFinished()) {
+							renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
+						}
+						if (!isRenderingJson) {
+							// setIsRendering(true);
+						}
 					}
-					if (hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked() && renderHelper.getGpuFinished()) {
-						renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
-					}
-					if (!isRenderingJson) {
-						//setIsRendering(true);
-					}
+				}
+			} else {
+				if (!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
+					renderHelper.setFinishAllJobs(true, true);
 				}
 			}
 		}
+
+		int[] allRenderedFrames = renderHelper.getRenderedFrames();
+		String[] renderStatList = new String[allRenderedFrames.length];
+		int renderedFrames = IntStream.of(allRenderedFrames).sum();
+		int[] order = sortHelper.sortIntAndGetWeight(allRenderedFrames.clone());
+		p.println(allRenderedFrames);
+		p.println(order);
+		p.println(allPCNames);
+		for (int i = 0; i < renderStatList.length; i++) {
+			try {
+				int percentage = (int) (100.0 / renderedFrames * allRenderedFrames[order[i]]);
+				if (percentage != percentage) {
+					percentage = 0;
+				}
+				renderStatList[i] = allPCNames[order[i]] + ": " + allRenderedFrames[order[i]] + " frames (" + percentage + "%)";
+			} catch (Exception e) {
+				renderStatList[i] = "Some problem occured!";
+				e.printStackTrace();
+			}
+		}
+		renderStatistics_HorizontalList.setList(renderStatList);
 	}
 
 	private void collectImages() {
@@ -530,6 +575,7 @@ public class FilesRenderingScreen {
 		if (renderGraphics_switch.getIsChecked()) {
 			allFiles_HorizontalList.onMousePressed();
 			allPCs_HorizontalList.onMousePressed();
+			renderStatistics_HorizontalList.onMousePressed();
 		}
 	}
 
@@ -539,6 +585,7 @@ public class FilesRenderingScreen {
 			showGPUOrCpuLog_switch.onMouseReleased();
 			allFiles_HorizontalList.onMouseReleased(mouseButton);
 			allPCs_HorizontalList.onMouseReleased(mouseButton);
+			renderStatistics_HorizontalList.onMouseReleased(mouseButton);
 		}
 	}
 
@@ -630,6 +677,7 @@ public class FilesRenderingScreen {
 		if (renderGraphics_switch.getIsChecked()) {
 			allFiles_HorizontalList.onScroll(e);
 			allPCs_HorizontalList.onScroll(e);
+			renderStatistics_HorizontalList.onScroll(e);
 		}
 	}
 
@@ -682,7 +730,9 @@ public class FilesRenderingScreen {
 		allConnectedNodes = mainActivity.getNodeEditor().getAllConnectedNodes();
 
 		String[] startList = {};
-		int startH = (p.height - btnSizeSmall * 5 - listH - margin * 2) / 2 + btnSizeSmall / 2;
+		// int startH = (p.height - btnSizeSmall * 5 - listH - margin * 2) / 2 +
+		// btnSizeSmall / 2;
+		int startH = (int) (btnSizeSmall * 1.5f);
 		allFiles_HorizontalList = new HorizontalList(p, p.width / 2, startH, p.width - margin * 2, btnSizeSmall + margin * 2, margin, edgeRad, stdTs, (int) p.textWidth("Files to render") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', false, true, false, "Files to render", hoLiPictoPaths, startList, stdFont, null);
 
 		startList = new String[allConnectedNodes.size()];
@@ -697,6 +747,7 @@ public class FilesRenderingScreen {
 
 		fileInfo_LogBar = new LogBar(p, 0, logBar.getH() / 2 + btnSizeSmall / 2 + margin * 2, allFiles_HorizontalList.getW(), btnSizeSmall + margin * 2, stdTs, edgeRad, margin, btnSizeSmall, dark, light, lighter, textCol, textDark, border, true, textYShift, '|', pictoPaths[3], stdFont, logBar);
 		fileInfo_LogBar.setText("File settings of selected file");
+		renderStatistics_HorizontalList = new HorizontalList(p, 0, (int) (allPCs_HorizontalList.getH() / 2 + logBarH + fileInfo_LogBar.getH() * 1.5f + margin * 2.5f), p.width - margin * 2, fileInfo_LogBar.getH(), margin, edgeRad, stdTs, (int) p.textWidth("Render statistics") + margin * 3 + btnSizeSmall, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, '\\', true, false, false, "Render Statistics", hoLiPictoPaths, new String[] {}, stdFont, allPCs_HorizontalList);
 
 		allPCNames = new String[allPCs_HorizontalList.getList().length];
 		allLastLogLines = new String[allPCs_HorizontalList.getList().length];
@@ -715,7 +766,7 @@ public class FilesRenderingScreen {
 			fileIsFinished[i] = false;
 		}
 		p.textSize(stdTs);
-		String infoString = "Display Stats";
+		String infoString = "Display status";
 		int switchW = (int) p.textWidth(infoString) + btnSizeSmall + margin * 2;
 		renderGraphics_switch = new Switch(p, switchW / 2 + margin, p.height - btnSizeSmall / 2 - margin, switchW, btnSizeSmall, edgeRad, margin, stdTs, light, lightest, lightest, textCol, textYShift, false, true, true, infoString, stdFont, null);
 
@@ -724,6 +775,7 @@ public class FilesRenderingScreen {
 		showGPUOrCpuLog_switch = new Switch(p, logBar.getW() / 2 - switchW / 2 - margin, 0, switchW, btnSizeSmall, edgeRad, margin, stdTs, dark, lightest, lightest, textCol, textYShift, true, true, true, infoString, stdFont, logBar);
 
 		rendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[4], "Rendering file", null);
+		sleep_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[5], "Rendering file", null);
 		global_Loadingbar = new Loadingbar(p, 0, -allFiles_HorizontalList.getH() / 2 - margin * 2, allFiles_HorizontalList.getW(), margin, stdTs, edgeRad, margin, lighter, light, textCol, 0, 600, textYShift, true, stdFont, allFiles_HorizontalList);
 		updateLists();
 	}
@@ -731,7 +783,6 @@ public class FilesRenderingScreen {
 	public void setIsRendering(Boolean state) {
 		JSONArray loadedData = new JSONArray();
 		JSONObject settingsObject = new JSONObject();
-		// give command to all pcs to do test -----------------------------
 
 		loadedData = jsonHelper.getData(mainActivity.getMasterCommandFilePath());
 		if (loadedData.isEmpty()) {
@@ -751,7 +802,6 @@ public class FilesRenderingScreen {
 				e.printStackTrace();
 			}
 		}
-		// give command to all pcs to do test -----------------------------
 
 		if (state == false) {
 			renderHelper.setFinishAllJobs(true, true);
