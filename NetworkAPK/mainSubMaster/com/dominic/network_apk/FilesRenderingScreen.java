@@ -227,9 +227,9 @@ public class FilesRenderingScreen {
 				allPCPictos[i].setCol(green);
 				File curRenderLogFile;
 				if (showGPUOrCpuLog_switch.getIsChecked()) {
-					curRenderLogFile = new File(mainActivity.getRenderLogPathCPU(n.getPcSelection_DropdownMenu().getSelectedItem()));
+					curRenderLogFile = new File(mainActivity.getRenderLogPathCPU(n.getPcSelection_DropdownMenu().getSelectedItem(), true));
 				} else {
-					curRenderLogFile = new File(mainActivity.getRenderLogPathGPU(n.getPcSelection_DropdownMenu().getSelectedItem()));
+					curRenderLogFile = new File(mainActivity.getRenderLogPathGPU(n.getPcSelection_DropdownMenu().getSelectedItem(), true));
 				}
 				if (curRenderLogFile.exists()) {
 					try {
@@ -536,9 +536,6 @@ public class FilesRenderingScreen {
 		String[] renderStatList = new String[allRenderedFrames.length];
 		int renderedFrames = IntStream.of(allRenderedFrames).sum();
 		int[] order = sortHelper.sortIntAndGetWeight(allRenderedFrames.clone());
-		p.println(allRenderedFrames);
-		p.println(order);
-		p.println(allPCNames);
 		for (int i = 0; i < renderStatList.length; i++) {
 			try {
 				int percentage = (int) (100.0 / renderedFrames * allRenderedFrames[order[i]]);

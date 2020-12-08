@@ -6,6 +6,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import org.apache.commons.io.FilenameUtils;
@@ -64,7 +65,17 @@ public class FileInteractionHelper {
 		}
 		return isCopied;
 	}
-
+	
+	public Boolean replaceFile(File source,File destination) {
+		Boolean copied=false;
+		try {
+			 Files.move(source.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return copied;
+	}
+	
 	public void copyFolder(String copyFolderPath, String destination) {
 		if (copyFolderPath.equals(destination) == false) {
 			new File(destination).mkdirs();

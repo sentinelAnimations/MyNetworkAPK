@@ -1,10 +1,10 @@
 [
   {
     "Node0": {
-      "posX": 617,
+      "posX": 598,
       "connectorPointIsConnectedArray": [
         true,
-        false,
+        true,
         false,
         false,
         true,
@@ -12,7 +12,7 @@
         false,
         false
       ],
-      "posY": 217,
+      "posY": 189,
       "connectorPointIds": [
         "e161195c-abb2-4575-b02d-be1811dee59f",
         "546063f2-587d-42b8-85ce-b1fe049cdbbb",
@@ -25,8 +25,8 @@
       ],
       "connectorPointConnectedIds": [
         "050c7e66-be09-4c99-9431-ebc25598833c",
-        "4b6db0a4-75a5-4d15-b8d1-d8723cbd7a39",
-        "0726ee82-c31c-4a07-ba4d-70cafe97d948",
+        "b210d5ea-3d95-4d2d-91ff-39a46e4fd47b",
+        null,
         null,
         "69749ba8-f384-4ece-b035-3dc929326041",
         null,
@@ -41,8 +41,8 @@
   },
   {
     "Node1": {
-      "posX": 903,
-      "posY": 211,
+      "posX": 884,
+      "posY": 183,
       "connectorPointId": "69749ba8-f384-4ece-b035-3dc929326041",
       "connectorPointConnectedId": "7ef216c0-f9e8-4dad-b5a2-0b5f7e32f0ab",
       "connectorPointIsConnected": true,
@@ -52,22 +52,38 @@
   },
   {
     "Node2": {
-      "gpuName": "NVIDIA GeForce GTX 1080",
+      "gpuName": "",
       "connectorPointId": "050c7e66-be09-4c99-9431-ebc25598833c",
       "useGpu_checkbox": true,
       "nodeType": 2,
       "cpuName": "Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz",
-      "posX": 266,
-      "posY": 221,
-      "pcStrengthCPU": 0,
+      "posX": 247,
+      "posY": 193,
       "cpuCores": 12,
       "connectorPointConnectedId": "e161195c-abb2-4575-b02d-be1811dee59f",
       "useCpu_checkbox": true,
       "connectorPointIsConnected": true,
       "selectPc_dropdownItem": "master",
       "selectPc_dropdown": 0,
-      "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214",
-      "pcStrengthGPU": 0
+      "nodeId": "089a0e67-578f-40bb-9c3f-f8413815f214"
+    }
+  },
+  {
+    "Node3": {
+      "gpuName": "NVIDIA GeForce GT 520",
+      "connectorPointId": "b210d5ea-3d95-4d2d-91ff-39a46e4fd47b",
+      "useGpu_checkbox": false,
+      "nodeType": 1,
+      "cpuName": "AMD Ryzen 9 3900X 12-Core Processor",
+      "posX": 240,
+      "posY": 348,
+      "cpuCores": 24,
+      "connectorPointConnectedId": "546063f2-587d-42b8-85ce-b1fe049cdbbb",
+      "useCpu_checkbox": true,
+      "connectorPointIsConnected": true,
+      "selectPc_dropdownItem": "slave001",
+      "selectPc_dropdown": 1,
+      "nodeId": "e9bd2702-12fd-4ac4-a63a-9db1790b9dc3"
     }
   }
 ]

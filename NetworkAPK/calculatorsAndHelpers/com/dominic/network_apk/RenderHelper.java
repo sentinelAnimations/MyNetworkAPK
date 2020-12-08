@@ -79,11 +79,11 @@ public class RenderHelper {
 		Boolean allFinished = true;
 		JSONArray allRenderJobsStatus = jsonHelper.getData(pathToRenderJobsStatus);
 		renderedFrames = new int[allPCNames.length];
-		Arrays.fill(renderedFrames,0);
+		Arrays.fill(renderedFrames, 0);
 		for (int i = 0; i < allRenderJobsStatus.size(); i++) {
 			JSONObject curObj = (JSONObject) allRenderJobsStatus.get(i);
-			Boolean startedJob=Boolean.parseBoolean(curObj.get("started").toString());
-			Boolean finishedJob=Boolean.parseBoolean(curObj.get("finished").toString());
+			Boolean startedJob = Boolean.parseBoolean(curObj.get("started").toString());
+			Boolean finishedJob = Boolean.parseBoolean(curObj.get("finished").toString());
 
 			if (!finishedJob || !startedJob) {
 				allFinished = false;
@@ -92,19 +92,19 @@ public class RenderHelper {
 				}
 				break;
 			}
-			if(finishedJob) {
-			for (int i2 = 0; i2 < renderedFrames.length; i2++) {
-				Boolean isEqual = false;
-				try {
-					isEqual = curObj.get("startedBy").toString().equals(allPCNames[i2]);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				if (isEqual) {
-					renderedFrames[i2] = renderedFrames[i2] + 1;
+			if (finishedJob) {
+				for (int i2 = 0; i2 < renderedFrames.length; i2++) {
+					Boolean isEqual = false;
+					try {
+						isEqual = curObj.get("startedBy").toString().equals(allPCNames[i2]);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					if (isEqual) {
+						renderedFrames[i2] = renderedFrames[i2] + 1;
+					}
 				}
 			}
-		}
 		}
 		return allFinished;
 	}
@@ -189,8 +189,8 @@ public class RenderHelper {
 				}
 				// copy blendfile to localfolder,if it doesnt already exist (one folder for CPU,
 				// one for GPU)
-				File logFileCPU = new File(mainActivity.getRenderLogPathCPU(mainActivity.getPCName()));
-				File logFileGPU = new File(mainActivity.getRenderLogPathGPU(mainActivity.getPCName()));
+				File logFileCPU = new File(mainActivity.getRenderLogPathCPU(mainActivity.getPCName(), false));
+				File logFileGPU = new File(mainActivity.getRenderLogPathGPU(mainActivity.getPCName(), false));
 
 				File blendFile = new File(mainActivity.getPathToBlenderRenderFolder() + "\\" + renderJob.get("blendfile").toString());
 				blendFileName = blendFile.getName().replaceFirst("[.][^.]+$", "");
@@ -278,7 +278,19 @@ public class RenderHelper {
 									startTimeCpu = pcInfoHelper.getCurTime();
 									Boolean problemOccured = false;
 									int failedCount = 0;
+									File syncedLogFile = new File(mainActivity.getRenderLogPathCPU(mainActivity.getPCName(), true));
+
 									while (!checkFile.exists()) {
+										syncedLogFile.delete();
+										int tries = 0;
+										while (!logCPU.exists()) {
+											// waitOnFinish(startTimeCpu, 200);
+											if (tries > 10) {
+												break;
+											}
+											tries++;
+										}
+										fileInteractionHelper.copyFile(logCPU.getAbsolutePath(), syncedLogFile.getAbsolutePath());
 
 										if (!checkIfJobExists(localFileCPU, pathToRenderJobsStatus, renderJobIndexCPU, "CPU") || finishCPUJob) {
 											commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowNameCPU);
@@ -300,6 +312,11 @@ public class RenderHelper {
 
 										if (logCPU.exists()) {
 											lastCPULogFound = pcInfoHelper.getCurTime();
+											if (System.currentTimeMillis() - logCPU.lastModified() > mainActivity.getLongTimeIntervall() * 1000) {
+												commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowNameCPU);
+												problemOccured = true;
+												break;
+											}
 										}
 
 										if (pcInfoHelper.getCurTime() - lastCPULogFound > mainActivity.getShortTimeIntervall()) {
@@ -352,7 +369,21 @@ public class RenderHelper {
 									startTimeGpu = pcInfoHelper.getCurTime();
 									Boolean problemOccured = false;
 									int failedCount = 0;
+									File syncedLogFile = new File(mainActivity.getRenderLogPathGPU(mainActivity.getPCName(), true));
+
 									while (!checkFile.exists()) {
+
+										syncedLogFile.delete();
+										int tries = 0;
+										while (!logGPU.exists()) {
+											// waitOnFinish(startTimeCpu, 200);
+											if (tries > 10) {
+												break;
+											}
+											tries++;
+										}
+										fileInteractionHelper.copyFile(logGPU.getAbsolutePath(), syncedLogFile.getAbsolutePath());
+
 										if (!checkIfJobExists(localFileGPU, pathToRenderJobsStatus, renderJobIndexGPU, "GPU") || finishGPUJob) {
 											commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowNameGPU);
 											finishGPUJob = false;
@@ -372,6 +403,11 @@ public class RenderHelper {
 										}
 										if (logGPU.exists()) {
 											lastGPULogFound = pcInfoHelper.getCurTime();
+											if (System.currentTimeMillis() - logGPU.lastModified() > mainActivity.getLongTimeIntervall() * 1000) {
+												commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowNameGPU);
+												problemOccured = true;
+												break;
+											}
 										}
 										if (pcInfoHelper.getCurTime() - lastGPULogFound > mainActivity.getShortTimeIntervall()) {
 											problemOccured = true;

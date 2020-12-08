@@ -991,12 +991,22 @@ public class MainActivity extends PApplet {
 
 	}
 
-	public String getRenderLogPathCPU(String pcName) {
-		return getPathToPCFolder() + "\\" + pcName + "\\renderLogCPU.txt";
+	public String getRenderLogPathCPU(String pcName,Boolean synced) {
+		String path=getPathToPCFolder() + "\\" + pcName+"\\";
+		if(synced) {
+			path+="\\synced_";
+		}
+		path+= "renderLogCPU.txt";
+		return path;
 	}
 
-	public String getRenderLogPathGPU(String pcName) {
-		return getPathToPCFolder() + "\\" + pcName + "\\renderLogGPU.txt";
+	public String getRenderLogPathGPU(String pcName,Boolean synced) {
+		String path=getPathToPCFolder() + "\\" + pcName+"\\";
+		if(synced) {
+			path+="synced_";
+		}
+		path+= "renderLogGPU.txt";
+		return path;
 	}
 
 	public String getLocalRenderBlendfiles() {
