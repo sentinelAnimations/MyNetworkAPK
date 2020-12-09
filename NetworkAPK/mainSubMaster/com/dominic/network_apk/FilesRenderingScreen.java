@@ -380,6 +380,9 @@ public class FilesRenderingScreen {
 		fileInteractionHelper.deleteFolder(localRenderFolder.getAbsolutePath());
 		fileInteractionHelper.deleteFolder(mainActivity.getCloudImageFolder());
 		fileInteractionHelper.deleteFolder(mainActivity.getOpenCheckPath());
+		// fileInteractionHelper.deleteFolder(new
+		// File(mainActivity.getMasterRenderJobsStatusFilePath()).getParent());
+		// Attention, folder has to be deleted
 		collected = false;
 
 		String[] fileList = getHorizontalList().getList();
@@ -555,17 +558,35 @@ public class FilesRenderingScreen {
 		p.println("now collecting");
 		for (int i = 0; i < allFiles_HorizontalList.getList().length; i++) {
 			try {
-				String folderName = new File(allFiles_HorizontalList.getList()[i]).getName().replaceFirst("[.][^.]+$", "");
+				String folderName = fileInteractionHelper.getNameWithoutExtension(new File(allFiles_HorizontalList.getList()[i]));
 				File destinationImageFolder = new File(imageSavePaths[i] + "\\" + folderName);
 				if (destinationImageFolder.exists()) {
 					fileInteractionHelper.deleteFolder(destinationImageFolder.getAbsolutePath());
 				}
-				fileInteractionHelper.copyFolder(mainActivity.getCloudImageFolder() + "\\" + folderName, imageSavePaths[i] + "\\");
+				String cloudImageFolder = mainActivity.getCloudImageFolder() + "\\" + folderName;
+				deleteJunkFiles(cloudImageFolder);
+				fileInteractionHelper.copyFolder(cloudImageFolder, imageSavePaths[i] + "\\");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		collected = true;
+	}
+
+	private void deleteJunkFiles(String path) {
+		try {
+			String[] allImgs = fileInteractionHelper.getFoldersAndFiles(path, false);
+			if (allImgs != null && allImgs.length > 0) {
+				for (int i = 0; i < allImgs.length; i++) {
+					File curFile = new File(path + "\\" + allImgs[i]);
+					if (fileInteractionHelper.getNameWithoutExtension(curFile).length() > renderHelper.getFilenameDigits()) {
+						curFile.delete();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onMousePressed(int mouseButton) {

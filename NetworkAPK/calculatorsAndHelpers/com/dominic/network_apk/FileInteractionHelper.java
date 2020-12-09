@@ -274,5 +274,8 @@ public class FileInteractionHelper {
 			return false;
 		}
 	}
+	public String getNameWithoutExtension(File f) {
+		return f.getName().replaceFirst("[.][^.]+$", "");
+	}
 
 }

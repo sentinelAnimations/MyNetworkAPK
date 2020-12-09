@@ -16,7 +16,7 @@ import jdk.jshell.spi.ExecutionControl.ExecutionControlException;
 import processing.core.PApplet;
 
 public class RenderHelper {
-	private int renderJobIndex = 0, renderJobIndexCPU, renderJobIndexGPU, jobsDone = 0;
+	private int renderJobIndex = 0, renderJobIndexCPU, renderJobIndexGPU, jobsDone = 0,filenameDigits=6;
 	private Boolean cpuFinished = false, gpuFinished = false, allJobsStarted = false, finishCPUJob = false, finishGPUJob = false;
 	private long prevCheckFinishedTime, startTimeCpu, startTimeGpu, lastCPULogFound, lastGPULogFound;
 	private String renderTerminalWindowNameCPU = "renderTerminalCPU", renderTerminalWindowNameGPU = "renderTerminalGPU", blendCommandCPU, blendCommandGPU;
@@ -90,7 +90,9 @@ public class RenderHelper {
 				if (i > jobsDone) {
 					jobsDone = i;
 				}
+				if(!finishedJob && !startedJob) {
 				break;
+				}
 			}
 			if (finishedJob) {
 				for (int i2 = 0; i2 < renderedFrames.length; i2++) {
@@ -193,7 +195,8 @@ public class RenderHelper {
 				File logFileGPU = new File(mainActivity.getRenderLogPathGPU(mainActivity.getPCName(), false));
 
 				File blendFile = new File(mainActivity.getPathToBlenderRenderFolder() + "\\" + renderJob.get("blendfile").toString());
-				blendFileName = blendFile.getName().replaceFirst("[.][^.]+$", "");
+				blendFileName = fileInteractionHelper.getNameWithoutExtension(blendFile);
+				// blendFileName = blendFile.getName().replaceFirst("[.][^.]+$", "");
 
 				File localBlendfile = new File(mainActivity.getLocalRenderBlendfiles() + "\\" + blendFile.getName());
 				if (!localBlendfile.exists()) {
@@ -209,8 +212,11 @@ public class RenderHelper {
 				if (!forceGPURenderingFile.exists()) {
 					fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "/forceGPURendering.py", forceGPURenderingFile.getAbsolutePath());
 				}
-
-				resultFileCPU = new File(mainActivity.getCloudImageFolder() + "\\" + blendFileName + "\\######");
+				String fName="\\";
+				for(int i=0;i<filenameDigits;i++) {
+					fName+="#";
+				}
+				resultFileCPU = new File(mainActivity.getCloudImageFolder() + "\\" + blendFileName + fName);
 				resultFileGPU = resultFileCPU;
 				if (useCPU) {
 					fileInteractionHelper.createParentFolders(resultFileCPU.getAbsolutePath());
@@ -252,7 +258,7 @@ public class RenderHelper {
 					logFileGPU.delete();
 
 					// delete existing resultFile----------------------
-					File deleteFile = new File(resultFileCPU.getParentFile().getAbsolutePath() + "\\" + p.nf(frameToRender, 6) + ".png");
+					File deleteFile = new File(resultFileCPU.getParentFile().getAbsolutePath() + "\\" + p.nf(frameToRender, filenameDigits) + ".png");
 					if (deleteFile.exists()) {
 						deleteFile.delete();
 					}
@@ -277,20 +283,24 @@ public class RenderHelper {
 								if (isExecuted) {
 									startTimeCpu = pcInfoHelper.getCurTime();
 									Boolean problemOccured = false;
-									int failedCount = 0;
+									int failedCount = 0, count = 0;
 									File syncedLogFile = new File(mainActivity.getRenderLogPathCPU(mainActivity.getPCName(), true));
 
 									while (!checkFile.exists()) {
-										syncedLogFile.delete();
-										int tries = 0;
-										while (!logCPU.exists()) {
-											// waitOnFinish(startTimeCpu, 200);
-											if (tries > 10) {
-												break;
+
+										if (count % 2 == 0) {
+											syncedLogFile.delete();
+											int tries = 0;
+											while (!logCPU.exists()) {
+												// waitOnFinish(startTimeCpu, 200);
+												if (tries > 10) {
+													break;
+												}
+												tries++;
 											}
-											tries++;
+											fileInteractionHelper.copyFile(logCPU.getAbsolutePath(), syncedLogFile.getAbsolutePath());
 										}
-										fileInteractionHelper.copyFile(logCPU.getAbsolutePath(), syncedLogFile.getAbsolutePath());
+										count++;
 
 										if (!checkIfJobExists(localFileCPU, pathToRenderJobsStatus, renderJobIndexCPU, "CPU") || finishCPUJob) {
 											commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowNameCPU);
@@ -368,21 +378,24 @@ public class RenderHelper {
 								if (isExecuted) {
 									startTimeGpu = pcInfoHelper.getCurTime();
 									Boolean problemOccured = false;
-									int failedCount = 0;
+									int failedCount = 0, count = 0;
 									File syncedLogFile = new File(mainActivity.getRenderLogPathGPU(mainActivity.getPCName(), true));
 
 									while (!checkFile.exists()) {
 
-										syncedLogFile.delete();
-										int tries = 0;
-										while (!logGPU.exists()) {
-											// waitOnFinish(startTimeCpu, 200);
-											if (tries > 10) {
-												break;
+										if (count % 2 == 0) {
+											syncedLogFile.delete();
+											int tries = 0;
+											while (!logGPU.exists()) {
+												// waitOnFinish(startTimeCpu, 200);
+												if (tries > 10) {
+													break;
+												}
+												tries++;
 											}
-											tries++;
+											fileInteractionHelper.copyFile(logGPU.getAbsolutePath(), syncedLogFile.getAbsolutePath());
 										}
-										fileInteractionHelper.copyFile(logGPU.getAbsolutePath(), syncedLogFile.getAbsolutePath());
+										count++;
 
 										if (!checkIfJobExists(localFileGPU, pathToRenderJobsStatus, renderJobIndexGPU, "GPU") || finishGPUJob) {
 											commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowNameGPU);
@@ -474,7 +487,7 @@ public class RenderHelper {
 				p.println("now writing");
 				while (!valueSet) {
 					try {
-						JSONArray array = jHelper.getData(path);
+						JSONArray array = getMergedArray(path);
 						JSONObject curObj = (JSONObject) array.get(index);
 						if (array.size() > 0) {
 							jHelper.clearArray();
@@ -504,6 +517,90 @@ public class RenderHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private JSONArray getMergedArray(String path) {
+		JsonHelper jHelper = new JsonHelper(p);
+
+		JSONArray mergedArray = jHelper.getData(path);
+		File mergeFile = new File(path);
+		String[] paths = fileInteractionHelper.getFoldersAndFiles(mergeFile.getParentFile().getAbsolutePath(), false);
+		ArrayList<String> duplicates = new ArrayList<>();
+		p.println("merge");
+		if (paths != null && paths.length > 0) {
+			// find duplicated/unmerged files ------------------------
+			p.println(paths);
+			for (int i = 0; i < paths.length; i++) {
+				String withoutExtension = fileInteractionHelper.getNameWithoutExtension(mergeFile);
+				p.println(withoutExtension, paths[i]);
+				if (p.match(paths[i], withoutExtension) != null && withoutExtension.equals(fileInteractionHelper.getNameWithoutExtension(new File(paths[i]))) == false) {
+					duplicates.add(paths[i]);
+					p.println("-------------" + duplicates.get(duplicates.size() - 1));
+				}
+			}
+			// find duplicated/unmerged files ------------------------
+			if (duplicates.size() > 0) { // else no duplicates
+				// load duplicated jsonArrays--------------------------
+				p.println("duplicates found");
+				p.println(mergedArray);
+				JSONArray[] loadedArrays = new JSONArray[duplicates.size()];
+				for (int i = 0; i < duplicates.size(); i++) {
+					loadedArrays[i] = jHelper.getData(mergeFile.getParentFile().getAbsolutePath() + "\\" + duplicates.get(i));
+					p.println(loadedArrays[i]);
+				}
+				// load duplicated jsonArrays--------------------------
+
+				// merge duplicated jsonArrays------------------------------
+				for (int i = 0; i < mergedArray.size(); i++) {
+					Boolean noneTrue = true;
+					for (int i2 = 0; i2 < loadedArrays.length; i2++) {
+						try {
+							Boolean bothTrue = false;
+							JSONObject curMergeObj = (JSONObject) mergedArray.get(i);
+							JSONObject curObj = (JSONObject) loadedArrays[i2].get(i);
+
+							Boolean startedMerge = Boolean.parseBoolean(curMergeObj.get("started").toString());
+							Boolean finishedMerge = Boolean.parseBoolean(curMergeObj.get("finished").toString());
+							// Boolean startedByMerge =
+							// Boolean.parseBoolean(curMergeObj.get("startedBy").toString());
+
+							Boolean started = Boolean.parseBoolean(curObj.get("started").toString());
+							Boolean finished = Boolean.parseBoolean(curObj.get("finished").toString());
+							Boolean startedBy = Boolean.parseBoolean(curObj.get("startedBy").toString());
+
+							if (started || finished || startedMerge || finishedMerge) {
+								noneTrue = false;
+							}
+							if (!startedMerge && started) {
+								curMergeObj.put("started", true);
+								curMergeObj.put("startedBy", startedBy);
+							}
+							if (!finishedMerge && finished) {
+								curMergeObj.put("finished", true);
+							}
+							mergedArray.set(i, curMergeObj);
+							if (started || startedMerge && finished || finishedMerge) {
+								bothTrue = true;
+								break;
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					if (noneTrue) {
+						break;
+					}
+				}
+				// merge duplicated jsonArrays------------------------------
+
+				// delete duplicates ---------------------------------------
+				for (int i = 0; i < duplicates.size(); i++) {
+					new File(mergeFile.getParentFile().getAbsolutePath() + "\\" + duplicates.get(i)).delete();
+				}
+				// delete duplicates ---------------------------------------
+			}
+		}
+		return mergedArray;
 	}
 
 	private Boolean checkIfJobExists(File fileToCheck, String pathToRenderJobsStatus, int rendJobInd, String cpuOrGpuStr) {
@@ -559,6 +656,9 @@ public class RenderHelper {
 	public void setFinishAllJobs(Boolean cpuState, Boolean gpuState) {
 		finishCPUJob = cpuState;
 		finishGPUJob = gpuState;
+	}
+	public int getFilenameDigits() {
+		return filenameDigits;
 	}
 
 }

@@ -1,10 +1,10 @@
 [
   {
-    "endFrame": 250,
-    "resY": 1080,
-    "resX": 2520,
+    "endFrame": 3,
+    "resY": 400,
+    "resX": 400,
     "samples": 2,
-    "checkboxIsChecked8": false,
+    "checkboxIsChecked8": true,
     "startFrame": 0,
     "checkboxIsChecked6": true,
     "stillFrame": 0,
@@ -17,7 +17,7 @@
     "checkboxIsChecked1": false,
     "imageSavePath": "D:\\algemeine Bilder\\ImageFolderFor_NetworkAPK",
     "fileList": [
-      "C:\\blenderFiles\\bakeTest.blend"
+      "C:\\blenderFiles\\miniPC_allElements_Animation_closeup.blend"
     ]
   }
 ]

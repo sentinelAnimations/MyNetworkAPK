@@ -73,7 +73,7 @@ public class MainActivity extends PApplet {
 	private String localProgrammPath = "localOutput/programms";
 	// Local -----------
 	// File names -------
-	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json", relativeMasterRenderJobsStatusFilePath = "MasterCommands\\MasterRenderJobsStatus.json", hardwareToUseFilePath = "MasterCommands\\hardwareToUse.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
+	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json", relativeMasterRenderJobsStatusFilePath = "MasterCommands\\jobStatus\\MasterRenderJobsStatus.json", hardwareToUseFilePath = "MasterCommands\\hardwareToUse.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
 	private String sheepitSettingsFileName = "sheepitSettings.json";
 	// File names -------
 
