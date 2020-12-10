@@ -15,7 +15,7 @@ public class FilesRenderingScreen {
 	private int stdTs, edgeRad, margin, btnSize, btnSizeSmall, btnSizeLarge, dark, light, green, red, blue, lighter, lightest, textCol, textDark, border, prevPCListSelectedInd = -1, onStartup = 0, prevSelectedFileListInd = 0;
 	private float textYShift, alpha;
 	private Boolean collected = false;
-	private long prevTime;
+	private long prevTime, restartLastModified;
 	private float[] listX, listW, allFiles_listX, allFiles_listW;
 	private Boolean[] renderAnimation, renderStillFrame, useNewResolution, startedRenderingTiles, allFilesCopyStatus, fileIsFinished;
 	private int[] startFrame, endFrame, stillFrame, resX, resY, samples, allPCStatus; // allPCStatus: 0=prog responding,1=prog is rendering, 2=prog not responding
@@ -156,10 +156,10 @@ public class FilesRenderingScreen {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 					// restartButton handling --------------------------------
 					if (restartAPK_ImageButtons[i].getIsClicked()) {
-						
+						renderHelper.setRestartValue(jsonHelper.getData(mainActivity.getRestartCommandFilePath()), i, "restart", true);
 						restartAPK_ImageButtons[i].setIsClicked(false);
 					}
 					// restartButton handling --------------------------------
@@ -197,12 +197,14 @@ public class FilesRenderingScreen {
 		// update PCView---------------------------------------------
 		if (allConnectedNodes.size() > 0) {
 
-			/*
-			 * File renderCmds = new File(mainActivity.getMasterRenderJobsFilePath()); if
-			 * (renderCmds.lastModified() != prevLastModified) { checkForFinished();
-			 * prevLastModified = renderCmds.lastModified(); }
-			 */
-
+			if (p.frameCount % 60 == 0) {
+				File restartCmdFile = new File(mainActivity.getRestartCommandFilePath());
+				if (restartCmdFile.exists() && restartCmdFile.lastModified() != restartLastModified) {
+					renderHelper.checkForRestart();
+					restartLastModified = restartCmdFile.lastModified();
+				}
+			}
+			
 			if (allFiles_HorizontalList.getSelectedInd() != prevSelectedFileListInd) {
 				fileInfo_LogBar.setText(getFileInfoOfSelected(allFiles_HorizontalList.getSelectedInd()));
 			}
@@ -497,18 +499,19 @@ public class FilesRenderingScreen {
 			jsonHelper.writeData(mainActivity.getMasterRenderJobsStatusFilePath());
 			// save and create renderJobStatusArray--------------------------------------
 
-			//prepare restart json ---------------------------------
+			// prepare restart json ---------------------------------
 			JSONArray restartArray = new JSONArray();
-			for (int i = 0; i < renderJobsArray.size(); i++) {
+			for (int i = 0; i < allConnectedNodes.size(); i++) {
 				JSONObject restartObj = new JSONObject();
+				restartObj.put("pcName", allPCNames[i]);
 				restartObj.put("restart", p.str(false));
-				renderJobsStatusArray.add(restartObj);
+				restartArray.add(restartObj);
 			}
 			jsonHelper.clearArray();
 			jsonHelper.setArray(restartArray);
 			jsonHelper.writeData(mainActivity.getRestartCommandFilePath());
-			//prepare restart json ---------------------------------
-			
+			// prepare restart json ---------------------------------
+
 			mainActivity.getRenderOverview().saveHardwareToUse(allConnectedNodes);
 
 			renderFiles();

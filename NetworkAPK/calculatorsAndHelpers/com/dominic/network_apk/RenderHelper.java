@@ -639,7 +639,35 @@ public class RenderHelper {
 		}
 		return jobExists;
 	}
-
+	
+	public void checkForRestart() {
+		JSONArray loadedArray=jsonHelper.getData(mainActivity.getRestartCommandFilePath());
+		if(loadedArray!=null && loadedArray.size()>0) {
+			for(int i=0;i<loadedArray.size();i++) {
+			JSONObject restartObj=(JSONObject) loadedArray.get(i);
+			String pcAlias=restartObj.get("pcName").toString();
+			if(mainActivity.getPCName().equals(pcAlias)) {
+				Boolean restart=Boolean.parseBoolean(restartObj.get("restart").toString());
+				if(restart) {
+					setRestartValue(loadedArray, i,"restart", false);
+					mainActivity.initializeLoadingScreen();
+				}
+			}
+		}
+		}
+	}
+	public void setRestartValue(JSONArray arr,int ind,String key, Boolean state) {
+		try {
+			JSONObject curObj=(JSONObject) arr.get(ind);
+			curObj.put(key,p.str(state));
+			arr.set(ind, curObj);
+			jsonHelper.clearArray();
+			jsonHelper.setArray(arr);
+			jsonHelper.writeData(mainActivity.getRestartCommandFilePath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public Boolean getStartRenderingFromJson() {
 		try {
 			int mode;

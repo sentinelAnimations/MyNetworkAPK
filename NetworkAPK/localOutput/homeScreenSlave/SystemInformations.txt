@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 12/9/2020, 15:34:39
+      Time of this report: 12/10/2020, 12:16:54
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 8193MB used, 11011MB available
+                Page File: 10216MB used, 8988MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -456,13 +456,13 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 141.0 GB
+ Free Space: 145.8 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB
 
       Drive: D:
- Free Space: 1078.1 GB
+ Free Space: 1077.7 GB
 Total Space: 2861.5 GB
 File System: NTFS
       Model: WDC WD30EFRX-68EUZN0
@@ -1467,6 +1467,44 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
+Fault bucket 1830804631711115399, type 5
+Event Name: MpTelemetry
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: Microsoft Defender Antivirus (77BDAF73-B396-481F-9042-AD358843EC24)
+P2: 4.18.2011.6
+P3: TimeOut
+P4: 1.1.17700.4
+P5: fixed
+P6: 12 / 2049+
+P7: 5 / not boot
+P8: 
+P9: 
+P10: 
+
+
++++ WER1 +++:
+Fault bucket , type 0
+Event Name: MpTelemetry
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: Microsoft Defender Antivirus (77BDAF73-B396-481F-9042-AD358843EC24)
+P2: 4.18.2011.6
+P3: TimeOut
+P4: 1.1.17700.4
+P5: fixed
+P6: 12 / 2049+
+P7: 5 / not boot
+P8: 
+P9: 
+P10: 
+
+
++++ WER2 +++:
 Fault bucket 1718017572998072751, type 4
 Event Name: APPCRASH
 Response: Not available
@@ -1485,7 +1523,7 @@ P9:
 P10: 
 
 
-+++ WER1 +++:
++++ WER3 +++:
 Fault bucket , type 0
 Event Name: APPCRASH
 Response: Not available
@@ -1504,7 +1542,7 @@ P9:
 P10: 
 
 
-+++ WER2 +++:
++++ WER4 +++:
 Fault bucket 2258539436349435537, type 5
 Event Name: RADAR_PRE_LEAK_64
 Response: Not available
@@ -1523,46 +1561,8 @@ P9:
 P10: 
 
 
-+++ WER3 +++:
-Fault bucket 1436477026018957989, type 5
-Event Name: StoreAgentScanForUpdatesFailure0
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Update;
-P2: 8024402c
-P3: 19041
-P4: 630
-P5: Windows.Desktop
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER4 +++:
-Fault bucket , type 0
-Event Name: StoreAgentScanForUpdatesFailure0
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Update;
-P2: 8024402c
-P3: 19041
-P4: 630
-P5: Windows.Desktop
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
 +++ WER5 +++:
-Fault bucket , type 0
+Fault bucket 1436477026018957989, type 5
 Event Name: StoreAgentScanForUpdatesFailure0
 Response: Not available
 Cab Id: 0
@@ -1601,6 +1601,44 @@ P10:
 
 +++ WER7 +++:
 Fault bucket , type 0
+Event Name: StoreAgentScanForUpdatesFailure0
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER8 +++:
+Fault bucket , type 0
+Event Name: StoreAgentScanForUpdatesFailure0
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: Update;
+P2: 8024402c
+P3: 19041
+P4: 630
+P5: Windows.Desktop
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER9 +++:
+Fault bucket , type 0
 Event Name: AppHangB1
 Response: Not available
 Cab Id: 0
@@ -1611,44 +1649,6 @@ P2: 8.6.2.10
 P3: 00000000
 P4: 5299
 P5: 134217728
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER8 +++:
-Fault bucket , type 0
-Event Name: AppHangB1
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: blender.exe
-P2: 2.9.0.0
-P3: 5f6b092e
-P4: e309
-P5: 134217728
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER9 +++:
-Fault bucket 2155596857590126729, type 5
-Event Name: RADAR_PRE_LEAK_64
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: chrome.exe
-P2: 87.0.4280.88
-P3: 10.0.19041.2.0.0
-P4: 
-P5: 
 P6: 
 P7: 
 P8: 

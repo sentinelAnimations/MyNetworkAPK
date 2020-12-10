@@ -32,7 +32,7 @@ public class HomeScreenSlaves {
 	private Boolean allWorking = true, copying = false;
 	private String pathToCloud, pcAlias, pcFolderName, cpuName = "", gpuName = "";
 	private String[] pictoPaths;
-	private long curTime, prevLastModified, lastLogTime = 0, lastLogTime2 = 0, prevTime1;
+	private long curTime, prevLastModified, lastLogTime = 0, lastLogTime2 = 0, prevTime1, restartLastModified;
 	private PFont stdFont;
 	private PApplet p;
 	private ImageButton[] mainButtons;
@@ -148,6 +148,13 @@ public class HomeScreenSlaves {
 	}
 
 	public void calcBackgroundTasks() {
+		if (p.frameCount % 60 == 0) {
+			File restartCmdFile = new File(mainActivity.getRestartCommandFilePath());
+			if (restartCmdFile.exists() && restartCmdFile.lastModified() != restartLastModified) {
+				renderHelper.checkForRestart();
+				restartLastModified = restartCmdFile.lastModified();
+			}
+		}
 		curTime = pcInfoHelper.getCurTime();
 		if (curTime - lastLogTime > mainActivity.getStdTimeIntervall()) {
 			logData();
@@ -166,27 +173,25 @@ public class HomeScreenSlaves {
 		}
 
 	}
-	
+
 	private void renderFiles() {
-		
-		checkForRestart();
-		
+
 		Boolean isRenderingJson = renderHelper.getStartRenderingFromJson();
 
 		Boolean startRendering = renderHelper.getStartRenderingFromJson();
-		
-		p.fill(255,0,0);
-		p.text(p.str(startRendering),100,100);
-		
+
+		p.fill(255, 0, 0);
+		p.text(p.str(startRendering), 100, 100);
+
 		if (startRendering) {
 			if (!renderHelper.getAllJobsStarted() && (renderHelper.getCpuFinished() || renderHelper.getGpuFinished())) {
 				Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(), true);
 				p.println("hw to use");
 				p.println(hwToUse);
-				
-				p.fill(255,0,0);
-				p.text(p.str(hwToUse[0])+":"+p.str(hwToUse[1]),100,200);
-				
+
+				p.fill(255, 0, 0);
+				p.text(p.str(hwToUse[0]) + ":" + p.str(hwToUse[1]), 100, 200);
+
 				p.println(renderHelper.getCpuFinished());
 				if (hwToUse[0] && renderHelper.getCpuFinished()) {
 					renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
@@ -195,11 +200,11 @@ public class HomeScreenSlaves {
 					renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
 				}
 				renderMode = 0;
-				if(!hwToUse[0] && !hwToUse[1]) {
-					renderMode=2;
-					
-					p.fill(255,0,0);
-					p.text("NO HW TO USE",100,300);
+				if (!hwToUse[0] && !hwToUse[1]) {
+					renderMode = 2;
+
+					p.fill(255, 0, 0);
+					p.text("NO HW TO USE", 100, 300);
 				}
 			} else {
 				if (!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {
@@ -232,7 +237,7 @@ public class HomeScreenSlaves {
 			if (sheepitRenderHelper.getIsRendering()) {
 				if (sheepitRenderHelper.getWindowIsOpen()) {
 					renderMode = 1;
-					checkIterations=0;
+					checkIterations = 0;
 				} else {
 					p.println(checkIterations);
 					String sheepitPath = sheepitRenderHelper.getSheepitExePath();
@@ -250,23 +255,7 @@ public class HomeScreenSlaves {
 			}
 		}
 	}
-	
-	private void checkForRestart() {
-		JSONArray loadedArray=jsonHelper.getData(mainActivity.getRestartCommandFilePath());
-		if(loadedArray!=null && loadedArray.size()>0) {
-			for(int i=0;i<loadedArray.size();i++) {
-			JSONObject restartObj=(JSONObject) loadedArray.get(i);
-			String pcAlias=restartObj.get("pcAlias").toString();
-			if(mainActivity.getPCName().equals(pcAlias)) {
-				Boolean restart=Boolean.parseBoolean(restartObj.get("restart").toString());
-				if(restart) {
-					mainActivity.initializeLoadingScreen();
-				}
-			}
-		}
-		}
-	}
-	
+
 	public void checkForNewSoftware() {
 		// check for new software ----------------------------------------------------
 		if (curTime - lastLogTime2 > mainActivity.getStdTimeIntervall() && !copying) {
@@ -342,8 +331,6 @@ public class HomeScreenSlaves {
 		// check for new software ----------------------------------------------------
 	}
 
-
-
 	public void logData() {
 		jsonHelper.clearArray();
 		JSONObject settingsDetails = new JSONObject();
@@ -357,7 +344,7 @@ public class HomeScreenSlaves {
 		settingsDetails.put("cpuCores", cpuCores);
 		settingsDetails.put("cpuName", cpuName);
 		settingsDetails.put("gpuName", gpuName);
-		
+
 		settingsObject.put("SystemLog", settingsDetails);
 
 		String jsonPath = mainActivity.getPathToPCFolder() + "\\" + pcAlias + "\\" + mainActivity.getLogFileName();
@@ -378,7 +365,7 @@ public class HomeScreenSlaves {
 	}
 
 	private void setData() {
-	
+
 	}
 
 	public void onMousePressed(int mouseButton) {
