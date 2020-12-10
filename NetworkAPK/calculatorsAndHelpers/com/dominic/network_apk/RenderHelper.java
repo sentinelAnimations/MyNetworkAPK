@@ -80,6 +80,7 @@ public class RenderHelper {
 		JSONArray allRenderJobsStatus = jsonHelper.getData(pathToRenderJobsStatus);
 		renderedFrames = new int[allPCNames.length];
 		Arrays.fill(renderedFrames, 0);
+		if(allRenderJobsStatus!=null && allRenderJobsStatus.size()>0) {
 		for (int i = 0; i < allRenderJobsStatus.size(); i++) {
 			JSONObject curObj = (JSONObject) allRenderJobsStatus.get(i);
 			Boolean startedJob = Boolean.parseBoolean(curObj.get("started").toString());
@@ -108,6 +109,9 @@ public class RenderHelper {
 				}
 			}
 		}
+	}else {
+		allFinished=false;
+	}
 		return allFinished;
 	}
 
@@ -119,6 +123,7 @@ public class RenderHelper {
 		int nextInd = -1;
 		Boolean nextJobFound = false;
 
+		if(allRenderJobsStatus!=null && allRenderJobsStatus.size()>0) {
 		for (int i = 0; i < allRenderJobsStatus.size(); i++) {
 			JSONObject curObj = (JSONObject) allRenderJobsStatus.get(i);
 			if (!nextJobFound) {
@@ -129,6 +134,9 @@ public class RenderHelper {
 				}
 			}
 		}
+	}else {
+		//evtl to do--------------
+	}
 		if (nextInd < 0) {
 			allJobsStarted = true;
 		}

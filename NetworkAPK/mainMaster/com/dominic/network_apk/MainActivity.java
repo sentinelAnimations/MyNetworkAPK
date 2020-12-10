@@ -74,7 +74,7 @@ public class MainActivity extends PApplet {
 	// Local -----------
 	// File names -------
 	private String logFileName = "logFile.json", relativeMasterCommandFilePath = "MasterCommands\\masterCommands.json", relativeMasterRenderJobsFilePath = "MasterCommands\\MasterRenderJobs.json", relativeMasterRenderJobsStatusFilePath = "MasterCommands\\jobStatus\\MasterRenderJobsStatus.json", hardwareToUseFilePath = "MasterCommands\\hardwareToUse.json", allRenderFilesRelativePath = "MasterCommands\\allRenderFiles.json", relativePathRenderPythonScrips = "renderPythonScripts", blenderRenderFilesFolderName = "blenderRenderFiles", pcFolderName = "networkPCs";
-	private String sheepitSettingsFileName = "sheepitSettings.json";
+	private String sheepitSettingsFileName = "sheepitSettings.json",restartCommandFilePath="MasterCommands\\restart.json";
 	// File names -------
 
 	// shared ----------
@@ -270,7 +270,7 @@ public class MainActivity extends PApplet {
 
 		// variableInitialisation for mode 101 --> RenderOverview -------------
 		loadingScreen.setLoadingStatus("Init RenderOverview");
-		String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png", absPathPictos + "masterPC.png", absPathPictos + "renderSettings.png", absPathPictos + "renderFile.png" };
+		String[] rOpp = { absPathPictos + "cross.png", absPathPictos + "sheepit.png", absPathPictos + "sleeping.png", absPathPictos + "checkmark.png", absPathPictos + "cmd.png", absPathPictos + "imageView.png", absPathPictos + "selectFolder.png", absPathPictos + "freeze.png", absPathPictos + "search.png", absPathPictos + "masterPC.png", absPathPictos + "renderSettings.png", absPathPictos + "renderFile.png",absPathPictos+"collectImages.png",absPathPictos+"restart.png" };
 		String[] hoLiPictoPathsRenderOverview = { absPathPictos + "blendFile.png", absPathPictos + "arrowLeft.png", absPathPictos + "arrowRight.png" };
 		renderOverview = new RenderOverview(this, 101, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red, blue, textYShift, getMasterCommandFilePath(), rOpp, hoLiPictoPathsRenderOverview, arrowPaths, fileExplorerPaths, stdFont);
 		// variableInitialisation for mode 101 --> RenderOverview -------------
@@ -916,7 +916,9 @@ public class MainActivity extends PApplet {
 	public String getSheepitSettingsPath() {
 		return new File(getMasterCommandFilePath()).getParentFile().getAbsolutePath() + "\\" + sheepitSettingsFileName;
 	}
-
+	public String getRestartCommandFilePath() {
+		return getPathToCloud()+"\\"+restartCommandFilePath;
+	}
 	public String[] getModeNamesMaster() {
 		return modeNamesMaster;
 	}

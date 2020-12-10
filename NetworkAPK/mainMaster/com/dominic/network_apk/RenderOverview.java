@@ -20,7 +20,7 @@ public class RenderOverview {
 	private String[] pictoPaths;
 	private PFont stdFont;
 	private PApplet p;
-	private ImageButton cancelRendering_ImageButton, imageView_imageButton, sleep_ImageButton;
+	private ImageButton cancelRendering_ImageButton, imageView_imageButton, sleep_ImageButton,collect_ImageButton;
 	private MainActivity mainActivity;
 	private FilesSettingsScreen filesSettingsScreen;
 	private FilesRenderingScreen filesRenderingScreen;
@@ -52,10 +52,11 @@ public class RenderOverview {
 		cancelRendering_ImageButton = new ImageButton(p, p.width - margin - btnSizeSmall / 2, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[0], "Quit render process", null);
 		imageView_imageButton = new ImageButton(p, p.width - margin * 2 - btnSizeSmall / 2 - btnSizeSmall, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[5], "Image view", null);
 		sleep_ImageButton = new ImageButton(p, p.width - margin * 3 - btnSizeSmall / 2 - btnSizeSmall * 2, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[2], "Sleep", null);
+		collect_ImageButton = new ImageButton(p, p.width - margin * 4 - btnSizeSmall / 2 - btnSizeSmall * 3, p.height - margin - btnSizeSmall / 2, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, true, false, textCol, light, pictoPaths[12], "Collect", null);
 
 		String[] rFSPictoPaths = { pictoPaths[3], pictoPaths[6] };
 		filesSettingsScreen = new FilesSettingsScreen(p, stdTs, edgeRad, margin, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, textYShift, rFSPictoPaths, hoLiPictoPaths, arrowPaths, fileExplorerPaths, stdFont);
-		String[] fRSPictoPaths = { pictoPaths[4], pictoPaths[7], pictoPaths[9], pictoPaths[10], pictoPaths[11], pictoPaths[2] };
+		String[] fRSPictoPaths = { pictoPaths[4], pictoPaths[7], pictoPaths[9], pictoPaths[10], pictoPaths[11], pictoPaths[2],pictoPaths[13] };
 		filesRenderingScreen = new FilesRenderingScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, lightest, textCol, textDark, border, green, red, blue, textYShift, fRSPictoPaths, hoLiPictoPaths, stdFont);
 		String[] rOSPictoPaths = { pictoPaths[1], pictoPaths[2] };
 		renderOnSheepitScreen = new RenderOnSheepitScreen(p, stdTs, edgeRad, margin, btnSizeLarge, btnSize, btnSizeSmall, dark, light, lighter, textCol, textDark, border, red, green, textYShift, rOSPictoPaths, hoLiPictoPaths, stdFont);
@@ -82,6 +83,7 @@ public class RenderOverview {
 			filesRenderingScreen.render();
 			imageView_imageButton.render();
 			sleep_ImageButton.render();
+			collect_ImageButton.render();
 		}
 		if (renderMode == 1.1f) {
 			sheepitSettingsScreen.render();
@@ -100,6 +102,7 @@ public class RenderOverview {
 		imageView_imageButton.getHoverText().render();
 		sleep_ImageButton.getHoverText().render();
 		cancelRendering_ImageButton.getHoverText().render();
+		collect_ImageButton.getHoverText().render();
 		// render all ---------------------------------------
 
 		// button handling -------------------------
@@ -124,11 +127,16 @@ public class RenderOverview {
 
 			cancelRendering_ImageButton.setIsClicked(false);
 		}
+		
 		if (sleep_ImageButton.getIsClicked()) {
 			if (renderMode == 0) {
 				filesRenderingScreen.setIsRendering(!filesRenderingScreen.getRenderHelper().getStartRenderingFromJson());
 			}
 			sleep_ImageButton.setIsClicked(false);
+		}
+		if(collect_ImageButton.getIsClicked()) {
+			filesRenderingScreen.collectImages();
+			collect_ImageButton.setIsClicked(false);
 		}
 
 		if (renderMode == 0) {
@@ -188,6 +196,7 @@ public class RenderOverview {
 			filesRenderingScreen.onMousePressed(mouseButton);
 			imageView_imageButton.onMousePressed();
 			sleep_ImageButton.onMousePressed();
+			collect_ImageButton.onMousePressed();
 		}
 		if (renderMode == 1.1f) {
 			sheepitSettingsScreen.onMousePressed(mouseButton);
@@ -212,6 +221,7 @@ public class RenderOverview {
 			filesRenderingScreen.onMouseReleased(mouseButton);
 			imageView_imageButton.onMouseReleased();
 			sleep_ImageButton.onMouseReleased();
+			collect_ImageButton.onMouseReleased();
 		}
 		if (renderMode == 1.1f) {
 			sheepitSettingsScreen.onMouseReleased(mouseButton);

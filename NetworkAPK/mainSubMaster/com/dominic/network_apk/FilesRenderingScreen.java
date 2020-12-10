@@ -32,6 +32,7 @@ public class FilesRenderingScreen {
 	private LogBar logBar, fileInfo_LogBar;
 	private Switch renderGraphics_switch, showGPUOrCpuLog_switch;
 	private PictogramImage rendering_PictogramImage, sleep_PictogramImage;
+	private ImageButton[] restartAPK_ImageButtons;
 	private FileInteractionHelper fileInteractionHelper;
 	private JsonHelper jsonHelper;
 	private RenderHelper renderHelper;
@@ -144,7 +145,7 @@ public class FilesRenderingScreen {
 					p.rect(listX[i], allPCs_HorizontalList.getY(), listW[i], allPCs_HorizontalList.getH() - margin * 2, edgeRad);
 					allPCLoadingbars[i].render();
 					allPCPictos[i].render();
-
+					restartAPK_ImageButtons[i].render();
 					try {
 						p.fill(textCol);
 						p.textFont(stdFont);
@@ -155,8 +156,14 @@ public class FilesRenderingScreen {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					
+					// restartButton handling --------------------------------
+					if (restartAPK_ImageButtons[i].getIsClicked()) {
+						
+						restartAPK_ImageButtons[i].setIsClicked(false);
+					}
+					// restartButton handling --------------------------------
 				}
-
 			}
 
 			// render allPCs_horizontalList --------------------
@@ -171,7 +178,7 @@ public class FilesRenderingScreen {
 			p.textFont(stdFont);
 			p.textSize(stdTs);
 			p.textAlign(p.RIGHT, p.CENTER);
-			p.text(statusText, mainActivity.getRenderOverview().getSleepImageButton().getX() - mainActivity.getRenderOverview().getSleepImageButton().getW() / 2 - margin, mainActivity.getRenderOverview().getSleepImageButton().getY());
+			p.text(statusText, p.width / 2, mainActivity.getRenderOverview().getSleepImageButton().getY());
 			// render all ----------------------------------------------
 		} else {
 
@@ -490,6 +497,18 @@ public class FilesRenderingScreen {
 			jsonHelper.writeData(mainActivity.getMasterRenderJobsStatusFilePath());
 			// save and create renderJobStatusArray--------------------------------------
 
+			//prepare restart json ---------------------------------
+			JSONArray restartArray = new JSONArray();
+			for (int i = 0; i < renderJobsArray.size(); i++) {
+				JSONObject restartObj = new JSONObject();
+				restartObj.put("restart", p.str(false));
+				renderJobsStatusArray.add(restartObj);
+			}
+			jsonHelper.clearArray();
+			jsonHelper.setArray(restartArray);
+			jsonHelper.writeData(mainActivity.getRestartCommandFilePath());
+			//prepare restart json ---------------------------------
+			
 			mainActivity.getRenderOverview().saveHardwareToUse(allConnectedNodes);
 
 			renderFiles();
@@ -554,7 +573,7 @@ public class FilesRenderingScreen {
 		renderStatistics_HorizontalList.setList(renderStatList);
 	}
 
-	private void collectImages() {
+	public void collectImages() {
 		p.println("now collecting");
 		for (int i = 0; i < allFiles_HorizontalList.getList().length; i++) {
 			try {
@@ -594,6 +613,9 @@ public class FilesRenderingScreen {
 			allFiles_HorizontalList.onMousePressed();
 			allPCs_HorizontalList.onMousePressed();
 			renderStatistics_HorizontalList.onMousePressed();
+			for (int i = allPCs_HorizontalList.getFirstDisplayedInd(); i <= allPCs_HorizontalList.getLastDisplayedInd(); i++) {
+				restartAPK_ImageButtons[i].onMousePressed();
+			}
 		}
 	}
 
@@ -604,6 +626,9 @@ public class FilesRenderingScreen {
 			allFiles_HorizontalList.onMouseReleased(mouseButton);
 			allPCs_HorizontalList.onMouseReleased(mouseButton);
 			renderStatistics_HorizontalList.onMouseReleased(mouseButton);
+			for (int i = allPCs_HorizontalList.getFirstDisplayedInd(); i <= allPCs_HorizontalList.getLastDisplayedInd(); i++) {
+				restartAPK_ImageButtons[i].onMouseReleased();
+			}
 		}
 	}
 
@@ -775,12 +800,14 @@ public class FilesRenderingScreen {
 		allRenderInfos = new String[allPCs_HorizontalList.getList().length];
 		allPCStatus = new int[allPCs_HorizontalList.getList().length];
 		fileIsFinished = new Boolean[allPCs_HorizontalList.getList().length];
+		restartAPK_ImageButtons = new ImageButton[allPCs_HorizontalList.getList().length];
 
 		for (int i = 0; i < allPCLoadingbars.length; i++) {
 			allPCLoadingbars[i] = new Loadingbar(p, 0, 0, listH, margin, stdTs, edgeRad, margin, border, dark, textCol, 0, 600, textYShift, false, stdFont, null);
 			allPCNames[i] = allConnectedNodes.get(i).getPcSelection_DropdownMenu().getSelectedItem();
 			allLastLogLines[i] = "Fra:2 Mem:142.26M (0.00M, Peak 152.21M) | Time:00:00.36 | Remaining:00:02.01 | Mem:11.84M, Peak:21.80M | Scene, View Layer | Rendered 1/680 Tiles: " + i;
 			allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
+			restartAPK_ImageButtons[i] = new ImageButton(p, listH / 2 - margin - btnSizeSmall / 2, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, false, true, lightest, lightest, pictoPaths[6], "Restart APK", allPCPictos[i]);
 			fileIsFinished[i] = false;
 		}
 		p.textSize(stdTs);
@@ -795,6 +822,7 @@ public class FilesRenderingScreen {
 		rendering_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[4], "Rendering file", null);
 		sleep_PictogramImage = new PictogramImage(p, p.width / 2, p.height / 2, btnSizeLarge, btnSizeLarge, margin, stdTs, edgeRad, textCol, textYShift, false, false, pictoPaths[5], "Rendering file", null);
 		global_Loadingbar = new Loadingbar(p, 0, -allFiles_HorizontalList.getH() / 2 - margin * 2, allFiles_HorizontalList.getW(), margin, stdTs, edgeRad, margin, lighter, light, textCol, 0, 600, textYShift, true, stdFont, allFiles_HorizontalList);
+
 		updateLists();
 	}
 
