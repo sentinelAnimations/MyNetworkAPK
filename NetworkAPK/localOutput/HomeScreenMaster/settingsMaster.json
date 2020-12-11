@@ -3,7 +3,7 @@
     "endFrame": 3,
     "resY": 400,
     "resX": 400,
-    "samples": 2,
+    "samples": 64,
     "checkboxIsChecked8": true,
     "startFrame": 0,
     "checkboxIsChecked6": true,
@@ -15,7 +15,7 @@
     "checkboxIsChecked3": false,
     "checkboxIsChecked0": true,
     "checkboxIsChecked1": false,
-    "imageSavePath": "D:\\algemeine Bilder\\ImageFolderFor_NetworkAPK",
+    "imageSavePath": "D:\\algemeine Bilder\\ImageFolderFor_NetworkAPK\\copyTest",
     "fileList": [
       "C:\\blenderFiles\\miniPC_allElements_Animation_closeup.blend"
     ]

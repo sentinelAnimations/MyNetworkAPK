@@ -69,7 +69,7 @@ The top progress-bar shows the (rendered-images)/(all-images) ratio. \n
 All Files to render. Even now, files could be removed from list --> are excluded from render process. \n
 \n
 1.4.3.3 Rendering PCs \n
-Lists all Connected PCs and their status. \n
+Lists all Connected PCs and their status. If the restart button (right upper corner of every pc list item) is pressed, the APK of the desired computer restarts. \n
 \n
 1.4.3.4 Logbar \n
 Shows the current log of the renderprocess of the PC selected in Render-PC-list. Note the GPU/CPU-switch at the right (switch between gpu/cpu log/progress). \n

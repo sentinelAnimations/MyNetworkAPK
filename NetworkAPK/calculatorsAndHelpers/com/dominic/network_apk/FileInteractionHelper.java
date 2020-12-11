@@ -20,11 +20,12 @@ public class FileInteractionHelper {
 	private PCInfoHelper pcInfoHelper;
 	private MainActivity mainActivity;
 	private CommandExecutionHelper commandExecutionHelper;
+
 	public FileInteractionHelper(PApplet p) {
 		this.p = p;
 		mainActivity = (MainActivity) p;
 		pcInfoHelper = mainActivity.getPcInfoHelper();
-		commandExecutionHelper=mainActivity.getCommandExecutionHelper();
+		commandExecutionHelper = mainActivity.getCommandExecutionHelper();
 	}
 
 	public String getAbsolutePath(String relativeFilePath) {
@@ -65,17 +66,34 @@ public class FileInteractionHelper {
 		}
 		return isCopied;
 	}
-	
-	public Boolean replaceFile(File source,File destination) {
-		Boolean copied=false;
+
+	public Boolean replaceFile(File source, File destination) {
+		Boolean copied = false;
 		try {
-			 Files.move(source.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			Files.move(source.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return copied;
 	}
-	
+
+	public void copyAndReplaceFilesOfFolder(String sourceFolder, String targetFolder) {
+
+		String[] allFiles = getFoldersAndFiles(sourceFolder, false);
+		if (allFiles != null && allFiles.length > 0) {
+			for (int i = 0; i < allFiles.length; i++) {
+				Path sourceDirectory = Paths.get(sourceFolder+"\\"+allFiles[i]);
+				Path targetDirectory = Paths.get(targetFolder+"\\"+allFiles[i]);
+				// copy source to target using Files Class
+				try {
+					Files.copy(sourceDirectory, targetDirectory, StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					System.out.println(e.toString());
+				}
+			}
+		}
+	}
+
 	public void copyFolder(String copyFolderPath, String destination) {
 		if (copyFolderPath.equals(destination) == false) {
 			new File(destination).mkdirs();
@@ -122,11 +140,11 @@ public class FileInteractionHelper {
 			p.println("cant copy to same path!");
 		}
 	}
-	
+
 	public void batchDeleteFolder(String path) {
-		commandExecutionHelper.executeCommand("rmdir /s/q "+path);
+		commandExecutionHelper.executeCommand("rmdir /s/q " + path);
 	}
-	
+
 	public void deleteFolder(String path) {
 		allInPathsDeleteFolder.clear();
 		allInPathsDeleteFolder.append(path);
@@ -246,18 +264,18 @@ public class FileInteractionHelper {
 		String cleanPath = pathToClean.replace("\\\\", "\\");
 		return cleanPath;
 	}
-	
-	public String getPathOfFileInFolder(String folderPath,String fileName) {
-		String filePath="";
-		ArrayList<File> allFilesInFolder=listFilesRecursive(folderPath);
-		for(int i=0;i<allFilesInFolder.size();i++) {
-			File f=allFilesInFolder.get(i);
-			if(f.getName().toString().equals(fileName)) {
-				filePath=f.getAbsolutePath();
+
+	public String getPathOfFileInFolder(String folderPath, String fileName) {
+		String filePath = "";
+		ArrayList<File> allFilesInFolder = listFilesRecursive(folderPath);
+		for (int i = 0; i < allFilesInFolder.size(); i++) {
+			File f = allFilesInFolder.get(i);
+			if (f.getName().toString().equals(fileName)) {
+				filePath = f.getAbsolutePath();
 				break;
 			}
 		}
-		//filePath="C:\\Program Files\\Blender Foundation\\Blender 2.90\\blender.exe";
+		// filePath="C:\\Program Files\\Blender Foundation\\Blender 2.90\\blender.exe";
 		return filePath;
 	}
 
@@ -274,6 +292,7 @@ public class FileInteractionHelper {
 			return false;
 		}
 	}
+
 	public String getNameWithoutExtension(File f) {
 		return f.getName().replaceFirst("[.][^.]+$", "");
 	}

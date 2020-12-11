@@ -200,11 +200,11 @@ public class FilesRenderingScreen {
 			if (p.frameCount % 60 == 0) {
 				File restartCmdFile = new File(mainActivity.getRestartCommandFilePath());
 				if (restartCmdFile.exists() && restartCmdFile.lastModified() != restartLastModified) {
-					renderHelper.checkForRestart();
+					renderHelper.checkForRestart(mainActivity.getMasterRenderJobsStatusFilePath());
 					restartLastModified = restartCmdFile.lastModified();
 				}
 			}
-			
+
 			if (allFiles_HorizontalList.getSelectedInd() != prevSelectedFileListInd) {
 				fileInfo_LogBar.setText(getFileInfoOfSelected(allFiles_HorizontalList.getSelectedInd()));
 			}
@@ -389,9 +389,8 @@ public class FilesRenderingScreen {
 		fileInteractionHelper.deleteFolder(localRenderFolder.getAbsolutePath());
 		fileInteractionHelper.deleteFolder(mainActivity.getCloudImageFolder());
 		fileInteractionHelper.deleteFolder(mainActivity.getOpenCheckPath());
-		// fileInteractionHelper.deleteFolder(new
-		// File(mainActivity.getMasterRenderJobsStatusFilePath()).getParent());
-		// Attention, folder has to be deleted
+		fileInteractionHelper.deleteFolder(new File(mainActivity.getMasterRenderJobsStatusFilePath()).getParent());
+		
 		collected = false;
 
 		String[] fileList = getHorizontalList().getList();
@@ -519,8 +518,12 @@ public class FilesRenderingScreen {
 	}
 
 	private void renderFiles() {
+		p.println("finished?",renderHelper.getCpuFinished(),renderHelper.getGpuFinished());
+		if(renderHelper.getCPUThread()!=null) {
+			p.println("cpuThread: "+renderHelper.getCPUThread().isAlive());
+		}
+		
 		Boolean isRenderingJson = renderHelper.getStartRenderingFromJson();
-		global_Loadingbar.setValue(renderHelper.getJobsDone());
 
 		if (renderHelper.getAllJobsFinished(mainActivity.getMasterRenderJobsStatusFilePath(), allPCNames)) {
 			global_Loadingbar.setValue(global_Loadingbar.getMax());
@@ -574,6 +577,8 @@ public class FilesRenderingScreen {
 			}
 		}
 		renderStatistics_HorizontalList.setList(renderStatList);
+		global_Loadingbar.setValue(renderedFrames);
+
 	}
 
 	public void collectImages() {
@@ -581,13 +586,18 @@ public class FilesRenderingScreen {
 		for (int i = 0; i < allFiles_HorizontalList.getList().length; i++) {
 			try {
 				String folderName = fileInteractionHelper.getNameWithoutExtension(new File(allFiles_HorizontalList.getList()[i]));
-				File destinationImageFolder = new File(imageSavePaths[i] + "\\" + folderName);
+				
+				
+				/*File destinationImageFolder = new File(imageSavePaths[i] + "\\" + folderName);
 				if (destinationImageFolder.exists()) {
 					fileInteractionHelper.deleteFolder(destinationImageFolder.getAbsolutePath());
-				}
+				}*/
+				
+				
 				String cloudImageFolder = mainActivity.getCloudImageFolder() + "\\" + folderName;
 				deleteJunkFiles(cloudImageFolder);
-				fileInteractionHelper.copyFolder(cloudImageFolder, imageSavePaths[i] + "\\");
+				//fileInteractionHelper.copyFolder(cloudImageFolder, imageSavePaths[i] + "\\");
+				fileInteractionHelper.copyAndReplaceFilesOfFolder(cloudImageFolder, imageSavePaths[i]);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -601,7 +611,7 @@ public class FilesRenderingScreen {
 			if (allImgs != null && allImgs.length > 0) {
 				for (int i = 0; i < allImgs.length; i++) {
 					File curFile = new File(path + "\\" + allImgs[i]);
-					if (fileInteractionHelper.getNameWithoutExtension(curFile).length() > renderHelper.getFilenameDigits()) {
+					if (fileInteractionHelper.getNameWithoutExtension(curFile).length() > renderHelper.getImageFilenameDigits()) {
 						curFile.delete();
 					}
 				}
@@ -810,7 +820,7 @@ public class FilesRenderingScreen {
 			allPCNames[i] = allConnectedNodes.get(i).getPcSelection_DropdownMenu().getSelectedItem();
 			allLastLogLines[i] = "Fra:2 Mem:142.26M (0.00M, Peak 152.21M) | Time:00:00.36 | Remaining:00:02.01 | Mem:11.84M, Peak:21.80M | Scene, View Layer | Rendered 1/680 Tiles: " + i;
 			allPCPictos[i] = new PictogramImage(p, margin + btnSize / 2, margin + btnSize / 2, btnSize, btnSize, margin, stdTs, edgeRad, textCol, textYShift, false, false, allConnectedNodes.get(i).getTypePicto().getPictoPath(), "", null);
-			restartAPK_ImageButtons[i] = new ImageButton(p, listH / 2 - margin - btnSizeSmall / 2, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, false, true, lightest, lightest, pictoPaths[6], "Restart APK", allPCPictos[i]);
+			restartAPK_ImageButtons[i] = new ImageButton(p, listH / 2 - margin - btnSizeSmall / 2, 0, btnSizeSmall, btnSizeSmall, stdTs, margin, edgeRad, -1, textYShift, false, true, lightest, lightest, pictoPaths[6], "", allPCPictos[i]);
 			fileIsFinished[i] = false;
 		}
 		p.textSize(stdTs);

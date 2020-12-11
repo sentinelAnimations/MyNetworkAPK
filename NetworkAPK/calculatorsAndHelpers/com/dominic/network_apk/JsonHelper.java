@@ -28,18 +28,18 @@ public class JsonHelper {
 
 	public JsonHelper(PApplet p) {
 		this.p = p;
-		fileInteractionHelper=new FileInteractionHelper(p);
+		fileInteractionHelper = new FileInteractionHelper(p);
 	}
 
 	public Boolean writeData(String path) {
 		// Write JSON file
-		//String[] splitPath = p.split(path, "/");
-		//File f = new File(splitPath[0]);
-		//f.mkdir();
-		Boolean isSaved=false;
+		// String[] splitPath = p.split(path, "/");
+		// File f = new File(splitPath[0]);
+		// f.mkdir();
+		Boolean isSaved = false;
 		File f = new File(path);
-		if(!f.exists()) {
-			//f.getParentFile().mkdirs();
+		if (!f.exists()) {
+			// f.getParentFile().mkdirs();
 			fileInteractionHelper.createParentFolders(f.getAbsolutePath());
 		}
 
@@ -50,7 +50,7 @@ public class JsonHelper {
 
 			file.write(jsonOutput);
 			file.flush();
-			isSaved=true;
+			isSaved = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,39 +60,32 @@ public class JsonHelper {
 	private void readData(String path) throws Exception {
 		JSONParser jsonParser = new JSONParser();
 		isFlawlessLoaded = false;
-		loadedData=new JSONArray();
+		loadedData = new JSONArray();
 		try (FileReader reader = new FileReader(path)) {
 			isFlawlessLoaded = true;
-			Object obj = jsonParser.parse(reader); 
+			Object obj = jsonParser.parse(reader);
 			loadedData = (JSONArray) obj;
 
-		} catch (FileNotFoundException e) {
-			isFlawlessLoaded = false;
-			e.printStackTrace();
-		} catch (IOException e) {
-			isFlawlessLoaded = false;
-			e.printStackTrace();
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			isFlawlessLoaded = false;
 			e.printStackTrace();
 		}
 	}
-	
 
 	public JSONArray getData(String path) {
 		try {
-            readData(path);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+			readData(path);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return loadedData;
 	}
-	
+
 	public JSONArray getDataFromSourceFolder(String path) {
 		isFlawlessLoaded = false;
 
-		try (InputStreamReader inputStreamReader =new InputStreamReader(JsonHelper.class.getResourceAsStream(path))) {
+		try (InputStreamReader inputStreamReader = new InputStreamReader(JsonHelper.class.getResourceAsStream(path))) {
 			loadedData = (JSONArray) new JSONParser().parse(inputStreamReader);
 			isFlawlessLoaded = true;
 
@@ -110,12 +103,11 @@ public class JsonHelper {
 	public void appendObjectToArray(JSONObject jObj) {
 		myArray.add(jObj);
 	}
-	
-	public void setArray(JSONArray jArr) {
-	    myArray.clear();
-	    myArray=jArr;
-	}
 
+	public void setArray(JSONArray jArr) {
+		myArray.clear();
+		myArray = jArr;
+	}
 
 	public void clearArray() {
 		myArray.clear();

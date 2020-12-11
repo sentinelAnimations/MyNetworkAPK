@@ -151,7 +151,7 @@ public class HomeScreenSlaves {
 		if (p.frameCount % 60 == 0) {
 			File restartCmdFile = new File(mainActivity.getRestartCommandFilePath());
 			if (restartCmdFile.exists() && restartCmdFile.lastModified() != restartLastModified) {
-				renderHelper.checkForRestart();
+				renderHelper.checkForRestart(mainActivity.getMasterRenderJobsStatusFilePath());
 				restartLastModified = restartCmdFile.lastModified();
 			}
 		}
@@ -179,7 +179,8 @@ public class HomeScreenSlaves {
 		Boolean isRenderingJson = renderHelper.getStartRenderingFromJson();
 
 		Boolean startRendering = renderHelper.getStartRenderingFromJson();
-
+		
+		p.textSize(30);
 		p.fill(255, 0, 0);
 		p.text(p.str(startRendering), 100, 100);
 

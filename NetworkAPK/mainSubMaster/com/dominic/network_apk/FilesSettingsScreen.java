@@ -406,6 +406,7 @@ public class FilesSettingsScreen {
 	}
 
 	public void setStartupVals() {
+		p.println("--------------",mainActivity.getHomeScreenMaster().getImageSavePath_pathSelector().getPath());
 		imageSavePath_pathSelector.setPath(mainActivity.getHomeScreenMaster().getImageSavePath_pathSelector().getPath(),false);
 
 		settings_checkboxes[0].setIsChecked(mainActivity.getHomeScreenMaster().getCheckboxes()[8].getIsChecked()); // useNewResolution

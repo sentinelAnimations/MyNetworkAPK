@@ -297,33 +297,27 @@ public class PathSelector<T> implements Widgets {
 		renderPathSelector = state;
 	}
 
-	public void setPath(String setPath,Boolean setAnyway) {
+	public void setPath(String setPath, Boolean setAnyway) {
 		File f = new File(setPath);
 		if (f.exists()) {
-			// if (f.isDirectory() == false) {
-			// File parentFile = f.getParentFile();
-			// if (parentFile != null) {
-			// f = parentFile;
-			// }
-			// }
 			String newSetPath = "";
-			if(setAnyway) {
-				newSetPath=setPath;
-			}else {
-			if (selectFolder) {
-				if (f.isDirectory()) {
-					newSetPath = f.getAbsolutePath();
-				} else {
-					newSetPath = f.getParentFile().getAbsolutePath();
+			if (setAnyway) {
+				newSetPath = setPath;
+			} else {
+				if (selectFolder) {
+					if (f.isDirectory()) {
+						newSetPath = f.getAbsolutePath();
+					} else {
+						newSetPath = f.getParentFile().getAbsolutePath();
+					}
 				}
-			}
-			if (!selectFolder) {
-				if (f.isDirectory()) {
-					newSetPath="";
-				} else {
-					newSetPath = f.getAbsolutePath();
+				if (!selectFolder) {
+					if (f.isDirectory()) {
+						newSetPath = "";
+					} else {
+						newSetPath = f.getAbsolutePath();
+					}
 				}
-			}
 			}
 			fileExplorer.setPath(newSetPath);
 			setText(newSetPath);
