@@ -1,8 +1,8 @@
 [
   {
-    "endFrame": 3,
-    "resY": 400,
-    "resX": 400,
+    "endFrame": 580,
+    "resY": 1080,
+    "resX": 2520,
     "samples": 64,
     "checkboxIsChecked8": true,
     "startFrame": 0,

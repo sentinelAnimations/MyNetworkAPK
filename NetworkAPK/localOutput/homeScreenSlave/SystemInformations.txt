@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 12/11/2020, 12:51:18
+      Time of this report: 12/13/2020, 22:12:08
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 10134MB used, 9069MB available
+                Page File: 9277MB used, 9450MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -456,13 +456,13 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 142.6 GB
+ Free Space: 132.8 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB
 
       Drive: D:
- Free Space: 1077.4 GB
+ Free Space: 1072.6 GB
 Total Space: 2861.5 GB
 File System: NTFS
       Model: WDC WD30EFRX-68EUZN0
@@ -496,7 +496,7 @@ Device ID: PCI\VEN_8086&DEV_8D26&SUBSYS_86001043&REV_05\3&11583659&0&E8
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D PCI Express Root Port 1 - 6F03
 Device ID: PCI\VEN_8086&DEV_6F03&SUBSYS_00008086&REV_01\3&11583659&0&09
-   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0488 (English), 9/10/2020 15:01:35, 472376 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 469320 bytes
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D Home Agent 0 - 6F30
 Device ID: PCI\VEN_8086&DEV_6F30&SUBSYS_6F308086&REV_01\3&103A9D54&0&91
@@ -734,8 +734,8 @@ Device ID: PCI\VEN_8086&DEV_6F28&SUBSYS_00000000&REV_01\3&11583659&0&28
 
      Name: ASMedia USB 3.0 eXtensible Host Controller - 1.0 (Microsoft)
 Device ID: PCI\VEN_1B21&DEV_1142&SUBSYS_85FD1043&REV_00\4&2C9BF1CA&0&00E4
-   Driver: C:\WINDOWS\system32\DRIVERS\USBXHCI.SYS, 10.00.19041.0488 (English), 9/10/2020 15:01:36, 602440 bytes
-   Driver: C:\WINDOWS\system32\DRIVERS\UMDF\UsbXhciCompanion.dll, 10.00.19041.0488 (English), 9/10/2020 15:01:36, 137408 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\USBXHCI.SYS, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 602440 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\UMDF\UsbXhciCompanion.dll, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 137936 bytes
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D DDRIO Channel 0/1 Interface - 6FBD
 Device ID: PCI\VEN_8086&DEV_6FBD&SUBSYS_00000000&REV_01\3&103A9D54&0&A5
@@ -772,7 +772,7 @@ Device ID: PCI\VEN_8086&DEV_8D47&SUBSYS_86001043&REV_05\3&11583659&0&F8
 
      Name: Intel(R) C610 series/X99 chipset PCI Express Root Port #5 - 8D18
 Device ID: PCI\VEN_8086&DEV_8D18&SUBSYS_86001043&REV_D5\3&11583659&0&E4
-   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0488 (English), 9/10/2020 15:01:35, 472376 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 469320 bytes
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D DDRIO Global Broadcast - 6FAF
 Device ID: PCI\VEN_8086&DEV_6FAF&SUBSYS_00000000&REV_01\3&103A9D54&0&9F
@@ -780,11 +780,11 @@ Device ID: PCI\VEN_8086&DEV_6FAF&SUBSYS_00000000&REV_01\3&103A9D54&0&9F
 
      Name: Intel(R) C610 series/X99 chipset PCI Express Root Port #1 - 8D10
 Device ID: PCI\VEN_8086&DEV_8D10&SUBSYS_86001043&REV_D5\3&11583659&0&E0
-   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0488 (English), 9/10/2020 15:01:35, 472376 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 469320 bytes
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D PCI Express Root Port 1 - 6F02
 Device ID: PCI\VEN_8086&DEV_6F02&SUBSYS_00008086&REV_01\3&11583659&0&08
-   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0488 (English), 9/10/2020 15:01:35, 472376 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 469320 bytes
 
      Name: Intel(R) Management Engine Interface 
 Device ID: PCI\VEN_8086&DEV_8D3A&SUBSYS_86001043&REV_05\3&11583659&0&B0
@@ -808,8 +808,8 @@ Device ID: PCI\VEN_8086&DEV_6FE2&SUBSYS_6FE28086&REV_01\3&103A9D54&0&62
 
      Name: Intel(R) USB 3.0 eXtensible Host Controller - 1.0 (Microsoft)
 Device ID: PCI\VEN_8086&DEV_8D31&SUBSYS_86001043&REV_05\3&11583659&0&A0
-   Driver: C:\WINDOWS\system32\DRIVERS\USBXHCI.SYS, 10.00.19041.0488 (English), 9/10/2020 15:01:36, 602440 bytes
-   Driver: C:\WINDOWS\system32\DRIVERS\UMDF\UsbXhciCompanion.dll, 10.00.19041.0488 (English), 9/10/2020 15:01:36, 137408 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\USBXHCI.SYS, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 602440 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\UMDF\UsbXhciCompanion.dll, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 137936 bytes
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D Caching Agent - 6FE0
 Device ID: PCI\VEN_8086&DEV_6FE0&SUBSYS_6FE08086&REV_01\3&103A9D54&0&60
@@ -877,7 +877,7 @@ Device ID: PCI\VEN_8086&DEV_8D20&SUBSYS_86371043&REV_05\3&11583659&0&D8
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D PCI Express Root Port 3 - 6F08
 Device ID: PCI\VEN_8086&DEV_6F08&SUBSYS_00008086&REV_01\3&11583659&0&18
-   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0488 (English), 9/10/2020 15:01:35, 472376 bytes
+   Driver: C:\WINDOWS\system32\DRIVERS\pci.sys, 10.00.19041.0662 (English), 12/11/2020 08:36:51, 469320 bytes
 
      Name: Intel(R) Xeon(R) E7 v4/Xeon(R) E5 v4/Xeon(R) E3 v4/Xeon(R) D Memory Controller 0 - Channel Target Address Decoder - 6FAC
 Device ID: PCI\VEN_8086&DEV_6FAC&SUBSYS_6FAC8086&REV_01\3&103A9D54&0&9C
@@ -906,7 +906,7 @@ WMSpeech Decoder DMO,0x00600800,1,1,WMSPDMOD.DLL,10.00.19041.0001
 MP3 Decoder DMO,0x00600800,1,1,mp3dmod.dll,10.00.19041.0001
 Mpeg4s Decoder DMO,0x00800001,1,1,mp4sdecd.dll,10.00.19041.0450
 WMV Screen decoder DMO,0x00600800,1,1,wmvsdecd.dll,10.00.19041.0001
-WMVideo Decoder DMO,0x00800001,1,1,wmvdecod.dll,10.00.19041.0450
+WMVideo Decoder DMO,0x00800001,1,1,wmvdecod.dll,10.00.19041.0662
 Mpeg43 Decoder DMO,0x00800001,1,1,mp43decd.dll,10.00.19041.0001
 Mpeg4 Decoder DMO,0x00800001,1,1,mpg4decd.dll,10.00.19041.0001
 DV Muxer,0x00400000,0,0,qdv.dll,10.00.19041.0001
@@ -915,7 +915,7 @@ WM ASF Reader,0x00400000,0,0,qasf.dll,12.00.19041.0001
 AVI Splitter,0x00600000,1,1,quartz.dll,10.00.19041.0329
 VGA 16 Color Ditherer,0x00400000,1,1,quartz.dll,10.00.19041.0329
 SBE2MediaTypeProfile,0x00200000,0,0,sbe.dll,10.00.19041.0001
-Microsoft DTV-DVD Video Decoder,0x005fffff,2,4,msmpeg2vdec.dll,10.00.19041.0610
+Microsoft DTV-DVD Video Decoder,0x005fffff,2,4,msmpeg2vdec.dll,10.00.19041.0662
 AC3 Parser Filter,0x00600000,1,1,mpg2splt.ax,10.00.19041.0329
 StreamBufferSink,0x00200000,0,0,sbe.dll,10.00.19041.0001
 MJPEG Decompressor,0x00600000,1,1,quartz.dll,10.00.19041.0329
@@ -997,9 +997,9 @@ Audio Capture Sources:
 Microphone (Realtek High Definition Audio),0x00200000,0,0,qcap.dll,10.00.19041.0001
 
 PBDA CP Filters:
-PBDA DTFilter,0x00600000,1,1,CPFilters.dll,10.00.19041.0488
-PBDA ETFilter,0x00200000,0,0,CPFilters.dll,10.00.19041.0488
-PBDA PTFilter,0x00200000,0,0,CPFilters.dll,10.00.19041.0488
+PBDA DTFilter,0x00600000,1,1,CPFilters.dll,10.00.19041.0662
+PBDA ETFilter,0x00200000,0,0,CPFilters.dll,10.00.19041.0662
+PBDA PTFilter,0x00200000,0,0,CPFilters.dll,10.00.19041.0662
 
 Midi Renderers:
 Default MidiOut Device,0x00800000,1,0,quartz.dll,10.00.19041.0329
@@ -1114,13 +1114,13 @@ WMMEDIASUBTYPE_WMSP1, WMSpeech Decoder DMO, CLSID_CWMSPDecMediaObject
 Media Foundation File Versions
 ---------------------------
 
-  mfcore.dll, 10.00.19041.0630
+  mfcore.dll, 10.00.19041.0685
   mfreadwrite.dll, 10.00.19041.0153
-  mfcaptureengine.dll, 10.00.19041.0546
-  mfsensorgroup.dll, 10.00.19041.0423
-  windows.media.dll, 10.00.19041.0546
-  frameserver.dll, 10.00.19041.0423
-  frameserverclient.dll, 10.00.19041.0423
+  mfcaptureengine.dll, 10.00.19041.0662
+  mfsensorgroup.dll, 10.00.19041.0662
+  windows.media.dll, 10.00.19041.0662
+  frameserver.dll, 10.00.19041.0662
+  frameserverclient.dll, 10.00.19041.0662
 
 
 ---------------------------
@@ -1134,12 +1134,12 @@ Media Foundation Transforms
 
 Video Decoders:
   NVIDIA MJPEG Video Decoder MFT, {70F36578-2741-454F-B494-E8563DDD1CB4}, 0x4, 8, nvDecMFTMjpegx.dll, 26.21.0014.3200
-  Microsoft MPEG Video Decoder MFT, {2D709E52-123F-49B5-9CBC-9AF5CDE28FB9}, 0x1, msmpeg2vdec.dll, 10.00.19041.0610
+  Microsoft MPEG Video Decoder MFT, {2D709E52-123F-49B5-9CBC-9AF5CDE28FB9}, 0x1, msmpeg2vdec.dll, 10.00.19041.0662
   DV Decoder MFT, {404A6DE5-D4D6-4260-9BC7-5A6CBD882432}, 0x1, mfdvdec.dll, 10.00.19041.0001
   Mpeg4s Decoder MFT, CLSID_CMpeg4sDecMFT, 0x1, mp4sdecd.dll, 10.00.19041.0450
-  Microsoft H264 Video Decoder MFT, CLSID_CMSH264DecoderMFT, 0x1, msmpeg2vdec.dll, 10.00.19041.0610
+  Microsoft H264 Video Decoder MFT, CLSID_CMSH264DecoderMFT, 0x1, msmpeg2vdec.dll, 10.00.19041.0662
   WMV Screen decoder MFT, CLSID_CMSSCDecMediaObject, 0x1, wmvsdecd.dll, 10.00.19041.0001
-  WMVideo Decoder MFT, CLSID_CWMVDecMediaObject, 0x1, wmvdecod.dll, 10.00.19041.0450
+  WMVideo Decoder MFT, CLSID_CWMVDecMediaObject, 0x1, wmvdecod.dll, 10.00.19041.0662
   MJPEG Decoder MFT, {CB17E772-E1CC-4633-8450-5617AF577905}, 0x1, mfmjpegdec.dll, 10.00.19041.0329
   Mpeg43 Decoder MFT, CLSID_CMpeg43DecMediaObject, 0x1, mp43decd.dll, 10.00.19041.0001
   Mpeg4 Decoder MFT, CLSID_CMpeg4DecMediaObject, 0x1, mpg4decd.dll, 10.00.19041.0001
@@ -1165,27 +1165,27 @@ Video Effects:
 Video Processor:
   Microsoft Video Processor MFT, {88753B26-5B24-49BD-B2E7-0C445C78C982}, 0x1, msvproc.dll, 10.00.19041.0488
 Audio Decoders:
-  Microsoft Dolby Digital Plus Decoder MFT, {177C0AFE-900B-48D4-9E4C-57ADD250B3D4}, 0x1, DolbyDecMFT.dll, 10.00.19041.0610
+  Microsoft Dolby Digital Plus Decoder MFT, {177C0AFE-900B-48D4-9E4C-57ADD250B3D4}, 0x1, DolbyDecMFT.dll, 10.00.19041.0662
   MS AMRNB Decoder MFT, {265011AE-5481-4F77-A295-ABB6FFE8D63E}, 0x1, MSAMRNBDecoder.dll, 10.00.19041.0001
   WMAudio Decoder MFT, CLSID_CWMADecMediaObject, 0x1, WMADMOD.DLL, 10.00.19041.0508
-  Microsoft AAC Audio Decoder MFT, CLSID_CMSAACDecMFT, 0x1, MSAudDecMFT.dll, 10.00.19041.0630
-  A-law Wrapper MFT, {36CB6E0C-78C1-42B2-9943-846262F31786}, 0x1, mfcore.dll, 10.00.19041.0630
-  GSM ACM Wrapper MFT, {4A76B469-7B66-4DD4-BA2D-DDF244C766DC}, 0x1, mfcore.dll, 10.00.19041.0630
+  Microsoft AAC Audio Decoder MFT, CLSID_CMSAACDecMFT, 0x1, MSAudDecMFT.dll, 10.00.19041.0662
+  A-law Wrapper MFT, {36CB6E0C-78C1-42B2-9943-846262F31786}, 0x1, mfcore.dll, 10.00.19041.0685
+  GSM ACM Wrapper MFT, {4A76B469-7B66-4DD4-BA2D-DDF244C766DC}, 0x1, mfcore.dll, 10.00.19041.0685
   WMAPro over S/PDIF MFT, CLSID_CWMAudioSpdTxDMO, 0x1, WMADMOD.DLL, 10.00.19041.0508
   Microsoft Opus Audio Decoder MFT, {63E17C10-2D43-4C42-8FE3-8D8B63E46A6A}, 0x1, MSOpusDecoder.dll, 10.00.19041.0001
   Microsoft FLAC Audio Decoder MFT, {6B0B3E6B-A2C5-4514-8055-AFE8A95242D9}, 0x1, MSFlacDecoder.dll, 10.00.19041.0207
-  Microsoft MPEG Audio Decoder MFT, {70707B39-B2CA-4015-ABEA-F8447D22D88B}, 0x1, MSAudDecMFT.dll, 10.00.19041.0630
+  Microsoft MPEG Audio Decoder MFT, {70707B39-B2CA-4015-ABEA-F8447D22D88B}, 0x1, MSAudDecMFT.dll, 10.00.19041.0662
   WMSpeech Decoder DMO, CLSID_CWMSPDecMediaObject, 0x1, WMSPDMOD.DLL, 10.00.19041.0001
-  G711 Wrapper MFT, {92B66080-5E2D-449E-90C4-C41F268E5514}, 0x1, mfcore.dll, 10.00.19041.0630
-  IMA ADPCM ACM Wrapper MFT, {A16E1BFF-A80D-48AD-AECD-A35C005685FE}, 0x1, mfcore.dll, 10.00.19041.0630
+  G711 Wrapper MFT, {92B66080-5E2D-449E-90C4-C41F268E5514}, 0x1, mfcore.dll, 10.00.19041.0685
+  IMA ADPCM ACM Wrapper MFT, {A16E1BFF-A80D-48AD-AECD-A35C005685FE}, 0x1, mfcore.dll, 10.00.19041.0685
   MP3 Decoder MFT, CLSID_CMP3DecMediaObject, 0x1, mp3dmod.dll, 10.00.19041.0001
   Microsoft ALAC Audio Decoder MFT, {C0CD7D12-31FC-4BBC-B363-7322EE3E1879}, 0x1, MSAlacDecoder.dll, 10.00.19041.0001
-  ADPCM ACM Wrapper MFT, {CA34FE0A-5722-43AD-AF23-05F7650257DD}, 0x1, mfcore.dll, 10.00.19041.0630
+  ADPCM ACM Wrapper MFT, {CA34FE0A-5722-43AD-AF23-05F7650257DD}, 0x1, mfcore.dll, 10.00.19041.0685
   Dolby TrueHD IEC-61937 converter MFT, {CF5EEEDF-0E92-4B3B-A161-BD0FFE545E4B}, 0x1, mfaudiocnv.dll, 10.00.19041.0001
   DTS IEC-61937 converter MFT, {D035E24C-C877-42D7-A795-2A8A339B472F}, 0x1, mfaudiocnv.dll, 10.00.19041.0001
 Audio Encoders:
   LPCM DVD-Audio MFT, {068A8476-9229-4CC0-9D49-2FC699DCD30A}, 0x1, mfaudiocnv.dll, 10.00.19041.0001
-  MP3 Encoder ACM Wrapper MFT, {11103421-354C-4CCA-A7A3-1AFF9A5B6701}, 0x1, mfcore.dll, 10.00.19041.0630
+  MP3 Encoder ACM Wrapper MFT, {11103421-354C-4CCA-A7A3-1AFF9A5B6701}, 0x1, mfcore.dll, 10.00.19041.0685
   Microsoft FLAC Audio Encoder MFT, {128509E9-C44E-45DC-95E9-C255B8F466A6}, 0x1, MSFlacEncoder.dll, 10.00.19041.0153
   WM Speech Encoder DMO, CLSID_CWMSPEncMediaObject2, 0x1, WMSPDMOE.DLL, 10.00.19041.0508
   MS AMRNB Encoder MFT, {2FAE8AFE-04A3-423A-A814-85DB454712B0}, 0x1, MSAMRNBEncoder.dll, 10.00.19041.0001
@@ -1198,9 +1198,9 @@ Audio Effects:
   AEC, CLSID_CWMAudioAEC, 0x1, mfwmaaec.dll, 10.00.19041.0001
   Resampler MFT, CLSID_CResamplerMediaObject, 0x1, resampledmo.dll, 10.00.19041.0001
 Multiplexers:
-  Microsoft MPEG2 Multiplexer MFT, {AB300F71-01AB-46D2-AB6C-64906CB03258}, 0x2, mfmpeg2srcsnk.dll, 10.00.19041.0630
+  Microsoft MPEG2 Multiplexer MFT, {AB300F71-01AB-46D2-AB6C-64906CB03258}, 0x2, mfmpeg2srcsnk.dll, 10.00.19041.0685
 Others:
-  Microsoft H264 Video Remux (MPEG2TSToMP4) MFT, {05A47EBB-8BF0-4CBF-AD2F-3B71D75866F5}, 0x1, msmpeg2vdec.dll, 10.00.19041.0610
+  Microsoft H264 Video Remux (MPEG2TSToMP4) MFT, {05A47EBB-8BF0-4CBF-AD2F-3B71D75866F5}, 0x1, msmpeg2vdec.dll, 10.00.19041.0662
 
 
 --------------------------------------------
@@ -1467,26 +1467,26 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
-Fault bucket 2172537229101545424, type 4
-Event Name: APPCRASH
+Fault bucket 2043352436022594390, type 5
+Event Name: RADAR_PRE_LEAK_64
 Response: Not available
 Cab Id: 0
 
 Problem signature:
-P1: Explorer.EXE
-P2: 10.0.19041.610
-P3: ab30c679
-P4: StackHash_1c3a
-P5: 10.0.19041.610
-P6: e5d7ed5c
-P7: c0000374
-P8: PCH_FF_FROM_ntdll+0x000000000009C8F4
+P1: Resolve.exe
+P2: 16.2.0.54
+P3: 10.0.19041.2.0.0
+P4: 
+P5: 
+P6: 
+P7: 
+P8: 
 P9: 
 P10: 
 
 
 +++ WER1 +++:
-Fault bucket , type 0
+Fault bucket 2172537229101545424, type 4
 Event Name: APPCRASH
 Response: Not available
 Cab Id: 0
@@ -1506,6 +1506,25 @@ P10:
 
 +++ WER2 +++:
 Fault bucket , type 0
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: Explorer.EXE
+P2: 10.0.19041.610
+P3: ab30c679
+P4: StackHash_1c3a
+P5: 10.0.19041.610
+P6: e5d7ed5c
+P7: c0000374
+P8: PCH_FF_FROM_ntdll+0x000000000009C8F4
+P9: 
+P10: 
+
+
++++ WER3 +++:
+Fault bucket , type 0
 Event Name: FaultTolerantHeap
 Response: Not available
 Cab Id: 0
@@ -1523,27 +1542,8 @@ P9:
 P10: 
 
 
-+++ WER3 +++:
-Fault bucket 1289098318052186279, type 5
-Event Name: WindowsWcpOtherFailure3
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: 10.0.19041.680:1
-P2: wcp\componentstore\storelayout.cpp
-P3: ComponentStore::CRawStoreLayout::HydrateFileUsingForwardAndReverseDeltas
-P4: 1682
-P5: 800f0984
-P6: 0x37c2292c
-P7: 
-P8: 
-P9: 
-P10: 
-
-
 +++ WER4 +++:
-Fault bucket , type 0
+Fault bucket 1289098318052186279, type 5
 Event Name: WindowsWcpOtherFailure3
 Response: Not available
 Cab Id: 0
@@ -1581,6 +1581,25 @@ P10:
 
 
 +++ WER6 +++:
+Fault bucket , type 0
+Event Name: WindowsWcpOtherFailure3
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: 10.0.19041.680:1
+P2: wcp\componentstore\storelayout.cpp
+P3: ComponentStore::CRawStoreLayout::HydrateFileUsingForwardAndReverseDeltas
+P4: 1682
+P5: 800f0984
+P6: 0x37c2292c
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER7 +++:
 Fault bucket 1830804631711115399, type 5
 Event Name: MpTelemetry
 Response: Not available
@@ -1599,7 +1618,7 @@ P9:
 P10: 
 
 
-+++ WER7 +++:
++++ WER8 +++:
 Fault bucket , type 0
 Event Name: MpTelemetry
 Response: Not available
@@ -1618,27 +1637,8 @@ P9:
 P10: 
 
 
-+++ WER8 +++:
-Fault bucket 1718017572998072751, type 4
-Event Name: APPCRASH
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: soffice.bin
-P2: 6.4.1.2
-P3: 5e4f5af3
-P4: ntdll.dll
-P5: 10.0.19041.610
-P6: e5d7ed5c
-P7: c0000005
-P8: 0000000000045e16
-P9: 
-P10: 
-
-
 +++ WER9 +++:
-Fault bucket , type 0
+Fault bucket 1718017572998072751, type 4
 Event Name: APPCRASH
 Response: Not available
 Cab Id: 0
