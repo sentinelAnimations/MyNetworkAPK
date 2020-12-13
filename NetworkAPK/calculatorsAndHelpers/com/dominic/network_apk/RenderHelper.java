@@ -167,13 +167,14 @@ public class RenderHelper {
 						Renderer rendererCPU = new Renderer(p, renderJobIndex, allJobsStarted,useCPU, blendCommandCPU, renderTerminalWindowNameCPU, pathToRenderJobsStatus, logFileCPU, deleteFile, localBlendfile, randomSeedFile, resolutionAndSampling, forceGPURenderingFile);
 						cpuThread = new Thread(rendererCPU);
 						cpuThread.start();
-						// cpuThread.join();
+						rendererCPU.handleJson(renderJobIndex, "started", p.str(true), pathToRenderJobsStatus, cpuOrGpuStr);
+
 						p.println("--------", rendererCPU.getAllJobsStarted(), cpuThread.isAlive());
 					} else {		
 						Renderer rendererGPU = new Renderer(p, renderJobIndex, allJobsStarted,useCPU, blendCommandGPU, renderTerminalWindowNameGPU, pathToRenderJobsStatus, logFileGPU, deleteFile, localBlendfile, randomSeedFile, resolutionAndSampling, forceGPURenderingFile);
 						gpuThread = new Thread(rendererGPU);
 						gpuThread.start();
-						// gpuThread.join();
+						rendererGPU.handleJson(renderJobIndex, "started", p.str(true), pathToRenderJobsStatus, cpuOrGpuStr);
 						p.println("--------", rendererGPU.getAllJobsStarted(), gpuThread.isAlive());
 					}
 					// System.gc();

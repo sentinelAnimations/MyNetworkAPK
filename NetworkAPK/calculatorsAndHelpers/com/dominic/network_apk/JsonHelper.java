@@ -16,6 +16,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.HashSet;
+import java.util.Set;
 
 import processing.core.PApplet;
 
@@ -29,6 +38,51 @@ public class JsonHelper {
 	public JsonHelper(PApplet p) {
 		this.p = p;
 		fileInteractionHelper = new FileInteractionHelper(p);
+	}
+
+	public JSONArray getJSONArrayFromFileChannel(FileChannel channel) {
+		JSONParser jsonParser = new JSONParser();
+		Object obj;
+		JSONArray arr = new JSONArray();
+		try {
+			ByteBuffer byteBuffer = ByteBuffer.allocate((int) channel.size());
+			Charset charset = Charset.forName("UTF-8");
+			String str = "";
+			while (channel.read(byteBuffer) > 0) {
+				byteBuffer.rewind();
+				CharBuffer cb = charset.decode(byteBuffer);
+				str += cb;
+				byteBuffer.flip();
+			}
+			str = str.trim();
+			//System.out.println(str);
+			
+			try {
+				obj = jsonParser.parse(str);
+				arr = (JSONArray) obj;
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return arr;
+	}
+
+	public void writeFileChannel(File file, FileChannel channel, ByteBuffer byteBuffer) throws IOException {
+		// delete old contente before writing new ------------------------
+		channel.truncate(0);
+		// delete old contente before writing new ------------------------
+
+		// write to file-------------------------------------
+		Set<StandardOpenOption> options = new HashSet<>();
+		options.add(StandardOpenOption.CREATE);
+		options.add(StandardOpenOption.APPEND);
+		Path path = Paths.get(file.getAbsolutePath());
+		channel.write(byteBuffer);
+		// write to file-------------------------------------
+
 	}
 
 	public Boolean writeData(String path) {

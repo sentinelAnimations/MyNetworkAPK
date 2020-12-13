@@ -1,7 +1,12 @@
 package com.dominic.network_apk;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -10,12 +15,15 @@ import java.util.concurrent.Executors;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import processing.core.PApplet;
 
 class Renderer implements Runnable {
 	private int renderJobIndex;
 	private Boolean finishJob = false, allJobsStarted, isCPU;
-	private String blendCommand, renderTerminalWindowName, pathToRenderJobsStatus, isCPUStr;
+	private String blendCommand, renderTerminalWindowName, pathToRenderJobsStatus, cpuOrGpuStr;
 	private long startTime, lastLogFound;
 	private PApplet p;
 	private File logFile, imageCheckFile, localBlendFile, randomSeed, resolutionAndSampling, forceGPURendering;
@@ -46,9 +54,9 @@ class Renderer implements Runnable {
 		jsonHelper = new JsonHelper(p);
 
 		if (isCPU) {
-			isCPUStr = "CPU";
+			cpuOrGpuStr = "CPU";
 		} else {
-			isCPUStr = "GPU";
+			cpuOrGpuStr = "GPU";
 		}
 	}
 
@@ -56,24 +64,26 @@ class Renderer implements Runnable {
 		System.out.println(Thread.currentThread().getName() + " (Start)");
 		lastLogFound = pcInfoHelper.getCurTime();
 
-		String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on " + isCPUStr, "ECHO -----------------------------", blendCommand, "ECHO Job finished >> " + logFile.getAbsolutePath(), "EXIT" };
+		String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on " + cpuOrGpuStr, "ECHO -----------------------------", blendCommand, "ECHO Job finished >> " + logFile.getAbsolutePath(), "EXIT" };
 		Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, renderTerminalWindowName, true);
 		if (isExecuted) {
+			
+
 			startTime = pcInfoHelper.getCurTime();
 			Boolean problemOccured = false;
 			int failedCount = 0, count = 0, doOnce = 0;
-			File syncedLogFile = new File(mainActivity.getRenderLogPathCPU(mainActivity.getPCName(), true));
+			File syncedLogFile;
+			if (isCPU) {
+				syncedLogFile = new File(mainActivity.getRenderLogPathCPU(mainActivity.getPCName(), true));
+			} else {
+				syncedLogFile = new File(mainActivity.getRenderLogPathGPU(mainActivity.getPCName(), true));
+			}
 
 			while (!imageCheckFile.exists()) {
-				p.println("-----++++" + pathToRenderJobsStatus);
+				
 				sleep((int) p.random(1500, 2500));
-				if (doOnce == 0) {
-
-					handleJson(renderJobIndex, "started", p.str(true), pathToRenderJobsStatus, isCPUStr);
-					doOnce++;
-				}
-
-				if (count % 2 == 0) {
+				
+				if (count % 1 == 0) {
 					syncedLogFile.delete();
 					int tries = 0;
 					while (!logFile.exists()) { // was logCPU
@@ -87,7 +97,7 @@ class Renderer implements Runnable {
 				}
 				count++;
 
-				if (!checkIfJobExists(localBlendFile, pathToRenderJobsStatus, renderJobIndex, isCPUStr) || finishJob) {
+				if (!checkIfJobExists(localBlendFile, pathToRenderJobsStatus, renderJobIndex, cpuOrGpuStr) || finishJob) {
 					finishJob = false;
 					problemOccured = true;
 					break;
@@ -132,13 +142,13 @@ class Renderer implements Runnable {
 			if (problemOccured) {
 				commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowName);
 				allJobsStarted = false;
-				handleJson(renderJobIndex, "started", p.str(false), pathToRenderJobsStatus, isCPUStr);
+				handleJson(renderJobIndex, "started", p.str(false), pathToRenderJobsStatus, cpuOrGpuStr);
 			} else {
-				handleJson(renderJobIndex, "finished", p.str(true), pathToRenderJobsStatus, isCPUStr);
+				handleJson(renderJobIndex, "finished", p.str(true), pathToRenderJobsStatus, cpuOrGpuStr);
 			}
 			sleep((int) p.random(1000, 1500));
 		} else {
-			p.println("failed to start rendering on " + isCPUStr);
+			p.println("failed to start rendering on " + cpuOrGpuStr);
 		}
 
 		System.out.println(Thread.currentThread().getName() + " (End)");// prints thread name
@@ -150,44 +160,66 @@ class Renderer implements Runnable {
 		int iterations = 0;
 		JsonHelper jHelper = new JsonHelper(p);
 		File jsonFile = new File(path);
-		
-		
-				System.out.println("Locked File");
-				// Thread.sleep(100);
-				p.println("now writing");
-				while (!valueSet) {
-					try {
 
-						JSONArray array = getMergedArray(path);
-						JSONObject curObj = (JSONObject) array.get(index);
-						if (array.size() > 0) {
-							jHelper.clearArray();
-							if (key.equals("started")) {
-								curObj.put("startedBy", mainActivity.getPCName());
-								curObj.put("hardware", cpuOrGpuStr);
-							}
-							p.println(index, key, value, cpuOrGpuStr);
-							curObj.put(key, value);
-							array.set(index, curObj);
-							jHelper.setArray(array);
-							jHelper.writeData(path);
-							valueSet = true;
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
+		while (isFilelocked(jsonFile) || !jsonFile.exists()) {
+			iterations++;
+			if (iterations > 500) {
+				break;
+			}
+		}
+		iterations = 0;
+
+		while (!valueSet) {
+
+			try {
+				File file = new File(jsonFile.getAbsolutePath());
+				FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+				FileLock lock = channel.lock();
+				System.out.println("Locked File");
+
+				JSONArray array = getMergedArray(path, channel);
+				JSONObject curObj = (JSONObject) array.get(index);
+				if (array.size() > 0) {
+					jHelper.clearArray();
+					if (key.equals("started")) {
+						curObj.put("startedBy", mainActivity.getPCName());
+						curObj.put("hardware", cpuOrGpuStr);
 					}
-					iterations++;
-					if (iterations > 500) {
-						break;
+					p.println(index, key, value, cpuOrGpuStr);
+					curObj.put(key, value);
+					array.set(index, curObj);
+
+					// jHelper.setArray(array);
+					// jHelper.writeData(path);
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					String prettyStr = gson.toJson(array);
+					p.println("now writing",index);
+					jHelper.writeFileChannel(jsonFile, channel, ByteBuffer.wrap(prettyStr.getBytes()));
+
+					if (lock != null) {
+						lock.release();
 					}
+					channel.close();
+
+					valueSet = true;
 				}
-				System.out.println("Released Lock");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			iterations++;
+			if (iterations > 500) {
+				break;
+			}
+		}
+		System.out.println("Released Lock");
 	}
 
-	private JSONArray getMergedArray(String path) {
+	private JSONArray getMergedArray(String path, FileChannel channel) {
 		JsonHelper jHelper = new JsonHelper(p);
 
-		JSONArray mergedArray = jHelper.getData(path);
+		// JSONArray mergedArray = jHelper.getData(path);
+		JSONArray mergedArray = jHelper.getJSONArrayFromFileChannel(channel);
+
 		File mergeFile = new File(path);
 		String[] paths = fileInteractionHelper.getFoldersAndFiles(mergeFile.getParentFile().getAbsolutePath(), false);
 		ArrayList<String> duplicates = new ArrayList<>();
@@ -266,6 +298,19 @@ class Renderer implements Runnable {
 			}
 		}
 		return mergedArray;
+	}
+
+	private boolean isFilelocked(File file) {
+		try {
+			try (FileInputStream in = new FileInputStream(file)) {
+				in.read();
+				return false;
+			}
+		} catch (FileNotFoundException e) {
+			return file.exists();
+		} catch (Exception e) {
+			return true;
+		}
 	}
 
 	private Boolean checkIfJobExists(File fileToCheck, String pathToRenderJobsStatus, int rendJobInd, String cpuOrGpuStr) {

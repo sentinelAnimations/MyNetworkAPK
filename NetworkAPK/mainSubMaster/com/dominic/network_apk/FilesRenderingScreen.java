@@ -160,6 +160,9 @@ public class FilesRenderingScreen {
 					// restartButton handling --------------------------------
 					if (restartAPK_ImageButtons[i].getIsClicked()) {
 						renderHelper.setRestartValue(jsonHelper.getData(mainActivity.getRestartCommandFilePath()), i, "restart", true);
+						if(allPCNames[i].equals(mainActivity.getPCName())) {
+							setIsRendering(false);
+						}
 						restartAPK_ImageButtons[i].setIsClicked(false);
 					}
 					// restartButton handling --------------------------------
@@ -543,9 +546,11 @@ public class FilesRenderingScreen {
 						Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(), false);
 
 						if (hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked() && renderHelper.getCpuFinished()) {
+							p.println("start CPU");
 							renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
 						}
 						if (hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked() && renderHelper.getGpuFinished()) {
+							p.println("start GPU");
 							renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
 						}
 						if (!isRenderingJson) {
