@@ -1,7 +1,7 @@
 ------------------
 System Information
 ------------------
-      Time of this report: 12/14/2020, 10:51:54
+      Time of this report: 12/14/2020, 20:54:56
              Machine name: MASTER
                Machine Id: {609616D9-B91D-488B-9141-43ACB04EB76F}
          Operating System: Windows 10 Home 64-bit (10.0, Build 19041) (19041.vb_release.191206-1406)
@@ -12,7 +12,7 @@ System Information
                 Processor: Intel(R) Core(TM) i7-6800K CPU @ 3.40GHz (12 CPUs), ~3.4GHz
                    Memory: 16384MB RAM
       Available OS Memory: 16296MB RAM
-                Page File: 9414MB used, 9313MB available
+                Page File: 8626MB used, 10101MB available
               Windows Dir: C:\WINDOWS
           DirectX Version: DirectX 12
       DX Setup Parameters: Not found
@@ -456,7 +456,7 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 133.4 GB
+ Free Space: 133.0 GB
 Total Space: 376.1 GB
 File System: NTFS
       Model: Samsung SSD 850 EVO 500GB
@@ -1467,6 +1467,177 @@ Diagnostics
 
 Windows Error Reporting:
 +++ WER0 +++:
+Fault bucket 2300987802931231161, type 4
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.662
+P3: 996782f8
+P4: StackHash_2267
+P5: 10.0.19041.662
+P6: 27bfa5f0
+P7: c0000374
+P8: PCH_33_FROM_ntdll+0x000000000009CB04
+P9: 
+P10: 
+
+
++++ WER1 +++:
+Fault bucket , type 0
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.662
+P3: 996782f8
+P4: StackHash_2267
+P5: 10.0.19041.662
+P6: 27bfa5f0
+P7: c0000374
+P8: PCH_33_FROM_ntdll+0x000000000009CB04
+P9: 
+P10: 
+
+
++++ WER2 +++:
+Fault bucket 2300987802931231161, type 4
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.662
+P3: 996782f8
+P4: StackHash_2267
+P5: 10.0.19041.662
+P6: 27bfa5f0
+P7: c0000374
+P8: PCH_33_FROM_ntdll+0x000000000009CB04
+P9: 
+P10: 
+
+
++++ WER3 +++:
+Fault bucket , type 0
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.662
+P3: 996782f8
+P4: StackHash_2267
+P5: 10.0.19041.662
+P6: 27bfa5f0
+P7: c0000374
+P8: PCH_33_FROM_ntdll+0x000000000009CB04
+P9: 
+P10: 
+
+
++++ WER4 +++:
+Fault bucket 2300987802931231161, type 4
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.662
+P3: 996782f8
+P4: StackHash_2267
+P5: 10.0.19041.662
+P6: 27bfa5f0
+P7: c0000374
+P8: PCH_33_FROM_ntdll+0x000000000009CB04
+P9: 
+P10: 
+
+
++++ WER5 +++:
+Fault bucket 1862779558080841180, type 5
+Event Name: FaultTolerantHeap
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.662
+P3: 996782F8
+P4: ffffbaad
+P5: 
+P6: 
+P7: 
+P8: 
+P9: 
+P10: 
+
+
++++ WER6 +++:
+Fault bucket , type 0
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: explorer.exe
+P2: 10.0.19041.662
+P3: 996782f8
+P4: StackHash_2267
+P5: 10.0.19041.662
+P6: 27bfa5f0
+P7: c0000374
+P8: PCH_33_FROM_ntdll+0x000000000009CB04
+P9: 
+P10: 
+
+
++++ WER7 +++:
+Fault bucket 2300987802931231161, type 4
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: Explorer.EXE
+P2: 10.0.19041.662
+P3: 996782f8
+P4: StackHash_2267
+P5: 10.0.19041.662
+P6: 27bfa5f0
+P7: c0000374
+P8: PCH_33_FROM_ntdll+0x000000000009CB04
+P9: 
+P10: 
+
+
++++ WER8 +++:
+Fault bucket , type 0
+Event Name: APPCRASH
+Response: Not available
+Cab Id: 0
+
+Problem signature:
+P1: Explorer.EXE
+P2: 10.0.19041.662
+P3: 996782f8
+P4: StackHash_2267
+P5: 10.0.19041.662
+P6: 27bfa5f0
+P7: c0000374
+P8: PCH_33_FROM_ntdll+0x000000000009CB04
+P9: 
+P10: 
+
+
++++ WER9 +++:
 Fault bucket 2043352436022594390, type 5
 Event Name: RADAR_PRE_LEAK_64
 Response: Not available
@@ -1481,177 +1652,6 @@ P5:
 P6: 
 P7: 
 P8: 
-P9: 
-P10: 
-
-
-+++ WER1 +++:
-Fault bucket 2172537229101545424, type 4
-Event Name: APPCRASH
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Explorer.EXE
-P2: 10.0.19041.610
-P3: ab30c679
-P4: StackHash_1c3a
-P5: 10.0.19041.610
-P6: e5d7ed5c
-P7: c0000374
-P8: PCH_FF_FROM_ntdll+0x000000000009C8F4
-P9: 
-P10: 
-
-
-+++ WER2 +++:
-Fault bucket , type 0
-Event Name: APPCRASH
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Explorer.EXE
-P2: 10.0.19041.610
-P3: ab30c679
-P4: StackHash_1c3a
-P5: 10.0.19041.610
-P6: e5d7ed5c
-P7: c0000374
-P8: PCH_FF_FROM_ntdll+0x000000000009C8F4
-P9: 
-P10: 
-
-
-+++ WER3 +++:
-Fault bucket , type 0
-Event Name: FaultTolerantHeap
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Explorer.EXE
-P2: 10.0.19041.610
-P3: AB30C679
-P4: ffffbaad
-P5: 
-P6: 
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER4 +++:
-Fault bucket 1289098318052186279, type 5
-Event Name: WindowsWcpOtherFailure3
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: 10.0.19041.680:1
-P2: wcp\componentstore\storelayout.cpp
-P3: ComponentStore::CRawStoreLayout::HydrateFileUsingForwardAndReverseDeltas
-P4: 1682
-P5: 800f0984
-P6: 0x37c2292c
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER5 +++:
-Fault bucket , type 0
-Event Name: WindowsWcpOtherFailure3
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: 10.0.19041.680:1
-P2: wcp\componentstore\storelayout.cpp
-P3: ComponentStore::CRawStoreLayout::HydrateFileUsingForwardAndReverseDeltas
-P4: 1682
-P5: 800f0984
-P6: 0x37c2292c
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER6 +++:
-Fault bucket , type 0
-Event Name: WindowsWcpOtherFailure3
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: 10.0.19041.680:1
-P2: wcp\componentstore\storelayout.cpp
-P3: ComponentStore::CRawStoreLayout::HydrateFileUsingForwardAndReverseDeltas
-P4: 1682
-P5: 800f0984
-P6: 0x37c2292c
-P7: 
-P8: 
-P9: 
-P10: 
-
-
-+++ WER7 +++:
-Fault bucket 1830804631711115399, type 5
-Event Name: MpTelemetry
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Microsoft Defender Antivirus (77BDAF73-B396-481F-9042-AD358843EC24)
-P2: 4.18.2011.6
-P3: TimeOut
-P4: 1.1.17700.4
-P5: fixed
-P6: 12 / 2049+
-P7: 5 / not boot
-P8: 
-P9: 
-P10: 
-
-
-+++ WER8 +++:
-Fault bucket , type 0
-Event Name: MpTelemetry
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: Microsoft Defender Antivirus (77BDAF73-B396-481F-9042-AD358843EC24)
-P2: 4.18.2011.6
-P3: TimeOut
-P4: 1.1.17700.4
-P5: fixed
-P6: 12 / 2049+
-P7: 5 / not boot
-P8: 
-P9: 
-P10: 
-
-
-+++ WER9 +++:
-Fault bucket 1718017572998072751, type 4
-Event Name: APPCRASH
-Response: Not available
-Cab Id: 0
-
-Problem signature:
-P1: soffice.bin
-P2: 6.4.1.2
-P3: 5e4f5af3
-P4: ntdll.dll
-P5: 10.0.19041.610
-P6: e5d7ed5c
-P7: c0000005
-P8: 0000000000045e16
 P9: 
 P10: 
 

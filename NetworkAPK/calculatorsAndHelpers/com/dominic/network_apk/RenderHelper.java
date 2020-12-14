@@ -19,7 +19,7 @@ import processing.core.PApplet;
 
 public class RenderHelper {
 	private int renderJobIndex = 0, renderJobIndexCPU, renderJobIndexGPU, imageFilenameDigits = 6;
-	private Boolean  allJobsStarted = false;
+	private Boolean allJobsStarted = false;
 	private String renderTerminalWindowNameCPU = "renderTerminalCPU", renderTerminalWindowNameGPU = "renderTerminalGPU", blendCommandCPU, blendCommandGPU;
 	private int[] renderedFrames;
 	private PApplet p;
@@ -101,19 +101,19 @@ public class RenderHelper {
 				if (!randomSeedFile.exists()) {
 					fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py", randomSeedFile.getAbsolutePath());
 				}
-				String forceGPUOrCPUFilename="_forceGPURendering.py";
-				if(useCPU) {
-					forceGPUOrCPUFilename="_forceCPURendering.py";
+				String forceGPUOrCPUFilename = "_forceGPURendering.py";
+				if (useCPU) {
+					forceGPUOrCPUFilename = "_forceCPURendering.py";
 				}
 				File forceGPUOrCPURenderingFile = new File(mainActivity.getPathToBlenderRenderFolder() + "\\job_" + renderJobIndex + forceGPUOrCPUFilename);
 				if (!forceGPUOrCPURenderingFile.exists()) {
-					if(useCPU) {
-					fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "/forceCPURendering.py", forceGPUOrCPURenderingFile.getAbsolutePath());
-					}else {
+					if (useCPU) {
+						fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "/forceCPURendering.py", forceGPUOrCPURenderingFile.getAbsolutePath());
+					} else {
 						fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "/forceGPURendering.py", forceGPUOrCPURenderingFile.getAbsolutePath());
 					}
 				}
-				
+
 				String fName = "\\";
 				for (int i = 0; i < imageFilenameDigits; i++) {
 					fName += "#";
@@ -181,7 +181,7 @@ public class RenderHelper {
 						rendererGPU.handleJson(renderJobIndex, "started", p.str(true), pathToRenderJobsStatus, cpuOrGpuStr);
 						p.println("--------", rendererGPU.getAllJobsStarted(), gpuThread.isAlive());
 					}
-					// System.gc();
+					System.gc(); // Attention!!!
 
 				}
 			}

@@ -326,10 +326,10 @@ public class FilesRenderingScreen {
 					String[] splitStr2 = p.split(splitStr[splitStr.length - 1], " ");
 					String[] splitStr3 = p.split(splitStr2[2], "/");
 					if (splitStr3.length == 2) {
-						if (startedRenderingTiles[i] == null) {
+						//if (startedRenderingTiles[i] == null) {
 							allPCLoadingbars[i].setMin(0);
 							allPCLoadingbars[i].setMax(Integer.parseInt(splitStr3[1]));
-						}
+						//}
 						allPCLoadingbars[i].setValue(Integer.parseInt(splitStr3[0]));
 						startedRenderingTiles[i] = true;
 						curTilesFound = true;

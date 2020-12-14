@@ -67,7 +67,6 @@ class Renderer implements Runnable {
 		String[] commands = { "cd " + new File(mainActivity.getSettingsScreen().getPathSelectors()[0].getPath()).getParentFile().getAbsolutePath(), "ECHO -----------------------------", "ECHO Started Renderprocess on " + cpuOrGpuStr, "ECHO -----------------------------", blendCommand, "ECHO Job finished >> " + logFile.getAbsolutePath(), "EXIT" };
 		Boolean isExecuted = commandExecutionHelper.executeMultipleCommands(commands, renderTerminalWindowName, true);
 		if (isExecuted) {
-			
 
 			startTime = pcInfoHelper.getCurTime();
 			Boolean problemOccured = false;
@@ -80,9 +79,9 @@ class Renderer implements Runnable {
 			}
 
 			while (!imageCheckFile.exists()) {
-				
+
 				sleep((int) p.random(1500, 2500));
-				
+
 				if (count % 1 == 0) {
 					syncedLogFile.delete();
 					int tries = 0;
@@ -133,14 +132,13 @@ class Renderer implements Runnable {
 				}
 
 			}
-			p.println("++++++ exited while loop");
 			localBlendFile.delete();
 			randomSeed.delete();
 			resolutionAndSampling.delete();
 			forceGPURendering.delete();
 			p.println("cpu problem occured: " + problemOccured);
 			if (problemOccured) {
-				p.println("kill"+renderTerminalWindowName);
+				p.println("kill" + renderTerminalWindowName);
 				commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowName);
 				allJobsStarted = false;
 				handleJson(renderJobIndex, "started", p.str(false), pathToRenderJobsStatus, cpuOrGpuStr);
@@ -178,7 +176,8 @@ class Renderer implements Runnable {
 				FileLock lock = channel.lock();
 				System.out.println("Locked File");
 
-				JSONArray array = getMergedArray(path, channel);
+				// JSONArray array = getMergedArray(path, channel);
+				JSONArray array = jHelper.getJSONArrayFromFileChannel(channel);
 				JSONObject curObj = (JSONObject) array.get(index);
 				if (array.size() > 0) {
 					jHelper.clearArray();
@@ -194,7 +193,7 @@ class Renderer implements Runnable {
 					// jHelper.writeData(path);
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
 					String prettyStr = gson.toJson(array);
-					p.println("now writing",index);
+					p.println("now writing", index);
 					jHelper.writeFileChannel(jsonFile, channel, ByteBuffer.wrap(prettyStr.getBytes()));
 
 					if (lock != null) {
@@ -356,7 +355,7 @@ class Renderer implements Runnable {
 	}
 
 	public void setFinishJob(Boolean state) {
-		p.println("++++finish:"+state);
+		p.println("++++finish:" + state);
 		finishJob = state;
 	}
 }

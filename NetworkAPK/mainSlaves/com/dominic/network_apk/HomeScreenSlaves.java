@@ -180,9 +180,9 @@ public class HomeScreenSlaves {
 
 		Boolean startRendering = renderHelper.getStartRenderingFromJson();
 		
-		p.textSize(30);
-		p.fill(255, 0, 0);
-		p.text(p.str(startRendering), 100, 100);
+		//p.textSize(30);
+		//p.fill(255, 0, 0);
+		//p.text(p.str(startRendering), 100, 100);
 
 		if (startRendering) {
 			if (!renderHelper.getAllJobsStarted() && (renderHelper.getCpuFinished() || renderHelper.getGpuFinished())) {
@@ -190,8 +190,8 @@ public class HomeScreenSlaves {
 				p.println("hw to use");
 				p.println(hwToUse);
 
-				p.fill(255, 0, 0);
-				p.text(p.str(hwToUse[0]) + ":" + p.str(hwToUse[1]), 100, 200);
+				//p.fill(255, 0, 0);
+				//p.text(p.str(hwToUse[0]) + ":" + p.str(hwToUse[1]), 100, 200);
 
 				p.println(renderHelper.getCpuFinished());
 				if (hwToUse[0] && renderHelper.getCpuFinished()) {
@@ -204,8 +204,8 @@ public class HomeScreenSlaves {
 				if (!hwToUse[0] && !hwToUse[1]) {
 					renderMode = 2;
 
-					p.fill(255, 0, 0);
-					p.text("NO HW TO USE", 100, 300);
+					//p.fill(255, 0, 0);
+					//p.text("NO HW TO USE", 100, 300);
 				}
 			} else {
 				if (!renderHelper.getCpuFinished() || !renderHelper.getGpuFinished()) {

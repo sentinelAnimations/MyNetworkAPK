@@ -60,7 +60,6 @@ public class Loadingbar<T> implements Widgets {
 			p.fill(colOk);
 			p.stroke(colOk);
 			p.rect(x1, y, w, h, edgeRad);
-
 		}
 	}
 
@@ -121,6 +120,8 @@ public class Loadingbar<T> implements Widgets {
 		x1 = (x - w / 2 + w1 / 2);
 		w2 = w - w1;
 		x2 = x1 + w1 / 2 + w2 / 2;
+		x1=p.constrain(x1, x-w/2, x+w/2);
+		x2=p.constrain(x2, x-w/2, x+w/2);
 	}
 
 	public void setMin(int setMin) {
