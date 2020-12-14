@@ -1,9 +1,14 @@
 package com.dominic.network_apk;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -160,7 +165,7 @@ public class FilesRenderingScreen {
 					// restartButton handling --------------------------------
 					if (restartAPK_ImageButtons[i].getIsClicked()) {
 						renderHelper.setRestartValue(jsonHelper.getData(mainActivity.getRestartCommandFilePath()), i, "restart", true);
-						if(allPCNames[i].equals(mainActivity.getPCName())) {
+						if (allPCNames[i].equals(mainActivity.getPCName())) {
 							setIsRendering(false);
 						}
 						restartAPK_ImageButtons[i].setIsClicked(false);
@@ -246,7 +251,7 @@ public class FilesRenderingScreen {
 				if (curRenderLogFile.exists()) {
 					try {
 						String[] lines = p.loadStrings(curRenderLogFile.getAbsolutePath());
-						if (lines.length > 0) {
+						if (lines!=null && lines.length > 0) {
 							String lastLine = lines[lines.length - 1];
 							allLastLogLines[i] = lastLine;
 							if (allPCs_HorizontalList.getSelectedInd() == i) {
@@ -393,7 +398,7 @@ public class FilesRenderingScreen {
 		fileInteractionHelper.deleteFolder(mainActivity.getCloudImageFolder());
 		fileInteractionHelper.deleteFolder(mainActivity.getOpenCheckPath());
 		fileInteractionHelper.deleteFolder(new File(mainActivity.getMasterRenderJobsStatusFilePath()).getParent());
-		
+
 		collected = false;
 
 		String[] fileList = getHorizontalList().getList();
@@ -403,15 +408,20 @@ public class FilesRenderingScreen {
 			File f = new File(fileList[i]);
 			allFilesCopyStatus[i] = fileInteractionHelper.copyFile(f.getAbsolutePath(), mainActivity.getPathToBlenderRenderFolder() + "\\" + i + "_" + f.getName());
 		}
-		String relativeFilePathRandomSeed = "/pythonScripts/randomSeed.py";
-		String copyFromPathRandomSeed = relativeFilePathRandomSeed;
-		Boolean randomSeedCopied = fileInteractionHelper.copyFile(copyFromPathRandomSeed, mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py");
+		Boolean randomSeedCopied=false,forceGPURenderingCopied=false,forceCPURenderingCopied=false;
+		
+		randomSeedCopied=fileInteractionHelper.copyFromIputstream("pythonScripts/randomSeed.py", mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py");
+		forceGPURenderingCopied=fileInteractionHelper.copyFromIputstream("pythonScripts/forceGPURendering.py", mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
+		forceCPURenderingCopied=fileInteractionHelper.copyFromIputstream("pythonScripts/forceCPURendering.py", mainActivity.getRenderPythonScriptsPath() + "\\forceCPURendering.py");
 
-		String copyFromPathForceGPURendering = "/pythonScripts/forceGPURendering.py";
-		String copyFromPathForceCPURendering = "/pythonScripts/forceCPURendering.py";
+		//Boolean randomSeedCopied = fileInteractionHelper.copyFile(copyFromPathRandomSeed, mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py");
 
-		Boolean forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
-		Boolean forceCPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceCPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceCPURendering.py");
+		//String copyFromPathForceGPURendering=fileInteractionHelper.getFileFromResource("pythonScripts/forceGPURendering.py");
+		//String copyFromPathForceCPURendering=fileInteractionHelper.getFileFromResource("pythonScripts/forceCPURendering.py");
+
+	    
+		//Boolean forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
+		//Boolean forceCPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceCPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceCPURendering.py");
 
 		if (randomSeedCopied && forceGPURenderingCopied && forceCPURenderingCopied) {
 
@@ -523,7 +533,7 @@ public class FilesRenderingScreen {
 	}
 
 	private void renderFiles() {
-		
+
 		Boolean isRenderingJson = renderHelper.getStartRenderingFromJson();
 
 		if (renderHelper.getAllJobsFinished(mainActivity.getMasterRenderJobsStatusFilePath(), allPCNames)) {
@@ -587,17 +597,17 @@ public class FilesRenderingScreen {
 		for (int i = 0; i < allFiles_HorizontalList.getList().length; i++) {
 			try {
 				String folderName = fileInteractionHelper.getNameWithoutExtension(new File(allFiles_HorizontalList.getList()[i]));
-				
-				
-				/*File destinationImageFolder = new File(imageSavePaths[i] + "\\" + folderName);
-				if (destinationImageFolder.exists()) {
-					fileInteractionHelper.deleteFolder(destinationImageFolder.getAbsolutePath());
-				}*/
-				
-				
+
+				/*
+				 * File destinationImageFolder = new File(imageSavePaths[i] + "\\" +
+				 * folderName); if (destinationImageFolder.exists()) {
+				 * fileInteractionHelper.deleteFolder(destinationImageFolder.getAbsolutePath());
+				 * }
+				 */
+
 				String cloudImageFolder = mainActivity.getCloudImageFolder() + "\\" + folderName;
 				deleteJunkFiles(cloudImageFolder);
-				//fileInteractionHelper.copyFolder(cloudImageFolder, imageSavePaths[i] + "\\");
+				// fileInteractionHelper.copyFolder(cloudImageFolder, imageSavePaths[i] + "\\");
 				fileInteractionHelper.copyAndReplaceFilesOfFolder(cloudImageFolder, imageSavePaths[i]);
 			} catch (Exception e) {
 				e.printStackTrace();

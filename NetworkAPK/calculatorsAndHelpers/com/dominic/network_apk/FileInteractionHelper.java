@@ -2,6 +2,9 @@ package com.dominic.network_apk;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import processing.core.PApplet;
@@ -35,6 +39,18 @@ public class FileInteractionHelper {
 			e.printStackTrace();
 			return "";
 		}
+	}
+
+	public Boolean copyFromIputstream(String from, String to) {
+		Boolean copied=false;
+		InputStream is = getClass().getClassLoader().getResourceAsStream(from);
+		try {
+			FileUtils.copyInputStreamToFile(is, new File(to));
+			copied=true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return copied;
 	}
 
 	public Boolean createParentFolders(String pathToFile) {
@@ -82,8 +98,8 @@ public class FileInteractionHelper {
 		String[] allFiles = getFoldersAndFiles(sourceFolder, false);
 		if (allFiles != null && allFiles.length > 0) {
 			for (int i = 0; i < allFiles.length; i++) {
-				Path sourceDirectory = Paths.get(sourceFolder+"\\"+allFiles[i]);
-				Path targetDirectory = Paths.get(targetFolder+"\\"+allFiles[i]);
+				Path sourceDirectory = Paths.get(sourceFolder + "\\" + allFiles[i]);
+				Path targetDirectory = Paths.get(targetFolder + "\\" + allFiles[i]);
 				// copy source to target using Files Class
 				try {
 					Files.copy(sourceDirectory, targetDirectory, StandardCopyOption.REPLACE_EXISTING);
