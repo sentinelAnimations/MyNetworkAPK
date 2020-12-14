@@ -19,8 +19,7 @@ import processing.core.PApplet;
 
 public class RenderHelper {
 	private int renderJobIndex = 0, renderJobIndexCPU, renderJobIndexGPU, imageFilenameDigits = 6;
-	private Boolean cpuFinished = false, gpuFinished = false, allJobsStarted = false, finishCPUJob = false, finishGPUJob = false;
-	private long prevCheckFinishedTime, startTimeCpu, startTimeGpu, lastCPULogFound, lastGPULogFound;
+	private Boolean  allJobsStarted = false;
 	private String renderTerminalWindowNameCPU = "renderTerminalCPU", renderTerminalWindowNameGPU = "renderTerminalGPU", blendCommandCPU, blendCommandGPU;
 	private int[] renderedFrames;
 	private PApplet p;
@@ -35,9 +34,6 @@ public class RenderHelper {
 	private Thread cpuThread, gpuThread;
 	private Renderer rendererCPU, rendererGPU;
 	private File resultFileCPU, resultFileGPU;
-	// private Runnable cpuRenderer, gpuRenderer;
-	// ExecutorService executor = Executors.newFixedThreadPool(2);// creating a pool
-	// of 5 threads
 
 	public RenderHelper(PApplet p) {
 		this.p = p;
@@ -105,11 +101,19 @@ public class RenderHelper {
 				if (!randomSeedFile.exists()) {
 					fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py", randomSeedFile.getAbsolutePath());
 				}
-
-				File forceGPURenderingFile = new File(mainActivity.getPathToBlenderRenderFolder() + "\\job_" + renderJobIndex + "_forceGPURendering.py");
-				if (!forceGPURenderingFile.exists()) {
-					fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "/forceGPURendering.py", forceGPURenderingFile.getAbsolutePath());
+				String forceGPUOrCPUFilename="_forceGPURendering.py";
+				if(useCPU) {
+					forceGPUOrCPUFilename="_forceCPURendering.py";
 				}
+				File forceGPUOrCPURenderingFile = new File(mainActivity.getPathToBlenderRenderFolder() + "\\job_" + renderJobIndex + forceGPUOrCPUFilename);
+				if (!forceGPUOrCPURenderingFile.exists()) {
+					if(useCPU) {
+					fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "/forceCPURendering.py", forceGPUOrCPURenderingFile.getAbsolutePath());
+					}else {
+						fileInteractionHelper.copyFile(mainActivity.getRenderPythonScriptsPath() + "/forceGPURendering.py", forceGPUOrCPURenderingFile.getAbsolutePath());
+					}
+				}
+				
 				String fName = "\\";
 				for (int i = 0; i < imageFilenameDigits; i++) {
 					fName += "#";
@@ -144,13 +148,15 @@ public class RenderHelper {
 				blendCommandCPU += resolutionSamplingStr;
 				blendCommandGPU += resolutionSamplingStr;
 
-				blendCommandGPU += " -P \"" + forceGPURenderingFile.getAbsolutePath() + "\"";
+				blendCommandCPU += " -P \"" + forceGPUOrCPURenderingFile.getAbsolutePath() + "\"";
+				blendCommandGPU += " -P \"" + forceGPUOrCPURenderingFile.getAbsolutePath() + "\"";
+
 				if (useCPU) {
 					blendCommandCPU += " -o \"" + resultFileCPU.getAbsolutePath() + "\" -F PNG -f " + frameToRender + " >>" + logFileCPU.getAbsolutePath();
 				} else {
 					blendCommandGPU += " -o \"" + resultFileGPU.getAbsolutePath() + "\" -F PNG -f " + frameToRender + " >>" + logFileGPU.getAbsolutePath();
 				}
-				if (localBlendfile.exists() && randomSeedFile.exists() && forceGPURenderingFile.exists() && ((useNewResolution && resolutionAndSampling.exists()) || (!useNewResolution))) {
+				if (localBlendfile.exists() && randomSeedFile.exists() && forceGPUOrCPURenderingFile.exists() && ((useNewResolution && resolutionAndSampling.exists()) || (!useNewResolution))) {
 
 					logFileCPU.delete();
 					logFileGPU.delete();
@@ -163,15 +169,13 @@ public class RenderHelper {
 					// delete existing resultFile----------------------
 
 					if (useCPU) {
-				
-						Renderer rendererCPU = new Renderer(p, renderJobIndex, allJobsStarted,useCPU, blendCommandCPU, renderTerminalWindowNameCPU, pathToRenderJobsStatus, logFileCPU, deleteFile, localBlendfile, randomSeedFile, resolutionAndSampling, forceGPURenderingFile);
+						rendererCPU = new Renderer(p, renderJobIndex, allJobsStarted, useCPU, blendCommandCPU, renderTerminalWindowNameCPU, pathToRenderJobsStatus, logFileCPU, deleteFile, localBlendfile, randomSeedFile, resolutionAndSampling, forceGPUOrCPURenderingFile);
 						cpuThread = new Thread(rendererCPU);
 						cpuThread.start();
 						rendererCPU.handleJson(renderJobIndex, "started", p.str(true), pathToRenderJobsStatus, cpuOrGpuStr);
-
 						p.println("--------", rendererCPU.getAllJobsStarted(), cpuThread.isAlive());
-					} else {		
-						Renderer rendererGPU = new Renderer(p, renderJobIndex, allJobsStarted,useCPU, blendCommandGPU, renderTerminalWindowNameGPU, pathToRenderJobsStatus, logFileGPU, deleteFile, localBlendfile, randomSeedFile, resolutionAndSampling, forceGPURenderingFile);
+					} else {
+						rendererGPU = new Renderer(p, renderJobIndex, allJobsStarted, useCPU, blendCommandGPU, renderTerminalWindowNameGPU, pathToRenderJobsStatus, logFileGPU, deleteFile, localBlendfile, randomSeedFile, resolutionAndSampling, forceGPUOrCPURenderingFile);
 						gpuThread = new Thread(rendererGPU);
 						gpuThread.start();
 						rendererGPU.handleJson(renderJobIndex, "started", p.str(true), pathToRenderJobsStatus, cpuOrGpuStr);
@@ -339,11 +343,15 @@ public class RenderHelper {
 	public void setFinishAllJobs(Boolean cpuState, Boolean gpuState) {
 		// finishCPUJob = cpuState;
 		// finishGPUJob = gpuState;
+		p.println("+++now+++");
 		if (rendererCPU != null && cpuThread.isAlive()) {
 			rendererCPU.setFinishJob(cpuState);
+			p.println("now cpu");
 		}
 		if (rendererGPU != null && gpuThread.isAlive()) {
 			rendererGPU.setFinishJob(gpuState);
+			p.println("now gpu");
+
 		}
 	}
 
@@ -370,9 +378,11 @@ public class RenderHelper {
 	public int getImageFilenameDigits() {
 		return imageFilenameDigits;
 	}
+
 	public Thread getCPUThread() {
 		return cpuThread;
 	}
+
 	public Thread getGPUThread() {
 		return gpuThread;
 	}

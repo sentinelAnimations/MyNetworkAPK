@@ -140,6 +140,7 @@ class Renderer implements Runnable {
 			forceGPURendering.delete();
 			p.println("cpu problem occured: " + problemOccured);
 			if (problemOccured) {
+				p.println("kill"+renderTerminalWindowName);
 				commandExecutionHelper.killTaskByWindowtitle(renderTerminalWindowName);
 				allJobsStarted = false;
 				handleJson(renderJobIndex, "started", p.str(false), pathToRenderJobsStatus, cpuOrGpuStr);
@@ -355,6 +356,7 @@ class Renderer implements Runnable {
 	}
 
 	public void setFinishJob(Boolean state) {
+		p.println("++++finish:"+state);
 		finishJob = state;
 	}
 }

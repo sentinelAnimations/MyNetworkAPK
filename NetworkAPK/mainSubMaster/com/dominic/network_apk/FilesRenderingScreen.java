@@ -407,11 +407,13 @@ public class FilesRenderingScreen {
 		String copyFromPathRandomSeed = relativeFilePathRandomSeed;
 		Boolean randomSeedCopied = fileInteractionHelper.copyFile(copyFromPathRandomSeed, mainActivity.getRenderPythonScriptsPath() + "\\randomSeed.py");
 
-		String relativeFileForceGPURendering = "/pythonScripts/forceGPURendering.py";
-		String copyFromPathForceGPURendering = relativeFileForceGPURendering;
-		Boolean forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
+		String copyFromPathForceGPURendering = "/pythonScripts/forceGPURendering.py";
+		String copyFromPathForceCPURendering = "/pythonScripts/forceCPURendering.py";
 
-		if (randomSeedCopied && forceGPURenderingCopied) {
+		Boolean forceGPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceGPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceGPURendering.py");
+		Boolean forceCPURenderingCopied = fileInteractionHelper.copyFile(copyFromPathForceCPURendering, mainActivity.getRenderPythonScriptsPath() + "\\forceCPURendering.py");
+
+		if (randomSeedCopied && forceGPURenderingCopied && forceCPURenderingCopied) {
 
 			String[] newFileList = new String[allFiles_HorizontalList.getList().length];
 			String[] filesList = fileInteractionHelper.getFoldersAndFiles(mainActivity.getPathToBlenderRenderFolder(), false);
@@ -521,10 +523,6 @@ public class FilesRenderingScreen {
 	}
 
 	private void renderFiles() {
-		p.println("finished?",renderHelper.getCpuFinished(),renderHelper.getGpuFinished());
-		if(renderHelper.getCPUThread()!=null) {
-			p.println("cpuThread: "+renderHelper.getCPUThread().isAlive());
-		}
 		
 		Boolean isRenderingJson = renderHelper.getStartRenderingFromJson();
 
@@ -546,11 +544,9 @@ public class FilesRenderingScreen {
 						Boolean[] hwToUse = mainActivity.getHardwareToRenderWith(mainActivity.getPCName(), false);
 
 						if (hwToUse[0] && mainActivity.getHomeScreenMaster().getCheckboxes()[4].getIsChecked() && renderHelper.getCpuFinished()) {
-							p.println("start CPU");
 							renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), true);
 						}
 						if (hwToUse[1] && mainActivity.getHomeScreenMaster().getCheckboxes()[5].getIsChecked() && renderHelper.getGpuFinished()) {
-							p.println("start GPU");
 							renderHelper.startRenderJob(mainActivity.getMasterRenderJobsFilePath(), mainActivity.getMasterRenderJobsStatusFilePath(), false);
 						}
 						if (!isRenderingJson) {

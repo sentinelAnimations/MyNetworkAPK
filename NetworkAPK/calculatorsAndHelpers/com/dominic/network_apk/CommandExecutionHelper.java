@@ -86,6 +86,7 @@ public class CommandExecutionHelper {
 			commandStr += "\"";
 			Process proc = rt.exec(commandStr);
 			taskIsKilled = true;
+			p.println("task was killed");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
